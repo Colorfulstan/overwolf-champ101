@@ -54,20 +54,17 @@ steal('can'
 				var deferred = $.Deferred();
 				var self = this;
 				var nameLow = name.toLowerCase();
-				//self.windows = self.windows || {};
 				// TODO: was ist, falls es schon ein window gibt?
-				if (self.windows[nameLow]) {
-				} // ???
-				else {
+				if (!self.windows[nameLow]) {
 					self.windows[nameLow] = new WindowCtrl('body#' + name.toLowerCase(), {
 						name: name
 					});
-					$.when(self.windows[nameLow].isWindowSetPromise).then(function (window) {
-						self.windows[nameLow].open();
-						steal.dev.log(name + ' Window opened: ', window, self.windows[name]);
-						deferred.resolve(window);
-					})
 				}
+				$.when(self.windows[nameLow].options.isWindowSetPromise).then(function (window) {
+					self.windows[nameLow].open();
+					steal.dev.log(name + ' Window opened: ', window, self.windows[name]);
+					deferred.resolve(window);
+				});
 				return deferred.promise();
 			}
 		});

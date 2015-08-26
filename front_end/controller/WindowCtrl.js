@@ -8,28 +8,9 @@ steal('can/control', function (Control) {
 			this.SCREEN_WIDTH = window.screen.availWidth;
 			this.SCREEN_HEIGHT = window.screen.availHeight;
 
-			this.childWindows = [];
-
-			if (options.name) {
-				try {
-					this.options.isWindowSetPromise = this.setOverwolfWindow(options.name);
-				} catch (e) {
-					console.error(e);
-				}
-			}
+			this.ow_window = {};
+			this.childWindows = {};
 			steal.dev.log('WindowCtrl initialized');
-		},
-		setOverwolfWindow: function (name) {
-			var deferred = $.Deferred();
-			var self = this;
-			overwolf.windows.obtainDeclaredWindow(name, function (result) {
-				if (result.status == "success") {
-					self.ow_window = result.window;
-					deferred.resolve(result.window);
-					steal.dev.log('ow_window set for WindowCtrl ' + name, self.ow_window);
-				}
-			});
-			return deferred.promise();
 		},
 
 		dragResize: function (edge) {
@@ -45,16 +26,27 @@ steal('can/control', function (Control) {
 		, minimize: function () {
 			overwolf.windows.minimize(this.ow_window.id);
 		}
+		/**
+		 * opens the overwolf window of this WindowCtrl.
+		 * Returns a promise that gets resolved to the overwolf window object for the opened window.
+		 * @returns {overwolf window}
+		 */
 		, open: function () {
 			var self = this;
-			steal.dev.log(this.options.isWindowSetPromise);
-			$.when(this.options.isWindowSetPromise)
-				.then(function () {
-					overwolf.windows.restore(self.ow_window.id, function () { });
-					if (self.options.width && self.options.height){
-						overwolf.windows.changeSize(self.ow_window.id, self.options.width, self.options.height); // TODO: try through manifest
-					}
-				});
+			var deferred = $.Deferred();
+			overwolf.windows.obtainDeclaredWindow(self.options.name, $.proxy(function (result) {
+				if (result.status == "success") {
+					self.ow_window = result.window;
+					overwolf.windows.restore(result.window.id, function (result) {
+						steal.dev.log('window opened', result);
+						if (self.options.width && self.options.height) {
+							overwolf.windows.changeSize(self.ow_window.id, self.options.width, self.options.height); // TODO: try through manifest
+						}
+						deferred.resolve(self.ow_window);
+					});
+				}
+			}, this));
+			return deferred.promise();
 		}
 		, getCenteredX: function () {
 			var w = this.ow_window.width / 2;
@@ -80,12 +72,12 @@ steal('can/control', function (Control) {
 		, '#btn-settings click': function (el, ev) {
 			// TODO: how to get this into App??
 			var self = this;
-			var win = new WindowCtrl('Settings', {name:'Settings'});
-			$.when(win.options.isWindowSetPromise).then(function () {
-				self.childWindows.push(win);
-			});
+			var name = 'Settings';
+			var win = self.childWindows[name];
+			if (!win) win = new WindowCtrl('body#' + name.toLowerCase(), {name: name});
 			win.open();
-			steal.dev.log('opensettings triggered');
+			self.childWindows[name] = win;
+			steal.dev.log('opensettings triggered', this.childWindows);
 		}
 	});
 
