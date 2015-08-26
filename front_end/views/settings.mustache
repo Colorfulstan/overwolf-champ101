@@ -1,0 +1,24 @@
+<form onsubmit="return false" id="summoner-form">
+	<label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
+	<br>
+	<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name" can-value='summonerName' />
+	<br>
+	<label for="server-region-select">Region</label>
+	<br>
+	<select name="server-region-select" id="server-region-select" can-value='server'>
+		<option value="BR">BR</option
+		<option value="EUNE">EUNE</option>
+		<option value="EUW">EUW</option>
+		<option value="KR">KR</option>
+		<option value="LAN">LAN</option>
+		<option value="LAS">LAS</option>
+		<option value="NA">NA</option>
+		<option value="OCE">OCE</option>
+		<option value="TR">TR</option>
+		<option value="RU">RU</option>
+		<option value="PBE">PBE</option>
+	</select>
+
+	<br>
+	<button type="submit" id="btn-save-close">Save and Close</button>
+</form>

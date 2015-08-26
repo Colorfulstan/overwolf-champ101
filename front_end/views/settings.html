@@ -3,87 +3,21 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 	<title>Demo app</title>
-	<!--<script src="../js/WindowController.js"></script>-->
-	<!--<script src="../js/Settings.js"></script>-->
-	<!--<script src="../js/Error.js"></script>-->
-	<!--<script src="../js/constants.js"></script>-->
 	<script type='text/javascript' src='../node_modules/steal/steal.js'
 			data-env="development"
-			data-main="settings"></script>
+			data-main="../js/settings/settings"></script>
 
 	<link rel="stylesheet" href="../assets/css/main.css" type="text/css" />
 </head>
 
 <body id="settings">
-<div id="content">
-	<form action="">
-		<label for="summoner-name-input">Summoner</label>
-		<br>
-		<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name" />
-		<br>
-		<label for="server-region-select">Region</label>
-		<br>
-		<select name="server-region-select" id="server-region-select">
-			<option value="BR">BR</option>
-			<option value="EUNE">EUNE</option>
-			<option value="EUW">EUW</option>
-			<option value="KR">KR</option>
-			<option value="LAN">LAN</option>
-			<option value="LAS">LAS</option>
-			<option value="NA">NA</option>
-			<option value="OCE">OCE</option>
-			<option value="TR">TR</option>
-			<option value="RU">RU</option>
-			<option value="PBE">PBE</option>
-		</select>
-		<br>
-	</form>
-
+<div class="drag-window-handle">
+	<br />
+	<br />
 </div>
 <div id="error-msg"></div>
-<button id="btn-close">Save and Close</button>
-
-<!--<script src="../js/data/Matchloader.js"></script>-->
-
-<script>
-//	$(document).ready(function () {
-//		var summonerNameFromStorage = Settings.summonerName();
-//		if (summonerNameFromStorage) {
-//			jQuery('#summoner-name-input').get(0).value = summonerNameFromStorage;
-//		}
-//		var regionFromStorage = Settings.server();
-//		if (regionFromStorage) {
-//			jQuery('#server-region-select').get(0).value = regionFromStorage;
-//		}
-//		Settings.clearSummonerId();
-//	});
-//
-//	jQuery('#close-btn').on('click', closeBtnHandler);
-//
-//	jQuery('#server-region-select').on('change', function () {
-//		Settings.server(this.value);
-//	});
-//	jQuery('#summoner-name-input').on('change', function () {
-//		Settings.summonerName(this.value);
-//	});
-
-//	function closeBtnHandler() {
-//		var btn = this;
-//		btn.innerHTML = "checking";
-//		jQuery.get(
-//				RIOT_ADAPTER_URL + '/getSummonerId.php'
-//				, {'server': Settings.server(), 'summoner' : Settings.summonerName()}
-//				, function(summonerId, status, jqXHR){
-//					console.log('data:', summonerId, 'status:', status, 'jqXHR:',jqXHR);
-//					Settings.summonerId(summonerId);
-//					WindowController.closeWindow();
-//				})
-//				.fail(function(data, status, jqXHR){
-//					console.log('data:', data, 'status:', status, 'jqXHR:',jqXHR);
-//					Error.summonerSettings(data.responseText);
-//					btn.innerHTML = "check again"
-//				});
-//	}
-</script>
+<div id="content">
+	<!-- settings.mustache inserted here -->
+</div>
 </body>
 </html>

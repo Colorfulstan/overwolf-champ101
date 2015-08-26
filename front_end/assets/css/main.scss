@@ -4,8 +4,14 @@
 @import "imports/tooltip";
 @import "imports/participants";
 
+$color-bg : #eee;
+
 * {
   overflow: hidden;
+}
+
+body {
+  background-color: $color-bg;
 }
 
 #panel-container {
@@ -50,4 +56,11 @@
 
 .hidden {
   display: none !important;
+}
+
+#btn-resize {
+  position: absolute;
+  cursor: se-resize;
+  bottom:0;
+  right:0;
 }

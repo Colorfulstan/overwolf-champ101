@@ -3,21 +3,16 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 	<title>Champions</title>
-	<script src="../js/constants.js"></script>
-	<script src="../js/Utility.js"></script>
-	<script src="../js/data/Matchloader.js"></script>
-	<script src="../js/PanelManager.js"></script>
-
-	<script src="../js/WindowController.js"></script>
-	<script src="../js/Settings.js"></script>
-	<script src="../js/Error.js"></script>
-
+	<script type='text/javascript' src='../node_modules/steal/steal.js'
+			data-env="development"
+			data-main="../js/match/match"></script>
+	<!--TODO-->
+	<!--<script src="../js/Utility.js"></script>-->
+	<!--<script src="../js/data/Matchloader.js"></script>-->
+	<!--<script src="../js/PanelManager.js"></script>-->
 	<link rel="stylesheet" href="../assets/css/main.css" type="text/css" />
-
 </head>
-
 <body>
-
 <div id="panel-container">
 	<div id="match-container" class="panel">
 		<!-- contains all the champs within the game as Thumbnails -->
@@ -32,29 +27,29 @@
 	</div>
 
 	<div id="tooltip-container" class="hidden">
-		<!-- for the tooltip to be shown - will get dynamically filled -->
+		<!-- for the tooltip to be shown -->
+		<!-- match-tooltip.mustache -->
 	</div>
 </div>
 <div id="pull-down-handle">
-	<button id="close" onclick="WindowController.closeWindow();">Close</button>
-	<button id="load-btn">Load</button>
+	<button id="btn-close">Close</button>
+	<button id="btn-load">Load</button>
 </div>
-<script src="../js/vendor/jquery/dist/jquery.min.js"></script>
 
 <script>
-	var ml;
-	init();
-	$('#load-btn').on('click', init);
-	function init(){
-		ml = new Matchloader(Settings.summonerId(), Settings.server());
-		ml.loadMatch($('#match-participants'), $('#match-participants .blue'), $('#match-participants .purple'));
-	}
-
-	$('#pull-down-handle').on('click', pullDownHandler);
-	function pullDownHandler() {
-		$(this).toggleClass('collapsed');
-		PanelManager.togglePanels();
-	}
+//	var ml; // TODO: migrate
+//	init();
+//	$('#load-btn').on('click', init);
+//	function init(){
+//		ml = new Matchloader(Settings.summonerId(), Settings.server());
+//		ml.loadMatch($('#match-participants'), $('#match-participants .blue'), $('#match-participants .purple'));
+//	}
+//
+//	$('#pull-down-handle').on('click', pullDownHandler);
+//	function pullDownHandler() {
+//		$(this).toggleClass('collapsed');
+//		PanelManager.togglePanels();
+//	}
 
 
 
