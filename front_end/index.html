@@ -9,13 +9,13 @@
 			data-env="development"
 			data-main="main"></script>
 
-	<!--<script src="../js/Settings.js"></script> TODO-->
+	<!--<script src="../js/SettingsModel.js"></script> TODO-->
 	<link rel="stylesheet" href="assets/css/main.css" type="text/css" />
 
 </head>
 
 <body id="main">
-<div id="content">
+<div id="content" class="drag-window-handle">
 	<h1>Champion Info</h1>
 
 	<!--TODO: Texte blasülz-->
@@ -27,16 +27,8 @@
 	<button id="btn-close">Close</button>
 	<button id="btn-settings">Settings</button>
 	<button id="btn-minimize">minimize</button>
-
 </div>
-<!--<script src="../js/data/Matchloader.js"></script> TODO-->
+<button id="btn-resize">drag to resize</button>
 
-<script>
-
-	//	if (!Settings.isSummonerSet()) { // TODO
-	//		WindowController.openSettings();
-	//	}
-	//	WindowController.openMatch(); // TODO: for debug - remove when finished
-</script>
 </body>
 </html>

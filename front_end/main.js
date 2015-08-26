@@ -1,6 +1,5 @@
 "use strict";
-var App = require('./App');
-var fixtures = require('./models/fixtures/fixtures');
+var App = require('./js/App');
 
 var app = new App();
 app.start();

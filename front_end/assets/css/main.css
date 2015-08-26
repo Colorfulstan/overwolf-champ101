@@ -59,6 +59,9 @@
 * {
   overflow: hidden; }
 
+body {
+  background-color: #eee; }
+
 #panel-container {
   height: auto;
   width: 740px;
@@ -88,5 +91,11 @@
 
 .hidden {
   display: none !important; }
+
+#btn-resize {
+  position: absolute;
+  cursor: se-resize;
+  bottom: 0;
+  right: 0; }
 
 /*# sourceMappingURL=main.css.map */
