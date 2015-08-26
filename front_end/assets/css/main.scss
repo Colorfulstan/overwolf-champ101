@@ -1,0 +1,53 @@
+@import "imports/reset.css";
+@import "imports/grid_12.css";
+
+@import "imports/tooltip";
+@import "imports/participants";
+
+* {
+  overflow: hidden;
+}
+
+#panel-container {
+  height:auto;
+  width: 740px;
+  margin: 0 auto;
+}
+
+#match-container{
+  height:74px;
+}
+
+#match-participants {
+  height: 100%;
+  width: 100%;
+
+  & * {
+    height: 100%;
+  }
+  &.loading {
+    background-color: red;
+  }
+
+  & .portrait {
+    float: left;
+
+    cursor: pointer;
+  }
+}
+
+#pull-down-handle {
+  background-color: brown;
+  opacity: 0.5;
+  width: 100%;
+  margin-top: 1px; // TODO: fix this bug - ifon top of screen = hover not releasing
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+
+.hidden {
+  display: none !important;
+}

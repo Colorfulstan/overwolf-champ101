@@ -1,0 +1,92 @@
+@import url(imports/reset.css);
+@import url(imports/grid_12.css);
+#tooltip-container {
+  width: 100%;
+  background-color: black;
+  opacity: 0.8;
+  color: #eee;
+  padding: 30px;
+  position: absolute;
+  z-index: 9999; }
+
+#participants-container {
+  height: auto;
+  position: relative;
+  padding-right: 30px; }
+  #participants-container #close-all-btn {
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background-color: brown;
+    right: 0;
+    top: 0; }
+
+.participant-panel {
+  height: 100px; }
+  .participant-panel > img {
+    height: 100%;
+    float: left; }
+  .participant-panel .summoner-spells {
+    height: 100%; }
+    .participant-panel .summoner-spells > img {
+      height: 28%; }
+    .participant-panel .summoner-spells .passive {
+      width: 100%;
+      height: auto; }
+  .participant-panel .champ-spells {
+    height: 100%; }
+    .participant-panel .champ-spells img {
+      height: 70%; }
+  .participant-panel .champ-select {
+    height: 100%; }
+    .participant-panel .champ-select .team {
+      height: 45%; }
+      .participant-panel .champ-select .team img {
+        height: 100%;
+        float: left; }
+  .participant-panel .panel-control {
+    height: 100%;
+    width: 30px;
+    background-color: black;
+    float: right; }
+    .participant-panel .panel-control .btn {
+      width: 100%;
+      height: 50%;
+      color: #eee;
+      text-align: center;
+      padding-top: 10px; }
+
+* {
+  overflow: hidden; }
+
+#panel-container {
+  height: auto;
+  width: 740px;
+  margin: 0 auto; }
+
+#match-container {
+  height: 74px; }
+
+#match-participants {
+  height: 100%;
+  width: 100%; }
+  #match-participants * {
+    height: 100%; }
+  #match-participants.loading {
+    background-color: red; }
+  #match-participants .portrait {
+    float: left;
+    cursor: pointer; }
+
+#pull-down-handle {
+  background-color: brown;
+  opacity: 0.5;
+  width: 100%;
+  margin-top: 1px; }
+  #pull-down-handle:hover {
+    opacity: 0.9; }
+
+.hidden {
+  display: none !important; }
+
+/*# sourceMappingURL=main.css.map */

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,uBAAwB;EACtB,MAAM,EAAE,IAAI;;AAGd,kBAAmB;EACjB,MAAM,EAAE,IAAI",
+"sources": ["participants.scss"],
+"names": [],
+"file": "participants.css"
+}
