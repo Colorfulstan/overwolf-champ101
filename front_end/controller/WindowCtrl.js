@@ -17,12 +17,11 @@ steal('can/control', function (Control) {
 					console.error(e);
 				}
 			}
-
 			steal.dev.log('WindowCtrl initialized');
 		},
 		setOverwolfWindow: function (name) {
 			var deferred = $.Deferred();
-			var self = this;  // TODO: might need a Defferer to ensure further window activities after ow_window is loaded
+			var self = this;
 			overwolf.windows.obtainDeclaredWindow(name, function (result) {
 				if (result.status == "success") {
 					self.ow_window = result.window;

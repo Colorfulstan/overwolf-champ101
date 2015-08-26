@@ -14,10 +14,10 @@ steal('can'
 			init: function () {
 				/** All opened overwolf windows stored under their respective Names @type {{ overwolfWindows }} */
 				this.windows = {};
-				steal.dev.log('App:', this);
+				/** The Settings-Controller to access and change Settings within the App @type {SettingsCtrl} */
+				this.settings = new SettingsCtrl('div#content');
 
-				this.settings = new SettingsCtrl();
-				steal.dev.log('App initialized');
+				steal.dev.log('App initialized :', this);
 			}
 			, start: function () {
 				this.openMainWindow();
@@ -31,11 +31,15 @@ steal('can'
 					overwolf.windows.changePosition(window.id, self.getCenteredX(window), self.getCenteredY(window));
 				});
 			}
+			/**
+			 * Opens the Settings-Window and creates a new SettingsCtrl stored within this.settings
+			 */
 			, openSettings: function () {
 				var self = this;
-				$.when($.proxy(this.openWindow, self, 'Settings')).then(function (window) {
+				$.when($.proxy(this.openWindow, self, 'Settings')).then($.proxy(function (window) {
+					// TODO: should this window open centered even after relocating it? => not position it at all
 					overwolf.windows.changePosition(window.id, self.getCenteredX(window), self.getCenteredY(window));
-				});
+				}), self);
 			}
 			/**
 			 * Opens a Window with the given Name (Capital-case)
@@ -56,13 +60,11 @@ steal('can'
 				} // ???
 				else {
 					self.windows[nameLow] = new WindowCtrl('body#' + name.toLowerCase(), {
-						name: name,
-						width: 750, // TODO: kann evtl weg wenn über Manifest läuft
-						height: 400 // TODO: kann evtl weg wenn über manifest läuft
+						name: name
 					});
 					$.when(self.windows[nameLow].isWindowSetPromise).then(function (window) {
 						self.windows[nameLow].open();
-						steal.dev.log(name + ' Window opened: ', window);
+						steal.dev.log(name + ' Window opened: ', window, self.windows[name]);
 						deferred.resolve(window);
 					})
 				}

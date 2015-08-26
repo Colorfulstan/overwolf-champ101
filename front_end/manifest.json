@@ -15,12 +15,12 @@
 	"windows": {
 	  "Main": {
 		"file": "index.html",
-		"transparent": false,
+		"transparent": true,
 		"resizable": true
 	  },
 	  "Settings": {
 		"file": "views/settings.html",
-		"transparent": false,
+		"transparent": true,
 		"resizable": false
 	  },
 	  "Match": {
