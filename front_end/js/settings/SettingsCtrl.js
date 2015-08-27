@@ -1,19 +1,19 @@
 "use strict";
 var can = require('can');
-var Settings = require('../settings/SettingsModel');
 var WindowCtrl = require('../WindowCtrl');
 
 /**
  * Controller for the "Settings" view
  */
 var SettingsCtrl = can.Control({
+	/**
+	 * @param options
+	 * @param options.settings - the SettingsModel object
+	 */
 	init: function () {
 
 		this.window = new WindowCtrl('body#settings', {name: 'Settings'});
 		this.window.open();
-
-		this.options.settings = new Settings();
-		steal.dev.log('Settings initialized:', this.options.settings);
 
 		this.element.html(
 			can.view('../../../views/settings.mustache', this.options.settings)
