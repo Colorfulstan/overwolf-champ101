@@ -5,13 +5,16 @@
 @import "imports/participants";
 
 $color-bg : #eee;
+$spacer : 30px;
 
 * {
   overflow: hidden;
 }
 
 body {
-  background-color: $color-bg;
+  &#settings, &#main {
+    background-color: $color-bg;
+  }
 }
 
 #panel-container {
@@ -20,8 +23,9 @@ body {
   margin: 0 auto;
 }
 
-#match-container{
+#match-overview-container{
   height:74px;
+  text-align: center;
 }
 
 #match-participants {
@@ -30,9 +34,6 @@ body {
 
   & * {
     height: 100%;
-  }
-  &.loading {
-    background-color: red;
   }
 
   & .portrait {
@@ -63,4 +64,17 @@ body {
   cursor: se-resize;
   bottom:0;
   right:0;
+}
+
+
+.loading {
+  background-color: red !important;
+}
+.failed {
+  background-color: orange !important;
+  padding: $spacer;
+}
+.opensettings {
+//  padding: $spacer !important;
+//  background-color: red !important;
 }

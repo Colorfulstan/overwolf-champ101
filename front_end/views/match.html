@@ -13,73 +13,40 @@
 	<link rel="stylesheet" href="../assets/css/main.css" type="text/css" />
 </head>
 <body>
-<div id="panel-container">
-	<div id="match-container" class="panel">
-		<!-- contains all the champs within the game as Thumbnails -->
-		<div id="match-participants">
-			<div class="team blue col-xs-6"></div>
-			<div class="team purple col-xs-6"></div>
+<div id="content">
+	<div id="panel-container">
+		<div id="match-overview-container" class="panel">
+			<!-- contains all the champs within the game as Thumbnails -->
+			<!-- match-overview.mustache -->
+			<div id="match-participants">
+				<div class="team blue col-xs-6"></div>
+				<div id="vs"></div>
+				<div class="team purple col-xs-6"></div>
+			</div>
+		</div>
+
+		<div id="champion-container" class="col-xs-12 table">
+			<!-- container to contain all the champion-panels with their spell informations -->
+			<!-- match-champions.mustache -->
+		</div>
+
+		<div id="tooltip-container" class="hidden">
+			<!-- for the tooltip to be shown -->
+			<!-- match-tooltip.mustache -->
 		</div>
 	</div>
-
-	<div id="participants-container" class="col-xs-12 table">
-		<!-- container to contain all the champion-panels with their spell informations -->
-	</div>
-
-	<div id="tooltip-container" class="hidden">
-		<!-- for the tooltip to be shown -->
-		<!-- match-tooltip.mustache -->
+	<div id="pull-down-handle">
+		<button id="btn-close">Close</button>
+		<button id="btn-load">Load</button>
 	</div>
 </div>
-<div id="pull-down-handle">
-	<button id="btn-close">Close</button>
-	<button id="btn-load">Load</button>
-</div>
-
 <script>
-//	var ml; // TODO: migrate
-//	init();
-//	$('#load-btn').on('click', init);
-//	function init(){
-//		ml = new Matchloader(Settings.summonerId(), Settings.server());
-//		ml.loadMatch($('#match-participants'), $('#match-participants .blue'), $('#match-participants .purple'));
-//	}
-//
-//	$('#pull-down-handle').on('click', pullDownHandler);
-//	function pullDownHandler() {
-//		$(this).toggleClass('collapsed');
-//		PanelManager.togglePanels();
-//	}
-
-
-
-	//	overwolf.settings.registerHotKey( // TODO: remove again if not used
-	//				"hide_match_window",
-	//				function (arg) {
-	//					if (arg.status == "success") {
-	//						// TODO: hide window during Tab is pressed
-	//						WindowController.minimizeWindow();
-	//						window.setTimeout(
-	//								WindowController.restoreMatch,
-	//						1000)
-	//					}
-	//				}
-	//		);
-	//	jQuery(window).on('keydown', keydownhandler);
-
-	//	function keyuphandler (e){
-	//		if (e.which == 9) {
-	//			alert('tab up');
-	//			jQuery(window).off('keyup', keyuphandler);
-	//			jQuery(window).on('keydown', keydownhandler);
-	//		}
-	//	}
-	//	function keydownhandler(e){
-	//		if (e.which == 9) {
-	//			alert('tab down');
-	//			jQuery(window).off('keydown', keydownhandler);
-	//			jQuery(window).on('keyup', keyuphandler);
-	//		}
+	//	var ml; // TODO: migrate
+	//	init();
+	//	$('#load-btn').on('click', init);
+	//	function init(){
+	//		ml = new Matchloader(Settings.summonerId(), Settings.server());
+	//		ml.loadMatch($('#match-participants'), $('#match-participants .blue'), $('#match-participants .purple'));
 	//	}
 
 

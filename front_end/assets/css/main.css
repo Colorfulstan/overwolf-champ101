@@ -9,11 +9,11 @@
   position: absolute;
   z-index: 9999; }
 
-#participants-container {
+#champion-container {
   height: auto;
   position: relative;
   padding-right: 30px; }
-  #participants-container #close-all-btn {
+  #champion-container #close-all-btn {
     position: absolute;
     width: 30px;
     height: 100%;
@@ -21,35 +21,35 @@
     right: 0;
     top: 0; }
 
-.participant-panel {
+.champion-panel {
   height: 100px; }
-  .participant-panel > img {
+  .champion-panel > img {
     height: 100%;
     float: left; }
-  .participant-panel .summoner-spells {
+  .champion-panel .summoner-spells {
     height: 100%; }
-    .participant-panel .summoner-spells > img {
+    .champion-panel .summoner-spells > img {
       height: 28%; }
-    .participant-panel .summoner-spells .passive {
+    .champion-panel .summoner-spells .passive {
       width: 100%;
       height: auto; }
-  .participant-panel .champ-spells {
+  .champion-panel .champ-spells {
     height: 100%; }
-    .participant-panel .champ-spells img {
+    .champion-panel .champ-spells img {
       height: 70%; }
-  .participant-panel .champ-select {
+  .champion-panel .champ-select {
     height: 100%; }
-    .participant-panel .champ-select .team {
+    .champion-panel .champ-select .team {
       height: 45%; }
-      .participant-panel .champ-select .team img {
+      .champion-panel .champ-select .team img {
         height: 100%;
         float: left; }
-  .participant-panel .panel-control {
+  .champion-panel .panel-control {
     height: 100%;
     width: 30px;
     background-color: black;
     float: right; }
-    .participant-panel .panel-control .btn {
+    .champion-panel .panel-control .btn {
       width: 100%;
       height: 50%;
       color: #eee;
@@ -59,7 +59,7 @@
 * {
   overflow: hidden; }
 
-body {
+body#settings, body#main {
   background-color: #eee; }
 
 #panel-container {
@@ -67,16 +67,15 @@ body {
   width: 740px;
   margin: 0 auto; }
 
-#match-container {
-  height: 74px; }
+#match-overview-container {
+  height: 74px;
+  text-align: center; }
 
 #match-participants {
   height: 100%;
   width: 100%; }
   #match-participants * {
     height: 100%; }
-  #match-participants.loading {
-    background-color: red; }
   #match-participants .portrait {
     float: left;
     cursor: pointer; }
@@ -97,5 +96,12 @@ body {
   cursor: se-resize;
   bottom: 0;
   right: 0; }
+
+.loading {
+  background-color: red !important; }
+
+.failed {
+  background-color: orange !important;
+  padding: 30px; }
 
 /*# sourceMappingURL=main.css.map */
