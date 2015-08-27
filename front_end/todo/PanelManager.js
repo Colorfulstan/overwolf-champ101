@@ -2,9 +2,9 @@
 function PanelManager() { }
 
 
-PanelManager.togglePanels = function () {
-    $('#panel-container').slideToggle(ANIMATION_SLIDE_SPEED);
-};
+//PanelManager.togglePanels = function () {
+//    $('#panel-container').slideToggle(ANIMATION_SLIDE_SPEED);
+//};
 
 PanelManager.toggleParticipants = function () {
     $('#participants-container').slideToggle(ANIMATION_SLIDE_SPEED);
