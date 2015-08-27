@@ -9,6 +9,7 @@ $spacer : 30px;
 
 * {
   overflow: hidden;
+  text-align: center;
 }
 
 body {
@@ -24,8 +25,12 @@ body {
 }
 
 #match-overview-container{
-  height:74px;
-  text-align: center;
+  height:60px;
+  #vs {
+    background-color: $color-bg;
+    font-size: $spacer;
+    padding: $spacer/2;
+  }
 }
 
 #match-participants {
@@ -38,7 +43,6 @@ body {
 
   & .portrait {
     float: left;
-
     cursor: pointer;
   }
 }

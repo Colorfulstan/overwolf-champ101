@@ -14,26 +14,26 @@ var MatchCtrl = can.Control({
 		this.data = {};
 	},
 
-	loadMatch: function ($loadingdiv, summonerId, server) {
+	loadMatch: function (summonerId, server) {
+		var deferred = $.Deferred();
 		var self = this;
-		$loadingdiv.addClass('loading');
-		$.when(this.loadData(summonerId, server))
+		self.element.addClass('loading');
+		$.when(self.loadData(summonerId, server))
 			.then(function (data) {
 				// TODO
-				self.data = data;
-				$loadingdiv.removeClass('loading');
+				self.element.removeClass('loading');
 				steal.dev.log(data);
+				deferred.resolve(data);
 			}).fail(function (data, status, jqXHR) {
 
 				steal.dev.log(data, status, jqXHR);
-				$loadingdiv
+				self.element
 					.addClass('failed open-settings')
 					.removeClass('loading')
 					.text("Match could not be loaded!\nClick here to check your settings.");
+				deferred.reject(data, status, jqXHR);
 			});
-
-		//self.loadChampPortraits($blueSideDiv, data.blue, 'blue');
-		//self.loadChampPortraits($purpleSideDiv, data.purple, 'purple');
+		return deferred.promise();
 	},
 
 	loadData: function (summonerId, server) {
