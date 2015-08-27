@@ -17,21 +17,22 @@ var MatchCtrl = can.Control({
 	loadMatch: function (summonerId, server) {
 		var deferred = $.Deferred();
 		var self = this;
-		self.element.addClass('loading');
+		self.panelContainer.addClass('loading');
 		$.when(self.loadData(summonerId, server))
 			.then(function (data) {
 				// TODO
-				self.element.removeClass('loading');
+				self.panelContainer.removeClass('loading');
 				steal.dev.log(data);
 				deferred.resolve(data);
 			}).fail(function (data, status, jqXHR) {
 
 				steal.dev.log(data, status, jqXHR);
-				self.element
+				self.panelContainer
 					.addClass('failed open-settings')
 					.removeClass('loading')
 					.text("Match could not be loaded!\nClick here to check your settings.");
 				deferred.reject(data, status, jqXHR);
+				self.on();
 			});
 		return deferred.promise();
 	},
@@ -75,6 +76,15 @@ var MatchCtrl = can.Control({
 		win.open();
 		self.childWindows[name] = win;
 		steal.dev.log('opensettings triggered', this.childWindows);
+	},
+
+	'button.show-team.blue click' : function () {
+		can.route.attr({team : 'blue', route: 'show/:team'});
+	},
+
+	'button.show-team.purple click' : function () {
+		can.route.attr({team : 'purple', route: 'show/:team'});
 	}
+
 });
 module.exports = MatchCtrl;

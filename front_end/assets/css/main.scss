@@ -77,8 +77,11 @@ body {
 .failed {
   background-color: orange !important;
   padding: $spacer;
+
 }
 .opensettings {
 //  padding: $spacer !important;
 //  background-color: red !important;
+  position: relative;
+  z-index: 999;
 }

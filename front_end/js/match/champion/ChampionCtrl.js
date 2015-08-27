@@ -64,6 +64,13 @@ var ChampionCtrl = can.Control({
 		data.purple.map(function (el, index) {
 			self.options.purple.push(new ChampionModel(el.champ));
 		});
+	},
+
+	'show/:team route': function () {
+		steal.dev.warn(':team route triggered');
+	},
+	'add/:champ route': function(){
+		steal.dev.warn(':champ route triggered');
 	}
 
 });
