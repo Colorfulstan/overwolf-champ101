@@ -13,23 +13,29 @@ var App = Construct.extend({
 		/** All opened overwolf windows stored under their respective Names @type {{ overwolfWindows }} */
 		this.windows = {};
 
+		this.settingsRead = new SettingsModel();
+
 		steal.dev.log('App initialized :', this);
 	}
 	, start: function () {
 		this.openMainWindow();
-
-		if (!Settings.isSummonerSet()) { // TODO
-			WindowController.openSettings();
+		if (!this.settingsRead.isSummonerSet()) { // TODO
+			this.openSettings();
 		}
-		WindowController.openMatch(); // TODO: for debug - remove when finished
+		this.openMatch(); // TODO: for debug - remove when finished
 	}
 	, openMainWindow: function () {
 		this.openWindow('Main');
 	}
-	, openMatchWindow: function () {
+	, openMatch: function () {
 		var self = this;
-		$.when($.proxy(this.openWindow, self, 'Match')).then(function (window) {
-			overwolf.windows.changePosition(window.id, self.getCenteredX(window), self.getCenteredY(window));
+		var name = 'Match';
+		var win = self.windows[name];
+		if (!win) win = new WindowCtrl('', {name: name});
+		self.windows[name] = win;
+		$.when(win.open()).then(function (ow_window) {
+			var x = self.windows[name].getCenteredX();
+			overwolf.windows.changePosition(ow_window.id, x, 0);
 		});
 	}
 	/**
@@ -37,10 +43,17 @@ var App = Construct.extend({
 	 */
 	, openSettings: function () {
 		var self = this;
-		$.when($.proxy(this.openWindow, self, 'Settings')).then($.proxy(function (window) {
-			// TODO: should this window open centered even after relocating it? => not position it at all
-			overwolf.windows.changePosition(window.id, self.getCenteredX(window), self.getCenteredY(window));
-		}), self);
+		var name = 'Settings';
+		var win = self.windows[name];
+		if (!win) win = new WindowCtrl('', {name: name});
+		win.open();
+		self.windows[name] = win;
+		$.when(win.open()).then(function (ow_window) {
+			//	// TODO: should this window open centered even after relocating it? => not position it at all
+			var x = self.windows[name].getCenteredX();
+			var y = self.windows[name].getCenteredY();
+			overwolf.windows.changePosition(ow_window.id, x, y);
+		});
 	}
 	/**
 	 * Opens a Window with the given Name (Capital-case)
@@ -56,12 +69,12 @@ var App = Construct.extend({
 		var self = this;
 		var nameLow = name.toLowerCase();
 		// TODO: was ist, falls es schon ein window gibt?
-		if (!self.windows[nameLow]) {
-			self.windows[nameLow] = new WindowCtrl('body#' + name.toLowerCase(), {
+		if (self.windows[name] == undefined) {
+			self.windows[name] = new WindowCtrl('body#' + name.toLowerCase(), {
 				name: name
 			});
 		}
-		$.when(self.windows[nameLow].open()).then(function (window) {
+		$.when(self.windows[name].open()).then(function (window) {
 			steal.dev.log(name + ' Window opened: ', window, self.windows[name]);
 			deferred.resolve(window);
 		});

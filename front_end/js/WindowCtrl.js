@@ -56,16 +56,16 @@ var WindowCtrl = Control({
 					deferred.resolve(self.ow_window);
 				});
 			}
-		}, this));
+		}, self));
 		return deferred.promise();
 	},
 	getCenteredX: function () {
 		var w = this.ow_window.width / 2;
-		return this.SCREEN_WIDTH / 2 - w;
+		return parseInt(this.SCREEN_WIDTH / 2 - w);
 	},
 	getCenteredY: function () {
 		var h = this.ow_window.height / 2;
-		return this.SCREEN_HEIGHT / 2 - h;
+		return parseInt(this.SCREEN_HEIGHT / 2 - h);
 	},
 	'.drag-window-handle mousedown': function (el, ev) {
 		steal.dev.log('dragging');
