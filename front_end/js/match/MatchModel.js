@@ -5,6 +5,7 @@ var MatchModel = can.Model({
 
 		this.blueTeam = can.List();
 		this.purpleTeam= can.List();
+		this.champions = can.List();
 	}
 });
 module.exports = MatchModel;
