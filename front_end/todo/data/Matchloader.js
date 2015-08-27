@@ -4,29 +4,7 @@ function Matchloader(_summonerId, _server) {
         var self = this;
         var $div;
 
-        $champsDiv.addClass('loading');
 
-        jQuery.get(RIOT_ADAPTER_URL
-            , {summonerId: _summonerId, server: _server}
-            , function (data) {
-                if (Settings.isDebugging()) console.log("gameData:", data);
-
-                Matchloader.data = data;
-                self.loadChampPortraits($blueSideDiv, data.blue, 'blue');
-                self.loadChampPortraits($purpleSideDiv, data.purple, 'purple');
-                if (Settings.isDebugging()) console.log('blue side: ', $blueSideDiv, 'purple side: ', $purpleSideDiv);
-
-                Matchloader.loaded = true;
-                $champsDiv.removeClass('loading');
-
-            }).fail(function (data, status, jqXHR) {
-                console.log(data);
-                Error.matchNotFound(data.responseText);
-                if (window.confirm("Do you want to check your settings?")) { // TODO: andere Lösung über anzeige im match div
-                    WindowController.openSettings();
-                }
-                Matchloader.loaded = false;
-            });
     };
 
     this.loadChampPortraits = function ($divContainer, data, team) {
