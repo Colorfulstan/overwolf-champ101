@@ -16,7 +16,7 @@ var MatchCtrl = can.Control({
 
 	loadMatch: function ($loadingdiv, summonerId, server) {
 		var self = this;
-		this.overview.element.addClass('loading');
+		$loadingdiv.addClass('loading');
 		$.when(this.loadData(summonerId, server))
 			.then(function (data) {
 				// TODO
@@ -26,7 +26,7 @@ var MatchCtrl = can.Control({
 			}).fail(function (data, status, jqXHR) {
 
 				steal.dev.log(data, status, jqXHR);
-				$loadingdiv.element
+				$loadingdiv
 					.addClass('failed open-settings')
 					.removeClass('loading')
 					.text("Match could not be loaded!\nClick here to check your settings.");
