@@ -4,6 +4,7 @@ var MatchCtrl = require('./MatchCtrl');
 var SettingsModel = require('../settings/SettingsModel');
 var OverviewCtrl = require('./overview/OverviewCtrl');
 var ChampionCtrl = require('./champion/ChampionCtrl');
+//var Routing = require('./champion/Routing');
 
 
 var match = new MatchCtrl('div#content');
@@ -20,3 +21,9 @@ $.when(dataPromise).then(function (data) {
 		purple: champions.options.purple
 	});
 }); // TODO: reload-btn
+
+//var champPanelRouting = new Routing(document.body);
+
+
+//champPanelRouting.setCtrl(champions);
+//champPanelRouting.ready();

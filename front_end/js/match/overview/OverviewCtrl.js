@@ -16,22 +16,26 @@ var OverviewCtrl = can.Control({
 	 */
 	init: function (el, options) {
 		this.element.html(
-			can.view('../../../../views/match-overview.mustache', {blue: this.options.blue, purple: this.options.purple})
+			can.view('../../../../views/match-overview.mustache', {
+				blue: this.options.blue,
+				purple: this.options.purple
+			})
 		);
 	},
 
-	//'.portrait mouseenter': function ($el, ev) {
-	//	// TODO: open Tooltip
-	//	this.options.portraitMouseenterHandler();
-	//},
-	//'.portrait mouseout': function () {
-	//	// TODO: close Tooltip
-	//	this.options.portraitMouseoutHandler();
-	//},
-	//'.portrait click': function () {
-	//	// TODO: add panel Tooltip
-	//	this.options.portraitClickHandler();
-	//}
+	'.portrait mouseenter': function ($el, ev) {
+		// TODO: open Tooltip
+		can.route.attr('tooltip',$el.attr('alt'));
+	},
+	'.portrait mouseout': function () {
+		// TODO: close Tooltip
+		can.route.attr('tooltip','');
+	},
+	'.portrait click': function ($el, ev) {
+		can.route.attr({route: 'add/:champ', champ: $el.attr('alt')});
+		steal.dev.log(can.route.attr());
+		// TODO: add panel Tooltip
+	}
 	//loadOverview : function () {
 	//}
 });

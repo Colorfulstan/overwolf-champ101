@@ -108,4 +108,8 @@ body#settings, body#main {
   background-color: orange !important;
   padding: 30px; }
 
+.opensettings {
+  position: relative;
+  z-index: 999; }
+
 /*# sourceMappingURL=main.css.map */
