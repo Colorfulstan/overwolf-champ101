@@ -1,7 +1,6 @@
 "use strict";
 var Construct = require('can/construct/');
 var WindowCtrl = require('./WindowCtrl');
-var SettingsModel = require('./settings/SettingsModel');
 
 /**
  * An Object containing the "whole" App.
@@ -13,13 +12,11 @@ var App = Construct.extend({
 		/** All opened overwolf windows stored under their respective Names @type {{ overwolfWindows }} */
 		this.windows = {};
 
-		this.settingsRead = new SettingsModel();
-
 		steal.dev.log('App initialized :', this);
 	}
-	, start: function () {
+	, start: function (isSummonerSet) {
 		this.openMainWindow();
-		if (!this.settingsRead.isSummonerSet()) { // TODO
+		if (!isSummonerSet) {
 			this.openSettings();
 		}
 		this.openMatch(); // TODO: for debug - remove when finished
