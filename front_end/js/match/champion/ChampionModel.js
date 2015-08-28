@@ -1,6 +1,6 @@
 "use strict";
 var can = require('can');
-var SpellModel = require('./SpellModel');
+var SpellModel = require('./../spell/SpellModel');
 require('../../constants');
 
 var ChampionModel = can.Model({},{
@@ -25,9 +25,6 @@ var ChampionModel = can.Model({},{
 	//destroy: 'DELETE /champ/{id}.json',
 	imgSrc: function(){
 		return DDRAGON_IMG_URL + '/champion/' + this.image.full; // TODO: replace with sprites
-	},
-	tooltip: function () {
-
 	}
 });
 module.exports = ChampionModel;

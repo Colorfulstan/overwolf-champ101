@@ -13,9 +13,6 @@ var SpellModel = can.Model({},{
 	//destroy: 'DELETE /champ/{id}.json',
 	imgSrc: function(){
 		return DDRAGON_IMG_URL + this.image.group + "/" + this.image.full; // TODO: replace with sprites
-	},
-	tooltip: function () {
-
 	}
 });
 module.exports = SpellModel;
