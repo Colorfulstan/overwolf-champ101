@@ -1,6 +1,7 @@
 "use strict";
 var can = require('can');
 var WindowCtrl = require('../WindowCtrl');
+var SettingsModel = require('../settings/SettingsModel');
 require('../constants');
 
 /**
@@ -17,7 +18,7 @@ var MatchCtrl = can.Control({
 	loadMatch: function (summonerId, server) {
 		var deferred = $.Deferred();
 		var self = this;
-		self.panelContainer.addClass('loading');
+		self.panelContainer.removeClass().addClass('loading');
 		$.when(self.loadData(summonerId, server))
 			.then(function (data) {
 				// TODO
@@ -28,9 +29,10 @@ var MatchCtrl = can.Control({
 
 				steal.dev.log(data, status, jqXHR);
 				self.panelContainer
-					.addClass('failed open-settings')
-					.removeClass('loading')
-					.text("Match could not be loaded!\nClick here to check your settings.");
+					.removeClass()
+					.addClass('failed')
+					.append('<button id="open-settings" class="btn pull-right col-xs-3">check settings.</button>');
+				self.panelContainer.append('<button id="reload" class="btn pull-right col-xs-3">Reload</button>');
 				deferred.reject(data, status, jqXHR);
 				self.on();
 			});
@@ -68,7 +70,7 @@ var MatchCtrl = can.Control({
 	//	this.togglePanels($handle);
 	//},
 
-	'.open-settings click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+	'#open-settings click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
 		var self = this;
 		var name = 'Settings';
 		var win = self.childWindows[name];
@@ -84,6 +86,12 @@ var MatchCtrl = can.Control({
 
 	'button.show-team.purple click' : function () {
 		can.route.attr({team : 'purple', route: 'show/:team'});
+	},
+
+	'button#reload click': function () {
+		var self = this;
+		var settings = new SettingsModel();
+		this.loadMatch(settings.attr('summonerId'), settings.attr('server'));
 	}
 
 });

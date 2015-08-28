@@ -25,16 +25,16 @@ var OverviewCtrl = can.Control({
 
 	'.portrait mouseenter': function ($el, ev) {
 		// TODO: open Tooltip
+		can.route.attr('route','tooltip/:champ');
 		can.route.attr('tooltip',$el.attr('alt'));
 	},
 	'.portrait mouseout': function () {
 		// TODO: close Tooltip
+		can.route.attr('route','tooltip/:champ');
 		can.route.attr('tooltip','');
 	},
 	'.portrait click': function ($el, ev) {
-		can.route.attr({route: 'add/:champ', champ: $el.attr('alt')});
-		steal.dev.log(can.route.attr());
-		// TODO: add panel Tooltip
+		can.route.attr({route: 'add/:champ', champ: $el.attr('alt'), clicked: $el.attr('alt')});
 	}
 	//loadOverview : function () {
 	//}

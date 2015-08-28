@@ -22,8 +22,4 @@ $.when(dataPromise).then(function (data) {
 	});
 }); // TODO: reload-btn
 
-//var champPanelRouting = new Routing(document.body);
-
-
-//champPanelRouting.setCtrl(champions);
-//champPanelRouting.ready();
+// Tooltip-controller erzeugen + durch Routing steuern

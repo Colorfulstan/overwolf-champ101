@@ -1,7 +1,8 @@
+@import "../helper/colors.scss";
+
 #champion-container {
   height: auto;
   position: relative;
-  padding-right: 30px;
 
   #close-all-btn {
     position: absolute;
@@ -15,17 +16,26 @@
 
 .champion-panel {
   height: 100px;
+  border-top: 1px dashed #ccc;
+  padding-right: 30px;
 
   & > img {
     height: 100%;
     float: left;
+  }
+  &.blue {
+    background-color: $color-blue;
+  }
+
+  &.purple {
+    background-color: $color-purple;
   }
 
   .summoner-spells {
     height: 100%;
 
     & > img {
-      height: 28%;
+      height: 27%;
     }
 
     .passive {

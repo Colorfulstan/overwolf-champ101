@@ -2,7 +2,7 @@
 require('../constants');
 var Model = require('can/model/');
 
-var Settings = Model.extend('Settings', {
+var Settings = Model.extend('Settings', {},{
 	init: function () {
 
 		this.STORAGE_KEY_REGION = 'region-code';
