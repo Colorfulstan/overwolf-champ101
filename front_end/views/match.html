@@ -33,19 +33,27 @@
 	<div id="pull-down-handle">
 		<button id="btn-close">Close</button>
 		<button id="btn-load">Load</button>
-		<button class="show-team blue">show blue team</button>
-		<button class="show-team purple">show purple team</button>
 	</div>
 </div>
 <script>
-	//	var ml; // TODO: migrate
-	//	init();
-	//	$('#load-btn').on('click', init);
-	//	function init(){
-	//		ml = new Matchloader(Settings.summonerId(), Settings.server());
-	//		ml.loadMatch($('#match-participants'), $('#match-participants .blue'), $('#match-participants .purple'));
-	//	}
-
+//	var $champSelect = $('<div class="champ-select col-xs-3">')// TODO: rework or integrate with ChampionCtrl
+//			.append(
+//			$('#match-participants').children().clone() // blue / purple team divs
+//					.removeClass('col-xs-6').addClass('col-xs-12')
+//					.each(function () {
+//						// this = team-container currently iterated
+//						var $champImgs = $(this).children();
+//						$champImgs.click(function () {
+//							// when clicked, the containing Panel should switch to that clicked champion
+//
+//							// this = clicked image
+//							var $this = $(this);
+//							var $panel = $this.closest('.participant-panel');
+//							// TODO: testen
+//							PanelManager.replaceChampion($panel, $this.attr('data-team'), $this.attr('data-team-index'));
+//						});
+//					})
+//	);
 
 </script>
 </body>

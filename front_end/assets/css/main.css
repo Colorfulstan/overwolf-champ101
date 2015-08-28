@@ -11,8 +11,7 @@
 
 #champion-container {
   height: auto;
-  position: relative;
-  padding-right: 30px; }
+  position: relative; }
   #champion-container #close-all-btn {
     position: absolute;
     width: 30px;
@@ -22,14 +21,20 @@
     top: 0; }
 
 .champion-panel {
-  height: 100px; }
+  height: 100px;
+  border-top: 1px dashed #ccc;
+  padding-right: 30px; }
   .champion-panel > img {
     height: 100%;
     float: left; }
+  .champion-panel.blue {
+    background-color: #909bff; }
+  .champion-panel.purple {
+    background-color: rgba(78, 7, 105, 0.73); }
   .champion-panel .summoner-spells {
     height: 100%; }
     .champion-panel .summoner-spells > img {
-      height: 28%; }
+      height: 27%; }
     .champion-panel .summoner-spells .passive {
       width: 100%;
       height: auto; }
@@ -57,7 +62,9 @@
       padding-top: 10px; }
 
 * {
-  overflow: hidden;
+  overflow: hidden; }
+
+p {
   text-align: center; }
 
 body#settings, body#main {
@@ -71,9 +78,10 @@ body#settings, body#main {
 #match-overview-container {
   height: 60px; }
   #match-overview-container #vs {
-    background-color: #eee;
-    font-size: 30px;
-    padding: 15px; }
+    background-color: #eee; }
+    #match-overview-container #vs p {
+      font-size: 30px;
+      padding: 15px; }
 
 #match-participants {
   height: 100%;
@@ -88,7 +96,9 @@ body#settings, body#main {
   background-color: brown;
   opacity: 0.5;
   width: 100%;
-  margin-top: 1px; }
+  margin-top: 1px;
+  position: relative;
+  top: -1px; }
   #pull-down-handle:hover {
     opacity: 0.9; }
 
@@ -108,8 +118,28 @@ body#settings, body#main {
   background-color: orange !important;
   padding: 30px; }
 
-.opensettings {
+.btn {
+  cursor: pointer; }
+  .btn.show-team {
+    border: none;
+    width: 15px;
+    height: 100%;
+    position: absolute;
+    top: 0; }
+    .btn.show-team.blue {
+      background: #909bff;
+      left: 0; }
+    .btn.show-team.purple {
+      background: rgba(78, 7, 105, 0.73);
+      right: 0; }
+
+button#reload {
+  background-color: #eee;
+  border: none;
   position: relative;
-  z-index: 999; }
+  right: 0;
+  top: 0;
+  height: 100%;
+  z-index: 9999; }
 
 /*# sourceMappingURL=main.css.map */

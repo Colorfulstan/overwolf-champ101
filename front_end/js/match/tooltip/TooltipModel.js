@@ -3,7 +3,7 @@
  * Model for a Tooltip-Window
  * @see TooltipModel.init
  */
-var TooltipModel = can.Model({
+var TooltipModel = can.Model({},{
 	/**
 	 *
 	 * @param {Number} y Position of the Tooltip relative to upper screen Edge
