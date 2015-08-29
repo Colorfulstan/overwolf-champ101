@@ -1,24 +1,41 @@
-// Entry point for match.html
 "use strict";
-var MatchCtrl = require('./MatchCtrl');
 var SettingsModel = require('../settings/SettingsModel');
-var OverviewCtrl = require('./overview/OverviewCtrl');
-var ChampionCtrl = require('./champion/ChampionCtrl');
+var OverviewCtrl = require('./overview-panel/OverviewCtrl');
+var ChampionCtrl = require('./champion-panel/ChampionCtrl');
 var TooltipCtrl = require('./tooltip/TooltipCtrl');
+require('../Routes');
 
-var match = new MatchCtrl('div#content');
+var MatchCtrl = require('./MatchCtrl');
+var MatchDAO = require('./MatchDAO');
+var MatchModel = require('./MatchModel');
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Entry point for match.html
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 var settings = new SettingsModel();
 
-var dataPromise = match.loadMatch(settings.attr('summonerId'), settings.attr('server'));
+var dao = new MatchDAO();
+var match = new MatchModel();
+match.attr('summonerId', settings.attr('summonerId'));
+match.attr('server', settings.attr('server'));
 
-var overview;
-var champions = new ChampionCtrl('#champion-container');
-$.when(dataPromise).then(function (data) {
-	champions.loadChampions(data);
-	overview = new OverviewCtrl('#match-overview-container', {
-		blue: champions.options.blue,
-		purple: champions.options.purple
-	});
-}); // TODO: reload-btn
+// Overall Controller for this view
+var matchCtrl = new MatchCtrl('div#content', {dao : dao, settings: settings});
 
-var tooltip = new TooltipCtrl('#tooltip-container', { champions: champions.options.participantsByChamp });
+var matchPromise = matchCtrl.loadMatch(match);
+
+
+// After successfully loading the Match-Data
+$.when(matchPromise).then(function (match) {
+
+	// Controller for Overview-Panel
+	var overview = new OverviewCtrl('#match-overview-container', { match : match });
+	// Controller for Champion-Panels
+	var champions = new ChampionCtrl('#champion-container', { match : match });
+	debugger;
+
+	// Controller for Tooltip
+	var tooltip = new TooltipCtrl('#tooltip-container', { match : match });
+});

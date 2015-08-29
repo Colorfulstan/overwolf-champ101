@@ -28,10 +28,12 @@ var App = Construct.extend({
 		var self = this;
 		var name = 'Match';
 		var win = self.windows[name];
-		if (!win) win = new WindowCtrl('', {name: name});
+		if (!win) win = new WindowCtrl('', {name: name, width: 750, height: 1000});
 		self.windows[name] = win;
 		$.when(win.open()).then(function (ow_window) {
-			var x = self.windows[name].getCenteredX();
+
+			overwolf.windows.changeSize(ow_window.id, win.options.width, win.options.height); // TODO: try through manifest
+			var x = win.getCenteredX();
 			overwolf.windows.changePosition(ow_window.id, x, 0);
 		});
 	}
