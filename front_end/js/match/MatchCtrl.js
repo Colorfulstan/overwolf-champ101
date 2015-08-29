@@ -1,76 +1,87 @@
 "use strict";
 var can = require('can');
 var WindowCtrl = require('../WindowCtrl');
-var SettingsModel = require('../settings/SettingsModel');
-require('../constants');
+var MatchDAO = require('./MatchDAO');
+var MatchModel = require('./MatchModel');
+
+require('../global');
 
 /**
  * Controller for the "Match" view
+ * @see init
  */
-var MatchCtrl = can.Control({
-	init: function () {
+var MatchCtrl = can.Control.extend({
+	defaults: {
+		openSettingsBtn: '#open-settings',
+		reloadBtn: '#reload',
+		handle: '#pull-down-handle'
+	}
+}, {
+	/** @property
+	 * @type {MatchModel} */
+	model: null,
+
+	/**
+	 * @constructor
+	 * @param element
+	 * @param options
+	 * @param options.settings {SettingsModel}
+	 * @param options.dao {MatchDAO}
+	 */
+	init: function (element, options) {
 		this.childWindows = {};
-		this.panelContainer = $('#panel-container');
-
-		this.data = {};
+		this.$panelContainer = $('#panel-container');
 	},
-
-	loadMatch: function (summonerId, server) {
+	loadMatch: function (transfer) {
 		var deferred = $.Deferred();
-		var self = this;
-		self.panelContainer.removeClass().addClass('loading');
-		$.when(self.loadData(summonerId, server))
-			.then(function (data) {
-				// TODO
-				self.panelContainer.removeClass('loading');
-				steal.dev.log(data);
-				deferred.resolve(data);
-			}).fail(function (data, status, jqXHR) {
 
-				steal.dev.log(data, status, jqXHR);
-				self.panelContainer
-					.removeClass()
-					.addClass('failed')
-					.append('<button id="open-settings" class="btn pull-right col-xs-3">check settings.</button>');
-				self.panelContainer.append('<button id="reload" class="btn pull-right col-xs-3">Reload</button>');
+		var self = this;
+		if (this.model == null) {  // first load
+			this.model = transfer;
+		}
+		this.model.attr('server', this.options.settings._server());
+		this.model.attr('summonerId', this.options.settings._summonerId());
+
+		self.$panelContainer.removeClass('failed').addClass('loading');
+		$.when(this.options.dao.loadMatchModel(self.model))
+			.then(function (match) {
+				deferred.resolve(match);
+				self.$panelContainer.removeClass('loading');
+			}).fail(function (data, status, jqXHR) {
+				steal.dev.warn("Loading Match failed!", data, status, jqXHR);
+				self.$panelContainer.removeClass('loading').addClass('failed');
 				deferred.reject(data, status, jqXHR);
-				self.on();
 			});
 		return deferred.promise();
 	},
-
-	loadData: function (summonerId, server) {
-		var self = this;
-		var deferred = $.Deferred();
-
-		jQuery.get(RIOT_ADAPTER_URL
-			, {summonerId: summonerId, server: server}
-			, function (data) { // success
-
-				steal.dev.log("gameData:", data);
-				steal.dev.log('blue side: ', data.blue, 'purple side: ', data.purple);
-				deferred.resolve(data);
-
-			}).fail(function (data, status, jqXHR) {
-				deferred.reject([data, status, jqXHR]);
-			});
-
-		return deferred.promise();
-	},
-
 	togglePanels: function ($handle) {
+		var self = this;
 		$handle.toggleClass('collapsed');
-		this.panelContainer.slideToggle(ANIMATION_SLIDE_SPEED);
+		//var speed = this.element.height() / 200 * ANIMATION_SLIDE_SPEED_PER_100PX;
+		//if (speed < ANIMATION_SLIDE_SPEED_PER_100PX) speed = ANIMATION_SLIDE_SPEED_PER_100PX;
+		this.$panelContainer.slideToggle(ANIMATION_SLIDE_SPEED_PER_100PX);
 	},
 
-	'#pull-down-handle click': function ($handle, ev) {
+	//' mouseout': function ($el, ev) {
+	//	var self = this;
+	//	steal.dev.log('mouseout from' , $el);
+	//	this.options.mouseLeftMatchWindowTO = window.setTimeout(function () {
+	//		self.togglePanels($(MatchCtrl.defaults.handle));
+	//	},
+	//	1000
+	//			//this.settings._mouseOutTimeout()
+	//	);
+	//},
+	//' * mouseenter': function ($el, ev) {
+	//	steal.dev.log('mouseenter in' , $el);
+	//	window.clearTimeout(this.options.mouseLeftMatchWindowTO);
+	//},
+	'{handle} click': function ($handle, ev) {
 		this.togglePanels($handle);
 	},
-	//'#pull-down-handle click': function ($handle, ev) {
-	//	this.togglePanels($handle);
-	//},
 
-	'#open-settings click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+	'{openSettingsBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		// TODO: do it through routing into WindowCtrl
 		var self = this;
 		var name = 'Settings';
 		var win = self.childWindows[name];
@@ -80,18 +91,21 @@ var MatchCtrl = can.Control({
 		steal.dev.log('opensettings triggered', this.childWindows);
 	},
 
-	'button.show-team.blue click' : function () {
-		can.route.attr({team : 'blue', route: 'show/:team'});
+	'button.show-team.blue click': function () {
+		can.route.attr({team: 'blue', route: 'show/:team'});
 	},
 
-	'button.show-team.purple click' : function () {
-		can.route.attr({team : 'purple', route: 'show/:team'});
+	'button.show-team.purple click': function () {
+		can.route.attr({team: 'purple', route: 'show/:team'});
 	},
 
-	'button#reload click': function () {
-		var self = this;
-		var settings = new SettingsModel();
-		this.loadMatch(settings.attr('summonerId'), settings.attr('server'));
+	'{reloadBtn} click': function () {
+		$.when(this.loadMatch(this.model)).then(function () {
+				debugger;
+				can.route.attr({'route': 'reload/:window', window: 'match'});
+				steal.dev.log(can.route.attr());
+			}
+		);
 	}
 
 });

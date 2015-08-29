@@ -4,7 +4,7 @@ var Control = require('can/control/');
  * Controller for window-interactions (opening, closing, minimizing, ...)
  * @see WindowCtrl.init
  */
-var WindowCtrl = Control({
+var WindowCtrl = Control.extend({
 	/**
 	 * @constructor
 	 * @param el - CSS Selector for the Element to listen on for events
@@ -50,7 +50,9 @@ var WindowCtrl = Control({
 				self.ow_window = result.window;
 				overwolf.windows.restore(result.window.id, function (result) {
 					steal.dev.log('window opened', result);
+					debugger;
 					if (self.options.width && self.options.height) {
+
 						overwolf.windows.changeSize(self.ow_window.id, self.options.width, self.options.height); // TODO: try through manifest
 					}
 					deferred.resolve(self.ow_window);

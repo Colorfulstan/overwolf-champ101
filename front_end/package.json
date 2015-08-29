@@ -1,7 +1,8 @@
 {
   "main": "main.js",
   "dependencies": {
-    "jquery": "^2.1.4"
+    "jquery": "^2.1.4",
+    "video.js": "^4.12.14"
   },
   "devDependencies": {
     "can": "^2.2.7",
