@@ -25,16 +25,21 @@ var OverviewCtrl = can.Control({
 
 	'.portrait mouseenter': function ($el, ev) {
 		// TODO: open Tooltip
-		can.route.attr('route','tooltip/:champ');
-		can.route.attr('tooltip',$el.attr('alt'));
+		can.route.attr({
+			route: 'tooltip/champ/:champ',
+			champ: $el.attr('alt'),
+			y: $el.offset().y + $el.height()
+		});
 	},
-	'.portrait mouseout': function () {
+	'.portrait mouseout': function ($el, ev) {
 		// TODO: close Tooltip
-		can.route.attr('route','tooltip/:champ');
-		can.route.attr('tooltip','');
+		can.route.attr({
+			route: 'tooltip/champ/:champ',
+			champ: null
+		});
 	},
 	'.portrait click': function ($el, ev) {
-		can.route.attr({route: 'add/:champ', champ: $el.attr('alt'), clicked: $el.attr('alt')});
+		can.route.attr({route: 'add/:champ', champ: $el.attr('alt')});
 	}
 	//loadOverview : function () {
 	//}

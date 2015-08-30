@@ -1,11 +1,11 @@
 "use strict";
 var Control = require('can/control/');
 var ChampionModel = require('./ChampionModel');
-var SpellModel = require('./SpellModel');
+var SpellModel = require('./../spell/SpellModel');
 /**
  * @see ChampionCtrl.init
  */
-var ChampionCtrl = can.Control({
+var ChampionCtrl = Control({
 	init: function () {
 
 		/** Champ-names on blue side */
@@ -13,7 +13,7 @@ var ChampionCtrl = can.Control({
 		/** Champ-names on purple side */
 		this.options.purple = [];
 
-		/** @type {{data: ChampionModel, summonerSpells: (SummonerSpell[]), team: Team[]}} */
+		/** @type {{data: ChampionModel, summonerSpells: (SpellModel[]), team: String}} */
 		this.options.participantsByChamp = {};
 
 		/**
