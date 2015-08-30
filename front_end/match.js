@@ -1,13 +1,13 @@
 "use strict";
-var SettingsModel = require('../settings/SettingsModel');
-var OverviewCtrl = require('./overview-panel/OverviewCtrl');
-var ChampionCtrl = require('./champion-panel/ChampionCtrl');
-var TooltipCtrl = require('./tooltip/TooltipCtrl');
-require('../Routes');
+var SettingsModel = require('./js/settings/SettingsModel');
+var OverviewCtrl = require('./js/match/overview-panel/OverviewCtrl');
+var ChampionCtrl = require('./js/match/champion-panel/ChampionCtrl');
+var TooltipCtrl = require('./js/match/tooltip/TooltipCtrl');
+require('js/Routes');
 
-var MatchCtrl = require('./MatchCtrl');
-var MatchDAO = require('./MatchDAO');
-var MatchModel = require('./MatchModel');
+var MatchCtrl = require('./js/match/MatchCtrl');
+var MatchDAO = require('./js/match/MatchDAO');
+var MatchModel = require('./js/match/MatchModel');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Entry point for match.html
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,11 +31,10 @@ var matchPromise = matchCtrl.loadMatch(match);
 $.when(matchPromise).then(function (match) {
 
 	// Controller for Overview-Panel
-	var overview = new OverviewCtrl('#match-overview-container', { match : match });
+	new OverviewCtrl('#match-overview-container', { match : match });
 	// Controller for Champion-Panels
-	var champions = new ChampionCtrl('#champion-container', { match : match });
-	debugger;
+	new ChampionCtrl('#champion-container', { match : match });
 
 	// Controller for Tooltip
-	var tooltip = new TooltipCtrl('#tooltip-container', { match : match });
+	new TooltipCtrl('#tooltip-container', { match : match });
 });

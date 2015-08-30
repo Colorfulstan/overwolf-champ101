@@ -7,5 +7,11 @@
   position: absolute;
   z-index: 9999;
   display: none; }
+  #tooltip-container:hover, #tooltip-container:active, #tooltip-container:focus {
+    opacity: 1; }
+
+#spell-video-container {
+  width: 348px;
+  height: 196px; }
 
 /*# sourceMappingURL=tooltip.css.map */

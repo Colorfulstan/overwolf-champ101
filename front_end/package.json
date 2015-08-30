@@ -2,13 +2,12 @@
   "main": "main.js",
   "dependencies": {
     "jquery": "^2.1.4",
-    "video.js": "^4.12.14"
+    "video.js": "^4.12.14",
+	"steal": "^0.10.5",
+	"can": "^2.2.7"
   },
   "devDependencies": {
-    "can": "^2.2.7",
     "grunt": "^0.4.5",
-    "jquery": "^2.1.4",
-    "steal": "^0.10.5",
     "steal-tools": "^0.10.7"
   },
   "scripts": {

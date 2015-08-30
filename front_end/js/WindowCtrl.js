@@ -4,7 +4,7 @@ var Control = require('can/control/');
  * Controller for window-interactions (opening, closing, minimizing, ...)
  * @see WindowCtrl.init
  */
-var WindowCtrl = Control.extend({
+var WindowCtrl = Control.extend('WindowCtrl', {},{
 	/**
 	 * @constructor
 	 * @param el - CSS Selector for the Element to listen on for events

@@ -5,7 +5,11 @@ var WindowCtrl = require('../WindowCtrl');
 /**
  * Controller for the "Settings" view
  */
-var SettingsCtrl = can.Control.extend({
+var SettingsCtrl = can.Control.extend('SettingsCtrl',{
+	defaults: {
+		settingsTmpl: 'templates/settings.mustache'
+	}
+},{
 	/**
 	 * @param options
 	 * @param options.settings - the SettingsModel object
@@ -16,7 +20,7 @@ var SettingsCtrl = can.Control.extend({
 		this.window.open();
 
 		this.element.html(
-			can.view('../../../views/settings.mustache', this.options.settings)
+			can.view(this.options.settingsTmpl, this.options.settings)
 		);
 		this.window.on();
 	},

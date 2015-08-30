@@ -1,7 +1,5 @@
-.champion-panel {
-  display: none; }
-  .champion-panel.stay {
-    display: block; }
+.champion-panel.stay {
+  display: block; }
 
 #open-settings {
   display: none; }
