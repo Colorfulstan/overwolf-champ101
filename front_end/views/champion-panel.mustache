@@ -1,0 +1,32 @@
+{{ #. }}
+<div class="champion-panel panel {{ team }}" data-name="{{ champ.name }}">
+
+
+	<img class="portrait btn" src="{{ champ.imgSrc }}" alt="{{ champ.name }}" />
+	{{ resetIndex }}
+	<div class="summoner-spells col-xs-1">
+		{{ #summonerSpells }}
+		<img class="summoner-spell spell btn" src="{{ imgSrc }}" alt="{{ name }}" data-index-1="{{ index }}" data-type="summoner"/>
+		{{ /summonerSpells }}
+		{{ resetIndex }}
+
+		<img class="spell passive" src="{{ champ.passive.imgSrc }}"
+			 alt="{{ champ.passive.name }}" data-type="passive" />
+	</div>
+
+	{{ resetIndex }}
+	<div class="champ-spells col-xs-5">
+		{{ #champ.spells }}
+		{{!--TODO: hover / click--}}
+		<img class="champion-spell spell btn" src="{{ imgSrc }}" alt="{{name}}" data-index-1="{{ index }}" data-type="ability"/>
+		{{ /champ.spells }}
+		{{ resetIndex }}
+	</div>
+
+
+	{{!--(champSelect)--}}
+
+	<div class="panel-control btn close">X</div>
+
+</div>
+{{ /. }}
