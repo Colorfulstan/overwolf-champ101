@@ -1,5 +1,11 @@
-#tooltip {
+#tooltip-container {
+  width: 100%;
   background-color: black;
-  opacity: 0.8; }
+  opacity: 0.8;
+  color: #eee;
+  padding: 30px;
+  position: absolute;
+  z-index: 9999;
+  display: none; }
 
 /*# sourceMappingURL=tooltip.css.map */

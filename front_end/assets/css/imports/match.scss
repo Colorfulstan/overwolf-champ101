@@ -1,0 +1,30 @@
+.champion-panel {
+  display: none;
+  &.stay {
+    display: block;
+  }
+}
+
+#open-settings {
+  display: none;
+}
+#reload {
+  display: none;
+}
+
+.loading {
+  background-color: red !important;
+}
+
+.failed {
+  background-color: orange !important;
+
+
+  #open-settings {
+    display: block;
+  }
+  #reload {
+    display: block;
+  }
+}
+

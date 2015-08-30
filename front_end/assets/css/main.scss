@@ -1,9 +1,11 @@
 @import "imports/reset.css";
 @import "imports/grid_12.css";
 
-@import "imports/tooltip";
-@import "imports/participants";
+@import "imports/tooltip.css";
+@import "imports/participants.css";
 @import "helper/colors.scss";
+
+@import "imports/match.css";
 
 $spacer : 30px;
 
@@ -77,15 +79,6 @@ body {
   right:0;
 }
 
-
-.loading {
-  background-color: red !important;
-}
-.failed {
-  background-color: orange !important;
-  padding: $spacer;
-
-}
 .opensettings {
 //  padding: $spacer !important;
 //  background-color: red !important;
