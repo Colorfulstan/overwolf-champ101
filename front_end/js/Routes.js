@@ -9,4 +9,7 @@ can.route('#!tooltip/spell/:champ/:index');
 can.route('#!add/:champ');
 can.route('#!show/:team');
 
+// OverviewCtrl
+can.route('!#reload/:window');
+
 can.route.ready();

@@ -5,7 +5,7 @@ var WindowCtrl = require('../WindowCtrl');
 /**
  * Controller for the "Settings" view
  */
-var SettingsCtrl = can.Control({
+var SettingsCtrl = can.Control.extend({
 	/**
 	 * @param options
 	 * @param options.settings - the SettingsModel object
