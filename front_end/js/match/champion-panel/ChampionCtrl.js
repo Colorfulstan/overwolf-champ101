@@ -5,7 +5,11 @@ var SpellModel = require('./SpellModel');
 /**
  * @see ChampionCtrl.init
  */
-var ChampionCtrl = can.Control.extend('ChampionCtrl',{},{
+var ChampionCtrl = can.Control.extend('ChampionCtrl', {
+	defaults: {
+		panelTmpl:'templates/champion-panel.mustache'
+	}
+}, {
 	/**
 	 *
 	 * @param element
@@ -27,20 +31,19 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl',{},{
 		this.options.panels = new can.List();
 
 		this.element.html(
-			can.view('./champion-panel.mustache',
+			can.view(this.options.panelTmpl,
 				this.options.panels,
 				{
 					index: function () {
 						return ++window['INDEX'] || (window['INDEX'] = 0);
 					},
-					resetIndex : function(){
+					resetIndex: function () {
 						window['INDEX'] = null;
 					}
 				}
 			));
 	},
 	addPanel: function (champName) {
-		console.log("addPanel");
 		if (this.element.find('[alt="' + champName + '"]').length) {
 			return;
 		}
@@ -54,7 +57,6 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl',{},{
 		//	$('.champion-panel:not([data-name="'+champName+'"])').addClass('stay');
 		//	$('.champion-panel[data-name="'+champName+'"]').slideDown(ANIMATION_SLIDE_SPEED_PER_100PX);
 		//}, 1);
-		steal.dev.log('added Panel: ', this.options.panels);
 	},
 	addCloseAllBtn: function () {
 		debugger;
@@ -102,29 +104,31 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl',{},{
 
 	'show/:team route': function (data) {
 		steal.dev.log(':team route triggered - adding Panels for Team:', data.team);
+		can.route.attr({ route: 'tooltip/hide'}, true);
 		this.showTeam(data.team);
 		this.addCloseAllBtn();
 	},
 	'add/:champ route': function (data) {
 		steal.dev.log(':champ route triggered - adding champ', data.champ);
+		can.route.attr({ route: 'tooltip/hide'}, true);
 		this.addPanel(data.champ);
 		if (this.options.panels.length >= 2) {
 			this.addCloseAllBtn();
 		}
 	},
 	'.close click': function ($el, ev) {
-		debugger;
+		can.route.attr({ route: 'tooltip/hide'}, true);
 		var champ = $el.closest('.panel').attr('data-name');
 		console.log($el, champ);
-
 		this.removePanel(champ);
 	},
 	'#close-all-btn click': function () {
+		can.route.attr({ route: 'tooltip/hide'}, true);
 		this.closeAllPanels();
 	},
 	'.spell mouseenter': function ($el, ev) {
 		debugger;
-		var $panel  = $el.closest('.panel');
+		var $panel = $el.closest('.panel');
 		can.route.attr({
 			route: 'tooltip/spell/:champ/:index',
 			champ: $panel.attr('data-name'),
@@ -133,8 +137,13 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl',{},{
 			y: $panel.offset().top + $panel.height()
 		});
 	},
+	'.spell click': function ($el, ev) {
+		//steal.dev.log('clicked on .spell');
+		var $panel = $el.closest('.panel');
+		$panel.toggleClass('sticky-tooltip');
+	},
 	'.portrait mouseenter': function ($el, ev) {
-		var $panel  = $el.closest('.panel');
+		var $panel = $el.closest('.panel');
 		can.route.attr({
 			route: 'tooltip/champ/:champ',
 			champ: $panel.attr('data-name'),
@@ -142,10 +151,10 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl',{},{
 		});
 	},
 	'img mouseout': function ($el, ev) {
-		can.route.attr({
-			route: 'tooltip/hide'
-		});
+		var $panel = $el.closest('.panel');
+		if (!$panel.hasClass('sticky-tooltip')){
+			can.route.attr({ route: 'tooltip/hide'}, true);
+		}
 	}
-
 });
 module.exports = ChampionCtrl;

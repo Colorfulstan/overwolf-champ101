@@ -9,4 +9,18 @@
   position: absolute;
   z-index: 9999;
   display: none;
+
+  &:hover, &:active, &:focus {
+    opacity: 1;
+  }
+}
+
+#spell-video-container {
+  width: 348px;
+  height: 196px;
+
+  #videoPlayer {
+    //    not shown until certain there is no error
+//    display: none;
+  }
 }

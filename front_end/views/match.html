@@ -3,13 +3,18 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 	<title>Champions</title>
+
 	<script type='text/javascript' src='../node_modules/steal/steal.js'
 			data-env="development"
-			data-main="../js/match/match"></script>
-	<!--TODO-->
-	<!--<script src="../js/Utility.js"></script>-->
-	<!--<script src="../js/data/Matchloader.js"></script>-->
-	<!--<script src="../js/PanelManager.js"></script>-->
+			data-main="match"></script>
+
+	<link href="../node_modules/video.js/dist/video-js/video-js.css" rel="stylesheet">
+	<link href="../assets/css/videojs-sublime-skin.min.css" rel="stylesheet">
+	<script src="../node_modules/video.js/dist/video-js/video.js"></script>
+	<script>
+		videojs.options.flash.swf = "../node_modules/video.js/dist/video-js/video-js.swf"
+	</script>
+
 	<link rel="stylesheet" href="../assets/css/main.css" type="text/css" />
 </head>
 <body>
@@ -38,24 +43,24 @@
 	</div>
 </div>
 <script>
-//	var $champSelect = $('<div class="champ-select col-xs-3">')// TODO: rework or integrate with ChampionCtrl
-//			.append(
-//			$('#match-participants').children().clone() // blue / purple team divs
-//					.removeClass('col-xs-6').addClass('col-xs-12')
-//					.each(function () {
-//						// this = team-container currently iterated
-//						var $champImgs = $(this).children();
-//						$champImgs.click(function () {
-//							// when clicked, the containing Panel should switch to that clicked champion
-//
-//							// this = clicked image
-//							var $this = $(this);
-//							var $panel = $this.closest('.participant-panel');
-//							// TODO: testen
-//							PanelManager.replaceChampion($panel, $this.attr('data-team'), $this.attr('data-team-index'));
-//						});
-//					})
-//	);
+	//	var $champSelect = $('<div class="champ-select col-xs-3">')// TODO: rework or integrate with ChampionCtrl
+	//			.append(
+	//			$('#match-participants').children().clone() // blue / purple team divs
+	//					.removeClass('col-xs-6').addClass('col-xs-12')
+	//					.each(function () {
+	//						// this = team-container currently iterated
+	//						var $champImgs = $(this).children();
+	//						$champImgs.click(function () {
+	//							// when clicked, the containing Panel should switch to that clicked champion
+	//
+	//							// this = clicked image
+	//							var $this = $(this);
+	//							var $panel = $this.closest('.participant-panel');
+	//							// TODO: testen
+	//							PanelManager.replaceChampion($panel, $this.attr('data-team'), $this.attr('data-team-index'));
+	//						});
+	//					})
+	//	);
 
 </script>
 </body>

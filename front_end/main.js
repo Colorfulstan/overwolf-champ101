@@ -3,6 +3,7 @@
 var App = require('./js/App');
 var SettingsModel = require('./js/settings/SettingsModel');
 
+
 var app = new App();
 var settings = new SettingsModel();
 

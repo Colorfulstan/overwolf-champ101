@@ -3,7 +3,11 @@ var can = require('can');
 /**
  * @see OverviewCtrl.init
  */
-var OverviewCtrl = can.Control.extend('OverviewCtrl', {}, {
+var OverviewCtrl = can.Control.extend('OverviewCtrl', {
+	defaults: {
+		overviewTmpl: 'templates/match-overview.mustache'
+	}
+}, {
 	/**
 	 *
 	 * @param el
@@ -16,7 +20,7 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {}, {
 		steal.dev.log("rendering view for OverviewCtrl");
 
 		this.element.html(
-			can.view('./match-overview.mustache', {
+			can.view(this.options.overviewTmpl, {
 				blue: this.options.match.blue,
 				purple: this.options.match.purple
 			})
