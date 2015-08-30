@@ -1,7 +1,11 @@
 "use strict";
 var can = require('can');
 
-can.route('#!tooltip/:champ');
+// TooltipCtrl
+can.route('#!tooltip/champ/:champ');
+can.route('#!tooltip/spell/:champ/:index');
+
+// ChampionCtrl
 can.route('#!add/:champ');
 can.route('#!show/:team');
 

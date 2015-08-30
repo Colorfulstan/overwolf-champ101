@@ -4,8 +4,7 @@ var MatchCtrl = require('./MatchCtrl');
 var SettingsModel = require('../settings/SettingsModel');
 var OverviewCtrl = require('./overview/OverviewCtrl');
 var ChampionCtrl = require('./champion/ChampionCtrl');
-//var Routing = require('./champion/Routing');
-
+var TooltipCtrl = require('./tooltip/TooltipCtrl');
 
 var match = new MatchCtrl('div#content');
 var settings = new SettingsModel();
@@ -22,4 +21,4 @@ $.when(dataPromise).then(function (data) {
 	});
 }); // TODO: reload-btn
 
-// Tooltip-controller erzeugen + durch Routing steuern
+var tooltip = new TooltipCtrl('#tooltip-container', { champions: champions.options.participantsByChamp });
