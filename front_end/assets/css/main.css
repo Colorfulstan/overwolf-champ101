@@ -1,66 +1,8 @@
 @import url(imports/reset.css);
 @import url(imports/grid_12.css);
-#tooltip-container {
-  width: 100%;
-  background-color: black;
-  opacity: 0.8;
-  color: #eee;
-  padding: 30px;
-  position: absolute;
-  z-index: 9999; }
-
-#champion-container {
-  height: auto;
-  position: relative; }
-  #champion-container #close-all-btn {
-    position: absolute;
-    width: 30px;
-    height: 100%;
-    background-color: brown;
-    right: 0;
-    top: 0; }
-
-.champion-panel {
-  height: 100px;
-  border-top: 1px dashed #ccc;
-  padding-right: 30px; }
-  .champion-panel > img {
-    height: 100%;
-    float: left; }
-  .champion-panel.blue {
-    background-color: #909bff; }
-  .champion-panel.purple {
-    background-color: rgba(78, 7, 105, 0.73); }
-  .champion-panel .summoner-spells {
-    height: 100%; }
-    .champion-panel .summoner-spells > img {
-      height: 27%; }
-    .champion-panel .summoner-spells .passive {
-      width: 100%;
-      height: auto; }
-  .champion-panel .champ-spells {
-    height: 100%; }
-    .champion-panel .champ-spells img {
-      height: 70%; }
-  .champion-panel .champ-select {
-    height: 100%; }
-    .champion-panel .champ-select .team {
-      height: 45%; }
-      .champion-panel .champ-select .team img {
-        height: 100%;
-        float: left; }
-  .champion-panel .panel-control {
-    height: 100%;
-    width: 30px;
-    background-color: black;
-    float: right; }
-    .champion-panel .panel-control .btn {
-      width: 100%;
-      height: 50%;
-      color: #eee;
-      text-align: center;
-      padding-top: 10px; }
-
+@import url(imports/tooltip.css);
+@import url(imports/participants.css);
+@import url(imports/match.css);
 * {
   overflow: hidden; }
 
@@ -110,13 +52,6 @@ body#settings, body#main {
   cursor: se-resize;
   bottom: 0;
   right: 0; }
-
-.loading {
-  background-color: red !important; }
-
-.failed {
-  background-color: orange !important;
-  padding: 30px; }
 
 .btn {
   cursor: pointer; }

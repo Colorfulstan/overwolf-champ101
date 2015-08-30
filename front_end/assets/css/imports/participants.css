@@ -1,7 +1,53 @@
 #champion-container {
-  height: auto; }
+  height: auto;
+  position: relative; }
+  #champion-container #close-all-btn {
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background-color: brown;
+    right: 0;
+    top: 0; }
 
 .champion-panel {
-  height: 75px; }
+  height: 100px;
+  border-top: 1px dashed #ccc;
+  padding-right: 30px; }
+  .champion-panel > img {
+    height: 100%;
+    float: left; }
+  .champion-panel.blue {
+    background-color: #909bff; }
+  .champion-panel.purple {
+    background-color: rgba(78, 7, 105, 0.73); }
+  .champion-panel .summoner-spells {
+    height: 100%; }
+    .champion-panel .summoner-spells > img {
+      height: 27%; }
+    .champion-panel .summoner-spells .passive {
+      width: 100%;
+      height: auto; }
+  .champion-panel .champ-spells {
+    height: 100%; }
+    .champion-panel .champ-spells img {
+      height: 70%; }
+  .champion-panel .champ-select {
+    height: 100%; }
+    .champion-panel .champ-select .team {
+      height: 45%; }
+      .champion-panel .champ-select .team img {
+        height: 100%;
+        float: left; }
+  .champion-panel .panel-control {
+    height: 100%;
+    width: 30px;
+    background-color: black;
+    float: right; }
+    .champion-panel .panel-control .btn {
+      width: 100%;
+      height: 50%;
+      color: #eee;
+      text-align: center;
+      padding-top: 10px; }
 
 /*# sourceMappingURL=participants.css.map */

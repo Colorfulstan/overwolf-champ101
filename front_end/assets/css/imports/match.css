@@ -1,0 +1,22 @@
+.champion-panel {
+  display: none; }
+  .champion-panel.stay {
+    display: block; }
+
+#open-settings {
+  display: none; }
+
+#reload {
+  display: none; }
+
+.loading {
+  background-color: red !important; }
+
+.failed {
+  background-color: orange !important; }
+  .failed #open-settings {
+    display: block; }
+  .failed #reload {
+    display: block; }
+
+/*# sourceMappingURL=match.css.map */
