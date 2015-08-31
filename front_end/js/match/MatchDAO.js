@@ -1,7 +1,7 @@
 "use strict";
-var SpellModel = require('./champion-panel/SpellModel');
-var ChampionModel = require('./champion-panel/ChampionModel');
-require('../global');
+var SpellModel = require('SpellModel');
+var ChampionModel = require('ChampionModel');
+require('global');
 var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	init: function () {
 	},

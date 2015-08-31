@@ -1,7 +1,7 @@
 "use strict";
 var can = require('can');
-var ChampionModel = require('./ChampionModel');
-var SpellModel = require('./SpellModel');
+var ChampionModel = require('ChampionModel');
+var SpellModel = require('SpellModel');
 /**
  * @see ChampionCtrl.init
  */

@@ -1,7 +1,7 @@
 "use strict";
 var can = require('can');
-var ImageModel = require('../ImageModel');
-require('../../global');
+var ImageModel = require('ImageModel');
+require('global');
 
 /** * // TODO: add more from backend and doc here
 

@@ -14,15 +14,15 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	 * @param options.match {MatchModel}
 	 */
 	init: function (el, options) {
-		this.renderView();
+		this.renderView(options.match.blue, options.match.purple);
 	},
-	renderView: function () {
+	renderView: function (teamBlue, teamPurple) {
 		steal.dev.log("rendering view for OverviewCtrl");
 
 		this.element.html(
 			can.view(this.options.overviewTmpl, {
-				blue: this.options.match.blue,
-				purple: this.options.match.purple
+				blue: teamBlue,
+				purple: teamPurple
 			})
 		);
 	},
@@ -44,9 +44,12 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 		//steal.dev.log('.portrait click');
 		can.route.attr({route: 'add/:champ', champ: $el.attr('alt')});
 	},
-	'reload/:window route': function () {
-		steal.dev.log('reload Route triggered');
-		this.renderView();
+	'reload/match route': function (routeData) {
+		steal.dev.log('refresh Route triggered in OverviewCtrl');
+		debugger;
+		this.options.match = routeData.match;
+		this.on();
+		this.renderView(this.options.match.blue,this.options.match.purple);
 	}
 });
 module.exports = OverviewCtrl;

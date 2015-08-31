@@ -1,7 +1,7 @@
 // Entry point for index.html
 "use strict";
-var App = require('./js/App');
-var SettingsModel = require('./js/settings/SettingsModel');
+var App = require('App');
+var SettingsModel = require('SettingsModel');
 
 
 var app = new App();

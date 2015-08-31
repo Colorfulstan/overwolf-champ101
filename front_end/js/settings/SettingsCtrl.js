@@ -1,6 +1,6 @@
 "use strict";
 var can = require('can');
-var WindowCtrl = require('../WindowCtrl');
+var WindowCtrl = require('WindowCtrl');
 
 /**
  * Controller for the "Settings" view

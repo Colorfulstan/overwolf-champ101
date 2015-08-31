@@ -1,8 +1,13 @@
 "use strict";
 var can = require('can');
-var WindowCtrl = require('../WindowCtrl');
-var MatchDAO = require('./MatchDAO');
-var MatchModel = require('./MatchModel');
+var WindowCtrl = require('WindowCtrl');
+var MatchDAO = require('MatchDAO');
+var MatchModel = require('MatchModel');
+
+var SettingsModel = require('SettingsModel');
+var OverviewCtrl = require('OverviewCtrl');
+var ChampionCtrl = require('ChampionCtrl');
+var TooltipCtrl = require('TooltipCtrl');
 
 require('../global');
 
@@ -24,29 +29,46 @@ var MatchCtrl = can.Control.extend({
 	/**
 	 * @constructor
 	 * @param element
-	 * @param options
-	 * @param options.settings {SettingsModel}
-	 * @param options.dao {MatchDAO}
 	 */
 	init: function (element, options) {
-		this.childWindows = {};
+		this.childWindows = {}; // ???
 		this.$panelContainer = $('#panel-container');
+
+		options.settings = new SettingsModel();
+
+		options.dao = new MatchDAO();
+		options.model = new MatchModel();
+		options.model.attr('summonerId', options.settings.attr('summonerId'));
+		options.model.attr('server', options.settings.attr('server'));
+
+		// After successfully loading the Match-Data
+		this.loadMatch(options.model)
+
 	},
-	loadMatch: function (transfer) {
+	loadMatch: function (matchModel) {
 		var deferred = $.Deferred();
+		debugger;
 
 		var self = this;
-		if (this.model == null) {  // first load
-			this.model = transfer;
-		}
-		this.model.attr('server', this.options.settings._server());
-		this.model.attr('summonerId', this.options.settings._summonerId());
+
+		//if (this.model == null) {  // first load
+		//	this.model = matchModel;
+		//}
+		//
 
 		self.$panelContainer.removeClass('failed').addClass('loading');
-		$.when(this.options.dao.loadMatchModel(self.model))
-			.then(function (match) {
-				deferred.resolve(match);
+		$.when(this.options.dao.loadMatchModel(self.options.model))
+			.then(function (matchModel) {
+				deferred.resolve(matchModel);
 				self.$panelContainer.removeClass('loading');
+				debugger;
+				// Controller for Overview-Panel
+				self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
+				// Controller for Champion-Panels
+				self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
+				// Controller for Tooltip
+				self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+
 			}).fail(function (data, status, jqXHR) {
 				steal.dev.warn("Loading Match failed!", data, status, jqXHR);
 				self.$panelContainer.removeClass('loading').addClass('failed');
@@ -100,12 +122,15 @@ var MatchCtrl = can.Control.extend({
 	},
 
 	'{reloadBtn} click': function () {
-		$.when(this.loadMatch(this.model)).then(function () {
-				debugger;
-				can.route.attr({'route': 'reload/:window', window: 'match'});
-				steal.dev.log(can.route.attr());
-			}
-		);
+		debugger;
+		delete this.options.settings;
+		this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
+		this.options.model.attr('server', this.options.settings._server());
+		this.options.model.attr('summonerId', this.options.settings._summonerId());
+		//this.options.model.attr('server', this.options.settings.attr('server'));
+		//this.options.model.attr('summonerId', this.options.settings.attr('summonerId'));
+
+		this.loadMatch(this.options.model);
 	}
 
 });

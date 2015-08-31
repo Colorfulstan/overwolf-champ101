@@ -1,5 +1,5 @@
 "use strict";
-require('../global');
+require('global');
 var can = require('can');
 
 var SettingsModel = can.Model.extend('SettingsModel', {},{
