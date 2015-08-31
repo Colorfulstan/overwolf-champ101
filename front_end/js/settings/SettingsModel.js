@@ -1,8 +1,8 @@
 "use strict";
 require('../global');
-var Model = require('can/model/');
+var can = require('can');
 
-var SettingsModel = Model.extend('SettingsModel', {},{
+var SettingsModel = can.Model.extend('SettingsModel', {},{
 	init: function () {
 
 		this.STORAGE_KEY_REGION = 'region-code';

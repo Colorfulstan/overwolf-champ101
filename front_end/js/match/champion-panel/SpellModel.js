@@ -1,5 +1,5 @@
 "use strict";
-var Model = require('can/model/');
+var can = require('can');
 var ImageModel = require('../ImageModel');
 require('../../global');
 
@@ -7,7 +7,7 @@ require('../../global');
 
  * @see SpellModel.init()
  * */
-var SpellModel = Model.extend('SpellModel',{}, {
+var SpellModel = can.Model.extend('SpellModel',{}, {
 	/**
 	 * @param options.name {String}
 	 * @param options.type {String}
