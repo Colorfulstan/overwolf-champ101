@@ -1,5 +1,5 @@
 "use strict";
-require('../global');
+require('global');
 var ImageModel = can.Model.extend('ImageModel', {}, {
 	init: function (options) {
 	},

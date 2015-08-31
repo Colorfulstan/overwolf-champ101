@@ -1,10 +1,10 @@
-require('js/global');
-var Model = require('can/model/');
+require('global');
+var can = require('can');
 /**
  * Data about the current Match
  * @constructor
  */
-var MatchModel = Model.extend('MatchModel', {},{
+var MatchModel = can.Model.extend('MatchModel', {},{
 	init : function(){
 	},
 

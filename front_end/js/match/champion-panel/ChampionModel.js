@@ -1,7 +1,7 @@
 "use strict";
 var can = require('can');
-var SpellModel = require('./SpellModel');
-require('../../global');
+var SpellModel = require('SpellModel');
+require('global');
 
 var ChampionModel = can.Model.extend({}, {
 	init: function (options) {
