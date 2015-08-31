@@ -46,11 +46,11 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 				self._extractParticipants(transfer, dataArray, 'purple');
 				transfer.version = dataArray.version;
 
-				steal.dev.log('GameData in %d:',transfer );
+				steal.dev.log('GameData in loadMatchModel:',transfer );
 				deferred.resolve(transfer);
 			}).fail(function (data, status, jqXHR) {
 
-				steal.dev.warn("Loading the Match failed!", data, status, jqXHR);
+				steal.dev.warn("Loading MatchModel failed!", data, status, jqXHR);
 
 				deferred.reject(data, status, jqXHR);
 			});
