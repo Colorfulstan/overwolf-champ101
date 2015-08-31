@@ -1,10 +1,24 @@
 "use strict";
-var Control = require('can/control/');
+var can = require('can');
 /**
  * Controller for window-interactions (opening, closing, minimizing, ...)
  * @see WindowCtrl.init
  */
-var WindowCtrl = Control.extend('WindowCtrl', {},{
+var WindowCtrl = can.Control.extend('WindowCtrl', {
+	// static
+	SCREEN_WIDTH: window.screen.availWidth,
+	SCREEN_HEIGHT: window.screen.availHeight,
+
+
+	getCenteredX: function (width) {
+		return parseInt(WindowCtrl.SCREEN_WIDTH / 2 - width / 2);
+	},
+	getCenteredY: function (height) {
+		return parseInt(WindowCtrl.SCREEN_HEIGHT / 2 - height / 2);
+	}
+
+
+}, { // Instance
 	/**
 	 * @constructor
 	 * @param el - CSS Selector for the Element to listen on for events
@@ -14,8 +28,6 @@ var WindowCtrl = Control.extend('WindowCtrl', {},{
 	 * @param [options.height]
 	 */
 	init: function (el, options) {
-		this.SCREEN_WIDTH = window.screen.availWidth;
-		this.SCREEN_HEIGHT = window.screen.availHeight;
 
 		this.ow_window = {};
 		this.childWindows = {};
@@ -50,7 +62,6 @@ var WindowCtrl = Control.extend('WindowCtrl', {},{
 				self.ow_window = result.window;
 				overwolf.windows.restore(result.window.id, function (result) {
 					steal.dev.log('window opened', result);
-					debugger;
 					if (self.options.width && self.options.height) {
 
 						overwolf.windows.changeSize(self.ow_window.id, self.options.width, self.options.height); // TODO: try through manifest
@@ -60,14 +71,6 @@ var WindowCtrl = Control.extend('WindowCtrl', {},{
 			}
 		}, self));
 		return deferred.promise();
-	},
-	getCenteredX: function () {
-		var w = this.ow_window.width / 2;
-		return parseInt(this.SCREEN_WIDTH / 2 - w);
-	},
-	getCenteredY: function () {
-		var h = this.ow_window.height / 2;
-		return parseInt(this.SCREEN_HEIGHT / 2 - h);
 	},
 	'.drag-window-handle mousedown': function (el, ev) {
 		steal.dev.log('dragging');

@@ -1,9 +1,9 @@
 "use strict";
-var Model = require('can/model/');
+var can = require('can');
 var SpellModel = require('./SpellModel');
 require('../../global');
 
-var ChampionModel = Model.extend({}, {
+var ChampionModel = can.Model.extend({}, {
 	init: function (options) {
 		var self = this;
 		options.passive.champId = this.id;

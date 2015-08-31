@@ -1,5 +1,5 @@
 "use strict";
-var Construct = require('can/construct/');
+var can = require('can');
 var WindowCtrl = require('./WindowCtrl');
 
 /**
@@ -7,7 +7,7 @@ var WindowCtrl = require('./WindowCtrl');
  * Represents the Main crossing point for the components of the app
  * as it initiates and manages the controllers.
  */
-var App = Construct.extend({
+var App = can.Construct.extend({
 	init: function () {
 		/** All opened overwolf windows stored under their respective Names @type {{ overwolfWindows }} */
 		this.windows = {};
@@ -33,7 +33,7 @@ var App = Construct.extend({
 		$.when(win.open()).then(function (ow_window) {
 
 			overwolf.windows.changeSize(ow_window.id, win.options.width, win.options.height); // TODO: try through manifest
-			var x = win.getCenteredX();
+			var x = WindowCtrl.getCenteredX(ow_window.width);
 			overwolf.windows.changePosition(ow_window.id, x, 0);
 		});
 	}
@@ -49,8 +49,8 @@ var App = Construct.extend({
 		self.windows[name] = win;
 		$.when(win.open()).then(function (ow_window) {
 			//	// TODO: should this window open centered even after relocating it? => not position it at all
-			var x = self.windows[name].getCenteredX();
-			var y = self.windows[name].getCenteredY();
+			var x = WindowCtrl.getCenteredX(self.windows[name].width);
+			var y = WindowCtrl.getCenteredY(self.windows[name].height);
 			overwolf.windows.changePosition(ow_window.id, x, y);
 		});
 	}

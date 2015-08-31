@@ -3,7 +3,7 @@ var SettingsModel = require('./js/settings/SettingsModel');
 var OverviewCtrl = require('./js/match/overview-panel/OverviewCtrl');
 var ChampionCtrl = require('./js/match/champion-panel/ChampionCtrl');
 var TooltipCtrl = require('./js/match/tooltip/TooltipCtrl');
-require('js/Routes');
+require('./js/Routes');
 
 var MatchCtrl = require('./js/match/MatchCtrl');
 var MatchDAO = require('./js/match/MatchDAO');
