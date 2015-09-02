@@ -1,5 +1,12 @@
 <h2 class="spell-name">{{name}}</h2>
-<p class="spell-description">{{{description}}}</p>
+<p class="spell-description">
+	{{#tooltip}}{{{.}}}{{/tooltip}}
+	{{^tooltip}}{{{description}}}{{/tooltip}}
+</p>
+<hr />
+<p>Cooldown: {{cooldownBurn}}</p>
+<p>Cost: {{costBurn}} {{costType}}</p>
+<p>Range: {{rangeBurn}}</p>
 
 {{ #videoAvailable }}
 <div id="spell-video-container">
