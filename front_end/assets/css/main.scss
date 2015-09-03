@@ -1,11 +1,11 @@
-@import "imports/reset.css";
-@import "imports/grid_12.css";
+@import "reset.css";
+@import "grid_12.css";
 
-@import "imports/tooltip.css";
-@import "imports/participants.css";
+@import "imports/tooltip.scss";
+@import "imports/participants.scss";
 @import "helper/colors.scss";
 
-@import "imports/match.css";
+@import "imports/match.scss";
 
 $spacer : 30px;
 
