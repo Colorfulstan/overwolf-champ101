@@ -6,8 +6,8 @@
 	"version": "0.3.0",
 	"minimum-overwolf-version": "0.77.10",
 	"author": "Colorfulstan",
-	"icon": "assets/icon.png",
-	"icon_gray": "assets/icon_gray.png",
+	"icon": "assets/img/icon.png",
+	"icon_gray": "assets/img/icon_gray.png",
 	"description": "Get infos about the champs in your League of Legends match. Forgot what skills that rare picked champion has? Want some pointers for how to play with or against that champion? This app gives you a quick lookup for all neccessary champion information right in your game. Fast and simple!"
   },
   "data": {
