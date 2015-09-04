@@ -3,8 +3,8 @@
   "type": "WebApp",
   "meta": {
 	"name": "LoL Champion Info",
-	"version": "0.3.5",
-	"minimum-overwolf-version": "0.77.10",
+	"version": "0.5.0",
+	"minimum-overwolf-version": "0.87.00",
 	"author": "Colorfulstan",
 	"icon": "assets/img/icon.png",
 	"icon_gray": "assets/img/icon_gray.png",
@@ -35,15 +35,15 @@
 	  "Match": {
 		"file": "views/match.html",
 		"transparent": true,
-		"resizable": true,
+		"resizable": false,
 		"show_in_taskbar": false
 	  }
 	},
 	"hotkeys": {
-	  "hide_match_window": {
-		"title": "Hide Match Window",
+	  "toggle_panels": {
+		"title": "Hide/Show Champion Infos",
 		"action-type": "custom",
-		"default": "Tab"
+		"default": "Alt + Space"
 	  }
 	},
 	"permissions": [

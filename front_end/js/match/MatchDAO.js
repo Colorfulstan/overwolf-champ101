@@ -70,13 +70,13 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 		transfer[team] = [];
 		var teamArray = dataArray[team];
 		for (var i = 0; i < teamArray.length; i++) {
-			var summonerSpells = [];
-			summonerSpells.push(new SpellModel(teamArray[i].summonerSpells[0]));
-			summonerSpells.push(new SpellModel(teamArray[i].summonerSpells[1]));
+			//var summonerSpells = [];
+			//summonerSpells.push(new SpellModel(teamArray[i].summonerSpells[0]));
+			//summonerSpells.push(new SpellModel(teamArray[i].summonerSpells[1]));
 
 			var participant = {
 				'champ': new ChampionModel(teamArray[i].champ),
-				'summonerSpells': summonerSpells,
+				//'summonerSpells': summonerSpells,
 				'team': team
 			};
 			transfer[team][i] = participant;
