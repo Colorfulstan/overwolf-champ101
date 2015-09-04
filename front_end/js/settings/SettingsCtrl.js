@@ -18,9 +18,11 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 
 		this.options.oldName = this.options.settings.attr('summonerName');
 		this.options.oldServer = this.options.settings.attr('server');
-		debugger;
-		this.window = new WindowCtrl('body#settings', {name: 'Settings'});
-		this.window.open();
+
+		var self = this;
+		$.when(WindowCtrl.open('Settings')).then(function (ow_window) {
+			self.options.ow_window = ow_window;
+		});
 
 		this.element.html(
 			can.view(this.options.settingsTmpl, this.options.settings)
@@ -31,21 +33,23 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 		var settings = this.options.settings;
 		debugger;
 		var self = this;
-		$btn.text("checking");
+		$btn.text("checking"); // TODO: replace with class
 		if (
 			this.options.oldServer == this.options.settings.attr('server')
 			&&
 			this.options.oldName == this.options.settings.attr('summonerName')
 		) {	// no change - spare the request
 			debugger;
-			self.window.close(); return; }
+			WindowCtrl.close(self.options.ow_window.id); return; }
 			$.get(
 				RIOT_ADAPTER_URL + '/getSummonerId.php'
 				, {'server': settings.attr('server'), 'summoner': settings.attr('summonerName')}
 				, function (summonerId, status, jqXHR) {
 					steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
 					settings.attr('summonerId', summonerId);
-					self.window.close();
+					self.options.oldName = self.options.settings.attr('summonerName');
+					self.options.oldServer = self.options.settings.attr('server');
+					WindowCtrl.close(self.options.ow_window.id);
 				})
 				.fail(function (data, status, jqXHR) {
 					steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);

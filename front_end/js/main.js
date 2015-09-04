@@ -1,10 +1,12 @@
 // Entry point for index.html
 "use strict";
-var App = require('App');
+var MainCtrl = require('MainCtrl');
 var SettingsModel = require('SettingsModel');
 
+MainCtrl.registerHotkeys();
+MainCtrl.registerOverwolfHandlers();
 
-var app = new App();
+var main = new MainCtrl('body');
 var settings = new SettingsModel();
 
-app.start(settings.isSummonerSet());
+main.start(settings.isSummonerSet());

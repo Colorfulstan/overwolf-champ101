@@ -38,7 +38,8 @@
 	  }
 	},
 	"permissions": [
-	  "Hotkeys"
+	  "Hotkeys",
+	  "GameInfo"
 	]
   },
   "externally_connectable": {
