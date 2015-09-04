@@ -26,5 +26,13 @@
 	<button id="btn-close">Close</button>
 	<button id="btn-settings">Settings</button>
 	<button id="btn-minimize">minimize</button>
+	<button id="btn-match">Match</button>
+
+	<script type="text/mustache" id="settings-tmpl">
+
+	<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" {{ #hideHomeAtStart }}checked="checked"{{ /hideHomeAtStart }}/>
+	<label for="hideHome">Don't show at start</label>
+	</script>
+
 </div>
 <button id="btn-resize">drag to resize</button>

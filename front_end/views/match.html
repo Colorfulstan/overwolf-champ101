@@ -24,8 +24,8 @@
 		<div id="match-overview-container" class="panel">
 			<!-- contains all the champs within the game as Thumbnails -->
 			<!-- match-overview.mustache -->
-			<button id="open-settings" class="btn pull-right col-xs-3">check settings.</button>
-			<button id="reload" class="btn pull-right col-xs-3">Reload</button>
+			<button class="btn-settings btn pull-right col-xs-3">check settings</button>
+			<button class="btn-reload btn pull-right col-xs-3">Reload</button>
 		</div>
 
 		<div id="champion-container" class="col-xs-12 table">
@@ -39,8 +39,15 @@
 		</div>
 	</div>
 	<div id="pull-down-handle">
-		<button id="btn-close">Close</button>
-		<button id="btn-load">Load</button>
+		<div id="app-buttons">
+			<button class="btn-home icon icon-hom">Home</button>
+			<button class="btn-feedback icon icon-feedback">Feedback</button>
+			<button class="btn-help icon icon-help">Help</button>
+			<button class="btn-settings icon icon-settings">Settings</button>
+			<button class="btn-reload icon icon-reload">Reload</button>
+			<button class="btn-close icon icon-close">Close</button>
+		</div>
+
 	</div>
 </div>
 <script>

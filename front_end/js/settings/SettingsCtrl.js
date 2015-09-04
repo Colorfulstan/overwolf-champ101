@@ -40,7 +40,7 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 			this.options.oldName == this.options.settings.attr('summonerName')
 		) {	// no change - spare the request
 			debugger;
-			WindowCtrl.close(self.options.ow_window.id); return; }
+			WindowCtrl.close(self.options.ow_window.name); return; }
 			$.get(
 				RIOT_ADAPTER_URL + '/getSummonerId.php'
 				, {'server': settings.attr('server'), 'summoner': settings.attr('summonerName')}
@@ -49,7 +49,8 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 					settings.attr('summonerId', summonerId);
 					self.options.oldName = self.options.settings.attr('summonerName');
 					self.options.oldServer = self.options.settings.attr('server');
-					WindowCtrl.close(self.options.ow_window.id);
+					debugger;
+					WindowCtrl.close(self.options.ow_window.name);
 				})
 				.fail(function (data, status, jqXHR) {
 					steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);

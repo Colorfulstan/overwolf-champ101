@@ -74,7 +74,6 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 				this.initVideo(spell);
 				break;
 			case 'champ':
-				console.log('routeData.champ:', routeData.champ);
 				var champ = this.options.match.participantsByChamp[routeData.champ].champ;
 				this.element.html(can.view(this.options.championTmpl, champ));
 				break;
