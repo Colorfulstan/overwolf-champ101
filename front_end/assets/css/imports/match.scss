@@ -1,14 +1,17 @@
+@import "../helper/variables";
+
 .champion-panel {
-//  display: none;
+  //  display: none;
   &.stay {
     display: block;
   }
 }
 
-#open-settings {
+.open-settings {
   display: none;
 }
-#reload {
+
+.reload {
   display: none;
 }
 
@@ -19,12 +22,34 @@
 .failed {
   background-color: orange !important;
 
-
-  #open-settings {
+  .open-settings {
     display: block;
   }
-  #reload {
+  .reload {
     display: block;
+  }
+}
+
+#pull-down-handle {
+  background-color: brown;
+  opacity: 0.5;
+  width: 100%;
+  height: $spacer;
+  margin-top: 1px; // enables scrolling with mouse on screen edge
+  position: relative;
+
+  #app-buttons {
+    display: none;
+    position: absolute;
+    right: 0;
+  }
+
+  &:hover {
+    opacity: 0.9;
+
+    #app-buttons {
+      display: block;
+    }
   }
 }
 

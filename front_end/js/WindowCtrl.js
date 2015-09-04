@@ -17,14 +17,14 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	getCenteredY: function (height) {
 		return parseInt(WindowCtrl.SCREEN_HEIGHT / 2 - height / 2);
 	},
-	dragResize: function (windowId,edge) {
-		overwolf.windows.dragResize(windowId, edge);
+	dragResize: function (name,edge) {
+		overwolf.windows.dragResize(name, edge);
 	},
-	dragMove: function (windowId) {
-		overwolf.windows.dragMove(windowId);
+	dragMove: function (name) {
+		overwolf.windows.dragMove(name);
 	},
-	minimize: function (windowId) {
-		overwolf.windows.minimize(windowId);
+	minimize: function (name) {
+		overwolf.windows.minimize(name);
 	},
 	/**
 	 * opens the overwolf window of this WindowCtrl.
@@ -49,6 +49,13 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		});
 		return deferred.promise();
 	},
+	openHelp: function (name, width, height) {
+		// TODO: implement
+	},
+	openFeedback: function (name, width, height){
+		// TODO: implement
+	},
+
 	/**
 	 * opens the overwolf window of this WindowCtrl.
 	 * Returns a promise that gets resolved to the overwolf window object for the opened window.

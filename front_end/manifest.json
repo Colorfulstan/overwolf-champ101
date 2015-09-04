@@ -3,7 +3,7 @@
   "type": "WebApp",
   "meta": {
 	"name": "LoL Champion Info",
-	"version": "0.3.0",
+	"version": "0.3.5",
 	"minimum-overwolf-version": "0.77.10",
 	"author": "Colorfulstan",
 	"icon": "assets/img/icon.png",
@@ -11,6 +11,15 @@
 	"description": "Get infos about the champs in your League of Legends match. Forgot what skills that rare picked champion has? Want some pointers for how to play with or against that champion? This app gives you a quick lookup for all neccessary champion information right in your game. Fast and simple!"
   },
   "data": {
+	  "launch_events": [
+		{
+		  "event": "GameLaunch",
+		  "event_data": {
+			"game_ids": [5426, 54261]
+		  },
+		  "start_minimized": true
+		}
+	  ],
 	"start_window": "Main",
 	"windows": {
 	  "Main": {

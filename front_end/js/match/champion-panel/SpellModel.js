@@ -200,7 +200,7 @@ var SpellModel = can.Model.extend('SpellModel', {
 	cdnNumber: function () {
 		try {
 			return this.cdnChampId() + '_0' + this.number;
-		} catch (e) { console.log(e)}
+		} catch (e) { steal.dev.log(e)}
 	},
 	/**
 	 * @example http://cdn.leagueoflegends.com/champion-abilities/images/0063_03.jpg

@@ -9,4 +9,4 @@ MainCtrl.registerOverwolfHandlers();
 var main = new MainCtrl('body');
 var settings = new SettingsModel();
 
-main.start(settings.isSummonerSet());
+main.start(settings.isSummonerSet(), settings.hideHomeAtStart());

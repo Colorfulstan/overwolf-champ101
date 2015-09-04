@@ -71,10 +71,10 @@
 .champion-panel.stay {
   display: block; }
 
-#open-settings {
+.open-settings {
   display: none; }
 
-#reload {
+.reload {
   display: none; }
 
 .loading {
@@ -82,10 +82,26 @@
 
 .failed {
   background-color: orange !important; }
-  .failed #open-settings {
+  .failed .open-settings {
     display: block; }
-  .failed #reload {
+  .failed .reload {
     display: block; }
+
+#pull-down-handle {
+  background-color: brown;
+  opacity: 0.5;
+  width: 100%;
+  height: 30px;
+  margin-top: 1px;
+  position: relative; }
+  #pull-down-handle #app-buttons {
+    display: none;
+    position: absolute;
+    right: 0; }
+  #pull-down-handle:hover {
+    opacity: 0.9; }
+    #pull-down-handle:hover #app-buttons {
+      display: block; }
 
 * {
   overflow: hidden; }
@@ -117,15 +133,6 @@ body#settings, body#main {
   #match-participants .portrait {
     float: left;
     cursor: pointer; }
-
-#pull-down-handle {
-  background-color: brown;
-  opacity: 0.5;
-  width: 100%;
-  margin-top: 1px;
-  position: relative; }
-  #pull-down-handle:hover {
-    opacity: 0.9; }
 
 .hidden {
   display: none !important; }

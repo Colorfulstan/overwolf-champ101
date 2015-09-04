@@ -17,8 +17,12 @@ require('../global');
  */
 var MatchCtrl = can.Control.extend({
 	defaults: {
-		openSettingsBtn: '#open-settings',
-		reloadBtn: '#reload',
+		homeBtn: '.btn-home',
+		openSettingsBtn: '.btn-settings',
+		reloadBtn: '.btn-reload',
+		openHelpBtn: '.btn-help',
+		openFeedbackBtn: '.btn-feedback',
+		closeBtn: '.btn-close',
 		handle: '#pull-down-handle'
 	}
 }, {
@@ -94,28 +98,42 @@ var MatchCtrl = can.Control.extend({
 	'{handle} click': function ($handle, ev) {
 		this.togglePanels($handle);
 	},
-
+	'{homeBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		WindowCtrl.open('Main');
+		ev.stopPropagation();
+	},
 	'{openSettingsBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
 		WindowCtrl.openSettings();
+		ev.stopPropagation();
 	},
-
-	'button.show-team.blue click': function () {
-		can.route.attr({team: 'blue', route: 'show/:team'});
+	'{openHelpBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		WindowCtrl.openHelp();
+		ev.stopPropagation();
 	},
-
-	'button.show-team.purple click': function () {
-		can.route.attr({team: 'purple', route: 'show/:team'});
+	'{openFeedbackBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		WindowCtrl.openFeedback();
+		ev.stopPropagation();
 	},
-
-	'{reloadBtn} click': function () {
-		debugger;
+	'{closeBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		WindowCtrl.closeMatch();
+		ev.stopPropagation();
+	},
+	'{reloadBtn} click': function ($el, ev) {
 		delete this.options.settings;
 		this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
 		this.options.model.attr('server', this.options.settings._server());
 		this.options.model.attr('summonerId', this.options.settings._summonerId());
 
 		this.loadMatch(this.options.model);
+		ev.stopPropagation();
+	},
+	'button.show-team.blue click': function ($el, ev) {
+		can.route.attr({team: 'blue', route: 'show/:team'});
+		ev.stopPropagation();
+	},
+	'button.show-team.purple click': function ($el, ev) {
+		can.route.attr({team: 'purple', route: 'show/:team'});
+		ev.stopPropagation();
 	}
-
 });
 module.exports = MatchCtrl;

@@ -1,13 +1,13 @@
+@import "helper/colors";
+@import "helper/variables";
+
 @import "reset.css";
 @import "grid_12.css";
 
 @import "imports/tooltip.scss";
 @import "imports/participants.scss";
-@import "helper/colors.scss";
 
 @import "imports/match.scss";
-
-$spacer : 30px;
 
 * {
   overflow: hidden;
@@ -53,19 +53,6 @@ body {
     cursor: pointer;
   }
 }
-
-#pull-down-handle {
-  background-color: brown;
-  opacity: 0.5;
-  width: 100%;
-  margin-top: 1px; // TODO: fix this bug - ifon top of screen = hover not releasing
-  position: relative;
-
-  &:hover {
-    opacity: 0.9;
-  }
-}
-
 
 .hidden {
   display: none !important;

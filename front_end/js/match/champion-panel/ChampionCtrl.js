@@ -119,7 +119,6 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 	'.close click': function ($el, ev) {
 		can.route.attr({ route: 'tooltip/hide'}, true);
 		var champ = $el.closest('.panel').attr('data-name');
-		console.log($el, champ);
 		this.removePanel(champ);
 	},
 	'#close-all-btn click': function () {
