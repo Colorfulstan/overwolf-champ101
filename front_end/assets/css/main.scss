@@ -60,7 +60,6 @@ body {
   width: 100%;
   margin-top: 1px; // TODO: fix this bug - ifon top of screen = hover not releasing
   position: relative;
-  top: -1px;
 
   &:hover {
     opacity: 0.9;

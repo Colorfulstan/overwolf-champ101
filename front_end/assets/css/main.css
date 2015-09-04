@@ -123,8 +123,7 @@ body#settings, body#main {
   opacity: 0.5;
   width: 100%;
   margin-top: 1px;
-  position: relative;
-  top: -1px; }
+  position: relative; }
   #pull-down-handle:hover {
     opacity: 0.9; }
 

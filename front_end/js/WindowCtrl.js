@@ -32,6 +32,9 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		this.ow_window = {};
 		this.childWindows = {};
 		steal.dev.log('WindowCtrl initialized');
+
+
+
 	},
 	dragResize: function (edge) {
 		overwolf.windows.dragResize(this.ow_window.id, edge);
