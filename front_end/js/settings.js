@@ -6,4 +6,4 @@ var SettingsModel = require('SettingsModel');
 var settings = new SettingsModel();
 steal.dev.log('Settings initialized:', settings);
 
-new SettingsCtrl('div#content', {settings: settings});
+new SettingsCtrl('div#content', {settings: settings}); // TODO: generalize element for the Window-Controllers

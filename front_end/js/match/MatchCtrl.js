@@ -31,7 +31,6 @@ var MatchCtrl = can.Control.extend({
 	 * @param element
 	 */
 	init: function (element, options) {
-		this.childWindows = {}; // ???
 		this.$panelContainer = $('#panel-container');
 
 		options.settings = new SettingsModel();
@@ -47,14 +46,8 @@ var MatchCtrl = can.Control.extend({
 	},
 	loadMatch: function (matchModel) {
 		var deferred = $.Deferred();
-		debugger;
 
 		var self = this;
-
-		//if (this.model == null) {  // first load
-		//	this.model = matchModel;
-		//}
-		//
 
 		self.$panelContainer.removeClass('failed').addClass('loading');
 		$.when(this.options.dao.loadMatchModel(self.options.model))
@@ -103,14 +96,7 @@ var MatchCtrl = can.Control.extend({
 	},
 
 	'{openSettingsBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		// TODO: do it through routing into WindowCtrl
-		var self = this;
-		var name = 'Settings';
-		var win = self.childWindows[name];
-		if (!win) win = new WindowCtrl('', {name: name});
-		win.open();
-		self.childWindows[name] = win;
-		steal.dev.log('opensettings triggered', this.childWindows);
+		WindowCtrl.openSettings();
 	},
 
 	'button.show-team.blue click': function () {
@@ -127,8 +113,6 @@ var MatchCtrl = can.Control.extend({
 		this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
 		this.options.model.attr('server', this.options.settings._server());
 		this.options.model.attr('summonerId', this.options.settings._summonerId());
-		//this.options.model.attr('server', this.options.settings.attr('server'));
-		//this.options.model.attr('summonerId', this.options.settings.attr('summonerId'));
 
 		this.loadMatch(this.options.model);
 	}
