@@ -8,9 +8,51 @@ var WindowCtrl = require('WindowCtrl');
  * as it initiates and manages the controllers.
  */
 var App = can.Construct.extend({
+
+	registerHotkeys: function () {
+		// TODO:
+	},
+	registerOverwolfHandlers: function () {
+		overwolf.windows.onStateChanged.addListener(function (result) {
+			steal.dev.log('debug', "App - overwolf.windows.onStateChanged:", result);
+			// TODO:
+		});
+		overwolf.windows.onMainWindowRestored.addListener(function (result) {
+			steal.dev.log('debug', "App - overwolf.windows.onMainWindowRestored:", result);
+		});
+		overwolf.games.onGameInfoUpdated.addListener(function (result) {
+			steal.dev.log('debug', 'App - overwolf.games.onGameInfoUpdated:', result);
+			if (App.gameStarted(result)) {
+				steal.dev.warn('League of Legends game started', new Date());
+				// TODO: start matchWindow
+			}
+			if (App.gameFinished(result)) {
+				steal.dev.warn('League of Legends game finished', new Date());
+				// TODO: close Matchwindow
+			}
+		});
+
+	},
+	gameStarted: function (result) {
+		return result.gameInfo !== null &&
+			result.gameInfo.title == "League of Legends" &&
+				result.gameChanged;
+		// gamechanged indiziert das Game gestartet wurde
+	},
+	gameFinished: function (result) {
+		return result.gameInfo !== null &&
+			result.gameInfo.title == "League of Legends" &&
+			result.runningChanged;
+		// runningchanged indiziert, dass Game beendet wurde
+	}
+
+}, {
 	init: function () {
 		/** All opened overwolf windows stored under their respective Names @type {{ overwolfWindows }} */
 		this.windows = {};
+
+		App.registerHotkeys();
+		App.registerOverwolfHandlers();
 
 		steal.dev.log('App initialized :', this);
 	}
