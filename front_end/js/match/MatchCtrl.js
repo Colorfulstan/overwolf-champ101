@@ -23,7 +23,7 @@ var MatchCtrl = can.Control.extend({
 		openHelpBtn: '.btn-help',
 		openFeedbackBtn: '.btn-feedback',
 		closeBtn: '.btn-close',
-		handle: '#pull-down-handle'
+		handle: '#match-app-bar'
 	}
 }, {
 

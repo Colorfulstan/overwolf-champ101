@@ -1,229 +1,41 @@
-@import url(reset.css);
-@import url(grid_12.css);
-#tooltip-container {
-  width: 100%;
-  background-color: black;
-  color: #eee;
-  padding: 30px;
-  position: absolute;
-  z-index: 9999;
-  display: none; }
-  #tooltip-container:hover, #tooltip-container:active, #tooltip-container:focus {
-    opacity: 1; }
+/*
+Error: Invalid CSS after "...>>> development": expected "{", was ""
+        on line 194 of main.scss
 
-#champion-container {
-  height: auto;
-  position: relative; }
-  #champion-container #close-all-btn {
-    position: absolute;
-    width: 30px;
-    height: 100%;
-    background-color: brown;
-    right: 0;
-    top: 0; }
+189: 
+190: .vertical-center {
+191:   transform: translateY(45%);
+192: }
+193: >>>>>>> development
 
-.champion-panel {
-  height: 100px;
-  border-top: 1px dashed #ccc;
-  padding-right: 30px; }
-  .champion-panel > img {
-    height: 100%;
-    float: left; }
-  .champion-panel.blue {
-    background-color: #909bff; }
-  .champion-panel.purple {
-    background-color: rgba(78, 7, 105, 0.73); }
-  .champion-panel .summoner-spells {
-    height: 100%; }
-    .champion-panel .summoner-spells > img {
-      height: 27%; }
-    .champion-panel .summoner-spells .passive {
-      width: 100%;
-      height: auto; }
-  .champion-panel .champ-spells {
-    height: 100%; }
-    .champion-panel .champ-spells img {
-      height: 70%; }
-  .champion-panel .champ-select {
-    height: 100%; }
-    .champion-panel .champ-select .team {
-      height: 45%; }
-      .champion-panel .champ-select .team img {
-        height: 100%;
-        float: left; }
-  .champion-panel .panel-control {
-    height: 100%;
-    width: 30px;
-    background-color: black;
-    float: right; }
-    .champion-panel .panel-control .btn {
-      width: 100%;
-      height: 50%;
-      color: #eee;
-      text-align: center;
-      padding-top: 10px; }
-
-.champion-panel.stay {
-  display: block; }
-
-.open-settings {
-  display: none; }
-
-.reload {
-  display: none; }
-
-.loading {
-  background-color: red !important; }
-
-.failed {
-  background-color: orange !important; }
-  .failed .open-settings {
-    display: block; }
-  .failed .reload {
-    display: block; }
-
-#pull-down-handle {
-  background-color: brown;
-  opacity: 0.5;
-  width: 100%;
-  height: 30px;
-  margin-top: 1px;
-  position: relative; }
-  #pull-down-handle #app-buttons {
-    display: none;
-    position: absolute;
-    right: 0; }
-  #pull-down-handle:hover {
-    opacity: 0.9; }
-    #pull-down-handle:hover #app-buttons {
-      display: block; }
-
-* {
-  overflow: hidden; }
-
-html {
-  font-size: 14px; }
-
-h1, h2, h3, h4, h5, h6 {
-  padding-bottom: 0.5em; }
-
-h1 {
-  font-size: 3rem; }
-
-h2 {
-  font-size: 2rem; }
-
-h3 {
-  font-size: 1.5rem; }
-
-h4 {
-  font-size: 1.3rem; }
-
-h5 {
-  font-size: 1.1rem; }
-
-h6 {
-  font-size: 1rem; }
-
-hr {
-  width: 80%;
-  border-color: #eee; }
-
-p {
-  padding: 0 0 30px 0; }
-
-ul {
-  list-style: circle; }
-
-body#settings, body#main {
-  background-color: #eee; }
-
-#panel-container {
-  height: auto;
-  width: 740px;
-  margin: 0 auto; }
-
-#match-overview-container {
-  height: 60px; }
-  #match-overview-container #vs {
-    background-color: #eee; }
-    #match-overview-container #vs p {
-      font-size: 30px;
-      padding: 15px; }
-
-#match-participants {
-  height: 100%;
-  width: 100%; }
-  #match-participants * {
-    height: 100%; }
-  #match-participants .portrait {
-    float: left;
-    cursor: pointer; }
-
-.hidden {
-  display: none !important; }
-
-#btn-resize {
-  position: absolute;
-  cursor: se-resize;
-  bottom: 0;
-  right: 0; }
-
-.btn {
-  cursor: pointer; }
-  .btn.show-team {
-    border: none;
-    width: 15px;
-    height: 100%;
-    position: absolute;
-    top: 0; }
-    .btn.show-team.blue {
-      background: #909bff;
-      left: 0; }
-    .btn.show-team.purple {
-      background: rgba(78, 7, 105, 0.73);
-      right: 0; }
-
-button#reload {
-  background-color: #eee;
-  border: none;
-  position: relative;
-  right: 0;
-  top: 0;
-  height: 100%;
-  z-index: 9999; }
-
-.padded {
-  padding: 30px; }
-  .padded-left {
-    padding-left: 30px; }
-    .padded-left-0 {
-      padding-left: 0; }
-  .padded-right {
-    padding-right: 30px; }
-    .padded-right-0 {
-      padding-right: 0; }
-  .padded-top {
-    padding-top: 30px; }
-    .padded-top-0 {
-      padding-top: 0; }
-  .padded-bot {
-    padding-bottom: 30px; }
-    .padded-bot-0 {
-      padding-bottom: 0; }
-  .padded-0 {
-    padding: 0; }
-
-.line-right {
-  border-right: 1px solid #eee; }
-.line-left {
-  border-left: 1px solid #eee; }
-
-.text-center {
-  text-align: center; }
-.text-body {
-  line-height: 1.3em !important; }
-.text-vertical-center {
-  vertical-align: middle; }
-
-/*# sourceMappingURL=main.css.map */
+Backtrace:
+main.scss:194
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:1162:in `expected'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:1098:in `expected'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:1093:in `tok!'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:638:in `block'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:632:in `ruleset'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:657:in `block_child'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:650:in `block_contents'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:117:in `stylesheet'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/scss/parser.rb:42:in `parse'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/engine.rb:403:in `_to_tree'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/engine.rb:378:in `_render_with_sourcemap'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/engine.rb:295:in `render_with_sourcemap'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/plugin/compiler.rb:490:in `update_stylesheet'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/plugin/compiler.rb:209:in `each'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/plugin.rb:82:in `update_stylesheets'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/exec/sass_scss.rb:364:in `watch_or_update'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/exec/sass_scss.rb:51:in `process_result'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/exec/base.rb:52:in `parse'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/lib/sass/exec/base.rb:19:in `parse!'
+C:/Tools-CLI/Ruby22-x64/lib/ruby/gems/2.2.0/gems/sass-3.4.17/bin/scss:13:in `<top (required)>'
+C:/Tools-CLI/Ruby22-x64/bin/scss:23:in `load'
+C:/Tools-CLI/Ruby22-x64/bin/scss:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid CSS after \"...>>> development\": expected \"{\", was \"\"\A         on line 194 of main.scss\A \A 189: \A 190: .vertical-center {\A 191:   transform: translateY(45%);\A 192: }\A 193: >>>>>>> development"; }
