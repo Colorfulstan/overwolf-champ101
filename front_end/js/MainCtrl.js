@@ -11,7 +11,7 @@ var SettingsModel = require('SettingsModel');
 var MainCtrl = can.Control.extend({
 	defaults: {
 		name: 'Main'
-		,closeBtn: '#btn-close'
+		, closeBtn: '#btn-close'
 		, resizeBtn: '#btn-resize'
 		, minimizeBtn: '#btn-minimize'
 		, settingsBtn: '#btn-settings'
@@ -22,9 +22,6 @@ var MainCtrl = can.Control.extend({
 	},
 
 	// static
-	registerHotkeys: function () {
-		// TODO:
-	},
 	registerOverwolfHandlers: function () {
 		overwolf.windows.onStateChanged.addListener(function (result) {
 			steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
@@ -74,7 +71,7 @@ var MainCtrl = can.Control.extend({
 	, start: function (isSummonerSet, hideHome) {
 		var name = 'Main';
 		var self = this;
-		if (!hideHome){
+		if (!hideHome) {
 			$.when(WindowCtrl.open(name)).then(function (ow_window) {
 				self.options.ow_window = ow_window;
 			});

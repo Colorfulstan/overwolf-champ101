@@ -1,7 +1,8 @@
-<form onsubmit="return false" id="summoner-form">
+<div class=""><form onsubmit="return false" id="summoner-form">
 	<label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
 	<br>
-	<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name" can-value='summonerName' />
+	<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
+		   can-value='summonerName' />
 	<br>
 	<label for="server-region-select">Region</label>
 	<br>
@@ -21,6 +22,12 @@
 
 	<br>
 	<button type="submit" id="btn-save-close">Save and Close</button>
-	<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart"/>
+	<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
 	<label for="hideHome">Don't show main window at startup</label>
 </form>
+
+{{#hotkeys}}
+	<ul>
+		<li>{{ title }} : {{ string }} <a class="btn btn-close" href="overwolf://settings/hotkeys#{{id}}">Change (and close this window)</a></li>
+	</ul>
+{{/hotkeys}}</div>
