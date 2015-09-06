@@ -24,8 +24,8 @@
 		<div id="match-overview-container" class="panel">
 			<!-- contains all the champs within the game as Thumbnails -->
 			<!-- match-overview.mustache -->
-			<button class="btn-settings btn pull-right col-xs-3">check settings</button>
-			<button class="btn-reload btn pull-right col-xs-3">Reload</button>
+			<div class="btn-settings btn icon pull-right col-xs-1 height-100"><i class="fa fa-cog fa-2x vertical-center"></i></div>
+			<div class="btn-reload btn icon pull-right col-xs-1 height-100"><i class="fa fa-refresh fa-2x vertical-center"></i></div>
 		</div>
 
 		<div id="champion-container" class="col-xs-12 table">
@@ -38,14 +38,18 @@
 			<!-- tooltip-XXXX.mustache -->
 		</div>
 	</div>
-	<div id="pull-down-handle">
-		<div id="app-buttons">
-			<button class="btn-home icon icon-hom">Home</button>
-			<button class="btn-feedback icon icon-feedback">Feedback</button>
-			<button class="btn-help icon icon-help">Help</button>
-			<button class="btn-settings icon icon-settings">Settings</button>
-			<button class="btn-reload icon icon-reload">Reload</button>
-			<button class="btn-close icon icon-close">Close</button>
+	<div id="match-app-bar" class="btn">
+		<div id="handle"></div>
+		<div class="app-buttons pull-left">
+			<div class="btn-home icon icon-home"><i class="fa fa-home fa-lg"></i></div>
+			<div class="btn-feedback icon icon-feedback"><i class="fa fa-commenting fa-lg"></i></div>
+			<div class="btn-help icon icon-help"><i class="fa fa-question-circle fa-lg"></i></div>
+		</div>
+		<div class="app-buttons pull-right">
+			<div class="btn-close icon icon-close"><i class="fa fa-times fa-lg"></i></div>
+			<div class="btn-reload icon icon-reload"><i class="fa fa-refresh fa-lg"></i></div>
+			<div class="btn-settings icon icon-settings"><i class="fa fa-cog fa-lg"></i></div>
+
 		</div>
 
 	</div>
