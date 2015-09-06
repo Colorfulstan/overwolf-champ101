@@ -129,6 +129,9 @@ hr {
   width: 80%;
   border-color: #eee; }
 
+p {
+  padding: 0 0 30px 0; }
+
 ul {
   list-style: circle; }
 
@@ -214,10 +217,18 @@ button#reload {
 .line-right {
   border-right: 1px solid #eee; }
 
-.text-body {
-  line-height: 1.3em !important; }
-
 .text-center {
   text-align: center; }
+.text-body {
+  line-height: 1.3em !important; }
+.text-vertical-center {
+  vertical-align: middle; }
+
+.table {
+  display: table;
+  height: 100%; }
+  .table-cell {
+    display: table-cell;
+    height: 100%; }
 
 /*# sourceMappingURL=main.css.map */

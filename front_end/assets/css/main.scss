@@ -39,6 +39,7 @@ hr {
 
 p {
 //  text-align: center;
+  padding: 0 0 $spacer 0;
 }
 
 ul {
@@ -156,6 +157,23 @@ button#reload {
   &-right { border-right: 1px solid $color-lines; }
 }
 
-.text-body { line-height: 1.3em !important; }
-.text-center {
-  text-align: center; }
+.text {
+  &-center {
+    text-align: center;
+  }
+  &-body {
+    line-height: 1.3em !important;
+  }
+  &-vertical-center {
+    vertical-align: middle;
+  }
+}
+
+.table {
+  display: table;
+  height:100%;
+  &-cell {
+    display: table-cell;
+    height: 100%;
+  }
+}
