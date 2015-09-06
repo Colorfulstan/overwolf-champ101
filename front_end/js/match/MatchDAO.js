@@ -48,6 +48,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 				steal.dev.log('GameData in loadMatchModel:',transfer );
 				deferred.resolve(transfer);
+				dataArray = null;
 			}).fail(function (data, status, jqXHR) {
 
 				steal.dev.warn("Loading MatchModel failed!", data, status, jqXHR);

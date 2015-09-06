@@ -48,8 +48,15 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 		steal.dev.log('refresh Route triggered in OverviewCtrl');
 		debugger;
 		this.options.match = routeData.match;
-		this.on();
 		this.renderView(this.options.match.blue,this.options.match.purple);
+	},
+	'.show-team.blue click': function ($el, ev) {
+		can.route.attr({team: 'blue', route: 'show/:team'});
+		ev.stopPropagation();
+	},
+	'.show-team.purple click': function ($el, ev) {
+		can.route.attr({team: 'purple', route: 'show/:team'});
+		ev.stopPropagation();
 	}
 });
 module.exports = OverviewCtrl;
