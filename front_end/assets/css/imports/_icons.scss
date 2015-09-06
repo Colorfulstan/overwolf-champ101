@@ -1,0 +1,30 @@
+@import "../helper/colors";
+@import "../helper/variables";
+
+.icon {
+  color: $color-icons;
+  opacity: 0.6;
+  padding: 0 $spacer/3;
+  display: inline-block;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.pull-right .icon {
+  float: right;
+}
+
+.pull-left .icon {
+  float: left;
+}
+
+.icon-settings  {};
+.icon-reload  {};
+.icon-help  {};
+.icon-close  {};
+
+i.fa {
+  line-height: 1em;
+}
