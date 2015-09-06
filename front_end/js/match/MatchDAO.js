@@ -20,7 +20,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 			, {summonerId: transfer.summonerId, server: transfer.server}
 			, function (data) { // success
 				steal.dev.log("gameData from Server:", data);
-				window.DDRAGON_URL = DDRAGON_BASE_URL + transfer.version + '/';
+				DDRAGON_URL = DDRAGON_BASE_URL + data.version + '/';
 				deferred.resolve(data);
 
 			}).fail(function (data, status, jqXHR) {
