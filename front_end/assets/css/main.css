@@ -216,6 +216,8 @@ button#reload {
 
 .line-right {
   border-right: 1px solid #eee; }
+.line-left {
+  border-left: 1px solid #eee; }
 
 .text-center {
   text-align: center; }
@@ -223,12 +225,5 @@ button#reload {
   line-height: 1.3em !important; }
 .text-vertical-center {
   vertical-align: middle; }
-
-.table {
-  display: table;
-  height: 100%; }
-  .table-cell {
-    display: table-cell;
-    height: 100%; }
 
 /*# sourceMappingURL=main.css.map */

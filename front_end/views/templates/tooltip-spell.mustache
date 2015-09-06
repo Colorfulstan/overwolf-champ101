@@ -1,19 +1,17 @@
 <div class="table">
-	<div class="col-xs-6 padded-right line-right table-cell">
+	<div class="col-xs-6 padded-right">
 		<h2 class="spell-name">{{name}}</h2>
 
-		<p class="spell-description text-vertical-center text-body">
+		<p class="spell-description text-body">
 			{{#tooltip}}{{{.}}}{{/tooltip}}
 			{{^tooltip}}{{{description}}}{{/tooltip}}
 		</p>
 	</div>
-	<div class="col-xs-6 padded-left table-cell">
+	<div class="col-xs-6 padded-left line-left">
 		<div class="spell-values row">
-			<p>Cooldown: {{cooldownBurn}}</p>
-
-			<p>Cost: {{costBurn}} {{costType}}</p>
-
-			<p>Range: {{rangeBurn}}</p>
+			<p>Cooldown: {{cooldownBurn}} <br />
+			   Cost: {{costBurn}} {{costType}} <br />
+			   Range: {{rangeBurn}}</p>
 		</div>
 		{{ #videoAvailable }}
 		<div id="spell-video-container" class="row">
