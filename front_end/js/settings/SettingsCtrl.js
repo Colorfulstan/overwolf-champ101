@@ -60,11 +60,15 @@ debugger;
 					$btn.text("try again");
 				});
 	},
-	'.btn-close click': function ($el, ev) {
+	'.btn-close mousedown': function ($el, ev) {
 		var self = this;
 		window.setTimeout(function () {
-			//WindowCtrl.close(self.options.ow_window.name);
+			WindowCtrl.close(self.options.ow_window.name);
 		}, 1);
+	},
+	'mousedown': function (el, ev) {
+		steal.dev.log('dragging');
+		WindowCtrl.dragMove(this.options.ow_window.name);
 	},
 	'#server-region-select change': function ($el, ev) {
 		this.options.settings.attr('server', $el.val());
