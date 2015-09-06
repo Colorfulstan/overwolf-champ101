@@ -95,7 +95,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	 */
 	openSettings: function () {
 		var name = 'Settings';
-		$.when(WindowCtrl.open(name)).then(function (ow_window) {
+		$.when(WindowCtrl.open(name, 500,500)).then(function (ow_window) {
 			steal.dev.log("WindowCtrl.openSettings: ", ow_window);
 			//	// TODO: should this window open centered even after relocating it? => not position it at all
 			var x = WindowCtrl.getCenteredX(ow_window.width);

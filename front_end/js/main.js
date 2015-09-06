@@ -1,9 +1,11 @@
 // Entry point for index.html
+require('Routes');
+
 "use strict";
 var MainCtrl = require('MainCtrl');
 var SettingsModel = require('SettingsModel');
 
-MainCtrl.registerHotkeys();
+//MainCtrl.registerHotkeys();
 MainCtrl.registerOverwolfHandlers();
 
 var main = new MainCtrl('body');
