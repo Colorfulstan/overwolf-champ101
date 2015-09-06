@@ -154,7 +154,9 @@ button#reload {
 }
 
 .line {
-  &-right { border-right: 1px solid $color-lines; }
+  &-right { border-right: $style-border-line }
+
+  &-left { border-left: $style-border-line }
 }
 
 .text {
@@ -168,12 +170,12 @@ button#reload {
     vertical-align: middle;
   }
 }
-
-.table {
-  display: table;
-  height:100%;
-  &-cell {
-    display: table-cell;
-    height: 100%;
-  }
-}
+//
+//.table {
+//  display: table;
+//  height:100%;
+//  &-cell {
+//    display: table-cell;
+//    height: 100%;
+//  }
+//}
