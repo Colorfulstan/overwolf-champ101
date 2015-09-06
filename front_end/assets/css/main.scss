@@ -13,8 +13,36 @@
   overflow: hidden;
 }
 
+html {
+  font-size: $font-size-base;
+}
+
+body {
+}
+
+h1,h2,h3,h4,h5,h6 {
+  padding-bottom: 0.5em;
+}
+
+h1 { font-size: 3rem; }
+h2{ font-size: 2rem; }
+h3{ font-size: 1.5rem; }
+
+h4{ font-size: 1.3rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem; }
+
+hr {
+  width: 80%;
+  border-color: $color-lines;
+}
+
 p {
-  text-align: center;
+//  text-align: center;
+}
+
+ul {
+  list-style: circle;
 }
 
 body {
@@ -104,3 +132,30 @@ button#reload {
   height: 100%;
   z-index: 9999;
 }
+
+.padded {
+
+  padding: $spacer;
+
+  &-left { padding-left: $spacer;
+    &-0 { padding-left: 0; }
+  }
+  &-right { padding-right: $spacer;
+    &-0 { padding-right: 0; }
+  }
+  &-top { padding-top: $spacer;
+    &-0 { padding-top: 0; }
+  }
+  &-bot { padding-bottom: $spacer;
+    &-0 { padding-bottom: 0; }
+  }
+  &-0 { padding: 0; }
+}
+
+.line {
+  &-right { border-right: 1px solid $color-lines; }
+}
+
+.text-body { line-height: 1.3em !important; }
+.text-center {
+  text-align: center; }
