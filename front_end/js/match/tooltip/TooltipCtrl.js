@@ -45,7 +45,8 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 
 
 	hideTooltip: function () {
-		this.element.html('');
+		//this.element.html('');
+
 		this.element.hide();
 	},
 	/**
@@ -94,13 +95,14 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 			videojs(videoTag, {controlBar: {fullscreenToggle: false}}, function () {
 				// sets up the videojs Player to work after it got inserted into the page by templatingFullscreenToggle
 				var player = this;
-				player.on('ended', function() {
-					player.load();
-				});
+				//player.on('ended', function() {
+				//	player.load();
+				//});
 				player.on('error', function (event) {
 					// TODO: maybe better error handling!?
 					steal.dev.log('Video got an Error', event, 'networkstate:', player.networkState);
 					//videojs(videoTag).dispose(); // remove videoJS if there's an error
+					player.dispose();
 					$('#videoPlayer').remove();
 				});
 			});
