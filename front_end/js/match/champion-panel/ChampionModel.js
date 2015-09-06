@@ -48,7 +48,7 @@ var ChampionModel = can.Model.extend({}, {
 	//spells: null,
 
 	imgSrc: function () {
-		return DDRAGON_IMG_URL + this.image.group + "/" + this.image.full;
+		return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;
 	},
 	videoAvailable : function(){ // TODO: maybe don't implement for Champion Spotlight
 		return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();
