@@ -1,14 +1,23 @@
-<h2 class="spell-name">{{name}}</h2>
-<p class="spell-description">
-	{{#tooltip}}{{{.}}}{{/tooltip}}
-	{{^tooltip}}{{{description}}}{{/tooltip}}
-</p>
-<hr />
-<p>Cooldown: {{cooldownBurn}}</p>
-<p>Cost: {{costBurn}} {{costType}}</p>
-<p>Range: {{rangeBurn}}</p>
+<div class="table">
+	<div class="col-xs-6 padded-right line-right table-cell">
+		<h2 class="spell-name">{{name}}</h2>
 
-{{ #videoAvailable }}
-<div id="spell-video-container">
+		<p class="spell-description text-vertical-center text-body">
+			{{#tooltip}}{{{.}}}{{/tooltip}}
+			{{^tooltip}}{{{description}}}{{/tooltip}}
+		</p>
+	</div>
+	<div class="col-xs-6 padded-left table-cell">
+		<div class="spell-values row">
+			<p>Cooldown: {{cooldownBurn}}</p>
+
+			<p>Cost: {{costBurn}} {{costType}}</p>
+
+			<p>Range: {{rangeBurn}}</p>
+		</div>
+		{{ #videoAvailable }}
+		<div id="spell-video-container" class="row">
+		</div>
+		{{ /videoAvailable }}
+	</div>
 </div>
-{{ /videoAvailable }}
