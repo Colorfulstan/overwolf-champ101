@@ -30,26 +30,40 @@
   }
 }
 
-#pull-down-handle {
-  background-color: brown;
-  opacity: 0.5;
+$app-bar-height : $spacer*2;
+#match-app-bar {
   width: 100%;
-  height: $spacer;
+  height: $app-bar-height;
   margin-top: 1px; // enables scrolling with mouse on screen edge
   position: relative;
-
-  #app-buttons {
-    display: none;
-    position: absolute;
-    right: 0;
-  }
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.01);
 
   &:hover {
-    opacity: 0.9;
 
-    #app-buttons {
+    .app-buttons {
       display: block;
     }
+    #handle {
+      opacity: 0.9;
+    }
   }
+
+  #handle {
+    opacity: 0.5;
+    background-color: brown;
+    border-radius: 100%;
+    position: absolute;
+    height: $app-bar-height - 10px;
+    width: 70%;
+    left: 15%;
+    top: -$app-bar-height / 2;
+  }
+
+  .app-buttons {
+    display: none;
+    width: 40%;
+  }
+
 }
 

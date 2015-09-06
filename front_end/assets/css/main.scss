@@ -4,6 +4,7 @@
 @import "reset.css";
 @import "grid_12.css";
 
+@import "imports/icons";
 @import "imports/tooltip.scss";
 @import "imports/participants.scss";
 
@@ -40,10 +41,6 @@ hr {
 p {
 //  text-align: center;
   padding: 0 0 $spacer 0;
-}
-
-ul {
-  list-style: circle;
 }
 
 body {
@@ -133,6 +130,14 @@ button#reload {
   height: 100%;
   z-index: 9999;
 }
+
+.height-100 {
+  height:100%;
+}
+
+.vertical-center {
+  transform: translateY(45%);
+}}
 
 .padded {
 
