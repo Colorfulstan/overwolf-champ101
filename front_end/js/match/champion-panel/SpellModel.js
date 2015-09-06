@@ -174,7 +174,7 @@ var SpellModel = can.Model.extend('SpellModel', {
 	//costType: null,
 
 	imgSrc: function () {
-		return DDRAGON_IMG_URL + this.image.group + "/" + this.image.full;
+		return DDRAGON_URL + '/img/'  + this.image.group + "/" + this.image.full;
 	},
 	videoAvailable: function () {
 		if (this.attr('enableVideo') != null) return this.attr('enableVideo');
