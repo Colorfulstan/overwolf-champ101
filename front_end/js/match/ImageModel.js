@@ -29,7 +29,7 @@ var ImageModel = can.Model.extend('ImageModel', {}, {
 	 * @type {Number} */
 	y: null,
 	imgSrc : function(){
-		return DDRAGON_IMG_URL + this.group + "/" + this.full;
+		return DDRAGON_URL + '/img/' + this.group + "/" + this.full;
 	}
 
 	 // TODO: replace with sprites
