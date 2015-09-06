@@ -20,32 +20,32 @@ var ChampionModel = can.Model.extend({}, {
 		this.attr('spells', spells);
 	},
 
-	/**@property
-	 * @type {String} */
-	name: null,
-
-	/**@property
-	 * @type {Number} */
-	id: null,
-	/**@property
-	 * @type {String[]} */
-	allytips: null,
-
-	/**@property
-	 * @type {String[]} */
-	enemytips: null,
-
-	/**@property
-	 * @type  {{ ImageModel }} */
-	image: null,
-
-	/**@property
-	 * @type {SpellModel} */
-	passive: null,
-
-	/**@property
-	 * @type {{ SpellModel[] }} */
-	spells: null,
+	///**@property
+	// * @type {String} */
+	//name: null,
+	//
+	///**@property
+	// * @type {Number} */
+	//id: null,
+	///**@property
+	// * @type {String[]} */
+	//allytips: null,
+	//
+	///**@property
+	// * @type {String[]} */
+	//enemytips: null,
+	//
+	///**@property
+	// * @type  {{ ImageModel }} */
+	//image: null,
+	//
+	///**@property
+	// * @type {SpellModel} */
+	//passive: null,
+	//
+	///**@property
+	// * @type {{ SpellModel[] }} */
+	//spells: null,
 
 	imgSrc: function () {
 		return DDRAGON_IMG_URL + this.image.group + "/" + this.image.full;

@@ -41,12 +41,18 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 	 * @param {MatchModel } options.match
 	 */
 	init: function (element, options) {
+		/** The videojs instance to load videos in */
+		options.videoPlayer = null;
 	},
 
 
 	hideTooltip: function () {
-		//this.element.html('');
+		this.element.children().remove();
 
+		if (this.options.videoPlayer){
+			this.options.videoPlayer.dispose();
+			delete this.options.videoPlayer;
+		}
 		this.element.hide();
 	},
 	/**
@@ -83,6 +89,7 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 		this.element.show();
 	},
 	initVideo: function (spell) {
+		var self = this;
 		if (spell.videoAvailable()) {
 
 			$('#spell-video-container').html(
@@ -95,21 +102,20 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 			videojs(videoTag, {controlBar: {fullscreenToggle: false}}, function () {
 				// sets up the videojs Player to work after it got inserted into the page by templatingFullscreenToggle
 				var player = this;
+				self.options.videoPlayer = this;
 				//player.on('ended', function() {
 				//	player.load();
 				//});
 				player.on('error', function (event) {
 					// TODO: maybe better error handling!?
 					steal.dev.log('Video got an Error', event, 'networkstate:', player.networkState);
-					//videojs(videoTag).dispose(); // remove videoJS if there's an error
-					player.dispose();
 					$('#videoPlayer').remove();
 				});
 			});
 		}
 	},
 	'tooltip/champ/:champ route': function (routeData) {
-		steal.dev.log('tooltip route for champ triggered', routeData);
+		//steal.dev.log('tooltip route for champ triggered', routeData);
 		if (routeData.champ) {
 			this.showTooltip('champ', routeData);
 		} else { this.hideTooltip(); }
@@ -118,7 +124,7 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 		this.hideTooltip();
 	},
 	'tooltip/spell/:champ/:index route': function (routeData) {
-		steal.dev.log('tooltip route for spell triggered', routeData);
+		//steal.dev.log('tooltip route for spell triggered', routeData);
 		if (routeData.champ !== null && routeData.index !== null) {
 			this.showTooltip('spell', routeData);
 		} else { this.hideTooltip(); }

@@ -26,9 +26,6 @@ var MatchCtrl = can.Control.extend({
 		handle: '#pull-down-handle'
 	}
 }, {
-	/** @property
-	 * @type {MatchModel} */
-	model: null,
 
 	/**
 	 * @constructor
@@ -125,14 +122,6 @@ var MatchCtrl = can.Control.extend({
 		this.options.model.attr('summonerId', this.options.settings._summonerId());
 
 		this.loadMatch(this.options.model);
-		ev.stopPropagation();
-	},
-	'button.show-team.blue click': function ($el, ev) {
-		can.route.attr({team: 'blue', route: 'show/:team'});
-		ev.stopPropagation();
-	},
-	'button.show-team.purple click': function ($el, ev) {
-		can.route.attr({team: 'purple', route: 'show/:team'});
 		ev.stopPropagation();
 	}
 });

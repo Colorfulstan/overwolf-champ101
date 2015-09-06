@@ -115,63 +115,63 @@ var SpellModel = can.Model.extend('SpellModel', {
 		}
 	},
 
-	/**@property
-	 * @type {String} */
-	name: null,
-	/**@property
-	 * @type {String} */
-	type: null,
-	/**@property
-	 * @type {String} */
-	description: null,
-	/**@property
-	 * @type {ImageModel} */
-	image: null,
-	/** The Number of the spell for the champ.
-	 *  1 will be the passive, 2-4 the abilities and 5 will be the ultimate
-	 * @property
-	 * @type {Number} */
-	number: null,
-	/** If this Spell has a Video or not (SummonerSpells do not
-	 * @property
-	 * @type {Number} */
-	enableVideo: null,
-	/**@property
-	 * @type {Number} */
-	champId: null,
-
-	/** @property
-	 * @type {Number[]} */
-	cooldown: null,
-
-	/** @property
-	 * @type {String} */
-	cooldownBurn: null,
-	/** @property
-	 * @type {Number[]} */
-	range: null,
-
-	/** @property
-	 * @type {Number[]} */
-	tooltip: null,
-	/** @property
-	 * @type {Number[]} */
-	effect: null,
-	/** @property
-	 * @type {Number[]} */
-	effectBurn: null,
-	/** @property
-	 * @type {Number[]} */
-	resource: null,
-	/** @property
-	 * @type {Number[]} */
-	cost: null,
-	/** @property
-	 * @type {Number[]} */
-	costBurn: null,
-	/** @property
-	 * @type {Number[]} */
-	costType: null,
+	///**@property
+	// * @type {String} */
+	//name: null,
+	///**@property
+	// * @type {String} */
+	//type: null,
+	///**@property
+	// * @type {String} */
+	//description: null,
+	///**@property
+	// * @type {ImageModel} */
+	//image: null,
+	///** The Number of the spell for the champ.
+	// *  1 will be the passive, 2-4 the abilities and 5 will be the ultimate
+	// * @property
+	// * @type {Number} */
+	//number: null,
+	///** If this Spell has a Video or not (SummonerSpells do not
+	// * @property
+	// * @type {Number} */
+	//enableVideo: null,
+	///**@property
+	// * @type {Number} */
+	//champId: null,
+	//
+	///** @property
+	// * @type {Number[]} */
+	//cooldown: null,
+	//
+	///** @property
+	// * @type {String} */
+	//cooldownBurn: null,
+	///** @property
+	// * @type {Number[]} */
+	//range: null,
+	//
+	///** @property
+	// * @type {Number[]} */
+	//tooltip: null,
+	///** @property
+	// * @type {Number[]} */
+	//effect: null,
+	///** @property
+	// * @type {Number[]} */
+	//effectBurn: null,
+	///** @property
+	// * @type {Number[]} */
+	//resource: null,
+	///** @property
+	// * @type {Number[]} */
+	//cost: null,
+	///** @property
+	// * @type {Number[]} */
+	//costBurn: null,
+	///** @property
+	// * @type {Number[]} */
+	//costType: null,
 
 	imgSrc: function () {
 		return DDRAGON_IMG_URL + this.image.group + "/" + this.image.full;

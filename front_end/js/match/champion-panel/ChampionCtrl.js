@@ -73,6 +73,8 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 	},
 	closeAllPanels: function () {
 		debugger;
+
+		//this.element.empty();
 		this.options.panels.replace(new can.List());
 		this.removeCloseAllBtn();
 	},
