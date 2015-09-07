@@ -4,6 +4,7 @@
 @import "reset.css";
 @import "grid_12.css";
 
+@import "fa/font-awesome";
 @import "imports/icons";
 @import "imports/tooltip.scss";
 @import "imports/participants.scss";
@@ -79,7 +80,6 @@ body {
     cursor: pointer;
   }
 }
-
 .hidden {
   display: none !important;
 }
@@ -129,6 +129,47 @@ button#reload {
   top: 0;
   height: 100%;
   z-index: 9999;
+}
+
+.vertical-center {
+  transform: translateY(45%);
+}
+
+.padded {
+
+  padding: $spacer;
+
+  &-left { padding-left: $spacer;
+    &-0 { padding-left: 0; }
+  }
+  &-right { padding-right: $spacer;
+    &-0 { padding-right: 0; }
+  }
+  &-top { padding-top: $spacer;
+    &-0 { padding-top: 0; }
+  }
+  &-bot { padding-bottom: $spacer;
+    &-0 { padding-bottom: 0; }
+  }
+  &-0 { padding: 0; }
+}
+
+.line {
+  &-right { border-right: $style-border-line }
+
+  &-left { border-left: $style-border-line }
+}
+
+.text {
+  &-center {
+    text-align: center;
+  }
+  &-body {
+    line-height: 1.3em !important;
+  }
+  &-vertical-center {
+    vertical-align: middle;
+  }
 }
 
 .height-100 {
@@ -183,4 +224,4 @@ button#reload {
 //    display: table-cell;
 //    height: 100%;
 //  }
-//}
+//}}
