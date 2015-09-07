@@ -7,5 +7,5 @@ var MatchCtrl = require('MatchCtrl');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 can.view.cache = false;
-
+MatchCtrl.registerHotkeys();
 var match = new MatchCtrl('#content');

@@ -22,7 +22,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		 * @property {ChampionModel} champ
 		 * @property {SpellModel[]} summonerSpells
 		 * @property {String} team
-		 * @property {number} index
+		 * @property {number} index - 1-based
 		 */
 		/**
 		 * Participant[]
@@ -90,6 +90,13 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 			this.removeCloseAllBtn();
 		}
 	},
+	removePanelById: function (id) {
+		this.options.panels.splice(id, 1);
+		if (this.options.panels.length <= 1) {
+			this.removeCloseAllBtn();
+		}
+	},
+	/** * @param team 'blue' or 'purple' */
 	showTeam: function (team) {
 		debugger;
 		var self = this;
@@ -98,10 +105,6 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 			teamList.push(self.options.match.participantsByChamp[participant.champ.name]);
 		});
 		self.options.panels.replace(teamList);
-		//window.setTimeout(function(){
-		//	$('.champion-panel:not(.stay)').slideDown(ANIMATION_SLIDE_SPEED_PER_100PX);
-		//	$('.champion-panel').addClass('stay');
-		//}, 1);
 	},
 
 	'show/:team route': function (data) {
@@ -117,6 +120,12 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		if (this.options.panels.length >= 2) {
 			this.addCloseAllBtn();
 		}
+	},
+	'close/panel/:id route': function (routeData) {
+		steal.dev.log('close Panel route', routeData);
+		can.route.attr({'route': ''});
+		this.removePanelById(routeData.id);
+
 	},
 	'.close click': function ($el, ev) {
 		can.route.attr({ route: 'tooltip/hide'}, true);

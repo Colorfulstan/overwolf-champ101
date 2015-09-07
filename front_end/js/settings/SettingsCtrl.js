@@ -19,11 +19,12 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 		this.options.oldName = this.options.settings.attr('summonerName');
 		this.options.oldServer = this.options.settings.attr('server');
 
+
 		var self = this;
 		$.when(WindowCtrl.open('Settings')).then(function (ow_window) {
 			self.options.ow_window = ow_window;
 		});
-
+debugger;
 		this.element.html(
 			can.view(this.options.settingsTmpl, this.options.settings)
 		);
@@ -58,6 +59,16 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 					settings.attr('summonerId', null);
 					$btn.text("try again");
 				});
+	},
+	'.btn-close mousedown': function ($el, ev) {
+		var self = this;
+		window.setTimeout(function () {
+			WindowCtrl.close(self.options.ow_window.name);
+		}, 1);
+	},
+	'mousedown': function (el, ev) {
+		steal.dev.log('dragging');
+		WindowCtrl.dragMove(this.options.ow_window.name);
 	},
 	'#server-region-select change': function ($el, ev) {
 		this.options.settings.attr('server', $el.val());
