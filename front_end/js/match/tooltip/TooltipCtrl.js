@@ -86,6 +86,15 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 				break;
 		}
 		this.element.css('top', routeData.y + 'px');
+		this.element.find('span').each(function (index, item) {
+			var cssClass = this.className;
+			if (cssClass && cssClass.indexOf('color') == 0){
+				this.style.color = '#' + cssClass.substr(5);
+				steal.dev.log('css color set to:', '#' + cssClass.substr(5));
+				$(this).removeClass(cssClass);
+			}
+		});
+
 		this.element.show();
 	},
 	initVideo: function (spell) {
