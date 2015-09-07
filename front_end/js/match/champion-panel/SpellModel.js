@@ -14,32 +14,18 @@ var SpellModel = can.Model.extend('SpellModel', {
 
 		debugger;
 
-		// vars
-		// {{ aX }} are always within the vars Array.
-		// sometimes {{ fX }} are found there too, sometimes {{ fX }} refers to the effects / effectsBurn Array
-		// so we first check the certain keys within vars and replace them.
-		// After that, we replace the {{ eX }} variables since those are unambiguosly within the effects / effectsBurn Array.
-		// If after that still {{ fX }} remain, they will be replaced through the effects / effectsBurn Array.
+		/* vars
+		 * {{ aX }} are always within the vars Array.
+		 * sometimes {{ fX }} are found there too, sometimes {{ fX }} refers to the effects / effectsBurn Array
+		 * so we first check the certain keys within vars and replace them.
+		 * After that, we replace the {{ eX }} variables since those are unambiguosly within the effects / effectsBurn Array.
+		 * If after that still {{ fX }} remain, they will be replaced through the effects / effectsBurn Array.
+		 */
 		if (vars !== null && vars != undefined) {
 			for (var j = 0; j < vars.length; j++) {
-				var type = "";
-
-				switch (vars[j].link){
-					//case 'attackdamage':  type = 'AD'
-					//	break;
-					//case 'bonusattackdamage': type = 'AP';
-					//	break;
-					//case 'spelldamage':
-					//	break;
-					//case 'bonusspelldamage':
-					//	break;
-					default:
-						type = vars[j].link; // TODO: link something here (@special.xyz ochurs sometimes)
-						break;
-				}
-// TODO: remove spans or give them classes
-				pattern = new RegExp('{{ ' +  vars[j].key  + ' }}', 'g');
-				ttNew = ttNew.replace(pattern, '<span style="color:red">' + vars[j].coeff + '* ' + type  + '</span>');
+				// TODO: remove spans or give them classes
+				pattern = new RegExp('{{ ' + vars[j].key + ' }}', 'g');
+				ttNew = ttNew.replace(pattern, '<span style="color:red">' + (vars[j].coeff * 100) + '%' + vars[j].link + '</span>');
 			}
 		}
 
@@ -49,12 +35,12 @@ var SpellModel = can.Model.extend('SpellModel', {
 			for (var i = 1; i <= effectBurn.length; i++) {
 				// {{ eX }} always referring to the effect / effectBurn Array
 				pattern = new RegExp('{{ e' + i + ' }}', 'g');
-				ttNew = ttNew.replace(pattern, '<span style="color:red">'+ effectBurn[i] + '</span>');
+				ttNew = ttNew.replace(pattern, '<span style="color:red">' + effectBurn[i] + '</span>');
 
 				// {{ fX }} was not found within the vars array, the achording index within effects / effectsburn will be used
 				// sometimes instead of {{ eX }} used eg Sona
 				pattern = new RegExp('{{ f' + i + ' }}', 'g');
-				ttNew = ttNew.replace(pattern, '<span style="color:red">' + effectBurn[i]  + '</span>');
+				ttNew = ttNew.replace(pattern, '<span style="color:red">' + effectBurn[i] + '</span>');
 			}
 		}
 
@@ -174,7 +160,7 @@ var SpellModel = can.Model.extend('SpellModel', {
 	//costType: null,
 
 	imgSrc: function () {
-		return DDRAGON_URL + '/img/'  + this.image.group + "/" + this.image.full;
+		return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;
 	},
 	videoAvailable: function () {
 		if (this.attr('enableVideo') != null) return this.attr('enableVideo');
