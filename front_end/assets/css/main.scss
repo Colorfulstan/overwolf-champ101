@@ -178,7 +178,7 @@ button#reload {
 
 .vertical-center {
   transform: translateY(45%);
-}}
+}
 
 .padded {
 
@@ -203,6 +203,15 @@ button#reload {
   &-right { border-right: $style-border-line }
 
   &-left { border-left: $style-border-line }
+}
+
+.collapse-border {
+  &-left {
+    margin-left: -$style-border-line-width !important;
+  }
+  &-right {
+    margin-right: -$style-border-line-width !important;
+  }
 }
 
 .text {
