@@ -24,7 +24,7 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 		$.when(WindowCtrl.open('Settings')).then(function (ow_window) {
 			self.options.ow_window = ow_window;
 		});
-debugger;
+		debugger;
 		this.element.html(
 			can.view(this.options.settingsTmpl, this.options.settings)
 		);
@@ -41,30 +41,32 @@ debugger;
 			this.options.oldName == this.options.settings.attr('summonerName')
 		) {	// no change - spare the request
 			debugger;
-			WindowCtrl.close(self.options.ow_window.name); return; }
-			$.get(
-				RIOT_ADAPTER_URL + '/getSummonerId.php'
-				, {'server': settings.attr('server'), 'summoner': settings.attr('summonerName')}
-				, function (summonerId, status, jqXHR) {
-					steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
-					settings.attr('summonerId', summonerId);
-					self.options.oldName = self.options.settings.attr('summonerName');
-					self.options.oldServer = self.options.settings.attr('server');
-					debugger;
-					WindowCtrl.close(self.options.ow_window.name);
-				})
-				.fail(function (data, status, jqXHR) {
-					steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
-					//Error.summonerSettings(data.responseText); // TODO
-					settings.attr('summonerId', null);
-					$btn.text("try again");
-				});
+			WindowCtrl.close(self.options.ow_window.name);
+			return;
+		}
+		$.get(
+			RIOT_ADAPTER_URL + '/getSummonerId.php'
+			, {'server': settings.attr('server'), 'summoner': settings.attr('summonerName')}
+			, function (summonerId, status, jqXHR) {
+				steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
+				settings.attr('summonerId', summonerId);
+				self.options.oldName = self.options.settings.attr('summonerName');
+				self.options.oldServer = self.options.settings.attr('server');
+				debugger;
+				WindowCtrl.close(self.options.ow_window.name);
+			})
+			.fail(function (data, status, jqXHR) {
+				steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
+				//Error.summonerSettings(data.responseText); // TODO
+				settings.attr('summonerId', null);
+				$btn.text("try again");
+			});
 	},
 	'.btn-close mousedown': function ($el, ev) {
 		var self = this;
 		window.setTimeout(function () {
 			WindowCtrl.close(self.options.ow_window.name);
-		}, 1);
+		}, 100);
 	},
 	'mousedown': function (el, ev) {
 		steal.dev.log('dragging');
