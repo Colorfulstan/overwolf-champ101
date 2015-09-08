@@ -3,8 +3,8 @@ require('global');
 var ImageModel = can.Model.extend('ImageModel', {}, {
 	init: function (options) {
 		debugger;
-		this.src = DDRAGON_URL + '/img/' + options.group + "/" + options.full;
-		this.spriteSrc = DDRAGON_URL + '/img/sprite/' + options.sprite;
+		this.src = DDRAGON_URL + 'img/' + options.group + "/" + options.full;
+		this.spriteSrc = DDRAGON_URL + 'img/sprite/' + options.sprite;
 	},
 	/** Filename for the single Image
 	 * @property

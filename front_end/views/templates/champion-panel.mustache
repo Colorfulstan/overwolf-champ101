@@ -1,19 +1,22 @@
 {{ #. }}
 <div class="champion-panel panel {{ team }}" data-name="{{ champ.name }}">
+	{{#champ}}
 
+	<div class="portrait btn img" style="background: url('{{ imgSrc }}')" title="{{ name }}" ></div>
 
-	<img class="portrait btn" src="{{ champ.image.src }}" alt="{{ champ.name }}" />
-
-	<div class="summoner-spells col-xs-1">
-		<img class="spell passive btn" src="{{ champ.passive.image.src }}"
-			 alt="{{ champ.passive.name }}" data-type="passive" />
-	</div>
-
+		{{#passive}}
+		<div class="spell passive btn img"
+			 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"
+					 title="{{ name }}" data-type="passive"></div>
+		{{/passive}}
+	{{/champ}}
 	{{ resetIndex }}
-	<div class="champ-spells col-xs-5">
+	<div class="champ-spells padded-right">
 		{{ #champ.spells }}
-		{{!--TODO: hover / click--}}
-		<img class="champion-spell spell btn" src="{{ image.src }}" alt="{{name}}" data-index-1="{{ index }}" data-type="ability"/>
+		{{!--TODO: hover / click--}}<div class="champion-spell spell btn img"
+			 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"
+			 title="{{name}}" data-index-1="{{ index }}" data-type="ability">
+		<div class="champ-spell-border"></div></div>
 		{{ /champ.spells }}
 		{{ resetIndex }}
 	</div>
@@ -21,7 +24,7 @@
 
 	{{!--(champSelect)--}}
 
-	<div class="panel-control btn close" >X</div>
+	<div class="panel-control btn close">X</div>
 
 </div>
 {{ /. }}
