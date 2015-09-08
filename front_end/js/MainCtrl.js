@@ -4,14 +4,15 @@ var WindowCtrl = require('WindowCtrl');
 var SettingsModel = require('SettingsModel');
 
 /**
- * An Object containing the "whole" App.
+ * An Object containing the "Main" view. (main.html / main.js)
  * Represents the Main crossing point for the components of the app
  * as it initiates and manages the controllers.
+ * @inheritDoc WindowCtrl
  */
 var MainCtrl = WindowCtrl.extend({
 	defaults: {
 		name: 'Main'
-		, matchBtn: '#btn-match'
+		, matchBtn: '.btn-match'
 		, hideHomeCB: '#hideHome'
 		, settingsTmpl: '#settings-tmpl'
 	},

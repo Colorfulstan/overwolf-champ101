@@ -1,5 +1,7 @@
 "use strict";
 var can = require('can');
+var Routes = require('Routes');
+
 /**
  * Controller for window-interactions (opening, closing, minimizing, ...)
  * @static
@@ -12,9 +14,8 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		, minimizeBtn: '.btn-minimize'
 		, settingsBtn: '.btn-settings'
 		, homeBtn: '.btn-home'
-		, openSettingsBtn: '.btn-settings'
-		, openHelpBtn: '.btn-help'
-		, openFeedbackBtn: '.btn-feedback'
+		, helpBtn: '.btn-help'
+		, feedbackBtn: '.btn-feedback'
 		, closeBtn: '.btn-close'
 	},
 	// static
@@ -49,11 +50,12 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		overwolf.windows.obtainDeclaredWindow(name, function (result) {
 			if (result.status == "success") {
 				var ow_window = result.window;
+				debugger;
 				overwolf.windows.restore(ow_window.id, function (result) {
-					steal.dev.log('window opened', result);
 					if (width && height) {
 						overwolf.windows.changeSize(ow_window.id, width, height); // TODO: try through manifest
 					}
+					debugger;
 					deferred.resolve(ow_window);
 				});
 			}
@@ -63,8 +65,17 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	openHelp: function (name, width, height) {
 		// TODO: implement
 	},
-	openFeedback: function (name, width, height) {
-		// TODO: implement
+	openFeedback: function () {
+		var name = 'Feedback';
+		var self = this;
+		$.when(this.open(name, 500, 500)).then(function (ow_window) {
+			steal.dev.log("WindowCtrl.openFeedback: ", ow_window);
+			//	// TODO: should this window open centered even after relocating it? => not position it at all
+			debugger;
+			var x = self.getCenteredX(ow_window.width);
+			var y = self.getCenteredY(ow_window.height);
+			overwolf.windows.changePosition(ow_window.id, x, y);
+		});
 	},
 
 	/**
@@ -170,6 +181,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		ev.stopPropagation();
 	},
 	'{feedbackBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		debugger;
 		this.constructor.openFeedback();
 		ev.stopPropagation();
 	}

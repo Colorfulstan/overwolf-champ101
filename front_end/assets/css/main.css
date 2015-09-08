@@ -2224,7 +2224,7 @@ hr {
 p {
   padding: 0 0 30px 0; }
 
-body#settings, body#main {
+body#settings, body#main, body#feedback {
   background-color: #eee; }
 
 .hidden {
