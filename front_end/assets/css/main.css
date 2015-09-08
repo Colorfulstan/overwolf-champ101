@@ -2057,30 +2057,56 @@ i.fa {
     height: 100%;
     background-color: brown;
     right: 0;
-    top: 0; }
+    top: 0;
+    z-index: 99; }
 
 .champion-panel {
   height: 100px;
   border-top: 1px dashed #ccc;
-  padding-right: 30px; }
-  .champion-panel > .img {
-    height: 100%;
-    float: left; }
+  padding-right: 30px;
+  position: relative; }
+  .champion-panel .portrait {
+    height: 75px;
+    width: 75px;
+    background-size: 75px 75px !important;
+    float: left;
+    border-radius: 100%;
+    margin: 10px;
+    /* border: 3px ridge white; */
+    -moz-box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.4);
+    -webkit-box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.4); }
   .champion-panel.blue {
     background-color: #909bff; }
   .champion-panel.purple {
     background-color: rgba(78, 7, 105, 0.73); }
-  .champion-panel .summoner-spells {
-    height: 100%; }
-    .champion-panel .summoner-spells > .img {
-      height: 27%; }
-    .champion-panel .summoner-spells .passive {
-      width: 100%;
-      height: auto; }
+  .champion-panel .passive {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    left: 60px;
+    top: 50px;
+    border-radius: 100%;
+    transform: scale(0.8); }
   .champion-panel .champ-spells {
-    height: 100%; }
+    height: 100%;
+    float: left; }
+    .champion-panel .champ-spells .champ-spell-border {
+      border-radius: 100%;
+      border: solid 5px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 12px 8px rgba(0, 0, 0, 0.5);
+      width: 58px;
+      height: 58px;
+      margin: -5px 0 0 -5px; }
     .champion-panel .champ-spells .img {
-      height: 70%; }
+      height: 48px;
+      width: 48px;
+      float: left;
+      margin-top: 18px;
+      margin-left: 34px;
+      border-radius: 100%;
+      box-sizing: content-box;
+      overflow: visible; }
   .champion-panel .champ-select {
     height: 100%; }
     .champion-panel .champ-select .team {
@@ -2100,24 +2126,10 @@ i.fa {
       text-align: center;
       padding-top: 10px; }
 
-.champion-panel.stay {
-  display: block; }
-
-.open-settings {
-  display: none; }
-
-.reload {
-  display: none; }
-
-.loading {
-  background-color: red !important; }
-
-.failed {
-  background-color: orange !important; }
-  .failed .open-settings {
-    display: block; }
-  .failed .reload {
-    display: block; }
+#panel-container {
+  height: auto;
+  width: 740px;
+  margin: 0 auto; }
 
 #match-app-bar {
   width: 100%;
@@ -2142,6 +2154,46 @@ i.fa {
   #match-app-bar .app-buttons {
     display: none;
     width: 40%; }
+
+#match-overview-container {
+  height: 60px; }
+  #match-overview-container .portrait {
+    width: 48px;
+    height: 48px; }
+  #match-overview-container #vs {
+    background-color: #eee; }
+    #match-overview-container #vs p {
+      font-size: 30px;
+      padding: 15px; }
+
+#match-participants {
+  height: 100%;
+  width: 100%; }
+  #match-participants * {
+    height: 100%; }
+  #match-participants .portrait {
+    float: left;
+    height: 48px;
+    cursor: pointer;
+    /* border-right: ridge 3px white; */
+    border-radius: 100%;
+    margin: 2px; }
+
+.open-settings {
+  display: none; }
+
+.reload {
+  display: none; }
+
+.loading {
+  background-color: red !important; }
+
+.failed {
+  background-color: orange !important; }
+  .failed .open-settings {
+    display: block; }
+  .failed .reload {
+    display: block; }
 
 * {
   overflow: hidden; }
@@ -2179,31 +2231,6 @@ p {
 
 body#settings, body#main {
   background-color: #eee; }
-
-#panel-container {
-  height: auto;
-  width: 740px;
-  margin: 0 auto; }
-
-#match-overview-container {
-  height: 60px; }
-  #match-overview-container .portrait {
-    width: 48px;
-    height: 48px; }
-  #match-overview-container #vs {
-    background-color: #eee; }
-    #match-overview-container #vs p {
-      font-size: 30px;
-      padding: 15px; }
-
-#match-participants {
-  height: 100%;
-  width: 100%; }
-  #match-participants * {
-    height: 100%; }
-  #match-participants .portrait {
-    float: left;
-    cursor: pointer; }
 
 .hidden {
   display: none !important; }

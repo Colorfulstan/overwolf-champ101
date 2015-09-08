@@ -1,0 +1,140 @@
+@import "../helper/colors.scss";
+
+#champion-container {
+  height: auto;
+  position: relative;
+
+  #close-all-btn {
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background-color: brown;
+    right: 0;
+    top: 0;
+    z-index: 99;
+  }
+}
+$portrait-width-height: 75px;
+.champion-panel {
+  height: 100px;
+  border-top: 1px dashed #ccc;
+  padding-right: 30px;
+  position: relative;
+
+  .portrait {
+    height: $portrait-width-height;
+    width: $portrait-width-height;
+    background-size: $portrait-width-height $portrait-width-height !important;;
+    float: left;
+    border-radius: 100%;
+    margin: 10px;
+    /* border: 3px ridge white; */
+    // TODO: as class or variable
+    -moz-box-shadow: 0 0 25px 8px rgba(255,255,255,0.4);
+    -webkit-box-shadow: 0 0 25px 8px rgba(255,255,255,0.4);
+    box-shadow: 0 0 25px 8px rgba(255,255,255,0.4);
+  }
+  &.blue {
+    background-color: $color-blue;
+  }
+
+  &.purple {
+    background-color: $color-purple;
+  }
+
+  .passive {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    left: 60px;
+    top: 50px;
+    border-radius: 100%;
+    transform: scale(0.8);
+  }
+
+  .champ-spells {
+    height: 100%;
+    float: left;
+    .champ-spell-border {
+      border-radius: 100%;
+      border: solid 5px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 12px 8px rgba(0, 0, 0, 0.5);
+      width: 58px;
+      height: 58px;
+      margin: -5px 0 0 -5px;
+    }
+    .img {
+      height: 48px;
+      width: 48px;
+      float: left;
+      margin-top: 18px;
+      margin-left: 34px;
+      border-radius: 100%;
+      box-sizing: content-box;
+      overflow: visible;
+    }
+  }
+
+  .champ-select {
+    height: 100%;
+
+    .team {
+      height: 45%;
+
+      .img {
+        height: 100%;
+        float: left;
+      }
+    }
+  }
+
+  .panel-control {
+    height: 100%;
+    width: 30px;
+    background-color: black;
+    float: right;
+
+    .btn {
+      width: 100%;
+      height: 50%;
+      color: #eee;
+      text-align: center;
+      padding-top: 10px;
+    }
+  }
+
+  //  .img-wrapper {
+  //    position: relative;
+  //    display: block;
+  //    float: left;
+  //    width: auto;
+  //    height: auto;
+  //    &:hover {
+  //      *{
+  //        opacity: 0.5;
+  //      }
+  //      &:after {
+  //        display: block;
+  //        position: absolute;
+  //        background-color: #0b97c4;
+  //
+  //        top: 0;
+  //        left: 0;
+  //        width: 50px;
+  //        height: 50px;
+  //        pointer-events: none;
+  //
+  //      }
+  //    }
+  //  }
+  //
+  //  &.sticky-tooltip {
+  //    .img-wrapper {
+  //      &:hover:after {
+  //        content: 'Tooltip is sticky';
+  //      }
+  //    } // .img-wrapper
+  //  } // .sticky-tooltip
+}
+
+// .champion-panel
