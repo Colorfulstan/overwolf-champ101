@@ -18,13 +18,13 @@ var MatchModel = can.Model.extend('MatchModel', {},{
 	summonerId : null,
 
 	/** Team 100
-	 * @property
-	 * @type {SummonerModel[]} */
+	* @property
+	* @type {SummonerModel[]} */
 	blue : [],
 
 	/** Team 200
-	 * @property
-	 * @type {SummonerModel[]} */
+	* @property
+	* @type {SummonerModel[]} */
 	purple : [],
 
 	/**
