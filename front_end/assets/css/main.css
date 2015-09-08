@@ -2033,7 +2033,7 @@ i.fa {
   line-height: 1em; }
 
 #tooltip-container {
-  width: 100%;
+  width: 700px;
   background-color: black;
   color: #eee;
   padding: 30px;
@@ -2059,7 +2059,12 @@ i.fa {
   height: 100px;
   border-top: 1px dashed #ccc;
   padding-right: 30px;
+  padding-left: 30px;
   position: relative; }
+  .champion-panel:last-child {
+    border-bottom-left-radius: 75px;
+    border-bottom-right-radius: 75px;
+    height: 105px; }
   .champion-panel .portrait {
     height: 75px;
     width: 75px;
@@ -2074,34 +2079,58 @@ i.fa {
   .champion-panel.blue {
     background-color: #909bff; }
   .champion-panel.purple {
-    background-color: rgba(78, 7, 105, 0.73); }
+    background-color: #4e0769; }
   .champion-panel .passive {
     width: 48px;
     height: 48px;
     position: absolute;
-    left: 60px;
+    left: 85px;
     top: 50px;
     border-radius: 100%;
     transform: scale(0.8); }
   .champion-panel .champ-spells {
     height: 100%;
-    float: left; }
-    .champion-panel .champ-spells .champ-spell-border {
-      border-radius: 100%;
-      border: solid 5px rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 12px 8px rgba(0, 0, 0, 0.5);
-      width: 58px;
-      height: 58px;
-      margin: -5px 0 0 -5px; }
+    float: left;
+    position: relative; }
     .champion-panel .champ-spells .img {
       height: 48px;
       width: 48px;
       float: left;
-      margin-top: 18px;
-      margin-left: 34px;
+      margin-top: 25px;
+      margin-left: 60px;
       border-radius: 100%;
       box-sizing: content-box;
       overflow: visible; }
+    .champion-panel .champ-spells .champ-spell-border {
+      border-radius: 100%;
+      border: solid 5px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.3);
+      width: 58px;
+      height: 58px;
+      margin: -5px 0 0 -5px; }
+    .champion-panel .champ-spells .champion-spell {
+      position: relative; }
+      .champion-panel .champ-spells .champion-spell:after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        background-color: #fff;
+        color: #000;
+        right: -7px;
+        font-weight: bold;
+        bottom: -10px;
+        padding: 4px; }
+      .champion-panel .champ-spells .champion-spell[data-index-1="1"]:after {
+        content: 'Q'; }
+      .champion-panel .champ-spells .champion-spell[data-index-1="2"]:after {
+        content: 'W'; }
+      .champion-panel .champ-spells .champion-spell[data-index-1="3"]:after {
+        content: 'E'; }
+      .champion-panel .champ-spells .champion-spell[data-index-1="4"]:after {
+        content: 'R'; }
   .champion-panel .champ-select {
     height: 100%; }
     .champion-panel .champ-select .team {
@@ -2123,8 +2152,9 @@ i.fa {
 
 #panel-container {
   height: auto;
-  width: 740px;
-  margin: 0 auto; }
+  width: 700px;
+  margin: 0 auto;
+  margin-bottom: -1px; }
 
 #match-app-bar {
   width: 100%;
@@ -2172,7 +2202,7 @@ i.fa {
     cursor: pointer;
     /* border-right: ridge 3px white; */
     border-radius: 100%;
-    margin: 2px; }
+    margin: 5px; }
 
 .open-settings {
   display: none; }
@@ -2230,7 +2260,7 @@ body#settings, body#main, body#feedback {
 .hidden {
   display: none !important; }
 
-#btn-resize {
+.btn-resize {
   position: absolute;
   cursor: se-resize;
   bottom: 0;
@@ -2248,7 +2278,7 @@ body#settings, body#main, body#feedback {
       background: #909bff;
       left: 0; }
     .btn.show-team.purple {
-      background: rgba(78, 7, 105, 0.73);
+      background: #4e0769;
       right: 0; }
 
 button#reload {

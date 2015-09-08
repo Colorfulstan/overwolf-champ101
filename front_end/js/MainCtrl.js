@@ -19,6 +19,7 @@ var MainCtrl = WindowCtrl.extend({
 
 	// static
 	registerOverwolfHandlers: function () {
+		var self = this;
 		overwolf.windows.onStateChanged.addListener(function (result) {
 			steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
 		});
@@ -27,15 +28,15 @@ var MainCtrl = WindowCtrl.extend({
 		});
 		overwolf.games.onGameInfoUpdated.addListener(function (result) {
 			steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
-			if (this.constructor.gameStarted(result)) {
+			if (self.gameStarted(result)) {
 				steal.dev.warn('League of Legends game started', new Date());
 				// TODO: start matchWindow
-				this.constructor.openMatch();
+				self.constructor.openMatch();
 			}
-			if (this.constructor.gameFinished(result)) {
+			if (self.gameFinished(result)) {
 				steal.dev.warn('League of Legends game finished', new Date());
 				// TODO: close Matchwindow
-				this.constructor.closeMatch()
+				self.constructor.closeMatch()
 			}
 		});
 	},
@@ -54,8 +55,6 @@ var MainCtrl = WindowCtrl.extend({
 }, { // Instance
 	init: function () {
 		WindowCtrl.prototype.init.apply(this, arguments);
-		//this._super.init();
-		/** The overwolf Window for this Window */
 
 		debugger;
 		this.element.append(

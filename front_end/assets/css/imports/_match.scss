@@ -2,18 +2,19 @@
 
 #panel-container {
   height:auto;
-  width: 740px;
+  width: $match-window-width;
   margin: 0 auto;
+  margin-bottom: -1px; // visual compensation for 1px at app-bar
 }
 
 $app-bar-height : $spacer*2;
 #match-app-bar {
   width: 100%;
-  height: $app-bar-height;
-  margin-top: 1px; // enables scrolling with mouse on screen edge
+  height: 60px;
+  margin-top: 1px; // enables scrolling on the top edge (compensated by panel-container -1px)
   position: relative;
   overflow: hidden;
-  background-color: rgba(0,0,0,0.01);
+  background-color: rgba(0, 0, 0, 0.01);
 
   &:hover {
 
@@ -73,7 +74,7 @@ $app-bar-height : $spacer*2;
     cursor: pointer;
     /* border-right: ridge 3px white; */
     border-radius: 100%;
-    margin: 2px;
+    margin: 5px;
   }
 }
 
