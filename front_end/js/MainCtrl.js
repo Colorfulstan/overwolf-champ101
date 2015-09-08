@@ -67,7 +67,7 @@ var MainCtrl = WindowCtrl.extend({
 		var name = 'Main';
 		var self = this;
 		if (!hideHome) {
-			$.when(WindowCtrl.open(name)).then(function (ow_window) {
+			$.when(this.constructor.open(name)).then(function (ow_window) {
 				self.ow_window = ow_window;
 			});
 		}

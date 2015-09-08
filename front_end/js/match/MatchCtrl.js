@@ -15,14 +15,10 @@ require('../global');
  * Controller for the "Match" view
  * @see init
  */
-var MatchCtrl = can.Control.extend({
+var MatchCtrl = WindowCtrl.extend({
 	defaults: {
-		homeBtn: '.btn-home',
-		openSettingsBtn: '.btn-settings',
+
 		reloadBtn: '.btn-reload',
-		openHelpBtn: '.btn-help',
-		openFeedbackBtn: '.btn-feedback',
-		closeBtn: '.btn-close',
 		handle: '#match-app-bar'
 	},
 
@@ -72,6 +68,7 @@ var MatchCtrl = can.Control.extend({
 	 * @param element
 	 */
 	init: function (element, options) {
+		WindowCtrl.prototype.init.apply(this, arguments);
 		this.$panelContainer = $('#panel-container');
 
 		options.settings = new SettingsModel();
@@ -134,26 +131,6 @@ var MatchCtrl = can.Control.extend({
 	//},
 	'{handle} click': function ($handle, ev) {
 		this.togglePanels($handle);
-	},
-	'{homeBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		WindowCtrl.open('Main');
-		ev.stopPropagation();
-	},
-	'{openSettingsBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		WindowCtrl.openSettings();
-		ev.stopPropagation();
-	},
-	'{openHelpBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		WindowCtrl.openHelp();
-		ev.stopPropagation();
-	},
-	'{openFeedbackBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		WindowCtrl.openFeedback();
-		ev.stopPropagation();
-	},
-	'{closeBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		WindowCtrl.closeMatch();
-		ev.stopPropagation();
 	},
 	'{reloadBtn} click': function ($el, ev) {
 		delete this.options.settings;

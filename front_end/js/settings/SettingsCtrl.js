@@ -5,7 +5,7 @@ var WindowCtrl = require('WindowCtrl');
 /**
  * Controller for the "Settings" view
  */
-var SettingsCtrl = can.Control.extend('SettingsCtrl', {
+var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	defaults: {
 		settingsTmpl: 'templates/settings.mustache'
 	}
@@ -16,13 +16,14 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 	 */
 	init: function (options) {
 
+		WindowCtrl.prototype.init.apply(this, arguments);
 		this.options.oldName = this.options.settings.attr('summonerName');
 		this.options.oldServer = this.options.settings.attr('server');
 
 
 		var self = this;
-		$.when(WindowCtrl.open('Settings')).then(function (ow_window) {
-			self.options.ow_window = ow_window;
+		$.when(this.constructor.open('Settings')).then(function (ow_window) {
+			self.ow_window = ow_window;
 		});
 		debugger;
 		this.element.html(
@@ -41,7 +42,7 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 			this.options.oldName == this.options.settings.attr('summonerName')
 		) {	// no change - spare the request
 			debugger;
-			WindowCtrl.close(self.options.ow_window.name);
+			this.constructor.close(self.ow_window.name);
 			return;
 		}
 		$.get(
@@ -53,7 +54,7 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 				self.options.oldName = self.options.settings.attr('summonerName');
 				self.options.oldServer = self.options.settings.attr('server');
 				debugger;
-				WindowCtrl.close(self.options.ow_window.name);
+				this.constructor.close(self.ow_window.name);
 			})
 			.fail(function (data, status, jqXHR) {
 				steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
@@ -62,30 +63,17 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 				$btn.text("try again");
 			});
 	},
-	'.btn-close mousedown': function ($el, ev) {
+	'.btn-close click': function ($el, ev) {
 		var self = this;
 		window.setTimeout(function () {
-			WindowCtrl.close(self.options.ow_window.name);
+			this.constructor.close(self.ow_window.name);
 		}, 100);
-	},
-	'mousedown': function (el, ev) {
-		steal.dev.log('dragging');
-		WindowCtrl.dragMove(this.options.ow_window.name);
 	},
 	'#server-region-select change': function ($el, ev) {
 		this.options.settings.attr('server', $el.val());
 	},
 	'#summoner-name-input change': function ($el, ev) {
 		this.options.settings.attr('summonerName', $el.val());
-	},
-	'.whats-this click': function ($el, ev) {
-		debugger;
-		var $whats = $('.whats-this-display');
-		if ($whats.length) {
-			$whats.remove();
-		} else {
-			$el.append('<div class="whats-this-display">' + $el.attr('title') + '</div>');
-		}
 	}
 });
 module.exports = SettingsCtrl;

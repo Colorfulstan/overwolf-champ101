@@ -8,11 +8,14 @@ var can = require('can');
 var WindowCtrl = can.Control.extend('WindowCtrl', {
 
 	defaults: {
-
-		closeBtn: '#btn-close'
-		, resizeBtn: '#btn-resize'
-		, minimizeBtn: '#btn-minimize'
-		, settingsBtn: '#btn-settings'
+		 resizeBtn: '.btn-resize'
+		, minimizeBtn: '.btn-minimize'
+		, settingsBtn: '.btn-settings'
+		, homeBtn: '.btn-home'
+		, openSettingsBtn: '.btn-settings'
+		, openHelpBtn: '.btn-help'
+		, openFeedbackBtn: '.btn-feedback'
+		, closeBtn: '.btn-close'
 	},
 	// static
 	SCREEN_WIDTH: window.screen.availWidth,
@@ -142,17 +145,33 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	},
 	'{closeBtn} click': function (el, ev) {
 		this.constructor.close(this.options.name);
+		ev.stopPropagation();
 	},
 	'{resizeBtn} mousedown': function () {
 		this.constructor.dragResize(this.options.name, 'BottomRight');
+		ev.stopPropagation();
 	},
 	'{minimizeBtn} click': function (el, ev) {
 		steal.dev.log('WindowCtrl: minimize window');
 		this.constructor.minimize(this.options.name);
+		ev.stopPropagation();
 	},
 	'{settingsBtn} click': function (el, ev) {
 		steal.dev.log('WindowCtrl: open settings');
 		this.constructor.openSettings();
+		ev.stopPropagation();
+	},
+	'{homeBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		this.constructor.open('Main');
+		ev.stopPropagation();
+	},
+	'{helpBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		this.constructor.openHelp();
+		ev.stopPropagation();
+	},
+	'{feedbackBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+		this.constructor.openFeedback();
+		ev.stopPropagation();
 	}
 });
 module.exports = WindowCtrl;
