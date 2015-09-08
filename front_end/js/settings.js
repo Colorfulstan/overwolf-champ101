@@ -8,5 +8,5 @@ var settings = new SettingsModel();
 steal.dev.log('Settings initialized:', settings);
 
 $.when(settings.loadHotKeys()).then(function () {
-	new SettingsCtrl('div#content', {settings: settings}); // TODO: generalize element for the Window-Controllers
+	new SettingsCtrl('div#content', {settings: settings});
 });
