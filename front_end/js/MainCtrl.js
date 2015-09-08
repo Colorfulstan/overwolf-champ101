@@ -8,16 +8,11 @@ var SettingsModel = require('SettingsModel');
  * Represents the Main crossing point for the components of the app
  * as it initiates and manages the controllers.
  */
-var MainCtrl = can.Control.extend({
+var MainCtrl = WindowCtrl.extend({
 	defaults: {
 		name: 'Main'
-		, closeBtn: '#btn-close'
-		, resizeBtn: '#btn-resize'
-		, minimizeBtn: '#btn-minimize'
-		, settingsBtn: '#btn-settings'
 		, matchBtn: '#btn-match'
 		, hideHomeCB: '#hideHome'
-
 		, settingsTmpl: '#settings-tmpl'
 	},
 
@@ -31,18 +26,17 @@ var MainCtrl = can.Control.extend({
 		});
 		overwolf.games.onGameInfoUpdated.addListener(function (result) {
 			steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
-			if (MainCtrl.gameStarted(result)) {
+			if (this.constructor.gameStarted(result)) {
 				steal.dev.warn('League of Legends game started', new Date());
 				// TODO: start matchWindow
-				WindowCtrl.openMatch();
+				this.constructor.openMatch();
 			}
-			if (MainCtrl.gameFinished(result)) {
+			if (this.constructor.gameFinished(result)) {
 				steal.dev.warn('League of Legends game finished', new Date());
 				// TODO: close Matchwindow
-				WindowCtrl.closeMatch()
+				this.constructor.closeMatch()
 			}
 		});
-
 	},
 	gameStarted: function (result) {
 		return result.gameInfo !== null &&
@@ -58,8 +52,9 @@ var MainCtrl = can.Control.extend({
 	}
 }, { // Instance
 	init: function () {
+		WindowCtrl.prototype.init.apply(this, arguments);
+		//this._super.init();
 		/** The overwolf Window for this Window */
-		this.options.ow_window = null;
 
 		debugger;
 		this.element.append(
@@ -73,37 +68,18 @@ var MainCtrl = can.Control.extend({
 		var self = this;
 		if (!hideHome) {
 			$.when(WindowCtrl.open(name)).then(function (ow_window) {
-				self.options.ow_window = ow_window;
+				self.ow_window = ow_window;
 			});
 		}
 
 		if (!isSummonerSet) {
-			WindowCtrl.openSettings();
+			this.constructor.openSettings();
 		}
-		WindowCtrl.openMatch(); // TODO: for debug - remove when finished
-	},
-
-	'.drag-window-handle mousedown': function (el, ev) {
-		steal.dev.log('dragging');
-		WindowCtrl.dragMove(this.options.name);
-	},
-	'{closeBtn} click': function (el, ev) {
-		WindowCtrl.close(this.options.name);
-	},
-	'{resizeBtn} mousedown': function () {
-		WindowCtrl.dragResize(this.options.name, 'BottomRight');
-	},
-	'{minimizeBtn} click': function (el, ev) {
-		steal.dev.log('minimize window');
-		WindowCtrl.minimize(this.options.name);
-	},
-	'{settingsBtn} click': function (el, ev) {
-		steal.dev.log('MainCtrl: open settings');
-		WindowCtrl.openSettings();
+		this.constructor.openMatch(); // TODO: for debug - remove when finished
 	},
 	'{matchBtn} click': function (el, ev) {
-		steal.dev.log('MainCtrl: open match');
-		WindowCtrl.openMatch();
-	}
+	steal.dev.log('WindowCtrl: open match');
+	this.constructor.openMatch();
+}
 });
 module.exports = MainCtrl;

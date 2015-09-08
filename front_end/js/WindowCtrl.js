@@ -6,18 +6,26 @@ var can = require('can');
  * @see WindowCtrl.init
  */
 var WindowCtrl = can.Control.extend('WindowCtrl', {
+
+	defaults: {
+
+		closeBtn: '#btn-close'
+		, resizeBtn: '#btn-resize'
+		, minimizeBtn: '#btn-minimize'
+		, settingsBtn: '#btn-settings'
+	},
 	// static
 	SCREEN_WIDTH: window.screen.availWidth,
 	SCREEN_HEIGHT: window.screen.availHeight,
 
 
 	getCenteredX: function (width) {
-		return parseInt(WindowCtrl.SCREEN_WIDTH / 2 - width / 2);
+		return parseInt(this.SCREEN_WIDTH / 2 - width / 2);
 	},
 	getCenteredY: function (height) {
-		return parseInt(WindowCtrl.SCREEN_HEIGHT / 2 - height / 2);
+		return parseInt(this.SCREEN_HEIGHT / 2 - height / 2);
 	},
-	dragResize: function (name,edge) {
+	dragResize: function (name, edge) {
 		overwolf.windows.dragResize(name, edge);
 	},
 	dragMove: function (name) {
@@ -52,7 +60,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	openHelp: function (name, width, height) {
 		// TODO: implement
 	},
-	openFeedback: function (name, width, height){
+	openFeedback: function (name, width, height) {
 		// TODO: implement
 	},
 
@@ -80,26 +88,28 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		var width = 750;
 		var height = 1000;
 		var name = 'Match';
-		$.when(WindowCtrl.open(name, width, height)).then(function (ow_window) {
+		var self = this;
+		$.when(this.open(name, width, height)).then(function (ow_window) {
 			steal.dev.log("WindowCtrl.openMatch: ", ow_window);
 			//overwolf.windows.changeSize(ow_window.id, width, height); // TODO: try through manifest
-			var x = WindowCtrl.getCenteredX(ow_window.width);
+			var x = self.getCenteredX(ow_window.width);
 			overwolf.windows.changePosition(ow_window.id, x, 0);
 		});
 	},
-	closeMatch: function(){
-		WindowCtrl.close('Match');
+	closeMatch: function () {
+		this.close('Match');
 	},
 	/**
 	 * Opens the Settings-Window and creates a new SettingsCtrl stored within this.settings
 	 */
 	openSettings: function () {
 		var name = 'Settings';
-		$.when(WindowCtrl.open(name, 500,500)).then(function (ow_window) {
+		var self = this;
+		$.when(this.open(name, 500, 500)).then(function (ow_window) {
 			steal.dev.log("WindowCtrl.openSettings: ", ow_window);
 			//	// TODO: should this window open centered even after relocating it? => not position it at all
-			var x = WindowCtrl.getCenteredX(ow_window.width);
-			var y = WindowCtrl.getCenteredY(ow_window.height);
+			var x = self.getCenteredX(ow_window.width);
+			var y = self.getCenteredY(ow_window.height);
 			overwolf.windows.changePosition(ow_window.id, x, y);
 		});
 	}
@@ -115,8 +125,34 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	init: function (el, options) {
 
 		this.ow_window = {};
-		this.childWindows = {};
 		steal.dev.log('WindowCtrl initialized for ', options.name);
+	},
+	'.whats-this click': function ($el, ev) {
+		debugger;
+		var $whats = $('.whats-this-display');
+		if ($whats.length) {
+			$whats.remove();
+		} else {
+			$el.append('<div class="whats-this-display">' + $el.attr('title') + '</div>');
+		}
+	},
+	'.drag-window-handle mousedown': function (el, ev) {
+		steal.dev.log('dragging');
+		this.constructor.dragMove(this.options.name);
+	},
+	'{closeBtn} click': function (el, ev) {
+		this.constructor.close(this.options.name);
+	},
+	'{resizeBtn} mousedown': function () {
+		this.constructor.dragResize(this.options.name, 'BottomRight');
+	},
+	'{minimizeBtn} click': function (el, ev) {
+		steal.dev.log('WindowCtrl: minimize window');
+		this.constructor.minimize(this.options.name);
+	},
+	'{settingsBtn} click': function (el, ev) {
+		steal.dev.log('WindowCtrl: open settings');
+		this.constructor.openSettings();
 	}
 });
 module.exports = WindowCtrl;

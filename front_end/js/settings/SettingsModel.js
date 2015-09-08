@@ -76,6 +76,8 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 		//this.bind('hotkeys', SettingsModel.getHotKeys());
 
 
+		this.attr('hideHomeAtStartInfo',"This will prevent the Main Window to show up when you enter a Game. Only the Match-Window will appear automatically.");
+
 		// TODO: Hotkey Änderung binden??
 
 	},
