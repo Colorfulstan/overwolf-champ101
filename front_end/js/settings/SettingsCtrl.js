@@ -77,6 +77,15 @@ var SettingsCtrl = can.Control.extend('SettingsCtrl', {
 	},
 	'#summoner-name-input change': function ($el, ev) {
 		this.options.settings.attr('summonerName', $el.val());
+	},
+	'.whats-this click': function ($el, ev) {
+		debugger;
+		var $whats = $('.whats-this-display');
+		if ($whats.length) {
+			$whats.remove();
+		} else {
+			$el.append('<div class="whats-this-display">' + $el.attr('title') + '</div>');
+		}
 	}
 });
 module.exports = SettingsCtrl;

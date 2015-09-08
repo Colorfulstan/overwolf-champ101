@@ -86,9 +86,7 @@ body {
       background: $color-purple;
       right:0;
     }
-
   }
-
 }
 
 button#reload {
@@ -194,6 +192,9 @@ button#reload {
   &-vertical-center {
     vertical-align: middle;
   }
+}
+.whats-this {
+  text-decoration: none;
 }
 //
 //.table {

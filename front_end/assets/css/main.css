@@ -2017,7 +2017,7 @@
 
 .icon {
   color: #fff;
-  opacity: 0.6;
+  opacity: 0.8;
   padding: 0 10px;
   display: inline-block; }
   .icon:hover {
@@ -2339,5 +2339,8 @@ button#reload {
   line-height: 1.3em !important; }
 .text-vertical-center {
   vertical-align: middle; }
+
+.whats-this {
+  text-decoration: none; }
 
 /*# sourceMappingURL=main.css.map */
