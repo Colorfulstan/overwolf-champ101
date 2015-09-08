@@ -1,5 +1,7 @@
+@import "../helper/variables";
+
 #tooltip-container {
-  width: 100%;
+  width: $match-window-width;
   background-color: black;
   color: #eee;
 
