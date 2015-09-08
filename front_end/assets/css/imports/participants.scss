@@ -19,7 +19,7 @@
   border-top: 1px dashed #ccc;
   padding-right: 30px;
 
-  & > img {
+  & > .img {
     height: 100%;
     float: left;
   }
@@ -34,7 +34,7 @@
   .summoner-spells {
     height: 100%;
 
-    & > img {
+    & > .img {
       height: 27%;
     }
 
@@ -46,7 +46,7 @@
 
   .champ-spells {
     height: 100%;
-    img {
+    .img {
       height: 70%;
     }
   }
@@ -57,7 +57,7 @@
     .team {
       height: 45%;
 
-      img {
+      .img {
         height: 100%;
         float: left;
       }

@@ -44,7 +44,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 			));
 	},
 	addPanel: function (champName) {
-		if (this.element.find('[alt="' + champName + '"]').length) {
+		if (this.element.find('[title="' + champName + '"]').length) {
 			return;
 		}
 		if (this.options.panels.length >= 5) {
@@ -160,7 +160,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 			y: $panel.offset().top + $panel.height()
 		});
 	},
-	'img mouseout': function ($el, ev) {
+	'.img mouseout': function ($el, ev) {
 		var $panel = $el.closest('.panel');
 		if (!$panel.hasClass('sticky-tooltip')){
 			can.route.attr({ route: 'tooltip/hide'}, true);
