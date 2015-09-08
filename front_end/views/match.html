@@ -21,19 +21,21 @@
 <body>
 <div id="content">
 	<div id="panel-container">
-		<div id="match-overview-container" class="panel">
+		<div id="match-overview-container" class="panel row">
 			<!-- contains all the champs within the game as Thumbnails -->
 			<!-- match-overview.mustache -->
 			<div class="btn-settings btn icon pull-right col-xs-1 height-100"><i class="fa fa-cog fa-2x vertical-center"></i></div>
 			<div class="btn-reload btn icon pull-right col-xs-1 height-100"><i class="fa fa-refresh fa-2x vertical-center"></i></div>
 		</div>
 
-		<div id="champion-container" class="col-xs-12 table">
-			<!-- container to contain all the champion-panels with their spell informations -->
-			<!-- champion-panel.mustache -->
+		<div class="row">
+			<div id="champion-container" class="col-xs-12 table">
+				<!-- container to contain all the champion-panels with their spell informations -->
+				<!-- champion-panel.mustache -->
+			</div>
 		</div>
 
-		<div id="tooltip-container">
+		<div id="tooltip-container" class="padded">
 			<!-- for the tooltip to be shown -->
 			<!-- tooltip-XXXX.mustache -->
 		</div>
