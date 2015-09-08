@@ -2,6 +2,9 @@
 require('global');
 var ImageModel = can.Model.extend('ImageModel', {}, {
 	init: function (options) {
+		debugger;
+		this.src = DDRAGON_URL + '/img/' + options.group + "/" + options.full;
+		this.spriteSrc = DDRAGON_URL + '/img/sprite/' + options.sprite;
 	},
 	/** Filename for the single Image
 	 * @property
@@ -27,11 +30,6 @@ var ImageModel = can.Model.extend('ImageModel', {}, {
 	x: null,
 	/**@property
 	 * @type {Number} */
-	y: null,
-	imgSrc : function(){
-		return DDRAGON_URL + '/img/' + this.group + "/" + this.full;
-	}
-
-	 // TODO: replace with sprites
+	y: null
 });
 module.exports = ImageModel;

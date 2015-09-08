@@ -10,7 +10,7 @@ var can = require('can');
  * <pre>
  * can.route.attr({
 			route: 'tooltip/champ/:name',
-			name: $el.attr('alt'),
+			name: $el.attr('title'),
 			y: $el.offset().y + $el.height()
 		});
  *
@@ -22,7 +22,7 @@ var can = require('can');
  * <pre>
  * can.route.attr({
  			route: 'tooltip/spell/:champ/:index',
- 			name: $el.attr('alt'),
+ 			name: $el.attr('title'),
  			y: $el.offset().y + $el.height()
  	});</pre>
  *

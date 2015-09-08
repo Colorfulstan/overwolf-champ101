@@ -14,6 +14,7 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	 * @param options.match {MatchModel}
 	 */
 	init: function (el, options) {
+		debugger;
 		this.renderView(options.match.blue, options.match.purple);
 	},
 	renderView: function (teamBlue, teamPurple) {
@@ -30,7 +31,7 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 		//steal.dev.log('.portrait mouseenter');
 		can.route.attr({
 			route: 'tooltip/champ/:champ',
-			champ: $el.attr('alt'),
+			champ: $el.attr('title'),
 			y: $el.offset().top + $el.height()
 		});
 	},
@@ -42,7 +43,7 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	},
 	'.portrait click': function ($el, ev) {
 		//steal.dev.log('.portrait click');
-		can.route.attr({route: 'add/:champ', champ: $el.attr('alt')});
+		can.route.attr({route: 'add/:champ', champ: $el.attr('title')});
 	},
 	'reload/match route': function (routeData) {
 		steal.dev.log('refresh Route triggered in OverviewCtrl');

@@ -1,6 +1,7 @@
 "use strict";
 var can = require('can');
 var SpellModel = require('SpellModel');
+var ImageModel = require('ImageModel');
 require('global');
 
 var ChampionModel = can.Model.extend({}, {
@@ -9,6 +10,8 @@ var ChampionModel = can.Model.extend({}, {
 		options.passive.champId = this.id;
 		options.passive.type = 'passive'; // TODO: do in backend?
 		this.attr('passive', new SpellModel(options.passive));
+		this.image = new ImageModel(options.image);
+		options.image = this.image;
 
 		var spells = [];
 		options.spells.map(function (el, index) {
@@ -48,7 +51,11 @@ var ChampionModel = can.Model.extend({}, {
 	//spells: null,
 
 	imgSrc: function () {
-		return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;
+		//return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;
+		return this.image.src ;
+	},
+	spriteSrc: function () {
+		return this.image.spriteSrc;
 	},
 	videoAvailable : function(){ // TODO: maybe don't implement for Champion Spotlight
 		return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();

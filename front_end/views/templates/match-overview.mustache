@@ -1,7 +1,10 @@
 <div id="match-participants">
 	<div class="team blue col-xs-5">
 		{{#blue}}
-			<img src="{{champ.imgSrc}}" alt="{{champ.name}}" class="portrait" />
+		{{#champ}}
+			<div title="{{name}}" class="portrait img"
+				 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"></div>
+		{{/champ}}
 		{{ /blue }}
 	</div>
 	<div id="vs" class="col-xs-2">
@@ -11,7 +14,10 @@
 	</div>
 	<div class="team purple col-xs-5 pull-right">
 		{{ #purple }}
-			<img src="{{champ.imgSrc}}" alt="{{champ.name}}" class="portrait" />
+				{{#champ}}
+					<div title="{{name}}" class="portrait img"
+						 style="background: url({{spriteSrc}}) -{{image.x}}px -{{image.y}}px;"></div>
+				{{/champ}}
 		{{ /purple }}
 	</div>
 </div>

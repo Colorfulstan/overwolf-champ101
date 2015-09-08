@@ -2063,7 +2063,7 @@ i.fa {
   height: 100px;
   border-top: 1px dashed #ccc;
   padding-right: 30px; }
-  .champion-panel > img {
+  .champion-panel > .img {
     height: 100%;
     float: left; }
   .champion-panel.blue {
@@ -2072,20 +2072,20 @@ i.fa {
     background-color: rgba(78, 7, 105, 0.73); }
   .champion-panel .summoner-spells {
     height: 100%; }
-    .champion-panel .summoner-spells > img {
+    .champion-panel .summoner-spells > .img {
       height: 27%; }
     .champion-panel .summoner-spells .passive {
       width: 100%;
       height: auto; }
   .champion-panel .champ-spells {
     height: 100%; }
-    .champion-panel .champ-spells img {
+    .champion-panel .champ-spells .img {
       height: 70%; }
   .champion-panel .champ-select {
     height: 100%; }
     .champion-panel .champ-select .team {
       height: 45%; }
-      .champion-panel .champ-select .team img {
+      .champion-panel .champ-select .team .img {
         height: 100%;
         float: left; }
   .champion-panel .panel-control {
@@ -2187,6 +2187,9 @@ body#settings, body#main {
 
 #match-overview-container {
   height: 60px; }
+  #match-overview-container .portrait {
+    width: 48px;
+    height: 48px; }
   #match-overview-container #vs {
     background-color: #eee; }
     #match-overview-container #vs p {

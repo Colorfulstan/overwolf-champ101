@@ -115,7 +115,7 @@ var SpellModel = can.Model.extend('SpellModel', {
 	 */
 	init: function (options) {
 		//var imgData = options.image;
-		//options.image = new ImageModel(imgData);
+		this.image = new ImageModel(options.image);
 
 		this.attr('enableVideo', false);
 		if (options.type != undefined) {
@@ -197,9 +197,9 @@ var SpellModel = can.Model.extend('SpellModel', {
 	// * @type {Number[]} */
 	//costType: null,
 
-	imgSrc: function () {
-		return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;
-	},
+	//imgSrc: function () {
+	//	return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;
+	//},
 	videoAvailable: function () {
 		if (this.attr('enableVideo') != null) return this.attr('enableVideo');
 		else return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();
