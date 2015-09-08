@@ -8,16 +8,18 @@ var SettingsModel = require('SettingsModel');
 var OverviewCtrl = require('OverviewCtrl');
 var ChampionCtrl = require('ChampionCtrl');
 var TooltipCtrl = require('TooltipCtrl');
+var FeedbackCtrl = require('FeedbackCtrl');
 
 require('../global');
 
 /**
- * Controller for the "Match" view
+ * Controller for the "Match" view (match.html / match.js)
+ * @inheritDoc WindowCtrl
  * @see init
  */
 var MatchCtrl = WindowCtrl.extend({
 	defaults: {
-
+		name: 'Match',
 		reloadBtn: '.btn-reload',
 		handle: '#match-app-bar'
 	},

@@ -32,6 +32,12 @@
 		"transparent": true,
 		"resizable": true
 	  },
+	  "Feedback": {
+		"file": "views/feedback.html",
+		"transparent": true,
+		"resizable": false,
+		"show_in_taskbar": true
+	  },
 	  "Match": {
 		"file": "views/match.html",
 		"transparent": true,
@@ -57,7 +63,7 @@
   ],
   "externally_connectable": {
 	"matches": [
-	  "http://*.krispin.it/sites/tests/riot-api"
+	  "http://*.krispin.it/*"
 	]
   }
 }

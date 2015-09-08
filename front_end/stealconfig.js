@@ -21,6 +21,7 @@ System.config({
 		'WindowCtrl': './js/WindowCtrl.js',
 		'global': './js/global.js',
 		'Routes': './js/Routes.js',
-		'MainCtrl': './js/MainCtrl.js'
+		'MainCtrl': './js/MainCtrl.js',
+		'FeedbackCtrl': './js/feedback/FeedbackCtrl.js'
 	}
 });

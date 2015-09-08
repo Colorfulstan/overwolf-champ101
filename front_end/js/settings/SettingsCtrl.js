@@ -3,10 +3,12 @@ var can = require('can');
 var WindowCtrl = require('WindowCtrl');
 
 /**
- * Controller for the "Settings" view
+ * Controller for the "Settings" view (settings.html / settings.js)
+ * @inheritDoc WindowCtrl
  */
 var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	defaults: {
+		name: 'Settings',
 		settingsTmpl: 'templates/settings.mustache'
 	}
 }, {
@@ -54,7 +56,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				self.options.oldName = self.options.settings.attr('summonerName');
 				self.options.oldServer = self.options.settings.attr('server');
 				debugger;
-				this.constructor.close(self.ow_window.name);
+				self.constructor.close(self.ow_window.name);
 			})
 			.fail(function (data, status, jqXHR) {
 				steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);

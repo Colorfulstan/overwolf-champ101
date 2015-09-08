@@ -19,7 +19,6 @@ var SpellModel = can.Model.extend('SpellModel', {
 		var ttNew = string;
 		var pattern;
 
-		debugger;
 
 		/**
 		 * builds a string from an array - x / y / z / ... / or a single value if all values are the same.
