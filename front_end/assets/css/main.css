@@ -2035,7 +2035,6 @@ i.fa {
 #tooltip-container {
   width: 100%;
   background-color: black;
-  opacity: 0.8;
   color: #eee;
   padding: 30px;
   position: absolute;
@@ -2043,10 +2042,6 @@ i.fa {
   display: none; }
   #tooltip-container:hover, #tooltip-container:active, #tooltip-container:focus {
     opacity: 1; }
-
-#spell-video-container {
-  width: 348px;
-  height: 196px; }
 
 #champion-container {
   height: auto;
@@ -2265,6 +2260,42 @@ button#reload {
   height: 100%;
   z-index: 9999; }
 
+.vertical-center {
+  transform: translateY(45%); }
+
+.padded {
+  padding: 30px; }
+  .padded-left {
+    padding-left: 30px; }
+    .padded-left-0 {
+      padding-left: 0; }
+  .padded-right {
+    padding-right: 30px; }
+    .padded-right-0 {
+      padding-right: 0; }
+  .padded-top {
+    padding-top: 30px; }
+    .padded-top-0 {
+      padding-top: 0; }
+  .padded-bot {
+    padding-bottom: 30px; }
+    .padded-bot-0 {
+      padding-bottom: 0; }
+  .padded-0 {
+    padding: 0; }
+
+.line-right {
+  border-right: 1px solid #eee; }
+.line-left {
+  border-left: 1px solid #eee; }
+
+.text-center {
+  text-align: center; }
+.text-body {
+  line-height: 1.3em !important; }
+.text-vertical-center {
+  vertical-align: middle; }
+
 .height-100 {
   height: 100%; }
 
@@ -2296,6 +2327,11 @@ button#reload {
   border-right: 1px solid #eee; }
 .line-left {
   border-left: 1px solid #eee; }
+
+.collapse-border-left {
+  margin-left: -1px !important; }
+.collapse-border-right {
+  margin-right: -1px !important; }
 
 .text-center {
   text-align: center; }
