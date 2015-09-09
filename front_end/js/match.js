@@ -8,4 +8,4 @@ var MatchCtrl = require('MatchCtrl');
 
 can.view.cache = false;
 MatchCtrl.registerHotkeys();
-var match = new MatchCtrl('#content');
+var match = new MatchCtrl('html');

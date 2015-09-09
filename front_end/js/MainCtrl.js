@@ -31,12 +31,12 @@ var MainCtrl = WindowCtrl.extend({
 			if (self.gameStarted(result)) {
 				steal.dev.warn('League of Legends game started', new Date());
 				// TODO: start matchWindow
-				self.constructor.openMatch();
+				self.openMatch();
 			}
 			if (self.gameFinished(result)) {
 				steal.dev.warn('League of Legends game finished', new Date());
 				// TODO: close Matchwindow
-				self.constructor.closeMatch()
+				self.closeMatch()
 			}
 		});
 	},
@@ -57,7 +57,7 @@ var MainCtrl = WindowCtrl.extend({
 		WindowCtrl.prototype.init.apply(this, arguments);
 
 		debugger;
-		this.element.append(
+		this.element.find('#content').append(
 			can.view(this.options.settingsTmpl, new SettingsModel())
 		);
 
@@ -77,7 +77,7 @@ var MainCtrl = WindowCtrl.extend({
 		}
 		this.constructor.openMatch(); // TODO: for debug - remove when finished
 	},
-	'{matchBtn} click': function (el, ev) {
+	'{matchBtn} mousedown': function (el, ev) {
 	steal.dev.log('WindowCtrl: open match');
 	this.constructor.openMatch();
 }
