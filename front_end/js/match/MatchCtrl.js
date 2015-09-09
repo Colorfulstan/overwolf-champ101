@@ -44,6 +44,9 @@ var MatchCtrl = WindowCtrl.extend({
 		overwolf.settings.registerHotKey("open_panels_team_purple", function (result) {
 			team_handler(result, 'purple');
 		});
+		//overwolf.settings.registerHotKey("open_match", function (result) { // TODO: open / close Match implementation - should not reload data but show/hide the matchwindow
+		//	team_handler(result, 'blue');
+		//});
 
 		function create_handler(id){
 			return function close_panel_handler(result) {

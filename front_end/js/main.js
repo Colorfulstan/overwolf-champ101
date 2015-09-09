@@ -8,7 +8,7 @@ var SettingsModel = require('SettingsModel');
 //MainCtrl.registerHotkeys();
 MainCtrl.registerOverwolfHandlers();
 
-var main = new MainCtrl('body');
+var main = new MainCtrl('html');
 var settings = new SettingsModel();
 
 main.start(settings.isSummonerSet(), settings.hideHomeAtStart());

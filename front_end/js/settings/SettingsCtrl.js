@@ -28,7 +28,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 			self.ow_window = ow_window;
 		});
 		debugger;
-		this.element.html(
+		this.element.find('#content').html(
 			can.view(this.options.settingsTmpl, this.options.settings)
 		);
 	},

@@ -154,33 +154,33 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		steal.dev.log('dragging');
 		this.constructor.dragMove(this.options.name);
 	},
-	'{closeBtn} click': function (el, ev) {
+	'{closeBtn} mousedown': function (el, ev) {
 		this.constructor.close(this.options.name);
 		ev.stopPropagation();
 	},
-	'{resizeBtn} mousedown': function () {
+	'{resizeBtn} mousedown': function (el, ev) {
 		this.constructor.dragResize(this.options.name, 'BottomRight');
 		ev.stopPropagation();
 	},
-	'{minimizeBtn} click': function (el, ev) {
+	'{minimizeBtn} mousedown': function (el, ev) {
 		steal.dev.log('WindowCtrl: minimize window');
 		this.constructor.minimize(this.options.name);
 		ev.stopPropagation();
 	},
-	'{settingsBtn} click': function (el, ev) {
+	'{settingsBtn} mousedown': function (el, ev) {
 		steal.dev.log('WindowCtrl: open settings');
 		this.constructor.openSettings();
 		ev.stopPropagation();
 	},
-	'{homeBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+	'{homeBtn} mousedown': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
 		this.constructor.open('Main');
 		ev.stopPropagation();
 	},
-	'{helpBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+	'{helpBtn} mousedown': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
 		this.constructor.openHelp();
 		ev.stopPropagation();
 	},
-	'{feedbackBtn} click': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+	'{feedbackBtn} mousedown': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
 		debugger;
 		this.constructor.openFeedback();
 		ev.stopPropagation();
