@@ -1,5 +1,6 @@
 @import "helper/colors";
 @import "helper/variables";
+@import "imports/fountain-spinner";
 
 @import "reset.css";
 @import "grid_12.css";
@@ -8,6 +9,8 @@
 @import "imports/icons";
 @import "imports/tooltip";
 @import "imports/champions";
+
+@import "imports/settings";
 
 @import "imports/match";
 
@@ -158,17 +161,22 @@ button#reload {
 
   &-left { padding-left: $spacer;
     &-0 { padding-left: 0; }
+    &-half { padding-left: $spacer/2; }
   }
   &-right { padding-right: $spacer;
     &-0 { padding-right: 0; }
+    &-half { padding-right: $spacer/2; }
   }
   &-top { padding-top: $spacer;
     &-0 { padding-top: 0; }
+    &-half { padding-top: $spacer/2; }
   }
   &-bot { padding-bottom: $spacer;
     &-0 { padding-bottom: 0; }
+    &-half { padding-bottom: $spacer/2; }
   }
   &-0 { padding: 0; }
+  &-half { padding: $spacer/2; }
 }
 
 .line {

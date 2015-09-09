@@ -1,13 +1,14 @@
 @import "../helper/variables";
+@import "../helper/colors";
 
 #panel-container {
-  height:auto;
+  height: auto;
   width: $match-window-width;
   margin: 0 auto;
   margin-bottom: -1px; // visual compensation for 1px at app-bar
 }
 
-$app-bar-height : $spacer*2;
+$app-bar-height: $spacer*2;
 #match-app-bar {
   width: 100%;
   height: 60px;
@@ -43,8 +44,8 @@ $app-bar-height : $spacer*2;
   }
 }
 
-#match-overview-container{
-  height:60px;
+#match-overview-container {
+  height: 60px;
 
   .portrait {
     width: 48px;
@@ -78,25 +79,24 @@ $app-bar-height : $spacer*2;
   }
 }
 
-.open-settings {
-  display: none;
-}
-
-.reload {
-  display: none;
-}
-
 .loading {
-  background-color: red !important;
+//  background-color: $color-loading !important;
+
+  .loading-state {
+    display: block;
+  }
+  .failed-state{
+    display: none;
+  }
 }
 
 .failed {
-  background-color: orange !important;
+  background-color: $color-failed !important;
 
-  .open-settings {
-    display: block;
+  .loading-state {
+    display: none;
   }
-  .reload {
+  .failed-state{
     display: block;
   }
 }

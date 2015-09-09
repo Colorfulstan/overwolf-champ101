@@ -20,8 +20,11 @@ require('../global');
 var MatchCtrl = WindowCtrl.extend({
 	defaults: {
 		name: 'Match',
+		$panelContainer: $('#panel-container'),
+		$overviewContainer: $('#match-overview-container'),
 		reloadBtn: '.btn-reload',
-		handle: '#match-app-bar'
+		handle: '#match-app-bar',
+		loadingTmpl: 'templates/parts/match-loading.mustache'
 	},
 
 	registerHotkeys: function () {
@@ -74,7 +77,6 @@ var MatchCtrl = WindowCtrl.extend({
 	 */
 	init: function (element, options) {
 		WindowCtrl.prototype.init.apply(this, arguments);
-		this.$panelContainer = $('#panel-container');
 
 		options.settings = new SettingsModel();
 
@@ -91,12 +93,19 @@ var MatchCtrl = WindowCtrl.extend({
 		var deferred = $.Deferred();
 
 		var self = this;
+debugger;
 
-		self.$panelContainer.removeClass('failed').addClass('loading');
+		var name = this.options.settings.attr('summonerName');
+		self.options.$overviewContainer.html(can.view(this.options.loadingTmpl , {summonerName: name}));
+		self.options.$overviewContainer.removeClass('failed').addClass('loading');
+		delete self.options.overview;
+		delete self.options.champions;
+		delete self.options.tooltip;
+
 		$.when(this.options.dao.loadMatchModel(self.options.model))
 			.then(function (matchModel) {
 				deferred.resolve(matchModel);
-				self.$panelContainer.removeClass('loading');
+				self.options.$overviewContainer.removeClass('loading');
 				debugger;
 				// Controller for Overview-Panel
 				self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
@@ -107,17 +116,16 @@ var MatchCtrl = WindowCtrl.extend({
 
 			}).fail(function (data, status, jqXHR) {
 				steal.dev.warn("Loading Match failed!", data, status, jqXHR);
-				self.$panelContainer.removeClass('loading').addClass('failed');
+				self.options.$overviewContainer.removeClass('loading').addClass('failed');
 				deferred.reject(data, status, jqXHR);
 			});
 		return deferred.promise();
 	},
 	togglePanels: function ($handle) {
-		var self = this;
 		$handle.toggleClass('collapsed');
 		//var speed = this.element.height() / 200 * ANIMATION_SLIDE_SPEED_PER_100PX;
 		//if (speed < ANIMATION_SLIDE_SPEED_PER_100PX) speed = ANIMATION_SLIDE_SPEED_PER_100PX;
-		this.$panelContainer.slideToggle(ANIMATION_SLIDE_SPEED_PER_100PX);
+		this.options.$panelContainer.slideToggle(ANIMATION_SLIDE_SPEED_PER_100PX);
 	},
 
 	//' mouseout': function ($el, ev) {
@@ -134,10 +142,10 @@ var MatchCtrl = WindowCtrl.extend({
 	//	steal.dev.log('mouseenter in' , $el);
 	//	window.clearTimeout(this.options.mouseLeftMatchWindowTO);
 	//},
-	'{handle} click': function ($handle, ev) {
+	'{handle} mousedown': function ($handle, ev) {
 		this.togglePanels($handle);
 	},
-	'{reloadBtn} click': function ($el, ev) {
+	'{reloadBtn} mousedown': function ($el, ev) {
 		delete this.options.settings;
 		this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
 		this.options.model.attr('server', this.options.settings._server());
