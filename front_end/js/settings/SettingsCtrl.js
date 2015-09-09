@@ -9,7 +9,8 @@ var WindowCtrl = require('WindowCtrl');
 var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	defaults: {
 		name: 'Settings',
-		settingsTmpl: 'templates/settings.mustache'
+		settingsTmpl: 'templates/settings.mustache',
+		loadingSpinnerTmpl: 'templates/parts/loading-spinner.mustache'
 	}
 }, {
 	/**
@@ -37,7 +38,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 		var settings = this.options.settings;
 		debugger;
 		var self = this;
-		$btn.text("checking"); // TODO: replace with class
+		$btn.text('checking'); // TODO: replace with class
 		if (
 			this.options.oldServer == this.options.settings.attr('server')
 			&&
@@ -62,7 +63,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
 				//Error.summonerSettings(data.responseText); // TODO
 				settings.attr('summonerId', null);
-				$btn.text("try again");
+				$btn.text("not found");
 			});
 	},
 	'.btn-close click': function ($el, ev) {
