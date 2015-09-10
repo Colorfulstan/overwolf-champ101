@@ -2,7 +2,7 @@
 	<ul class="padded-bot-half">
 		<li><i class="fa fa-info-circle pull-left padded-right"></i>
 
-			<div>To receive any data you need to set your summoner name and the server you play on.
+			<div>To receive any data for your game you need to set your summoner name and the server you play on.
 			</div>
 		</li>
 		<li><i class="fa fa-exclamation-triangle pull-left padded-right"></i>
@@ -14,25 +14,25 @@
 	</ul>
 
 	<form onsubmit="return false" id="summoner-form">
-		<div><label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
-			<br>
-			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
-				   can-value='summonerName' />
-		</div>
-		<div><label for="server-region-select">Region</label>
-			<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
-				<option value="BR">BR</option
-				<option value="EUNE">EUNE</option>
-				<option value="EUW">EUW</option>
-				<option value="KR">KR</option>
-				<option value="LAN">LAN</option>
-				<option value="LAS">LAS</option>
-				<option value="NA">NA</option>
-				<option value="OCE">OCE</option>
-				<option value="TR">TR</option>
-				<option value="RU">RU</option>
-				<option value="PBE">PBE</option>
-			</select></div>
+		<label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
+		<br>
+		<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
+			   can-value='summonerName' />
+
+		<label for="server-region-select">Region</label>
+		<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
+			<option value="BR">BR</option
+			<option value="EUNE">EUNE</option>
+			<option value="EUW">EUW</option>
+			<option value="KR">KR</option>
+			<option value="LAN">LAN</option>
+			<option value="LAS">LAS</option>
+			<option value="NA">NA</option>
+			<option value="OCE">OCE</option>
+			<option value="TR">TR</option>
+			<option value="RU">RU</option>
+			<option value="PBE">PBE</option>
+		</select>
 
 		<div class="padded-top">
 			<button type="submit" id="btn-save-close">Save and Close</button>
@@ -40,10 +40,9 @@
 		</div>
 	</form>
 	<div class="row">
-		<div class="padded-top padded-bot">
-			<input class="pull-left" type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart"
-				   {{ #hideHomeAtStart }}checked="checked"{{ /hideHomeAtStart }}"/>
-			<label for="hideHome">Don't show at start
+		<div class="padded-bot padded-top">
+			<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
+			<label for="hideHome">Don't show main window at startup
 				<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a></label>
 		</div>
 	</div>
