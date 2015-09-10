@@ -3,6 +3,7 @@ System.config({
 		'jquery/jquery': './node_modules/jquery/dist/jquery.js',
 		'can':'./node_modules/can/can.js',
 		'can/*':'./node_modules/can/*.js',
+		'materialize':'./node_modules/materialize-css/bin/materialize.js',
 
 		'SettingsModel': './js/settings/SettingsModel.js',
 		'SettingsCtrl': './js/settings/SettingsCtrl.js',

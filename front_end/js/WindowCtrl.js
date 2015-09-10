@@ -101,9 +101,8 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	openMatch: function () {
 		var width = 750;
 		var height = 1000;
-		var name = 'Match';
 		var self = this;
-		$.when(this.open(name, width, height)).then(function (ow_window) {
+		$.when(this.open('Match', width, height)).then(function (ow_window) {
 			steal.dev.log("WindowCtrl.openMatch: ", ow_window);
 			//overwolf.windows.changeSize(ow_window.id, width, height); // TODO: try through manifest
 			var x = self.getCenteredX(ow_window.width);
@@ -117,9 +116,8 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	 * Opens the Settings-Window and creates a new SettingsCtrl stored within this.settings
 	 */
 	openSettings: function () {
-		var name = 'Settings';
 		var self = this;
-		$.when(this.open(name, 500, 500)).then(function (ow_window) {
+		$.when(this.open('Settings')).then(function (ow_window) {
 			steal.dev.log("WindowCtrl.openSettings: ", ow_window);
 			//	// TODO: should this window open centered even after relocating it? => not position it at all
 			var x = self.getCenteredX(ow_window.width);
@@ -142,12 +140,11 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		steal.dev.log('WindowCtrl initialized for ', options.name);
 	},
 	'.whats-this click': function ($el, ev) {
-		debugger;
-		var $whats = $('.whats-this-display');
+		var $whats = $el.closest('div').find('.whats-this-display');
 		if ($whats.length) {
 			$whats.remove();
 		} else {
-			$el.append('<div class="whats-this-display">' + $el.attr('title') + '</div>');
+			$el.closest('div').append('<div class="whats-this-display text-body">' + $el.attr('title') + '</div>');
 		}
 	},
 	'.drag-window-handle mousedown': function (el, ev) {

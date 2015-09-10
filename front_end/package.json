@@ -1,9 +1,10 @@
 {
   "main": "index.js",
   "dependencies": {
+    "can": "^2.2.7",
     "jquery": "^2.1.4",
-    "video.js": "^4.12.14",
-    "can": "^2.2.7"
+    "materialize-css": "^0.96.1",
+    "video.js": "^4.12.14"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

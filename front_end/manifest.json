@@ -25,24 +25,35 @@
 	  "Main": {
 		"file": "views/main.html",
 		"transparent": true,
-		"resizable": true
+		"resizable": true,
+		"size": {"width": 400, "height": 600},
+		"min_size": {"width": 400, "height": 600},
+		"max_size": {"width": 400, "height": 1200}
 	  },
 	  "Settings": {
 		"file": "views/settings.html",
 		"transparent": true,
-		"resizable": true
+		"resizable": true,
+		"size": {"width": 800, "height": 600},
+		"min_size": {"width": 400, "height": 400},
+		"max_size": {"width": 800, "height": 1200}
+
 	  },
 	  "Feedback": {
 		"file": "views/feedback.html",
 		"transparent": true,
 		"resizable": false,
-		"show_in_taskbar": true
+		"show_in_taskbar": true,
+		"size": {"width": 400, "height": 400},
+		"min_size": {"width": 400, "height": 400},
+		"max_size": {"width": 800, "height": 800}
 	  },
 	  "Match": {
 		"file": "views/match.html",
 		"transparent": true,
 		"resizable": false,
-		"show_in_taskbar": false
+		"show_in_taskbar": false,
+		"size": {"width": 750, "height": 1000}
 	  }
 	},
 	"hotkeys": {

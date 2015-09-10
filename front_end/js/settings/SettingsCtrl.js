@@ -25,7 +25,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 
 
 		var self = this;
-		$.when(this.constructor.open('Settings')).then(function (ow_window) {
+		$.when(this.constructor.open('Settings', 800, 600)).then(function (ow_window) {
 			self.ow_window = ow_window;
 		});
 		debugger;

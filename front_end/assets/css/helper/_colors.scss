@@ -1,9 +1,13 @@
-$color-bg : #eee;
+$color-bg : rgba(6,16,19,0.9);
 $color-blue: #909bff;
 $color-purple: rgba(78, 7, 105, 1);
 $color-lines: #eee;
 
+$color-accent-1: #039be5;
+$color-accent-2: #26a69a;
+
 $color-font-dark: #000;
+$color-font-bright: #fff;
 
 $style-border-line-width: 1px;
 $style-border-line: $style-border-line-width solid $color-lines;

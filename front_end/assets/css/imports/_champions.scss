@@ -38,9 +38,9 @@ $portrait-width-height: 75px;
     margin: 10px;
     /* border: 3px ridge white; */
     // TODO: as class or variable
-    -moz-box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.4);
-    -webkit-box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.4);
+    -moz-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
+    -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
   }
   &.blue {
     background-color: $color-blue;
@@ -58,6 +58,9 @@ $portrait-width-height: 75px;
     top: 50px;
     border-radius: 100%;
     transform: scale(0.8);
+    -moz-box-shadow: -2px -2px 12px 0px;
+    -webkit-box-shadow: -2px -2px 12px 0px;
+    box-shadow: -2px -2px 12px 0px;
   }
 
   .champ-spells {
@@ -78,26 +81,28 @@ $portrait-width-height: 75px;
       border-radius: 100%;
       border: solid 5px rgba(255, 255, 255, 0.2);
       box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.3);
-      width: 58px;
-      height: 58px;
+      width: 48px;
+      height: 48px;
       margin: -5px 0 0 -5px;
     }
 
     .champion-spell {
       position: relative;
       &:after {
+        text-align: center;
+        pointer-events: none;
         content: '';
         display: block;
         position: absolute;
-        width: 20px;
+        width: 25px;
         height: 20px;
         border-radius: 100%;
-        background-color: #fff;
+        background-color: rgba(255,255,255,0.5);
         color: #000;
         right: -7px;
         font-weight: bold;
         bottom: -10px;
-        padding: 4px;
+        padding-top: 5px;
       }
 
       &[data-index-1="1"] {

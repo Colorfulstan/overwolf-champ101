@@ -29,7 +29,7 @@ $app-bar-height: $spacer*2;
 
   #handle {
     opacity: 0.5;
-    background-color: brown;
+    background-color: $color-accent-1;
     border-radius: 100%;
     position: absolute;
     height: $app-bar-height - 10px;
@@ -57,6 +57,7 @@ $app-bar-height: $spacer*2;
     p {
       font-size: $spacer;
       padding: $spacer/2;
+      text-align: center;
     }
   }
 }
