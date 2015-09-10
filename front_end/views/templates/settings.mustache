@@ -1,34 +1,77 @@
-<div class=""><form onsubmit="return false" id="summoner-form">
-	<label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
-	<br>
-	<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
-		   can-value='summonerName' />
-	<br>
-	<label for="server-region-select">Region</label>
-	<br>
-	<select name="server-region-select" id="server-region-select" can-value='server'>
-		<option value="BR">BR</option
-		<option value="EUNE">EUNE</option>
-		<option value="EUW">EUW</option>
-		<option value="KR">KR</option>
-		<option value="LAN">LAN</option>
-		<option value="LAS">LAS</option>
-		<option value="NA">NA</option>
-		<option value="OCE">OCE</option>
-		<option value="TR">TR</option>
-		<option value="RU">RU</option>
-		<option value="PBE">PBE</option>
-	</select>
+<div class="col-sm-6">
+	<ul class="padded-bot-half">
+		<li><i class="fa fa-info-circle pull-left padded-right"></i>
 
-	<br>
-	<button type="submit" id="btn-save-close">Save and Close</button>
-	<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
-	<label for="hideHome">Don't show main window at startup</label>
-	<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a>
-</form>
+			<div>To receive any data you need to set your summoner name and the server you play on.
+			</div>
+		</li>
+		<li><i class="fa fa-exclamation-triangle pull-left padded-right"></i>
 
-{{#hotkeys}}
-	<ul>
-		<li>{{ title }} : {{ string }} <a class="btn btn-close" href="overwolf://settings/hotkeys#{{id}}">Change (and close this window)</a></li>
+			<div>Your summoner name is the name displayed within the game, not your account name. We will never ask you
+				 about your password or account name
+			</div>
+		</li>
 	</ul>
-{{/hotkeys}}</div>
+
+	<form onsubmit="return false" id="summoner-form">
+		<div><label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
+			<br>
+			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
+				   can-value='summonerName' />
+		</div>
+		<div><label for="server-region-select">Region</label>
+			<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
+				<option value="BR">BR</option
+				<option value="EUNE">EUNE</option>
+				<option value="EUW">EUW</option>
+				<option value="KR">KR</option>
+				<option value="LAN">LAN</option>
+				<option value="LAS">LAS</option>
+				<option value="NA">NA</option>
+				<option value="OCE">OCE</option>
+				<option value="TR">TR</option>
+				<option value="RU">RU</option>
+				<option value="PBE">PBE</option>
+			</select></div>
+
+		<div class="padded-top">
+			<button type="submit" id="btn-save-close">Save and Close</button>
+			<button type="submit" id="btn-cancel">cancel</button>
+		</div>
+	</form>
+	<div class="row">
+		<div class="padded-top padded-bot">
+			<input class="pull-left" type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart"
+				   {{ #hideHomeAtStart }}checked="checked"{{ /hideHomeAtStart }}"/>
+			<label for="hideHome">Don't show at start
+				<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a></label>
+		</div>
+	</div>
+</div>
+<div class="hidden-xs col-sm-1">&nbsp;</div>
+<div class="col-sm-5">
+	<div class="col-xs-8 col-xs-offset-2 col-sm-12 col-sm-offset-0">
+		<ul>
+			<li><i class="fa fa-info-circle pull-left padded-right-half"></i>
+
+				<div>Hotkeys only work from within the game.</div>
+			</li>
+		</ul>
+		<table class="hoverable">
+			<thead>
+			<th>Hotkeys</th>
+			</thead>
+			<tbody>
+			{{#hotkeys}}
+				<tr>
+					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
+						   class="padded-top-half padded-bot-half">{{ title }}</a></td>
+					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
+						   class="padded-top-half padded-bot-half">{{ string }}</a></td>
+				</tr>
+			{{/hotkeys}}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="btn-resize fa fa-rss fa-rotate-270"></div>

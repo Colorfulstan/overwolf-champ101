@@ -75,7 +75,7 @@ var MainCtrl = WindowCtrl.extend({
 		if (!isSummonerSet) {
 			this.constructor.openSettings();
 		}
-		this.constructor.openMatch(); // TODO: for debug - remove when finished
+		//this.constructor.openMatch(); // TODO: for debug - remove when finished
 	},
 	'{matchBtn} mousedown': function (el, ev) {
 	steal.dev.log('WindowCtrl: open match');

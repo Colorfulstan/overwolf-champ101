@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="">
+<html lang="en" class="window-border-radius">
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 	<title>Champ Info</title>
@@ -13,28 +13,31 @@
 
 </head>
 
-<body id="main" class="padded drag-window-handle">
-<div id="content" class="">
+<body id="main" class="padded drag-window-handle window-border-radius window-border">
+
+<div class="app-buttons padded-top-half padded-right-half">
+	<div class="btn btn-match icon"><i class="fa fa-search"></i></div>
+	<div class="btn btn-settings icon icon-settings"><i class="fa fa-cog fa-lg"></i></div>
+	<div class="btn btn-minimize icon"><i class="fa fa-minus"></i></div>
+	<div class="btn btn-close icon icon-close"><i class="fa fa-times fa-lg"></i></div>
+</div>
+
+<div id="content" class="padded-top-half">
 	<h1>Champion Info</h1>
+	<ul>
+		<li><i class="fa fa-info-circle pull-left padded-right-half"></i><div>When you start a new Game you can access the app over the handle on top of your screen. It will close again after you left the game.</div></li>
+		<li><i class="fa fa-info-circle pull-left padded-right-half"></i><div>You can open the match window outside of games through clicking &nbsp;<i class="btn fa fa-search btn-match"></i></div></li>
+		<li><i class="fa fa-info-circle pull-left padded-right-half"></i><div>Games with spectators disabled will not offer the neccessary data for this app</div></li>
+		<li><i class="fa fa-info-circle pull-left padded-right-half"></i><div>You can drag Windows (except the match-window) by clicking anywhere in the window.</div></li>
+	</ul>
 
-	<!--TODO: Texte blasülz-->
-	<p>You can drag from anywhere you want</p>
-
-	<p>When you start a new Game, the Champions will be loaded and displayed on the upper edge of your screen.</p>
-
-	<p>Games with disabled spectators will not be able to get the neccessary Data!</p>
-	<button class="btn-close">Close</button>
-	<button class="btn-settings">Settings</button>
-	<button class="btn-minimize">minimize</button>
-	<button class="btn-match">Match</button>
-	<button class="btn-feedback">Feedback</button>
-
-	<script type="text/mustache" id="settings-tmpl">
-
-	<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" {{ #hideHomeAtStart }}checked="checked"{{ /hideHomeAtStart }}"/>
-	<label for="hideHome" ">Don't show at start</label>
-	<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a>
+	<div class="padded-top">
+		<script type="text/mustache" id="settings-tmpl">
+	<input class="pull-left" type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" {{ #hideHomeAtStart }}checked="checked"{{ /hideHomeAtStart }}"/>
+	<label for="hideHome">Don't show at start
+	<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a></label>
 	</script>
+	</div>
 
 </div>
-<button class="btn-resize">drag to resize</button>
+<div class="btn-resize fa fa-rss fa-rotate-270"></div>
