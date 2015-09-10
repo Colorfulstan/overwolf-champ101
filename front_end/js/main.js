@@ -6,9 +6,14 @@ var MainCtrl = require('MainCtrl');
 var SettingsModel = require('SettingsModel');
 
 //MainCtrl.registerHotkeys();
-MainCtrl.registerOverwolfHandlers();
 
 var main = new MainCtrl('html');
+main.constructor.registerOverwolfHandlers();
+
 var settings = new SettingsModel();
 
-main.start(settings.isSummonerSet(), settings.hideHomeAtStart());
+if (settings.hideHomeAtStart()){ // here we assume summoner already got set somewhen, else this option couldn't have been set
+	main.constructor.openMatch();
+} else {
+	main.start(settings.isSummonerSet());
+}

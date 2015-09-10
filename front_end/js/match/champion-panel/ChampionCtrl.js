@@ -44,6 +44,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 			));
 	},
 	addPanel: function (champName) {
+		steal.dev.log(this.options.panels);
 		if (this.element.find('[title="' + champName + '"]').length) {
 			return;
 		}
