@@ -13,6 +13,6 @@ $style-border-line-width: 1px;
 $style-border-line: $style-border-line-width solid $color-lines;
 $color-icons: #fff;
 
-$color-success: green;
+$color-success: rgba(0,255,0,0.5);
 $color-loading: orange;
-$color-failed: red;
+$color-failed: rgba(255,0,0,0.5);
