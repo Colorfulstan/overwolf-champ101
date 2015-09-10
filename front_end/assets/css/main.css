@@ -10217,6 +10217,20 @@ select {
   select option {
     color: inherit; }
 
+#btn-save-close {
+  text-align: center;
+  height: 30px;
+  padding: 5px 0 0 0;
+  border: none; }
+
+#btn-cancel {
+  text-align: center;
+  height: 30px;
+  padding-top: 8px;
+  opacity: 0.5; }
+  #btn-cancel * {
+    opacity: 1; }
+
 #panel-container {
   height: auto;
   width: 700px;
@@ -10271,18 +10285,6 @@ select {
     /* border-right: ridge 3px white; */
     border-radius: 100%;
     margin: 5px; }
-
-.loading .loading-state {
-  display: block; }
-.loading .failed-state {
-  display: none; }
-
-.failed {
-  background-color: red !important; }
-  .failed .loading-state {
-    display: none; }
-  .failed .failed-state {
-    display: block; }
 
 * {
   overflow: hidden;
@@ -10453,5 +10455,20 @@ ul li {
   border: 3px ridge #039be5; }
   .window-border-radius {
     border-radius: 20px; }
+
+.loading .loading-state {
+  display: block; }
+.loading .failed-state {
+  display: none; }
+
+.failed {
+  background-color: rgba(255, 0, 0, 0.5) !important; }
+  .failed .loading-state {
+    display: none; }
+  .failed .failed-state {
+    display: block; }
+
+.success {
+  background-color: rgba(0, 255, 0, 0.5) !important; }
 
 /*# sourceMappingURL=main.css.map */

@@ -79,25 +79,3 @@ $app-bar-height: $spacer*2;
     margin: 5px;
   }
 }
-
-.loading {
-//  background-color: $color-loading !important;
-
-  .loading-state {
-    display: block;
-  }
-  .failed-state{
-    display: none;
-  }
-}
-
-.failed {
-  background-color: $color-failed !important;
-
-  .loading-state {
-    display: none;
-  }
-  .failed-state{
-    display: block;
-  }
-}

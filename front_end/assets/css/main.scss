@@ -217,3 +217,31 @@ ul {
 //    height: 100%;
 //  }
 //}}
+
+
+.loading {
+  //  background-color: $color-loading !important;
+
+  .loading-state {
+    display: block;
+  }
+  .failed-state{
+    display: none;
+  }
+}
+
+.failed {
+  background-color: $color-failed !important;
+
+  .loading-state {
+    display: none;
+  }
+  .failed-state{
+    display: block;
+  }
+}
+
+
+.success {
+  background-color: $color-success !important;
+}
