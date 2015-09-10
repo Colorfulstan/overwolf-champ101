@@ -117,15 +117,18 @@ debugger;
 			}).fail(function (data, status, jqXHR) {
 				steal.dev.warn("Loading Match failed!", data, status, jqXHR);
 				self.options.$overviewContainer.removeClass('loading').addClass('failed');
+				if (data.status == 503){
+					self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
+				}
 				deferred.reject(data, status, jqXHR);
 			});
 		return deferred.promise();
 	},
 	togglePanels: function ($handle) {
 		$handle.toggleClass('collapsed');
-		//var speed = this.element.height() / 200 * ANIMATION_SLIDE_SPEED_PER_100PX;
-		//if (speed < ANIMATION_SLIDE_SPEED_PER_100PX) speed = ANIMATION_SLIDE_SPEED_PER_100PX;
-		this.options.$panelContainer.slideToggle(ANIMATION_SLIDE_SPEED_PER_100PX);
+		//var speed = this.element.height() / 200 * ANIMATION_SLIDE_SPEED_PER_PANEL;
+		//if (speed < ANIMATION_SLIDE_SPEED_PER_PANEL) speed = ANIMATION_SLIDE_SPEED_PER_PANEL;
+		this.options.$panelContainer.slideToggle(ANIMATION_SLIDE_SPEED_PER_PANEL);
 	},
 
 	//' mouseout': function ($el, ev) {

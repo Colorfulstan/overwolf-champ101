@@ -23,6 +23,30 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	SCREEN_HEIGHT: window.screen.availHeight,
 
 
+	// static
+	registerOverwolfHandlers: function () {
+		var self = this;
+		overwolf.windows.onStateChanged.addListener(function (result) {
+			steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
+		});
+		overwolf.windows.onMainWindowRestored.addListener(function (result) {
+			steal.dev.log('debug', "MainCtrl - overwolf.windows.onMainWindowRestored:", result);
+		});
+		overwolf.games.onGameInfoUpdated.addListener(function (result) {
+			steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
+			if (self.gameStarted(result)) {
+				steal.dev.warn('League of Legends game started', new Date());
+				// TODO: start matchWindow
+				self.openMatch();
+			}
+			if (self.gameFinished(result)) {
+				steal.dev.warn('League of Legends game finished', new Date());
+				// TODO: close Matchwindow
+				self.closeMatch()
+			}
+		});
+	},
+
 	getCenteredX: function (width) {
 		return parseInt(this.SCREEN_WIDTH / 2 - width / 2);
 	},
