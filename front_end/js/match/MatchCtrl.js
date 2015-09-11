@@ -88,6 +88,10 @@ debugger;
 		//if (speed < ANIMATION_SLIDE_SPEED_PER_PANEL) speed = ANIMATION_SLIDE_SPEED_PER_PANEL;
 		this.options.$panelContainer.slideToggle(ANIMATION_SLIDE_SPEED_PER_PANEL);
 	},
+	showPanels: function () {
+		$(handle).removeClass('collapsed');
+		this.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
+	},
 
 	//' mouseout': function ($el, ev) {
 	//	var self = this;
@@ -119,7 +123,11 @@ debugger;
 		steal.dev.log('toggle/all route');
 		can.route.attr({'route': ''});
 		this.togglePanels($(this.options.handle));
-
+	},
+	'show/all route': function (routeData) {
+		steal.dev.log('show/all - routeData:', routeData);
+		this.showPanels();
+		can.route.attr({'route':""});
 	}
 });
 module.exports = MatchCtrl;

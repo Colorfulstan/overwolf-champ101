@@ -84,6 +84,30 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		});
 		return deferred.promise();
 	},
+	/**
+	 * Minimizes or restores a window, depending on if it is currently minimized or not.
+	 * @param name {String} name of the Window as in the manifest.json
+	 * @return {Promise} after the Window got minimized or restored resolving
+	 * to the overwolf Window object when window got restored
+	 * or into null if it got minimized
+	 */
+	toggle: function (name) {
+		var self = this;
+		var deferred = $.Deferred();
+		overwolf.windows.obtainDeclaredWindow(name, function (result) {
+			if (result.status == "success") {
+				if (result.window.isVisible) {
+					self.minimize(name);
+					deferred.resolve(null);
+				} else {
+					$.when(self.open(name)).then(function (odkWindow) {
+						deferred.resolve(odkWindow);
+					}); // TODO: test - is this the same as just restoring it?
+				}
+			}
+		});
+		return deferred.promise();
+	},
 	openHelp: function (name, width, height) {
 		// TODO: implement
 	},
@@ -201,6 +225,15 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	'{homeBtn} mousedown': function ($el, ev) {
 		this.constructor.open('Main');
 		ev.stopPropagation();
+	}
+	,
+	/**
+	 * @param routeData.window {String} Name of the Window as in the manifest
+	 */
+	'toggle/:window route': function (routeData) {
+		steal.dev.log('toggle/:window - routeData:', routeData);
+		this.constructor.toggle(routeData.window);
+		can.route.attr({'route':"show/all"});
 	}
 	//,
 	//'{helpBtn} mousedown': function ($el, ev) {

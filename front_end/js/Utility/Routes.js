@@ -8,8 +8,10 @@ var Routes = {
 	// MatchCtrl
 	/** Toggles all Panels */
 	togglePanels: 'toggle/all',
+	showPanels: 'show/all',
 	/** removes the panel with given id (0 = uppermost panel) */
 	closePanel: 'close/panel/:id',
+	closeAllPanels: 'close/panel/all',
 
 	// ChampionCtrl
 	panelChampion: 'add/:champ',
@@ -23,7 +25,8 @@ var Routes = {
 	closeWindow: 'close/:window',
 	minimizeWindow: 'minimize/:window',
 	restoreWindow: 'restore/:window',
-	refreshWindow: 'refresh/:window'
+	refreshWindow: 'refresh/:window',
+	toggleWindow: 'toggle/:window'
 
 };
 
@@ -33,6 +36,8 @@ can.route('#!' + Routes.tootltipSpell);
 
 // MatchCtrl
 can.route('#!' + Routes.closePanel);
+can.route('#!' + Routes.closeAllPanels);
+can.route('#!' + Routes.showPanels);
 
 
 // ChampionCtrl
@@ -49,6 +54,7 @@ can.route('!#' + Routes.closeWindow);
 can.route('!#' + Routes.minimizeWindow);
 can.route('!#' + Routes.restoreWindow);
 can.route('!#' + Routes.refreshWindow);
+can.route('!#' + Routes.toggleWindow);
 
 
 can.route.ready();

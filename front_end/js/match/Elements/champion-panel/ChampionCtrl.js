@@ -69,9 +69,6 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		$('#close-all-btn').addClass('hidden');
 	},
 	closeAllPanels: function () {
-		debugger;
-
-		//this.element.empty();
 		this.options.panels.replace(new can.List());
 		this.removeCloseAllBtn();
 	},
@@ -184,6 +181,11 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		if (!$panel.hasClass('sticky-tooltip')){
 			can.route.attr({ route: 'tooltip/hide'}, true);
 		}
+	},
+	'close/panel/all route': function (routeData) {
+		steal.dev.log('close/panel/all');
+		can.route.attr({'route': ''});
+		this.closeAllPanels();
 	}
 });
 module.exports = ChampionCtrl;
