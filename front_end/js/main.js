@@ -13,8 +13,14 @@ main.constructor.registerOverwolfHandlers();
 
 var settings = new SettingsModel();
 
-if (settings.hideHomeAtStart() && main.constructor.gameStarted()){ // here we assume summoner already got set somewhen, else this option couldn't have been set
-	main.constructor.openMatch();
-} else { // TODO: something s wrong here but it works for now
-	main.start(settings.isSummonerSet());
-}
+overwolf.games.getRunningGameInfo(function(data){
+	if (data == undefined || data == null){ // manual start since no game is running
+		main.start(settings.isSummonerSet());
+	} else { // automatic start since a game is running and the app will start with league
+		// here we assume summoner already got set somewhen, else this option couldn't have been set
+		if (!settings.hideHomeAtStart()){
+			main.start(settings.isSummonerSet());
+		}
+		main.constructor.openMatch();
+	}
+});

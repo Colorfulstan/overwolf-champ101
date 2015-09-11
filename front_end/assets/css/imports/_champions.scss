@@ -2,6 +2,7 @@
 @import "../helper/variables.scss";
 
 @mixin tooltip-arrow($width, $height, $bottom, $left){
+  display: block;
   content: '';
   width: 0;
   height: 0;
@@ -63,6 +64,18 @@ $portrait-width-height: 75px;
     -moz-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
+    overflow: visible;
+
+    &:hover {
+      &:before {
+        @include tooltip-arrow(16px, 20px, 1px, 61px);
+      }
+    }
+    &:active {
+      &:before {
+        @include tooltip-arrow(16px, 20px, 1px, 61px);
+      }
+    }
   }
   &.blue {
     background-color: $color-blue;
@@ -83,10 +96,16 @@ $portrait-width-height: 75px;
     -moz-box-shadow: -2px -2px 12px 0px;
     -webkit-box-shadow: -2px -2px 12px 0px;
     box-shadow: -2px -2px 12px 0px;
+    overflow: visible;
 
-    &:hover, &.active {
+    &:hover {
       &:before {
-        @include tooltip-arrow(10px, 10px, -11px, 5px);
+        @include tooltip-arrow(10px, 14px, -12px, 15px);
+      }
+    }
+    &:active {
+      &:before {
+        @include tooltip-arrow(10px, 14px, -12px, 15px);
       }
     }
   }

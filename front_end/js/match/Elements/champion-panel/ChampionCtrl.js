@@ -163,7 +163,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		debugger;
 		var $panel = this.mouseenterHandler($el);
 		can.route.attr({
-			route: 'tooltip/spell/:champ/:index',
+			route: Routes.tooltipSpell,
 			champ: $panel.attr('data-name'),
 			index: $el.attr('data-index-1') - 1,
 			type: $el.attr('data-type'),

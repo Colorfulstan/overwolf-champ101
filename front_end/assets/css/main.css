@@ -10051,7 +10051,30 @@ i.fa {
     /* border: 3px ridge white; */
     -moz-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3); }
+    box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
+    overflow: visible; }
+    .champion-panel .portrait:hover:before {
+      display: block;
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 20px solid black;
+      position: absolute;
+      bottom: 1px;
+      left: 61px; }
+    .champion-panel .portrait:active:before {
+      display: block;
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 20px solid black;
+      position: absolute;
+      bottom: 1px;
+      left: 61px; }
   .champion-panel.blue {
     background-color: #385FC5; }
   .champion-panel.purple {
@@ -10066,17 +10089,30 @@ i.fa {
     transform: scale(0.8);
     -moz-box-shadow: -2px -2px 12px 0px;
     -webkit-box-shadow: -2px -2px 12px 0px;
-    box-shadow: -2px -2px 12px 0px; }
-    .champion-panel .passive:hover:before, .champion-panel .passive.active:before {
+    box-shadow: -2px -2px 12px 0px;
+    overflow: visible; }
+    .champion-panel .passive:hover:before {
+      display: block;
       content: '';
       width: 0;
       height: 0;
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
-      border-bottom: 10px solid black;
+      border-bottom: 14px solid black;
       position: absolute;
-      bottom: -11px;
-      left: 5px; }
+      bottom: -12px;
+      left: 15px; }
+    .champion-panel .passive:active:before {
+      display: block;
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 14px solid black;
+      position: absolute;
+      bottom: -12px;
+      left: 15px; }
   .champion-panel .champ-spells {
     height: 100%;
     float: left;
@@ -10115,6 +10151,7 @@ i.fa {
         bottom: -10px;
         padding-top: 5px; }
       .champion-panel .champ-spells .champion-spell:hover:before, .champion-panel .champ-spells .champion-spell.active:before {
+        display: block;
         content: '';
         width: 0;
         height: 0;

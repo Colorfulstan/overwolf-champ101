@@ -16,6 +16,7 @@ var MainCtrl = WindowCtrl.extend({
 		, hideHomeCB: '#hideHome'
 		, settingsTmpl: '#settings-tmpl'
 	},
+	/** will be set to true when main.start() got called */
 	gameStarted: function (result) {
 		return result.gameInfo !== null &&
 			result.gameInfo.title == "League of Legends" &&
@@ -36,7 +37,6 @@ var MainCtrl = WindowCtrl.extend({
 		this.element.find('#content').append(
 			can.view(this.options.settingsTmpl, new SettingsModel())
 		);
-
 		steal.dev.log('MainCtrl initialized :', this);
 	}
 	, start: function (isSummonerSet) {
