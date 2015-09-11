@@ -1,5 +1,3 @@
-// TODO: maybe overthink this file / placement of hotkeys
-
 var can = require('can');
 
 var Hotkeys = function(){};
@@ -23,7 +21,8 @@ Hotkeys.registerHotkeys = function () {
 	overwolf.settings.registerHotKey("open_panels_team_purple", function (result) {
 		team_handler(result, 'purple');
 	});
-	//overwolf.settings.registerHotKey("open_match", function (result) { // TODO: open / close Match implementation - should not reload data but show/hide the matchwindow
+	// TODO: open / close Match implementation - should not reload data but show/hide the matchwindow
+	//overwolf.settings.registerHotKey("open_match", function (result) {
 	//	team_handler(result, 'blue');
 	//});
 
