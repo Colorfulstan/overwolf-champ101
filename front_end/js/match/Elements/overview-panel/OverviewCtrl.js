@@ -1,11 +1,16 @@
 "use strict";
 var can = require('can');
+var Routes = require('Routes');
+
 /**
  * @see OverviewCtrl.init
  */
 var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	defaults: {
-		overviewTmpl: 'templates/match-overview.mustache'
+		overviewTmpl: 'templates/match-overview.mustache',
+
+		// handled routes
+		reloadMatchRoute: Routes.reloadMatch
 	}
 }, {
 	/**
@@ -14,7 +19,6 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	 * @param options.match {MatchModel}
 	 */
 	init: function (el, options) {
-		debugger;
 		this.renderView(options.match.blue, options.match.purple);
 	},
 	renderView: function (teamBlue, teamPurple) {
@@ -27,10 +31,17 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 			})
 		);
 	},
+	// Eventhandler
+	'{reloadMatchRoute} route': function (routeData) {
+		steal.dev.log('refresh Route triggered in OverviewCtrl');
+		debugger;
+		this.options.match = routeData.match;
+		this.renderView(this.options.match.blue,this.options.match.purple);
+	},
 	'.portrait mouseenter': function ($el, ev) {
 		//steal.dev.log('.portrait mouseenter');
 		can.route.attr({
-			route: 'tooltip/champ/:champ',
+			route: Routes.tooltipChampion,
 			champ: $el.attr('title'),
 			y: $el.offset().top + $el.height()
 		});
@@ -38,25 +49,19 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	'.portrait mouseout': function ($el, ev) {
 		//steal.dev.log('.portrait mouseout');
 		can.route.attr({
-			route: 'tooltip/hide'
+			route: Routes.tooltipHide
 		});
 	},
 	'.portrait click': function ($el, ev) {
 		//steal.dev.log('.portrait click');
-		can.route.attr({route: 'add/:champ', champ: $el.attr('title')});
-	},
-	'reload/match route': function (routeData) {
-		steal.dev.log('refresh Route triggered in OverviewCtrl');
-		debugger;
-		this.options.match = routeData.match;
-		this.renderView(this.options.match.blue,this.options.match.purple);
+		can.route.attr({route: Routes.panelChampion, champ: $el.attr('title')});
 	},
 	'.show-team.blue click': function ($el, ev) {
-		can.route.attr({team: 'blue', route: 'show/:team'});
+		can.route.attr({team: 'blue', route: Routes.panelTeam});
 		ev.stopPropagation();
 	},
 	'.show-team.purple click': function ($el, ev) {
-		can.route.attr({team: 'purple', route: 'show/:team'});
+		can.route.attr({team: 'purple', route: Routes.panelTeam});
 		ev.stopPropagation();
 	}
 });

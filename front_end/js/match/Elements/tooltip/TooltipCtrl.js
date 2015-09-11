@@ -1,5 +1,7 @@
 "use strict";
 var can = require('can');
+var Routes = require('Routes');
+
 /**
  * Controls the tooltip-container
  * To show a tooltip use can.route.attr()
@@ -31,7 +33,12 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 	defaults: {
 		spellTmpl: 'templates/tooltip-spell.mustache',
 		championTmpl: 'templates/tooltip-champ.mustache',
-		videoTmpl: 'templates/video.mustache'
+		videoTmpl: 'templates/video.mustache',
+
+		// handled Routes
+		tooltipChampionRoute: Routes.tooltipChampion,
+		tooltipHideRoute: Routes.tooltipHide,
+		tooltipSpellRoute: Routes.tooltipSpell
 	}
 }, {
 	/**
@@ -124,16 +131,17 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 			});
 		}
 	},
-	'tooltip/champ/:champ route': function (routeData) {
+	// Routing Handlers
+	'{tooltipChampionRoute} route': function (routeData) {
 		//steal.dev.log('tooltip route for champ triggered', routeData);
 		if (routeData.champ) {
 			this.showTooltip('champ', routeData);
 		} else { this.hideTooltip(); }
 	},
-	'tooltip/hide route': function () {
+	'{tooltipHideRoute} route': function () {
 		this.hideTooltip();
 	},
-	'tooltip/spell/:champ/:index route': function (routeData) {
+	'{tooltipSpellRoute} route': function (routeData) {
 		//steal.dev.log('tooltip route for spell triggered', routeData);
 		if (routeData.champ !== null && routeData.index !== null) {
 			this.showTooltip('spell', routeData);

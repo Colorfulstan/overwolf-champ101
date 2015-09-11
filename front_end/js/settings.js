@@ -2,7 +2,8 @@
 "use strict";
 var SettingsCtrl = require('SettingsCtrl');
 var SettingsModel = require('SettingsModel');
-require('Routes');
+var Routes = require('Routes');
+Routes.ready();
 
 var settings = new SettingsModel();
 steal.dev.log('Settings initialized:', settings);

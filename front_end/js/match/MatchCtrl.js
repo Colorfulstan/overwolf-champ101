@@ -11,6 +11,8 @@ var ChampionCtrl = require('ChampionCtrl');
 var TooltipCtrl = require('TooltipCtrl');
 var FeedbackCtrl = require('FeedbackCtrl');
 
+var Routes = require('Routes');
+
 require('../global');
 
 /**
@@ -25,7 +27,11 @@ var MatchCtrl = WindowCtrl.extend({
 		$overviewContainer: $('#match-overview-container'),
 		reloadBtn: '.btn-reload',
 		handle: '#match-app-bar',
-		loadingTmpl: 'templates/parts/match-loading.mustache'
+		loadingTmpl: 'templates/parts/match-loading.mustache',
+
+		// handled routes
+		toggleAllRoute: Routes.togglePanels,
+		showAllRoute: Routes.showPanels
 	}
 }, {
 
@@ -107,6 +113,8 @@ debugger;
 	//	steal.dev.log('mouseenter in' , $el);
 	//	window.clearTimeout(this.options.mouseLeftMatchWindowTO);
 	//},
+
+	// Eventhandler
 	'{handle} mousedown': function ($handle, ev) {
 		this.togglePanels($handle);
 	},
@@ -119,12 +127,12 @@ debugger;
 		this.loadMatch(this.options.model);
 		ev.stopPropagation();
 	},
-	'toggle/all route': function (routeData) {
+	'{toggleAllRoute} route': function (routeData) {
 		steal.dev.log('toggle/all route');
 		can.route.attr({'route': ''});
 		this.togglePanels($(this.options.handle));
 	},
-	'show/all route': function (routeData) {
+	'{showAllRoute} route': function (routeData) {
 		steal.dev.log('show/all - routeData:', routeData);
 		this.showPanels();
 		can.route.attr({'route':""});

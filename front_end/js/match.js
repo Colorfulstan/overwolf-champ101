@@ -1,5 +1,5 @@
 "use strict";
-require('Routes');
+var Routes = require('Routes');
 
 var Hotkeys = require('Hotkeys');
 var MatchCtrl = require('MatchCtrl');
@@ -7,5 +7,6 @@ var MatchCtrl = require('MatchCtrl');
 // Entry point for match.html
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Routes.ready();
 Hotkeys.registerHotkeys();
 var match = new MatchCtrl('html');

@@ -1,9 +1,10 @@
 // Entry point for index.html
-require('Routes');
-
 "use strict";
 var MainCtrl = require('MainCtrl');
 var SettingsModel = require('SettingsModel');
+
+var Routes = require('Routes');
+Routes.ready();
 
 //MainCtrl.registerHotkeys();
 

@@ -2,12 +2,20 @@
 var can = require('can');
 var ChampionModel = require('ChampionModel');
 var SpellModel = require('SpellModel');
+
+var Routes = require('Routes');
 /**
  * @see ChampionCtrl.init
  */
 var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 	defaults: {
-		panelTmpl:'templates/champion-panel.mustache'
+		panelTmpl: 'templates/champion-panel.mustache',
+
+		// handled routes
+		showTeamRoute: Routes.panelTeam,
+		addChampRoute: Routes.panelChampion,
+		closeAllPanelsRoute: Routes.closeAllPanels,
+		closeSinglePanelsRoute: Routes.closePanel
 	}
 }, {
 	/**
@@ -55,7 +63,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		panel.index = this.options.panels.length;
 		this.options.panels.push(panel);
 
-		window.setTimeout(function(){
+		window.setTimeout(function () {
 			var $newPanel = $('.champion-panel[data-name="' + champName + '"]');
 			$newPanel.hide();
 			$newPanel.slideDown();
@@ -101,29 +109,33 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		self.options.panels.replace(teamList);
 	},
 
-	'show/:team route': function (data) {
+	'{showTeamRoute} route': function (data) {
 		steal.dev.log(':team route triggered - adding Panels for Team:', data.team);
-		can.route.attr({ route: 'tooltip/hide'}, true);
+		can.route.attr({route: Routes.tooltipHide}, true);
 		this.showTeam(data.team);
 		this.addCloseAllBtn();
 	},
-	'add/:champ route': function (data) {
+	'{addChampRoute} route': function (data) {
 		steal.dev.log(':champ route triggered - adding champ', data.champ);
-		can.route.attr({ route: 'tooltip/hide'}, true);
+		can.route.attr({route: Routes.tooltipHide}, true);
 		this.addPanel(data.champ);
 		if (this.options.panels.length >= 2) {
 			this.addCloseAllBtn();
 		}
 	},
-	'close/panel/:id route': function (routeData) {
+	'{closeAllPanelsRoute} route': function (routeData) {
+		steal.dev.log('close/panel/all');
+		can.route.attr({'route': ''});
+		this.closeAllPanels();
+	},
+	'{closeSinglePanelsRoute route}': function (routeData) {
 		steal.dev.log('close Panel route', routeData);
 		can.route.attr({'route': ''});
 		this.removePanelById(routeData.id);
-
 	},
 	'.close click': function ($el, ev) {
 		var self = this;
-		can.route.attr({ route: 'tooltip/hide'}, true);
+		can.route.attr({route: Routes.tooltipHide}, true);
 		var $panel = $el.closest('.panel');
 		var champ = $el.closest('.panel').attr('data-name');
 		$panel.slideUp(function () {
@@ -132,7 +144,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 	},
 	'#close-all-btn click': function () {
 		var self = this;
-		can.route.attr({ route: 'tooltip/hide'}, true);
+		can.route.attr({route: Routes.tooltipHide}, true);
 		$('.champion-panel').slideUp(function () {
 			self.closeAllPanels();
 		});
@@ -162,30 +174,25 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		//steal.dev.log('clicked on .spell');
 		var $panel = $el.closest('.panel');
 		//if (!$el.hasClass('active')){
-			$panel.toggleClass('sticky-tooltip');
-			$el.toggleClass('active');
-			$el.siblings().removeClass('active');
+		$panel.toggleClass('sticky-tooltip');
+		$el.toggleClass('active');
+		$el.siblings().removeClass('active');
 		//}
 	},
 	'.portrait mouseenter': function ($el, ev) {
 		var $panel = this.mouseenterHandler($el);
 
 		can.route.attr({
-			route: 'tooltip/champ/:champ',
+			route: Routes.tooltipChampion,
 			champ: $panel.attr('data-name'),
 			y: $panel.offset().top + $panel.height()
 		});
 	},
 	'.img mouseout': function ($el, ev) {
 		var $panel = $el.closest('.panel');
-		if (!$panel.hasClass('sticky-tooltip')){
-			can.route.attr({ route: 'tooltip/hide'}, true);
+		if (!$panel.hasClass('sticky-tooltip')) {
+			can.route.attr({route: Routes.tooltipHide}, true);
 		}
-	},
-	'close/panel/all route': function (routeData) {
-		steal.dev.log('close/panel/all');
-		can.route.attr({'route': ''});
-		this.closeAllPanels();
 	}
 });
 module.exports = ChampionCtrl;
