@@ -9,9 +9,13 @@
 	</div>
 	<div class="col-xs-6 padded-left line-left collapse-border-left">
 		<div class="spell-values row">
-			<p>Cooldown: {{cooldownBurn}} <br />
-			   Cost: {{costBurn}} {{costType}} <br />
-			   Range: {{rangeBurn}}</p>
+			<table class="spell-values-table">
+				<tbody>
+				{{#cooldownBurn}} <tr> <td>Cooldown</td> <td>{{.}}</td> </tr> {{/cooldownBurn}}
+				{{#costBurn}} <tr> <td>Cost</td> <td>{{.}} {{costType}}</td> </tr> {{/costBurn}}
+				{{#rangeBurn}} <tr> <td>Range</td> <td>{{.}}</td> </tr> {{/rangeBurn}}
+				</tbody>
+			</table>
 		</div>
 		{{ #videoAvailable }}
 		<div id="spell-video-container" class="row">

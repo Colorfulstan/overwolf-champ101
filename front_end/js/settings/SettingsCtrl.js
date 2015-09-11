@@ -63,7 +63,10 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
 				//Error.summonerSettings(data.responseText); // TODO
 				settings.attr('summonerId', null);
-				$btn.text("not found");
+				// TODO: Error message and try again on the button
+				// 503 temp unavailable
+				// 404 not found
+				$btn.text(data.statusText);
 			});
 	},
 	'.btn-close click': function ($el, ev) {
