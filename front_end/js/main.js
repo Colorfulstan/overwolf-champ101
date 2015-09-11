@@ -12,8 +12,8 @@ main.constructor.registerOverwolfHandlers();
 
 var settings = new SettingsModel();
 
-if (settings.hideHomeAtStart()){ // here we assume summoner already got set somewhen, else this option couldn't have been set
+if (settings.hideHomeAtStart() && main.constructor.gameStarted()){ // here we assume summoner already got set somewhen, else this option couldn't have been set
 	main.constructor.openMatch();
-} else {
+} else { // TODO: something s wrong here but it works for now
 	main.start(settings.isSummonerSet());
 }

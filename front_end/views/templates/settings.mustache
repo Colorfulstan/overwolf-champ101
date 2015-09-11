@@ -33,19 +33,19 @@
 			<option value="RU">RU</option>
 			<option value="PBE">PBE</option>
 		</select>
-
+		<div class="row">
+			<div class="padded-bot padded-top">
+				<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
+				<label for="hideHome">Don't show main window at startup
+					<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a></label>
+			</div>
+		</div>
 		<div class="padded-top">
 			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
 			<div id="btn-cancel" class="btn col-xs-6 failed"><i class="fa fa-times"></i></div>
 		</div>
 	</form>
-	<div class="row">
-		<div class="padded-bot padded-top">
-			<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
-			<label for="hideHome">Don't show main window at startup
-				<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a></label>
-		</div>
-	</div>
+
 </div>
 <div class="hidden-xs col-sm-1">&nbsp;</div>
 <div class="col-sm-5">

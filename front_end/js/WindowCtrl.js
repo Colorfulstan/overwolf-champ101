@@ -10,7 +10,7 @@ var Routes = require('Routes');
 var WindowCtrl = can.Control.extend('WindowCtrl', {
 
 	defaults: {
-		 resizeBtn: '.btn-resize'
+		resizeBtn: '.btn-resize'
 		, minimizeBtn: '.btn-minimize'
 		, settingsBtn: '.btn-settings'
 		, homeBtn: '.btn-home'
@@ -74,9 +74,9 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 				var ow_window = result.window;
 				debugger;
 				overwolf.windows.restore(ow_window.id, function (result) {
-					if (width && height) {
-						overwolf.windows.changeSize(ow_window.id, width, height); // TODO: try through manifest
-					}
+					//if (width && height) {
+					//	overwolf.windows.changeSize(ow_window.id, width, height); // TODO: try through manifest
+					//}
 					debugger;
 					deferred.resolve(ow_window);
 				});
@@ -126,7 +126,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		var self = this;
 		$.when(this.open('Match', width, height)).then(function (ow_window) {
 			steal.dev.log("WindowCtrl.openMatch: ", ow_window);
-			//overwolf.windows.changeSize(ow_window.id, width, height); // TODO: try through manifest
+			//overwolf.windows.changeSize(ow_window.id, width, height); // TODO: does it work through manifest on new installation?
 			var x = self.getCenteredX(ow_window.width);
 			overwolf.windows.changePosition(ow_window.id, x, 0);
 		});
@@ -160,7 +160,8 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 
 		this.ow_window = {};
 		steal.dev.log('WindowCtrl initialized for ', options.name);
-	},
+	}
+	,
 	'.whats-this click': function ($el, ev) {
 		var $whats = $el.closest('div').find('.whats-this-display');
 		if ($whats.length) {
@@ -168,41 +169,49 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		} else {
 			$el.closest('div').append('<div class="whats-this-display text-body">' + $el.attr('title') + '</div>');
 		}
-	},
+	}
+	,
 	'.drag-window-handle mousedown': function (el, ev) {
 		steal.dev.log('dragging');
 		this.constructor.dragMove(this.options.name);
-	},
+	}
+	,
 	'{closeBtn} mousedown': function (el, ev) {
 		this.constructor.close(this.options.name);
 		ev.stopPropagation();
-	},
+	}
+	,
 	'{resizeBtn} mousedown': function (el, ev) {
 		this.constructor.dragResize(this.options.name, 'BottomRight');
 		ev.stopPropagation();
-	},
+	}
+	,
 	'{minimizeBtn} mousedown': function (el, ev) {
 		steal.dev.log('WindowCtrl: minimize window');
 		this.constructor.minimize(this.options.name);
 		ev.stopPropagation();
-	},
+	}
+	,
 	'{settingsBtn} mousedown': function (el, ev) {
 		steal.dev.log('WindowCtrl: open settings');
 		this.constructor.openSettings();
 		ev.stopPropagation();
-	},
-	'{homeBtn} mousedown': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
+	}
+	,
+	'{homeBtn} mousedown': function ($el, ev) {
 		this.constructor.open('Main');
 		ev.stopPropagation();
-	},
-	'{helpBtn} mousedown': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		this.constructor.openHelp();
-		ev.stopPropagation();
-	},
-	'{feedbackBtn} mousedown': function ($el, ev) { // TODO: testen wenn laden fehlschlägt
-		debugger;
-		this.constructor.openFeedback();
-		ev.stopPropagation();
 	}
+	//,
+	//'{helpBtn} mousedown': function ($el, ev) {
+	//	this.constructor.openHelp();
+	//	ev.stopPropagation();
+	//}
+	//,
+	//'{feedbackBtn} mousedown': function ($el, ev) {
+	//	debugger;
+	//	this.constructor.openFeedback();
+	//	ev.stopPropagation();
+	//}
 });
 module.exports = WindowCtrl;

@@ -76,7 +76,7 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 		//this.bind('hotkeys', SettingsModel.getHotKeys());
 
 
-		this.attr('hideHomeAtStartInfo',"This will prevent the Start Window to show up when you enter a Game");
+		this.attr('hideHomeAtStartInfo', "This will prevent the Start Window to show up when you enter a Game");
 
 		// TODO: Hotkey Änderung binden??
 
@@ -100,11 +100,6 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 			localStorage.setItem(SettingsModel.STORAGE_KEY_ID, newVal);
 		}
 	},
-	//_mouseOutTimeout: function (ev, newVal, oldVal) {
-	//	//if (newVal == undefined) return localStorage.getItem(SettingsModel.MOUSEOUT_KEY_ID);
-	//	//if (newVal !== oldVal) localStorage.setItem(SettingsModel.MOUSEOUT_KEY_ID, newVal);
-	//	return 1; // TODO: maybe implement as setting
-	//},
 	_hideHomeAtStart: function (ev, newVal, oldVal) {
 		if (newVal == undefined) {
 			return this.hideHomeAtStart();
@@ -142,6 +137,17 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 			deferred.resolve();
 		});
 		return deferred.promise();
+	},
+	clone: function () {
+		var data = this.attr();
+		delete data[this.constructor.id];
+		return new this.constructor(data);
+	},
+	copyFrom : function (settingsModel){
+		for (var attrKey in settingsModel.attr()){
+			debugger;
+			this.attr(attrKey, settingsModel.attr(attrKey));
+		}
 	}
 });
 module.exports = SettingsModel;
