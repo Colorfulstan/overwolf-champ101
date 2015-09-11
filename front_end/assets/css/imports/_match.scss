@@ -8,17 +8,16 @@
   margin-bottom: -1px; // visual compensation for 1px at app-bar
 }
 
-$app-bar-height: $spacer*2;
+$app-bar-height: $spacer;
 #match-app-bar {
   width: 100%;
-  height: 60px;
+  height: $app-bar-height;
   margin-top: 1px; // enables scrolling on the top edge (compensated by panel-container -1px)
   position: relative;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.01);
 
   &:hover {
-
     .app-buttons {
       display: block;
     }
@@ -32,7 +31,7 @@ $app-bar-height: $spacer*2;
     background-color: $color-accent-1;
     border-radius: 100%;
     position: absolute;
-    height: $app-bar-height - 10px;
+    height: $app-bar-height;
     width: 70%;
     left: 15%;
     top: -$app-bar-height / 2;
@@ -40,7 +39,7 @@ $app-bar-height: $spacer*2;
 
   .app-buttons {
     display: none;
-    width: 40%;
+    width: $spacer*4;
   }
 }
 
@@ -82,3 +81,4 @@ $app-bar-height: $spacer*2;
     margin: 5px;
   }
 }
+

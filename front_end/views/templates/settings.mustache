@@ -14,12 +14,12 @@
 	</ul>
 
 	<form onsubmit="return false" id="summoner-form">
-		<label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
+		<div><label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
 		<br>
 		<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
-			   can-value='summonerName' />
+			   can-value='summonerName' /></div>
 
-		<label for="server-region-select">Region</label>
+		<div><label for="server-region-select">Region</label>
 		<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
 			<option value="BR">BR</option
 			<option value="EUNE">EUNE</option>
@@ -32,7 +32,7 @@
 			<option value="TR">TR</option>
 			<option value="RU">RU</option>
 			<option value="PBE">PBE</option>
-		</select>
+		</select></div>
 		<div class="row">
 			<div class="padded-bot padded-top">
 				<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />

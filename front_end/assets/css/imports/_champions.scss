@@ -25,6 +25,13 @@
   right: 0;
   top: 0;
   z-index: 99;
+
+  &:hover {
+    span{
+      font-weight: 600;
+    }
+  }
+
 }
 $portrait-width-height: 75px;
 .champion-panel {
@@ -33,10 +40,14 @@ $portrait-width-height: 75px;
   padding-right: 30px;
   padding-left: 30px;
   position: relative;
+  opacity: 0.5;
+  &:hover, &.sticky-tooltip {
+    opacity: 1;
+  }
 
   &:last-child {
-    border-bottom-left-radius: 75px;
-    border-bottom-right-radius: 75px;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
     height: 105px;
   }
 
@@ -72,6 +83,12 @@ $portrait-width-height: 75px;
     -moz-box-shadow: -2px -2px 12px 0px;
     -webkit-box-shadow: -2px -2px 12px 0px;
     box-shadow: -2px -2px 12px 0px;
+
+    &:hover, &.active {
+      &:before {
+        @include tooltip-arrow(10px, 10px, -11px, 5px);
+      }
+    }
   }
 
   .champ-spells {
@@ -115,12 +132,7 @@ $portrait-width-height: 75px;
         bottom: -10px;
         padding-top: 5px;
       }
-      &:hover {
-        &:before {
-          @include tooltip-arrow(20px, 25px, -31px, 5px);
-        }
-      }
-      &.active{
+      &:hover, &.active {
         &:before {
           @include tooltip-arrow(20px, 25px, -31px, 5px);
         }

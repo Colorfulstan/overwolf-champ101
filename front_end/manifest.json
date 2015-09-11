@@ -53,18 +53,15 @@
 		"transparent": true,
 		"resizable": false,
 		"show_in_taskbar": false,
-		"size": {"width": 750, "height": 1000}
+		"size": {"width": 750, "height": 1200}
 	  }
 	},
 	"hotkeys": {
-	  "toggle_panels": { "title": "Hide/Show Champion Infos", "action-type": "custom", "default": "Ctrl+Space"},
+	  "toggle_panels": { "title": "Hide/Show Champion Panels", "action-type": "custom", "default": "Ctrl+Space"},
 	  "open_panels_team_blue": { "title": "Open Champions Team blue", "action-type": "custom", "default": "Num 1"},
 	  "open_panels_team_purple": { "title": "Open Champions Team purple", "action-type": "custom", "default": "Num 2"},
-	  "close_panel_1": { "title": "Remove Champion Panel 1", "action-type": "custom", "default": "Ctrl+Num 1"},
-	  "close_panel_2": { "title": "Remove Champion Panel 2", "action-type": "custom", "default": "Ctrl+Num 2"},
-	  "close_panel_3": { "title": "Remove Champion Panel 3", "action-type": "custom", "default": "Ctrl+Num 3"},
-	  "close_panel_4": { "title": "Remove Champion Panel 4", "action-type": "custom", "default": "Ctrl+Num 4"},
-	  "close_panel_5": { "title": "Remove Champion Panel 5", "action-type": "custom", "default": "Ctrl+Num 5"}
+	  "close_panels": { "title": "Remove Champion Panels", "action-type": "custom", "default": "Ctrl+Num 1"},
+	  "toggle_match": {"title":"Hide/Show Match Window", "action-type": "custom", "default": "Ctrl+Shift+Space"}
 	}
   },
   "permissions": [
