@@ -99,16 +99,15 @@ ul {
     height: 100%;
     position: absolute;
     top: 0;
-
-    &.blue {
-      background: $color-blue;
-      left: 0;
-    }
-    &.purple {
-      background: $color-purple;
-      right:0;
-    }
   }
+}
+
+
+.blue {
+  background: $color-blue;
+}
+.purple {
+  background: $color-purple;
 }
 
 .vertical-center {
@@ -208,15 +207,18 @@ ul {
     border-radius: 20px;
   }
 }
-//
-//.table {
-//  display: table;
-//  height:100%;
-//  &-cell {
-//    display: table-cell;
-//    height: 100%;
-//  }
-//}}
+
+.table {
+  display: table;
+  &-cell {
+    display: table-cell;
+    height: 100%;
+    &.middle {
+      vertical-align: middle;
+      text-align: center;
+    }
+  }
+}
 
 
 .loading {

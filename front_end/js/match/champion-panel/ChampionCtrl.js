@@ -30,7 +30,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		 */
 		this.options.panels = new can.List();
 
-		this.element.html(
+		this.element.append(
 			can.view(this.options.panelTmpl,
 				this.options.panels,
 				{
@@ -54,23 +54,19 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		var panel = this.options.match.participantsByChamp[champName];
 		panel.index = this.options.panels.length;
 		this.options.panels.push(panel);
-		//window.setTimeout(function(){
-		//	$('.champion-panel:not([data-name="'+champName+'"])').addClass('stay');
-		//	$('.champion-panel[data-name="'+champName+'"]').slideDown(ANIMATION_SLIDE_SPEED_PER_100PX);
-		//}, 1);
+
+		window.setTimeout(function(){
+			var $newPanel = $('.champion-panel[data-name="' + champName + '"]');
+			$newPanel.hide();
+			$newPanel.slideDown();
+		}, 1);
 	},
 	addCloseAllBtn: function () {
 		debugger;
-		var $close = $('#close-all-btn');
-		if ($close.length) {
-			$close.show();
-		} else {
-			var $closeAllBtn = $('<div id="close-all-btn" class="btn close table-cell">');
-			this.element.prepend($closeAllBtn);
-		}
+		$('#close-all-btn').removeClass('hidden')
 	},
 	removeCloseAllBtn: function () {
-		$('#close-all-btn').hide();
+		$('#close-all-btn').addClass('hidden');
 	},
 	closeAllPanels: function () {
 		debugger;
@@ -129,17 +125,34 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 
 	},
 	'.close click': function ($el, ev) {
+		var self = this;
 		can.route.attr({ route: 'tooltip/hide'}, true);
+		var $panel = $el.closest('.panel');
 		var champ = $el.closest('.panel').attr('data-name');
-		this.removePanel(champ);
+		$panel.slideUp(function () {
+			self.removePanel(champ);
+		});
 	},
 	'#close-all-btn click': function () {
+		var self = this;
 		can.route.attr({ route: 'tooltip/hide'}, true);
-		this.closeAllPanels();
+		$('.champion-panel').slideUp(function () {
+			self.closeAllPanels();
+		});
 	},
+	mouseenterHandler: function ($el) {
+		var $panel = $el.closest('.panel');
+
+		if (!$el.hasClass('active')) {
+			$panel.removeClass('sticky-tooltip');
+			$('#champion-container .active').removeClass('active');
+		}
+		return $panel;
+	},
+
 	'.spell mouseenter': function ($el, ev) {
 		debugger;
-		var $panel = $el.closest('.panel');
+		var $panel = this.mouseenterHandler($el);
 		can.route.attr({
 			route: 'tooltip/spell/:champ/:index',
 			champ: $panel.attr('data-name'),
@@ -151,10 +164,15 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 	'.spell click': function ($el, ev) {
 		//steal.dev.log('clicked on .spell');
 		var $panel = $el.closest('.panel');
-		$panel.toggleClass('sticky-tooltip');
+		//if (!$el.hasClass('active')){
+			$panel.toggleClass('sticky-tooltip');
+			$el.toggleClass('active');
+			$el.siblings().removeClass('active');
+		//}
 	},
 	'.portrait mouseenter': function ($el, ev) {
-		var $panel = $el.closest('.panel');
+		var $panel = this.mouseenterHandler($el);
+
 		can.route.attr({
 			route: 'tooltip/champ/:champ',
 			champ: $panel.attr('data-name'),

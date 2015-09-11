@@ -9,5 +9,5 @@ var FEEDBACK_URL = 'http://champinfo.krispin.it/feedback/index.php';
 
 var CDN_ABILITIES_URL = 'http://cdn.leagueoflegends.com/champion-abilities/';
 
-var ANIMATION_SLIDE_SPEED_PER_100PX = 400;
+var ANIMATION_SLIDE_SPEED_PER_PANEL = 400;
 
