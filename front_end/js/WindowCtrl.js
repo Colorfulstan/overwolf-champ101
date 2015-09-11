@@ -36,12 +36,10 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 			steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 			if (self.gameStarted(result)) {
 				steal.dev.warn('League of Legends game started', new Date());
-				// TODO: start matchWindow
 				self.openMatch();
 			}
 			if (self.gameFinished(result)) {
 				steal.dev.warn('League of Legends game finished', new Date());
-				// TODO: close Matchwindow
 				self.closeMatch()
 			}
 		});
