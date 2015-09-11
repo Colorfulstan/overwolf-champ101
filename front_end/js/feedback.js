@@ -1,6 +1,8 @@
 
 var FeedbackCtrl = require('FeedbackCtrl');
-require('Routes');
+
+var Routes = require('Routes');
+Routes.ready();
 
 debugger;
 var feedback = new FeedbackCtrl('#content');

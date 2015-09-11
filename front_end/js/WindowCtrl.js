@@ -16,7 +16,10 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		, homeBtn: '.btn-home'
 		, helpBtn: '.btn-help'
 		, feedbackBtn: '.btn-feedback'
-		, closeBtn: '.btn-close'
+		, closeBtn: '.btn-close',
+
+		// handled routes
+		toggleWindowRoute: Routes.toggleWindow,
 	},
 	// static
 	SCREEN_WIDTH: window.screen.availWidth,
@@ -200,6 +203,8 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		this.constructor.dragMove(this.options.name);
 	}
 	,
+
+	// Eventhandler
 	'{closeBtn} mousedown': function (el, ev) {
 		this.constructor.close(this.options.name);
 		ev.stopPropagation();
@@ -230,10 +235,10 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	/**
 	 * @param routeData.window {String} Name of the Window as in the manifest
 	 */
-	'toggle/:window route': function (routeData) {
+	'{toggleWindowRoute} route': function (routeData) {
 		steal.dev.log('toggle/:window - routeData:', routeData);
 		this.constructor.toggle(routeData.window);
-		can.route.attr({'route':"show/all"});
+		can.route.attr({'route': Routes.showPanels});
 	}
 	//,
 	//'{helpBtn} mousedown': function ($el, ev) {
