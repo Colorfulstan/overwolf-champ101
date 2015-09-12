@@ -8,7 +8,7 @@
   height: 0;
   border-left: $width solid transparent;
   border-right: $width solid transparent;
-  border-bottom: $height solid black;
+  border-bottom: $height solid $color-bg;
   position: absolute;
   bottom: $bottom;
   left: $left;
@@ -103,7 +103,7 @@ $portrait-width-height: 75px;
         @include tooltip-arrow(10px, 14px, -12px, 15px);
       }
     }
-    &:active {
+    &.active {
       &:before {
         @include tooltip-arrow(10px, 14px, -12px, 15px);
       }
