@@ -34,8 +34,8 @@
 		"file": "views/settings.html",
 		"transparent": true,
 		"resizable": true,
-		"size": {"width": 800, "height": 600},
-		"min_size": {"width": 400, "height": 400},
+		"size": {"width": 800, "height": 530},
+		"min_size": {"width": 400, "height": 530},
 		"max_size": {"width": 800, "height": 1200}
 
 	  },
