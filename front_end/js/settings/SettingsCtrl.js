@@ -40,6 +40,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 			self.options.settingsBackup.attr('server') == settings.attr('server')
 			&&
 			self.options.settingsBackup.attr('summonerName') == settings.attr('summonerName')
+			&& settings.attr('summonerName') != "---" // testing string
 		) {	// no change - spare the request
 			debugger;
 			self.constructor.close(self.ow_window.name);
