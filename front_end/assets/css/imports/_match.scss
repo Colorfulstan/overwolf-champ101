@@ -4,18 +4,20 @@
 #panel-container {
   height: auto;
   width: $match-window-width;
-  margin: 0 auto;
-  margin-bottom: -1px; // visual compensation for 1px at app-bar
+  margin: 1px auto 0;
+  margin-bottom: -2px; // visual compensation for 1px at app-bar
 }
 
 $app-bar-height: $spacer;
 #match-app-bar {
-  width: 100%;
+  left: 32%;
+  width: 36%;
   height: $app-bar-height;
-  margin-top: 1px; // enables scrolling on the top edge (compensated by panel-container -1px)
-  position: relative;
+
+  background-color: rgba(0, 0, 0, 0.01); // enables scrolling on the top edge (compensated by panel-container -1px)
+  margin-top: 1px;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.01);
+  position: relative;
 
   &:hover {
     .app-buttons {
@@ -27,19 +29,20 @@ $app-bar-height: $spacer;
   }
 
   #handle {
+    left: 30%;
+    top: -$app-bar-height / 2;
+    width: 40%;
+    height: $app-bar-height;
     opacity: 0.5;
-    background-color: $color-accent-1;
+    background-color: $color-bg;
     border-radius: 100%;
     position: absolute;
-    height: $app-bar-height;
-    width: 70%;
-    left: 15%;
-    top: -$app-bar-height / 2;
   }
 
   .app-buttons {
     display: none;
     width: $spacer*4;
+    margin-top: 5px;
   }
 }
 
@@ -53,13 +56,29 @@ $app-bar-height: $spacer;
   }
   #vs {
     background-color: $color-bg;
+    overflow: hidden;
     p {
       font-size: $spacer;
-      padding: $spacer/2;
       text-align: center;
+//      width: 100%;
+    }
+    .show-team {
+      z-index: 99;
+      border-radius: 100%;
     }
     .purple {
-      right:0;
+      right:-17px;
+      .add {
+        position: relative;
+        right: 7px;
+      }
+    }
+    .blue {
+      left:-17px;
+      .add {
+        position: relative;
+        left: 7px;
+      }
     }
   }
 }

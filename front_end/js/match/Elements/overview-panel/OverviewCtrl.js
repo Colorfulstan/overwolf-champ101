@@ -54,18 +54,21 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	},
 	'.portrait click': function ($el, ev) {
 		//steal.dev.log('.portrait click');
-		$el.removeClass('addable');
 		can.route.attr({route: Routes.panelChampion, champ: $el.attr('title')});
+		$el.removeClass('addable');
 	},
 	'.show-team.blue click': function ($el, ev) {
-		$('.team.blue').find('.portrait').removeClass('addable');
 		can.route.attr({team: 'blue', route: Routes.panelTeam});
 		ev.stopPropagation();
+		$('.team.blue').find('.portrait').removeClass('addable');
+		$('.show-team.blue').removeClass('addable');
+
 	},
 	'.show-team.purple click': function ($el, ev) {
-		$('.team.purple').find('.portrait').removeClass('addable');
 		can.route.attr({team: 'purple', route: Routes.panelTeam});
 		ev.stopPropagation();
+		$('.show-team.purple').removeClass('addable');
+		$('.team.purple').find('.portrait').removeClass('addable');
 	}
 });
 module.exports = OverviewCtrl;

@@ -103,14 +103,6 @@ footer#disclaimer {
   &:hover, &.active{
     opacity: 1;
   }
-
-  &.show-team {
-    border: none;
-    width: $spacer/2;
-    height: 100%;
-    position: absolute;
-    top: 0;
-  }
 }
 
 .loading {

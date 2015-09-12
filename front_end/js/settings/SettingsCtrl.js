@@ -34,7 +34,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 		);
 	},
 
-	saveAndCloseHandler: function (self, settings, $btn) {
+	saveAndCloseHandler: function (self, $btn) {
 		var settings = self.options.settings;
 		if (
 			self.options.settingsBackup.attr('server') == settings.attr('server')
@@ -62,6 +62,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 					// TODO: Error message and try again on the button
 					// 503 temp unavailable
 					// 404 not found
+					// statusText 'error' == kein Internet??
 					$btn.text(data.statusText);
 				});
 		}
