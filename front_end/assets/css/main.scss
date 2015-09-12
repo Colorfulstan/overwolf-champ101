@@ -55,7 +55,8 @@ hr {
 
 p {
 //  text-align: center;
-  padding: 0 0 $spacer 0;
+  padding: 0 0 0 0;
+  font-weight: 300;
 }
 
 body {
@@ -68,6 +69,9 @@ ul {
   li {
     padding-top: $spacer/2;
     line-height: 1.3rem;
+    .fa {
+      padding-top: 2px;
+    }
   }
 }
 

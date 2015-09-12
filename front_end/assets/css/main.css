@@ -10287,7 +10287,8 @@ hr {
   border-color: #eee; }
 
 p {
-  padding: 0 0 30px 0; }
+  padding: 0 0 0 0;
+  font-weight: 300; }
 
 body#settings, body#main, body#feedback {
   background-color: rgba(6, 16, 19, 0.9); }
@@ -10295,6 +10296,8 @@ body#settings, body#main, body#feedback {
 ul li {
   padding-top: 15px;
   line-height: 1.3rem; }
+  ul li .fa {
+    padding-top: 2px; }
 
 font {
   font-size: inherit !important; }
