@@ -34,6 +34,7 @@
   }
 
 }
+
 $portrait-width-height: 75px;
 .champion-panel {
   height: 100px;
@@ -79,10 +80,12 @@ $portrait-width-height: 75px;
   }
   &.blue {
     background-color: $color-blue;
+    .champion-spell:after { color: $color-blue}
   }
 
   &.purple {
     background-color: $color-purple;
+    .champion-spell:after { color: $color-purple}
   }
 
   .passive {
@@ -131,107 +134,95 @@ $portrait-width-height: 75px;
       width: 48px;
       height: 48px;
       margin: -5px 0 0 -5px;
+      pointer-events: none;
     }
 
     .champion-spell {
       position: relative;
-      &:after {
-        text-align: center;
-        pointer-events: none;
-        content: '';
+      &:after { // circle for the key
+//        display: block;
+//        content: '';
+//        pointer-events: none;
+//        position: absolute;
+//        z-index: 9999;
+//
+//        width: 25px;
+//        height: 20px;
+//        bottom: -10px;
+//        right: -7px;
+//        padding-top: 5px;
+//
+//        border-radius: 100%;
+//        background-color: rgba(255,255,255,0.5);
+//        color: #000;
+//        font-weight: bold;
+//        text-align: center;
+
         display: block;
+        content: '';
+        pointer-events: none;
         position: absolute;
+        z-index: 9999;
         width: 25px;
         height: 20px;
-        border-radius: 100%;
-        background-color: rgba(255,255,255,0.5);
-        color: #000;
-        right: -7px;
-        font-weight: bold;
-        bottom: -10px;
+        bottom: -20px;
+        right: -20px;
         padding-top: 5px;
+        border-radius: 100%;
+        font-size: 18px;
+        font-weight: 800;
+        text-align: center;
+        text-shadow: -1px -1px 1px rgba(0, 0, 0, 1);
       }
       &:hover, &.active {
+        z-index: 999;
         &:before {
           @include tooltip-arrow(20px, 25px, -31px, 5px);
         }
       }
 
-      &[data-index-1="1"] {
+      &[data-index-1="1"]{
+        &:after { content: 'Q'; }
+      }
+      &[data-index-1="2"]{
+        &:after { content: 'W'; }
+      }
+      &[data-index-1="3"]{
+        &:after { content: 'E'; }
+      }
+      &[data-index-1="4"]{
+        &:after { content: 'R'; }
+      }
+
+      &[data-index-1="5"] {
+        clear: left;
+      }
+
+      &[data-index-1="5"],
+      &[data-index-1="6"],
+      &[data-index-1="7"],
+      &[data-index-1="8"] {
+        position: relative;
+        top: -73px;
+        -webkit-clip-path: inset(0 0 0 25px);
+        clip-path: inset(0 0 0 25px);
+        overflow: hidden;
+
+        &:hover, &.active {
+          -webkit-clip-path: initial;
+          clip-path: initial;
+          overflow: visible;
+        }
         &:after {
-          content: 'Q';
+          display:none;
         }
       }
-      &[data-index-1="2"] {
-        &:after {
-          content: 'W';
-        }
-      }
-      &[data-index-1="3"] {
-        &:after {
-          content: 'E';
-        }
-      }
-      &[data-index-1="4"] {
-        &:after {
-          content: 'R';
-        }
-      }
-    } // .champion-spell
-  }
-  // .champ-spells
-//
-//  .champ-select {
-//    height: 100%;
-//
-//    .team {
-//      height: 45%;
-//
-//      .img {
-//        height: 100%;
-//        float: left;
-//      }
-//    }
-//  }
+    }  // .champion-spell
+  }// .champ-spells
 
   .panel-control {
     height: 100%;
     width: 60px;
     float: right;
   }
-
-  //  .img-wrapper {
-  //    position: relative;
-  //    display: block;
-  //    float: left;
-  //    width: auto;
-  //    height: auto;
-  //    &:hover {
-  //      *{
-  //        opacity: 0.5;
-  //      }
-  //      &:after {
-  //        display: block;
-  //        position: absolute;
-  //        background-color: #0b97c4;
-  //
-  //        top: 0;
-  //        left: 0;
-  //        width: 50px;
-  //        height: 50px;
-  //        pointer-events: none;
-  //
-  //      }
-  //    }
-  //  }
-  //
-  //  &.sticky-tooltip {
-  //    .img-wrapper {
-  //      &:hover:after {
-  //        content: 'Tooltip is sticky';
-  //      }
-  //    } // .img-wrapper
-  //  } // .sticky-tooltip
-}
-
-// .champion-panel
+}// .champion-panel

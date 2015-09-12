@@ -78,12 +78,18 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 	},
 	closeAllPanels: function () {
 		this.options.panels.replace(new can.List());
+
 		$('.team').find('.portrait').addClass('addable');
+		$('.show-team').addClass('addable');
+
 		this.removeCloseAllBtn();
 	},
 	removePanel: function (champName) {
 		var self = this;
+
 		$('.team').find('[title="'+ champName +'"]').addClass('addable');
+		$('.show-team').addClass('addable');
+
 		this.options.panels.each(function (item, index) {
 			if (champName == item.champ.name) {
 				self.options.panels.splice(index, 1);
@@ -94,21 +100,25 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 			this.removeCloseAllBtn();
 		}
 	},
-	removePanelById: function (id) {
-		this.options.panels.splice(id, 1);
+	removePanelById: function (id) { // TODO: currently unused - maybe useful if new panel after max is added on the end and first one gets removed
+		var panel = this.options.panels.splice(id, 1)[0];
+		debugger;
 		if (this.options.panels.length <= 1) {
 			this.removeCloseAllBtn();
 		}
+		$('.team').find('[title="'+ panel.champ.key +'"]').addClass('addable'); // TODO: test this and fix if name of champ comes from elsewhere then panel.champ.key
 	},
 	/** * @param team 'blue' or 'purple' */
 	showTeam: function (team) {
 		debugger;
 		var self = this;
+		self.closeAllPanels();
 		var teamList = new can.List();
 		this.options.match[team].map(function (participant) {
 			teamList.push(self.options.match.participantsByChamp[participant.champ.name]);
 		});
 		self.options.panels.replace(teamList);
+		$('.show-team.'+ team).removeClass('addable');
 	},
 
 	'{showTeamRoute} route': function (data) {
@@ -130,7 +140,7 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		can.route.attr({'route': ''});
 		this.closeAllPanels();
 	},
-	'{closeSinglePanelsRoute route}': function (routeData) {
+	'{closeSinglePanelsRoute} route': function (routeData) {
 		steal.dev.log('close Panel route', routeData);
 		can.route.attr({'route': ''});
 		this.removePanelById(routeData.id);
