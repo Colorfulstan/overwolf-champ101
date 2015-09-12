@@ -2,8 +2,10 @@
 	<div class="team blue col-xs-5">
 		<div class="pull-right">{{#blue}}
 		{{#champ}}
-			<div title="{{name}}" class="portrait img"
-				 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"></div>
+			<div title="{{name}}" class="portrait img addable"
+				 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;">
+				<i class="add fa fa-plus fa-lg"></i>
+			</div>
 		{{/champ}}
 		{{ /blue }}</div>
 	</div>
@@ -15,8 +17,10 @@
 	<div class="team purple col-xs-5"><div class="pull-left">
 		{{ #purple }}
 				{{#champ}}
-					<div title="{{name}}" class="portrait img"
-						 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"></div>
+					<div title="{{name}}" class="portrait img addable"
+						 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;">
+						<i class="add fa fa-plus fa-lg"></i>
+					</div>
 				{{/champ}}
 		{{ /purple }}
 	</div></div>

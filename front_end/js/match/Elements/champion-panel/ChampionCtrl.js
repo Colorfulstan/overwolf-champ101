@@ -78,12 +78,14 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 	},
 	closeAllPanels: function () {
 		this.options.panels.replace(new can.List());
+		$('.team').find('.portrait').addClass('addable');
 		this.removeCloseAllBtn();
 	},
-	removePanel: function (champ) {
+	removePanel: function (champName) {
 		var self = this;
+		$('.team').find('[title="'+ champName +'"]').addClass('addable');
 		this.options.panels.each(function (item, index) {
-			if (champ == item.champ.name) {
+			if (champName == item.champ.name) {
 				self.options.panels.splice(index, 1);
 				return false;
 			}
@@ -137,9 +139,9 @@ var ChampionCtrl = can.Control.extend('ChampionCtrl', {
 		var self = this;
 		can.route.attr({route: Routes.tooltipHide}, true);
 		var $panel = $el.closest('.panel');
-		var champ = $el.closest('.panel').attr('data-name');
+		var champName = $el.closest('.panel').attr('data-name');
 		$panel.slideUp(function () {
-			self.removePanel(champ);
+			self.removePanel(champName);
 		});
 	},
 	'#close-all-btn click': function () {

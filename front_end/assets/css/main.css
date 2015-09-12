@@ -241,6 +241,19 @@
   position: absolute;
   bottom: -10px; }
 
+.add {
+  display: none !important; }
+
+.addable {
+  display: table; }
+  .addable:hover .add {
+    display: table-cell !important;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle; }
+
 .materialize-red.lighten-5 {
   background-color: #fdeaeb !important; }
 
@@ -10074,7 +10087,7 @@ i.fa {
       height: 0;
       border-left: 16px solid transparent;
       border-right: 16px solid transparent;
-      border-bottom: 20px solid black;
+      border-bottom: 20px solid rgba(6, 16, 19, 0.9);
       position: absolute;
       bottom: 1px;
       left: 61px; }
@@ -10085,7 +10098,7 @@ i.fa {
       height: 0;
       border-left: 16px solid transparent;
       border-right: 16px solid transparent;
-      border-bottom: 20px solid black;
+      border-bottom: 20px solid rgba(6, 16, 19, 0.9);
       position: absolute;
       bottom: 1px;
       left: 61px; }
@@ -10112,18 +10125,18 @@ i.fa {
       height: 0;
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
-      border-bottom: 14px solid black;
+      border-bottom: 14px solid rgba(6, 16, 19, 0.9);
       position: absolute;
       bottom: -12px;
       left: 15px; }
-    .champion-panel .passive:active:before {
+    .champion-panel .passive.active:before {
       display: block;
       content: '';
       width: 0;
       height: 0;
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
-      border-bottom: 14px solid black;
+      border-bottom: 14px solid rgba(6, 16, 19, 0.9);
       position: absolute;
       bottom: -12px;
       left: 15px; }
@@ -10171,7 +10184,7 @@ i.fa {
         height: 0;
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
-        border-bottom: 25px solid black;
+        border-bottom: 25px solid rgba(6, 16, 19, 0.9);
         position: absolute;
         bottom: -31px;
         left: 5px; }
