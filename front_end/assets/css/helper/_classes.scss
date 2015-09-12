@@ -95,5 +95,26 @@
   bottom:5px;
   right:5px;
   opacity: 0;
+}
 
+.pinnable {
+
+  [class^="pin-"]{ display: none; }
+
+  &:hover {
+    .pin-on { display: none; }
+    .pin-off { display: block; }
+  }
+
+  &.active:hover {
+    .pin-on { display: block; }
+    .pin-off { display: none; }
+  }
+
+  &.passive {
+    [class^="pin-"]{
+      position: absolute;
+      bottom: -10px;
+    }
+  }
 }

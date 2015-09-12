@@ -1,9 +1,10 @@
 @import "../helper/variables";
+@import "../helper/colors";
 
 #tooltip-container {
   width: $match-window-width;
-  background-color: black;
-  color: #eee;
+  background-color: $color-bg;
+  color: $color-font-bright;
 
   padding: 30px;
 
