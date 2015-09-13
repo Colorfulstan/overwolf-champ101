@@ -52,7 +52,8 @@ module.exports = function (grunt) {
 			}
 			, js: { expand: true, cwd: 'dist/', src: 'bundles/**', dest: 'out/dist/'}
 			, css: { expand:true, src: ['assets/css/*.css'], dest: 'out/'}
-			, img: { expand:true, src: 'assets/img/**', dest: 'out/'}
+			, fonts: { expand:true, src: ['assets/font/**/*'], dest: 'out/'}
+			, img: { expand:true, src: 'assets/img/**/*', dest: 'out/'}
 			, cfg: { expand:true, src: 'manifest.json', dest: 'out/'}
 			, steal: { expand:true, cwd: 'node_modules/steal', src: ['steal.production.js'], dest: 'out/'}
 			, videojs: { expand:true, src: ['node_modules/video.js/dist/video-js/**'], dest: 'out/'}

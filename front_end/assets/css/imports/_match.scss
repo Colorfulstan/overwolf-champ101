@@ -27,7 +27,9 @@ $app-bar-height: $spacer;
       opacity: 0.9;
     }
   }
-
+  &.animated-handle {
+    opacity: 1 !important;
+  }
   #handle {
     left: 30%;
     top: -$app-bar-height / 2;
@@ -37,6 +39,13 @@ $app-bar-height: $spacer;
     background-color: $color-bg;
     border-radius: 100%;
     position: absolute;
+
+    &.animated-bg {
+      -webkit-animation: colorchange 2s linear infinite;
+      animation: colorchange 2s linear infinite;
+      opacity: 1 !important;
+    }
+
   }
 
   .app-buttons {
@@ -45,6 +54,34 @@ $app-bar-height: $spacer;
     margin-top: 5px;
   }
 }
+
+@-webkit-keyframes colorchange {
+
+  0%   {
+//    background-color: $color-bg;
+  box-shadow: 0 0 0 0 rgba(255,0,0,0);
+  }
+//  30%  {
+////    background-color: $color-accent-1;
+//    box-shadow: 0 0 25px 10px rgba(255,255,255,0.5);}
+  50%  {
+//    background-color: $color-accent-2;
+    box-shadow: 0 0 20px 15px rgba(255,0,0,1);}
+  100% {
+//    background-color: $color-bg;
+    box-shadow: 0 0 0 0 rgba(255,0,0,0);}
+
+
+}
+
+@-moz-keyframes colorchange {
+
+  0%   {background-color: $color-bg;}
+  30%  {background-color: $color-accent-1;}
+  60%  {background-color: $color-accent-2;}
+  100% {background-color: $color-bg;}
+}
+
 
 #match-overview-container {
   height: 60px;

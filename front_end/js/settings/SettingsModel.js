@@ -2,11 +2,21 @@
 require('global');
 var can = require('can');
 
+/**
+ * @typedef SettingsModel
+ * @property summonerName {String}
+ * @property summonerId {number}
+ * @property server {String}
+ * @property hideHomeAtStart {boolean}
+ * @property startMatchCollapsed {boolean}
+ * @property hotkeys {Hotkey[]} has to be initialized through {@see loadHotKeys}
+ */
 var SettingsModel = can.Model.extend('SettingsModel', {
 	STORAGE_KEY_REGION: 'region-code',
 	STORAGE_KEY_NAME: 'summoner-name',
 	STORAGE_KEY_ID: 'summoner-id',
 	STORAGE_KEY_HOME_AT_START: 'setting-home-at-startup',
+	STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 	//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
 
 	getManifest: function () {
@@ -60,19 +70,20 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 
 }, {
 	init: function () {
-
 		this.attr('summonerName', this._summonerName());
 		this.attr('summonerId', this._summonerId());
 		this.attr('server', this._server());
 		//this.attr('mouseOutTimeout', this._mouseOutTimeout());
 		this.attr('hideHomeAtStart', this._hideHomeAtStart());
-
+		this.attr('startMatchCollapsed', this._startMatchCollapsed());
+		// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
 
 		this.bind('summonerName', this._summonerName);
 		this.bind('summonerId', this._summonerId);
 		this.bind('server', this._server);
 		//this.bind('mouseOutTimeout', this._mouseOutTimeout);
 		this.bind('hideHomeAtStart', this._hideHomeAtStart);
+		this.bind('startMatchCollapsed', this._startMatchCollapsed);
 		//this.bind('hotkeys', SettingsModel.getHotKeys());
 
 
@@ -106,6 +117,15 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 		}
 		if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_HOME_AT_START, newVal);
 	},
+	_startMatchCollapsed: function (ev, newVal, oldVal) {
+		if (newVal == undefined) {
+			debugger;
+			return localStorage.getItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED) == 'true';
+		}
+		// localstorage entry gets removed for falsy statement
+		if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED);
+		else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED, newVal);
+	},
 	// Todo: need??
 	//clearSummonerId: function () {
 	//	return localStorage.removeItem(SettingsModel.STORAGE_KEY_ID)
@@ -129,6 +149,10 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 	//		}
 	//	)
 	//}
+	/**
+	 * Loads Hotkeys from the Manifest / overwolf settings and stores them into the SettingsModel instance
+	 * @return {Promise} that gets resolved after Hotkeys has been set for this.attr('hotkeys'). Does not resolve into any value
+	 */
 	loadHotKeys: function () {
 		var deferred = $.Deferred();
 		var self = this;
@@ -143,8 +167,8 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 		delete data[this.constructor.id];
 		return new this.constructor(data);
 	},
-	copyFrom : function (settingsModel){
-		for (var attrKey in settingsModel.attr()){
+	copyFrom: function (settingsModel) {
+		for (var attrKey in settingsModel.attr()) {
 			debugger;
 			this.attr(attrKey, settingsModel.attr(attrKey));
 		}

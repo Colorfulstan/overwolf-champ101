@@ -26,8 +26,12 @@ var MatchCtrl = WindowCtrl.extend({
 		$panelContainer: $('#panel-container'),
 		$overviewContainer: $('#match-overview-container'),
 		reloadBtn: '.btn-reload',
-		handle: '#match-app-bar',
+		appBar: '#match-app-bar',
+		handle: '#handle',
 		loadingTmpl: 'templates/parts/match-loading.mustache',
+
+		handleAnimationClass: 'animated-bg',
+		animatedHandleClass: 'animated-handle',
 
 		// handled routes
 		toggleAllRoute: Routes.togglePanels,
@@ -38,9 +42,13 @@ var MatchCtrl = WindowCtrl.extend({
 	/**
 	 * @constructor
 	 * @param element
+	 * @param options
+	 * @param options.startCollapsed {boolean} if true, start minimized and add class for bg-animation
 	 */
 	init: function (element, options) {
-		WindowCtrl.prototype.init.apply(this, arguments);
+
+		var self = this;
+		WindowCtrl.prototype.init.apply(self, arguments);
 
 		options.settings = new SettingsModel();
 
@@ -48,9 +56,18 @@ var MatchCtrl = WindowCtrl.extend({
 		options.model = new MatchModel();
 		options.model.attr('summonerId', options.settings.attr('summonerId'));
 		options.model.attr('server', options.settings.attr('server'));
+		debugger;
+		if (options.settings.attr('startMatchCollapsed')){
+			debugger;
+			self.hidePanels();
+			$(self.options.handle).addClass(self.options.handleAnimationClass);
+			$(self.options.appBar).addClass(self.options.animatedHandleClass);
+		}
+
+		window.name = "Match Window"; // DEBUG INFO
 
 		// After successfully loading the Match-Data
-		this.loadMatch(options.model)
+		self.loadMatch(options.model)
 
 	},
 	loadMatch: function (matchModel) {
@@ -62,9 +79,31 @@ debugger;
 		var name = this.options.settings.attr('summonerName');
 		self.options.$overviewContainer.html(can.view(this.options.loadingTmpl , {summonerName: name}));
 		self.options.$overviewContainer.removeClass('failed').addClass('loading');
+
 		delete self.options.overview;
 		delete self.options.champions;
 		delete self.options.tooltip;
+
+		// if its started within a game then register onblur Handler to the window to collapse automatically
+		overwolf.games.getRunningGameInfo(function(data){
+			if (data == undefined || data == null){ // no game running
+			} else { // game is running
+				self.hidePanelsOnKlickHandler = $.proxy(self.hidePanels, self);
+				overwolf.games.inputTracking.onMouseUp.addListener(self.hidePanelsOnKlickHandler);
+				steal.dev.log("added hidePanelsOnKlickHandler", self.hidePanelsOnKlickHandler);
+
+				$(window).on('blur', function(){
+					self.hidePanels();
+					overwolf.games.inputTracking.onMouseUp.removeListener(self.hidePanelsOnKlickHandler);
+					overwolf.games.inputTracking.onMouseUp.addListener(self.hidePanelsOnKlickHandler);
+					steal.dev.log("added hidePanelsOnKlickHandler", self.hidePanelsOnKlickHandler);
+				});
+				$(window).on('focus', function(){
+					overwolf.games.inputTracking.onMouseUp.removeListener(self.hidePanelsOnKlickHandler);
+					steal.dev.log("removed hidePanelsOnKlickHandler", self.hidePanelsOnKlickHandler);
+				});
+			}
+		});
 
 		$.when(this.options.dao.loadMatchModel(self.options.model))
 			.then(function (matchModel) {
@@ -88,22 +127,31 @@ debugger;
 			});
 		return deferred.promise();
 	},
-	togglePanels: function ($handle) {
-		$handle.toggleClass('collapsed');
-		//var speed = this.element.height() / 200 * ANIMATION_SLIDE_SPEED_PER_PANEL;
-		//if (speed < ANIMATION_SLIDE_SPEED_PER_PANEL) speed = ANIMATION_SLIDE_SPEED_PER_PANEL;
-		this.options.$panelContainer.slideToggle(ANIMATION_SLIDE_SPEED_PER_PANEL);
+	togglePanels: function (appBar) {
+		debugger;
+		if ($(appBar).hasClass('collapsed')) {
+			$(this.options.handle).removeClass(this.options.handleAnimationClass);
+			$(appBar).removeClass(this.options.animatedHandleClass);
+			this.showPanels();
+		} else {
+			this.hidePanels();
+		}
 	},
 	showPanels: function () {
-		$(handle).removeClass('collapsed');
+		$(this.options.appBar).removeClass('collapsed');
 		this.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
+
+	},
+	hidePanels: function () {
+			$(this.options.appBar).addClass('collapsed');
+			this.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
 	},
 
 	//' mouseout': function ($el, ev) {
 	//	var self = this;
 	//	steal.dev.log('mouseout from' , $el);
 	//	this.options.mouseLeftMatchWindowTO = window.setTimeout(function () {
-	//		self.togglePanels($(MatchCtrl.defaults.handle));
+	//		self.togglePanels($(MatchCtrl.defaults.appBar));
 	//	},
 	//	1000
 	//			//this.settings._mouseOutTimeout()
@@ -115,8 +163,8 @@ debugger;
 	//},
 
 	// Eventhandler
-	'{handle} mousedown': function ($handle, ev) {
-		this.togglePanels($handle);
+	'{appBar} mousedown': function (appBar, ev) {
+		this.togglePanels(appBar);
 	},
 	'{reloadBtn} mousedown': function ($el, ev) {
 		delete this.options.settings;
@@ -130,7 +178,7 @@ debugger;
 	'{toggleAllRoute} route': function (routeData) {
 		steal.dev.log('toggle/all route');
 		can.route.attr({'route': ''});
-		this.togglePanels($(this.options.handle));
+		this.togglePanels($(this.options.appBar));
 	},
 	'{showAllRoute} route': function (routeData) {
 		steal.dev.log('show/all - routeData:', routeData);

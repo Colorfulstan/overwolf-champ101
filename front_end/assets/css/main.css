@@ -10257,6 +10257,8 @@ select {
     display: block; }
   #match-app-bar:hover #handle {
     opacity: 0.9; }
+  #match-app-bar.animated-handle {
+    opacity: 1 !important; }
   #match-app-bar #handle {
     left: 30%;
     top: -15px;
@@ -10266,11 +10268,31 @@ select {
     background-color: rgba(6, 16, 19, 0.9);
     border-radius: 100%;
     position: absolute; }
+    #match-app-bar #handle.animated-bg {
+      -webkit-animation: colorchange 2s linear infinite;
+      animation: colorchange 2s linear infinite;
+      opacity: 1 !important; }
   #match-app-bar .app-buttons {
     display: none;
     width: 120px;
     margin-top: 5px; }
 
+@-webkit-keyframes colorchange {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+  50% {
+    box-shadow: 0 0 20px 15px red; }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+@-moz-keyframes colorchange {
+  0% {
+    background-color: rgba(6, 16, 19, 0.9); }
+  30% {
+    background-color: #039be5; }
+  60% {
+    background-color: #26a69a; }
+  100% {
+    background-color: rgba(6, 16, 19, 0.9); } }
 #match-overview-container {
   height: 60px; }
   #match-overview-container .portrait {
@@ -10379,7 +10401,7 @@ footer#disclaimer {
 
 .btn {
   cursor: pointer;
-  opacity: 0.7; }
+  opacity: 0.8; }
   .btn:hover, .btn.active {
     opacity: 1; }
 
