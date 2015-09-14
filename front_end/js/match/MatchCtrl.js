@@ -147,21 +147,6 @@ debugger;
 			this.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
 	},
 
-	//' mouseout': function ($el, ev) {
-	//	var self = this;
-	//	steal.dev.log('mouseout from' , $el);
-	//	this.options.mouseLeftMatchWindowTO = window.setTimeout(function () {
-	//		self.togglePanels($(MatchCtrl.defaults.appBar));
-	//	},
-	//	1000
-	//			//this.settings._mouseOutTimeout()
-	//	);
-	//},
-	//' * mouseenter': function ($el, ev) {
-	//	steal.dev.log('mouseenter in' , $el);
-	//	window.clearTimeout(this.options.mouseLeftMatchWindowTO);
-	//},
-
 	// Eventhandler
 	'{appBar} mousedown': function (appBar, ev) {
 		this.togglePanels(appBar);
