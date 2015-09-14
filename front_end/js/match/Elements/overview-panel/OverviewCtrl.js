@@ -40,10 +40,11 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	},
 	'.portrait mouseenter': function ($el, ev) {
 		//steal.dev.log('.portrait mouseenter');
+		var $panel = $el.closest('.panel');
 		can.route.attr({
 			route: Routes.tooltipChampion,
 			champ: $el.attr('title'),
-			y: $el.offset().top + $el.height()
+			y: $panel.offset().top + $panel.height()
 		});
 	},
 	'.portrait mouseout': function ($el, ev) {

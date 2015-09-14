@@ -32,14 +32,15 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 		this.element.find('#content').html(
 			can.view(self.options.settingsTmpl, self.options.settings)
 		);
+		//this.element.find('#summoner-name-input').focus();
 	},
 
 	saveAndCloseHandler: function (self, $btn) {
 		var settings = self.options.settings;
 		if (
-			self.options.settingsBackup.attr('server') == settings.attr('server')
-			&&
-			self.options.settingsBackup.attr('summonerName') == settings.attr('summonerName')
+			settings.isSummonerSet()
+			&& self.options.settingsBackup.attr('server') == settings.attr('server')
+			&& self.options.settingsBackup.attr('summonerName') == settings.attr('summonerName')
 			&& settings.attr('summonerName') != "---" // testing string
 		) {	// no change - spare the request
 			debugger;
@@ -88,6 +89,10 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	},
 	'#summoner-name-input change': function ($el, ev) {
 		this.options.settings.attr('summonerName', $el.val());
+	},
+	'#summoner-name-input focus': function ($el, ev) {
+		$el.val('');
+		console.log('yub');
 	}
 });
 module.exports = SettingsCtrl;

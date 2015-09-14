@@ -10061,7 +10061,7 @@ i.fa {
   padding-right: 30px;
   padding-left: 30px;
   position: relative;
-  opacity: 0.5; }
+  opacity: 0.8; }
   .champion-panel:hover, .champion-panel.sticky-tooltip {
     opacity: 1; }
   .champion-panel:last-child {
@@ -10079,7 +10079,8 @@ i.fa {
     -moz-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
-    overflow: visible; }
+    overflow: visible;
+    opacity: 1 !important; }
     .champion-panel .portrait:hover:before {
       display: block;
       content: '';
