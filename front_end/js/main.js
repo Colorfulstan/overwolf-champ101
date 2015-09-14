@@ -28,6 +28,8 @@ overwolf.games.getRunningGameInfo(function(data){
 			main.start(settings.isSummonerSet());
 		}
 		settings.attr('startMatchCollapsed', true);
-		main.constructor.openMatch();
+		if (settings.isSummonerSet()){ // If Summoner is set start the matchwindow right away
+			main.constructor.openMatch();
+		} // otherwise user has to open it manually ot start a game after setting the summoner
 	}
 });

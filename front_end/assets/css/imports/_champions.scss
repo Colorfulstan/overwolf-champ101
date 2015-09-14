@@ -42,7 +42,7 @@ $portrait-width-height: 75px;
   padding-right: 30px;
   padding-left: 30px;
   position: relative;
-  opacity: 0.5;
+  opacity: 0.8;
   &:hover, &.sticky-tooltip {
     opacity: 1;
   }
@@ -66,6 +66,7 @@ $portrait-width-height: 75px;
     -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     overflow: visible;
+    opacity: 1 !important;
 
     &:hover {
       &:before {

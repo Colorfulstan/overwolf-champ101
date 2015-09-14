@@ -8,31 +8,33 @@
 		<li><i class="fa fa-exclamation-triangle pull-left padded-right"></i>
 
 			<p>Your summoner name is the name displayed within the game, not your account name. We will never ask you
-				 about your password or account name
+			   about your password or account name
 			</p>
 		</li>
 	</ul>
 
 	<form onsubmit="return false" id="summoner-form">
-		<div><label for="summoner-name-input">Summonername <br /> (ingame, not Accountname)</label>
-		<br>
-		<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
-			   can-value='summonerName' /></div>
+		<div><label for="summoner-name-input">Summonername <br />
+											  (currently set: <strong>{{ summonerName }}</strong>)</label>
+			<br>
+			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
+				   can-value='summonerName' autofocus /></div>
 
 		<div><label for="server-region-select">Region</label>
-		<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
-			<option value="BR">BR</option
-			<option value="EUNE">EUNE</option>
-			<option value="EUW">EUW</option>
-			<option value="KR">KR</option>
-			<option value="LAN">LAN</option>
-			<option value="LAS">LAS</option>
-			<option value="NA">NA</option>
-			<option value="OCE">OCE</option>
-			<option value="TR">TR</option>
-			<option value="RU">RU</option>
-			<option value="PBE">PBE</option>
-		</select></div>
+			<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
+				<option hidden>No Region set!</option>
+				<option value="BR">BR</option
+				<option value="EUNE">EUNE</option>
+				<option value="EUW">EUW</option>
+				<option value="KR">KR</option>
+				<option value="LAN">LAN</option>
+				<option value="LAS">LAS</option>
+				<option value="NA">NA</option>
+				<option value="OCE">OCE</option>
+				<option value="TR">TR</option>
+				<option value="RU">RU</option>
+				<option value="PBE">PBE</option>
+			</select></div>
 		<div class="row">
 			<div class="padded-bot padded-top">
 				<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
@@ -58,7 +60,9 @@
 		</ul>
 		<table class="hoverable">
 			<thead>
-			<tr><th>Hotkeys</th></tr>
+			<tr>
+				<th>Hotkeys</th>
+			</tr>
 			</thead>
 			<tbody>
 			{{#hotkeys}}
