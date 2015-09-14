@@ -10326,7 +10326,7 @@ select {
   #match-participants .portrait {
     float: left;
     height: 48px;
-    cursor: pointer;
+    cursor: url("../img/cursor/hand-pointer-o_000000_20.png"), auto !important;
     /* border-right: ridge 3px white; */
     border-radius: 100%;
     margin: 5px; }
@@ -10383,6 +10383,9 @@ ul li {
   ul li .fa {
     padding-top: 2px; }
 
+a, label {
+  cursor: url("../img/cursor/hand-pointer-o_000000_20.png"), auto !important; }
+
 font {
   font-size: inherit !important; }
 
@@ -10400,7 +10403,7 @@ footer#disclaimer {
   font-weight: 100; }
 
 .btn {
-  cursor: pointer;
+  cursor: url("../img/cursor/hand-pointer-o_000000_20.png"), auto;
   opacity: 0.8; }
   .btn:hover, .btn.active {
     opacity: 1; }
@@ -10422,5 +10425,11 @@ footer#disclaimer {
 
 .whats-this {
   text-decoration: none; }
+
+.drag-window-handle {
+  cursor: url("../img/cursor/hand-paper-o_000000_20.png"), auto; }
+
+.drag-window-handle:active {
+  cursor: url("../img/cursor/hand-grab-o_000000_20.png"), auto; }
 
 /*# sourceMappingURL=main.css.map */

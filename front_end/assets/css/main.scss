@@ -75,6 +75,10 @@ ul {
   }
 }
 
+a, label {
+  cursor: url('../img/cursor/hand-pointer-o_000000_20.png'),auto !important;
+}
+
 font {
   font-size: inherit !important;
 }
@@ -97,7 +101,7 @@ footer#disclaimer {
 }
 
 .btn {
-  cursor: pointer;
+  cursor: url('../img/cursor/hand-pointer-o_000000_20.png'),auto;
   opacity: 0.8;
 
   &:hover, &.active{
@@ -135,3 +139,9 @@ footer#disclaimer {
   text-decoration: none;
 }
 
+.drag-window-handle {
+  cursor: url('../img/cursor/hand-paper-o_000000_20.png'), auto;
+}
+.drag-window-handle:active {
+  cursor: url('../img/cursor/hand-grab-o_000000_20.png'), auto;
+}
