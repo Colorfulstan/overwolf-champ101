@@ -23,10 +23,6 @@ Hotkeys.registerHotkeys = function () {
 	overwolf.settings.registerHotKey("open_panels_team_purple", function (result) {
 		team_handler(result, 'purple');
 	});
-	// TODO: open / close Match implementation - should not reload data but show/hide the matchwindow
-	//overwolf.settings.registerHotKey("open_match", function (result) {
-	//	team_handler(result, 'blue');
-	//});
 	overwolf.settings.registerHotKey("close_panels", function (result) {
 		steal.dev.log('Hotkey close_panels triggered', result);
 		if (result.status == "success") {
