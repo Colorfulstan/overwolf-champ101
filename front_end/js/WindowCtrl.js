@@ -238,7 +238,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	'{toggleWindowRoute} route': function (routeData) {
 		steal.dev.log('toggle/:window - routeData:', routeData);
 		this.constructor.toggle(routeData.window);
-		can.route.attr({'route': Routes.showPanels});
+		can.route.attr({'route': Routes.expandPanels});
 	}
 	//,
 	//'{helpBtn} mousedown': function ($el, ev) {

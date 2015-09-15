@@ -35,8 +35,9 @@ var MatchCtrl = WindowCtrl.extend({
 
 		// handled routes
 		toggleAllRoute: Routes.togglePanels,
-		showAllRoute: Routes.showPanels
+		expandPanelsRoute: Routes.expandPanels
 	}
+
 }, {
 
 	/**
@@ -57,7 +58,7 @@ var MatchCtrl = WindowCtrl.extend({
 		options.model.attr('summonerId', options.settings.attr('summonerId'));
 		options.model.attr('server', options.settings.attr('server'));
 		debugger;
-		if (options.settings.attr('startMatchCollapsed')){
+		if (options.settings.attr('startMatchCollapsed')) {
 			debugger;
 			self.hidePanels();
 			$(self.options.handle).addClass(self.options.handleAnimationClass);
@@ -66,18 +67,35 @@ var MatchCtrl = WindowCtrl.extend({
 
 		window.name = "Match Window"; // DEBUG INFO
 
+		self.hidePanelsOnClickHandler = $.proxy(self.hidePanels, self);
+
 		// After successfully loading the Match-Data
 		self.loadMatch(options.model)
 
 	},
+	addMatchWindowBlurHandler: function (handler) {
+		if (localStorage.getItem('lock_matchWindowHandler') != "1") {
+			overwolf.games.inputTracking.onMouseUp.addListener(handler);
+			steal.dev.warn("added hidePanelsOnKlickHandler", handler, localStorage.getItem('lock_matchWindowHandler'));
+			localStorage.setItem('lock_matchWindowHandler', "1");
+		}
+	},
+	removeMatchWindowBlurHandler: function (handler) {
+		if (localStorage.getItem('lock_matchWindowHandler') == "1") {
+			overwolf.games.inputTracking.onMouseUp.removeListener(handler);
+			steal.dev.warn("removed hidePanelsOnKlickHandler", handler, localStorage.getItem('lock_matchWindowHandler'));
+			localStorage.setItem('lock_matchWindowHandler', "0");
+		}
+	}
+	,
 	loadMatch: function (matchModel) {
 		var deferred = $.Deferred();
 
 		var self = this;
-debugger;
+		debugger;
 
 		var name = this.options.settings.attr('summonerName');
-		self.options.$overviewContainer.html(can.view(this.options.loadingTmpl , {summonerName: name}));
+		self.options.$overviewContainer.html(can.view(this.options.loadingTmpl, {summonerName: name}));
 		self.options.$overviewContainer.removeClass('failed').addClass('loading');
 
 		delete self.options.overview;
@@ -85,22 +103,29 @@ debugger;
 		delete self.options.tooltip;
 
 		// if its started within a game then register onblur Handler to the window to collapse automatically
-		overwolf.games.getRunningGameInfo(function(data){
-			if (data == undefined || data == null){ // no game running
-			} else { // game is running
-				self.hidePanelsOnKlickHandler = $.proxy(self.hidePanels, self);
-				overwolf.games.inputTracking.onMouseUp.addListener(self.hidePanelsOnKlickHandler);
-				steal.dev.log("added hidePanelsOnKlickHandler", self.hidePanelsOnKlickHandler);
+		overwolf.games.getRunningGameInfo(function (data) {
+			var gameIsRunning = !(data == undefined || data == null);
+			if (gameIsRunning) {
 
-				$(window).on('blur', function(){
+				//// retain the behaviour of collapsing when clicking outside of the Window even after minimizing and restoring it
+				//overwolf.windows.onStateChanged.addListener(function (result) {
+				//	steal.dev.log('debug', "MatchCtrl - overwolf.windows.onStateChanged:", result);
+				//	if (result.window_state == "normal") {
+				//		localStorage.setItem('lock_matchWindowJustRestored', "1");
+				//	} else {
+				//		localStorage.setItem('lock_matchWindowJustRestored', "0");
+				//	}
+				//});
+
+				$(window).on('blur', function () {
+					steal.dev.log('Matchwindow lost focus');
+					localStorage.removeItem('lock_matchWindowJustRestored');
 					self.hidePanels();
-					overwolf.games.inputTracking.onMouseUp.removeListener(self.hidePanelsOnKlickHandler);
-					overwolf.games.inputTracking.onMouseUp.addListener(self.hidePanelsOnKlickHandler);
-					steal.dev.log("added hidePanelsOnKlickHandler", self.hidePanelsOnKlickHandler);
+					self.addMatchWindowBlurHandler(self.hidePanelsOnClickHandler);
 				});
-				$(window).on('focus', function(){
-					overwolf.games.inputTracking.onMouseUp.removeListener(self.hidePanelsOnKlickHandler);
-					steal.dev.log("removed hidePanelsOnKlickHandler", self.hidePanelsOnKlickHandler);
+				$(window).on('focus', function () {
+					steal.dev.log('Matchwindow gained focus');
+					self.removeMatchWindowBlurHandler(self.hidePanelsOnClickHandler);
 				});
 			}
 		});
@@ -120,7 +145,7 @@ debugger;
 			}).fail(function (data, status, jqXHR) {
 				steal.dev.warn("Loading Match failed!", data, status, jqXHR);
 				self.options.$overviewContainer.removeClass('loading').addClass('failed');
-				if (data.status == 503){
+				if (data.status == 503) {
 					self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
 				}
 				deferred.reject(data, status, jqXHR);
@@ -132,19 +157,18 @@ debugger;
 		if ($(appBar).hasClass('collapsed')) {
 			$(this.options.handle).removeClass(this.options.handleAnimationClass);
 			$(appBar).removeClass(this.options.animatedHandleClass);
-			this.showPanels();
+			this.expandPanels();
 		} else {
 			this.hidePanels();
 		}
 	},
-	showPanels: function () {
+	expandPanels: function () {
 		$(this.options.appBar).removeClass('collapsed');
 		this.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
-
 	},
 	hidePanels: function () {
-			$(this.options.appBar).addClass('collapsed');
-			this.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
+		$(this.options.appBar).addClass('collapsed');
+		this.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
 	},
 
 	// Eventhandler
@@ -165,10 +189,10 @@ debugger;
 		can.route.attr({'route': ''});
 		this.togglePanels($(this.options.appBar));
 	},
-	'{showAllRoute} route': function (routeData) {
+	'{expandPanelsRoute} route': function (routeData) {
 		steal.dev.log('show/all - routeData:', routeData);
-		this.showPanels();
-		can.route.attr({'route':""});
+		this.expandPanels();
+		can.route.attr({'route': ""});
 	}
 });
 module.exports = MatchCtrl;

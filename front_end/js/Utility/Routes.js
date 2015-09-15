@@ -9,7 +9,7 @@ var Routes = {
 	// MatchCtrl
 	/** Toggles all Panels */
 	togglePanels: 'toggle/all',
-	showPanels: 'show/all',
+	expandPanels: 'show/all',
 	/** removes the panel with given id (0 = uppermost panel) */
 	closePanel: 'close/panel/:id',
 	closeAllPanels: 'close/panel/all',
@@ -39,7 +39,7 @@ var Routes = {
 		// MatchCtrl
 		can.route('#!' + Routes.closePanel);
 		can.route('#!' + Routes.closeAllPanels);
-		can.route('#!' + Routes.showPanels);
+		can.route('#!' + Routes.expandPanels);
 
 
 		// ChampionCtrl
