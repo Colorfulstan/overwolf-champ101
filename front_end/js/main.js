@@ -15,6 +15,8 @@ Routes.ready();
 
 var main = new MainCtrl('html');
 main.constructor.registerOverwolfHandlers();
+localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
+localStorage.removeItem('temp_gameId'); // TODO: move into Settings
 
 var settings = new SettingsModel();
 

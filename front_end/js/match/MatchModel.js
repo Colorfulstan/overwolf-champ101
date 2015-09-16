@@ -39,6 +39,11 @@ var MatchModel = can.Model.extend('MatchModel', {},{
 	 * @property
 	 * @type {String}*/
 	version : null,
+
+	/** The most recent GameId of the given summoner
+	 * @property
+	 * @type {number}*/
+	gameId : null
 });
 module.exports = MatchModel;
 

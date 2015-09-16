@@ -68,6 +68,8 @@ var MatchCtrl = WindowCtrl.extend({
 		window.name = "Match Window"; // DEBUG INFO
 
 		self.hidePanelsOnClickHandler = $.proxy(self.hidePanels, self);
+		localStorage.setItem('lock_getCachedGame','0');
+		localStorage.removeItem('temp_gameId');
 
 		// After successfully loading the Match-Data
 		self.loadMatch(options.model)

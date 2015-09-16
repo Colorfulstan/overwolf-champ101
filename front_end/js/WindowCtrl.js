@@ -38,10 +38,12 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		overwolf.games.onGameInfoUpdated.addListener(function (result) {
 			steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 			if (self.gameStarted(result)) {
+				localStorage.setItem('lock_getCachedGame', "1");
 				steal.dev.warn('League of Legends game started', new Date());
 				self.openMatch();
 			}
 			if (self.gameFinished(result)) {
+				localStorage.setItem('lock_getCachedGame', "0");
 				steal.dev.warn('League of Legends game finished', new Date());
 				self.closeMatch()
 			}

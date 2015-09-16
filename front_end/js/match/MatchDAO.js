@@ -16,8 +16,15 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	 */
 	_loadDataFromServer: function (transfer) {
 		var deferred = $.Deferred();
+
+		var params = {summonerId: transfer.summonerId, server: transfer.server};
+		if (localStorage.getItem('lock_getCachedGame') == "1"){
+			debugger;
+			params['gameId'] = localStorage.getItem('temp_gameId');
+		}
+		steal.dev.log('request for gamedata with params:', params);
 		jQuery.get(RIOT_ADAPTER_URL
-			, {summonerId: transfer.summonerId, server: transfer.server}
+			, params
 			, function (data) { // success
 				steal.dev.log("gameData from Server:", data);
 				DDRAGON_URL = DDRAGON_BASE_URL + data.version + '/';
@@ -42,6 +49,9 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 		$.when(self._loadDataFromServer(transfer))
 			.then(function (dataArray) {
+				localStorage.setItem('temp_gameId', dataArray['gameId']);
+				localStorage.setItem('lock_getCachedGame', "1");
+
 				self._extractParticipants(transfer, dataArray, 'blue');
 				self._extractParticipants(transfer, dataArray, 'purple');
 				transfer.version = dataArray.version;
@@ -50,6 +60,8 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 				deferred.resolve(transfer);
 				dataArray = null;
 			}).fail(function (data, status, jqXHR) {
+
+				localStorage.setItem('lock_getCachedGame', "0");
 
 				steal.dev.warn("Loading MatchModel failed!", data, status, jqXHR);
 
