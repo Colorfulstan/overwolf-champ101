@@ -95,13 +95,16 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 	/** @private */
 	_server: function (ev, newVal, oldVal) {
 		if (newVal == undefined)return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION);
-		if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
+		if (newVal !== oldVal) {localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
+			localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
+		}
 	},
 	/** @private */
 	_summonerName: function (ev, newVal, oldVal) {
 		if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_NAME);
 		if (newVal !== oldVal) {
 			localStorage.setItem(SettingsModel.STORAGE_KEY_NAME, newVal);
+			localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
 		}
 	},
 	/** @private */
@@ -109,6 +112,7 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 		if (newVal == undefined)return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
 		if (newVal !== oldVal) {
 			localStorage.setItem(SettingsModel.STORAGE_KEY_ID, newVal);
+			localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
 		}
 	},
 	_hideHomeAtStart: function (ev, newVal, oldVal) {
