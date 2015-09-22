@@ -4,7 +4,8 @@ steal(
 	, 'global.js'
 	, function (can) {
 		/**
-		 * @typedef SettingsModel
+		 * @class {SettingsModel} SettingsModel
+		 * @constructor {@link SettingsModel.init}
 		 * @property summonerName {String}
 		 * @property summonerId {number}
 		 * @property server {String}
@@ -69,11 +70,15 @@ steal(
 				});
 				return deferred.promise();
 			},
+			/** Is the Match window being displayed on the side of the screen or on top?
+			 * @returns {boolean} */
 			sideViewEnabled: function () {
-				debugger;
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true'
 			}
 		}, {
+			/**
+			 * @constructs
+			 */
 			init: function () {
 				/**@property summonerName attr('summonerName') */ // TODO: how to document this?
 				this.attr('summonerName', this._summonerName());

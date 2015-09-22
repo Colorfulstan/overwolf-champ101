@@ -28,8 +28,8 @@ steal(
 				// backup for checking for changes and possible restore on cancel
 				self.options.settingsBackup = self.options.settings.clone();
 
-				$.when(self.constructor.open('Settings', 800, 600)).then(function (ow_window) {
-					self.ow_window = ow_window;
+				$.when(self.constructor.open('Settings')).then(function ( /**ODKWindow*/ odkWindow) {
+					self.odkWindow = odkWindow;
 				});
 				debugger;
 				this.element.find('#content').html(
@@ -47,7 +47,7 @@ steal(
 					&& settings.attr('summonerName') != "---" // testing string
 				) {	// no change - spare the request
 					debugger;
-					self.constructor.close(self.ow_window.name);
+					self.constructor.close(self.odkWindow.name);
 				} else {
 					$.get(
 						RIOT_ADAPTER_URL + '/getSummonerId.php'
@@ -57,7 +57,7 @@ steal(
 							settings.attr('summonerId', summonerId);
 							//delete self.options.settingsBackup;
 							//self.options.settingsBackup = settings.clone();
-							self.constructor.close(self.ow_window.name);
+							self.constructor.close(self.odkWindow.name);
 						})
 						.fail(function (data, status, jqXHR) {
 							steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
@@ -78,14 +78,14 @@ steal(
 			'.btn-close click': function ($el, ev) {
 				var self = this;
 				window.setTimeout(function () {
-					self.constructor.close(self.ow_window.name);
+					self.constructor.close(self.odkWindow.name);
 				}, 100);
 			},
 			'#btn-cancel click': function ($el, ev) {
 				// restore the old settings-values
 				this.options.settings.copyFrom(this.options.settingsBackup);
 				// close window
-				this.constructor.close(this.ow_window.name);
+				this.constructor.close(this.odkWindow.name);
 			},
 			'#server-region-select change': function ($el, ev) {
 				this.options.settings.attr('server', $el.val());

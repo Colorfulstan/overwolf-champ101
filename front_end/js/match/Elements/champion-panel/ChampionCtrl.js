@@ -10,9 +10,14 @@ steal(
 		, /**Routes*/ Routes) {
 
 		/**
-		 * @see ChampionCtrl.init
+		 * @class
+		 * @constructor {@link ChampionCtrl.init}
 		 */
-		var ChampionCtrl = can.Control.extend('ChampionCtrl', {
+		var ChampionCtrl = can.Control.extend('ChampionCtrl',
+			/**
+			 * @lends ChampionCtrl
+			 */
+			{
 			defaults: {
 				panelTmpl: 'templates/champion-panel.mustache',
 
@@ -24,7 +29,7 @@ steal(
 			}
 		}, {
 			/**
-			 *
+			 * @constructs
 			 * @param element
 			 * @param options.match {MatchModel}
 			 */

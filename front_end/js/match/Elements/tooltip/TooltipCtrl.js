@@ -10,6 +10,8 @@ steal(
 		 * To show a tooltip use can.route.attr()
 		 * with respective route, name and y attributes
 		 *
+		 * @class
+		 * @constructor {@link TooltipCtrl.init}
 		 * @example
 		 * <b>Champion Tooltip:</b>
 		 * <pre>
@@ -32,7 +34,11 @@ steal(
  	});</pre>
 		 *
 		 */
-		var TooltipCtrl = can.Control.extend('TooltipCtrl', {
+		var TooltipCtrl = can.Control.extend('TooltipCtrl',
+			/**
+			 * @lends {TooltipCtrl}
+			 */
+			{
 			defaults: {
 				spellTmpl: 'templates/tooltip-spell.mustache',
 				championTmpl: 'templates/tooltip-champ.mustache',
@@ -122,9 +128,11 @@ steal(
 		}, {
 			/**
 			 *
+			 * @constructs TooltipCtrl
 			 * @param element
 			 * @param options
 			 * @param {MatchModel } options.match
+			 * @param {* } options.videoPlayer will be set later
 			 */
 			init: function (element, options) {
 				/** The videojs instance to load videos in */

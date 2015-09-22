@@ -5,7 +5,7 @@ steal(
 	, 'global.js'
 	, function (can
 		, /**WindowCtrl*/ WindowCtrl
-		, global) {
+		) {
 
 
 		/**
@@ -24,10 +24,7 @@ steal(
 			}
 		}, {
 			init: function () {
-				debugger;
-
 				WindowCtrl.prototype.init.apply(this, arguments);
-				var self = this;
 				this.element.html(can.view(this.options.feedbackTmpl));
 			},
 			'{formSubmit} click': function ($el, ev) {
