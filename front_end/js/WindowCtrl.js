@@ -1,6 +1,7 @@
 "use strict";
 var can = require('can');
 var Routes = require('Routes');
+var SettingsModel = require('SettingsModel');
 
 /**
  * Controller for window-interactions (opening, closing, minimizing, ...)
@@ -19,7 +20,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		, closeBtn: '.btn-close',
 
 		// handled routes
-		toggleWindowRoute: Routes.toggleWindow,
+		toggleWindowRoute: Routes.toggleWindow
 	},
 	// static
 	SCREEN_WIDTH: window.screen.availWidth,
@@ -38,12 +39,12 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		overwolf.games.onGameInfoUpdated.addListener(function (result) {
 			steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 			if (self.gameStarted(result)) {
-				localStorage.setItem('lock_getCachedGame', "1");
+				localStorage.setItem('lock_getCachedGame', "1"); // TODO: move into Settings
 				steal.dev.warn('League of Legends game started', new Date());
-				self.openMatch();
+				self.openMatch(SettingsModel.sideViewEnabled());
 			}
 			if (self.gameFinished(result)) {
-				localStorage.setItem('lock_getCachedGame', "0");
+				localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
 				steal.dev.warn('League of Legends game finished', new Date());
 				self.closeMatch()
 			}
@@ -149,15 +150,17 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		});
 		return deferred.promise();
 	},
-	openMatch: function () {
-		var width = 750;
-		var height = 1000;
-		var self = this;
+	openMatch: function (displaySideView) {
+		var width = 750, height = 1000, self = this;
+
 		$.when(this.open('Match', width, height)).then(function (ow_window) {
+			debugger;
 			steal.dev.log("WindowCtrl.openMatch: ", ow_window);
-			//overwolf.windows.changeSize(ow_window.id, width, height); // TODO: does it work through manifest on new installation?
-			var x = self.getCenteredX(ow_window.width);
-			overwolf.windows.changePosition(ow_window.id, x, 0);
+			var x, y;
+			if (displaySideView){
+				x = 0; y = 100;
+			} else { x = self.getCenteredX(ow_window.width); y = 0; }
+			overwolf.windows.changePosition(ow_window.id, x, y);
 		});
 	},
 	closeMatch: function () {

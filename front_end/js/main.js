@@ -31,7 +31,7 @@ overwolf.games.getRunningGameInfo(function(data){
 		}
 		settings.attr('startMatchCollapsed', true);
 		if (settings.isSummonerSet()){ // If Summoner is set start the matchwindow right away
-			main.constructor.openMatch();
+			main.constructor.openMatch(SettingsModel.sideViewEnabled());
 		} // otherwise user has to open it manually ot start a game after setting the summoner
 	}
 });
