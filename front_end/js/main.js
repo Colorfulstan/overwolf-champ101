@@ -1,37 +1,38 @@
-// Entry point for index.html
-"use strict";
-var MainCtrl = require('MainCtrl');
-var SettingsModel = require('SettingsModel');
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Entry point for main.html
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+"use strict";
+steal(
+	'MainCtrl.js'
+	, 'SettingsModel.js'
+	, 'Routes.js'
+	, function (/**MainCtrl*/ MainCtrl
+		, /**SettingsModel*/ SettingsModel
+		, /**Routes*/ Routes) {
+		Routes.ready();
 
-var Routes = require('Routes');
-Routes.ready();
+		var main = new MainCtrl('html');
+		main.constructor.registerOverwolfHandlers();
+		localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
+		localStorage.removeItem('temp_gameId'); // TODO: move into Settings
+
+		var settings = new SettingsModel();
+
+		overwolf.games.getRunningGameInfo(function (data) {
+			if (data == undefined || data == null) { // manual start since no game is running
+				settings.attr('startMatchCollapsed', false);
+				main.start(settings.isSummonerSet());
+			} else { // automatic start since a game is running and the app will start with league
+				// here we assume summoner already got set somewhen, else this option couldn't have been set
+				if (!settings.hideHomeAtStart()) {
+					main.start(settings.isSummonerSet());
+				}
+				settings.attr('startMatchCollapsed', true);
+				if (settings.isSummonerSet()) { // If Summoner is set start the matchwindow right away
+					main.constructor.openMatch(SettingsModel.sideViewEnabled());
+				} // otherwise user has to open it manually ot start a game after setting the summoner
+			}
+		});
+	});
 
 
-//MainCtrl.registerHotkeys();
-
-var main = new MainCtrl('html');
-main.constructor.registerOverwolfHandlers();
-localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
-localStorage.removeItem('temp_gameId'); // TODO: move into Settings
-
-var settings = new SettingsModel();
-
-overwolf.games.getRunningGameInfo(function(data){
-	if (data == undefined || data == null){ // manual start since no game is running
-		settings.attr('startMatchCollapsed', false);
-		main.start(settings.isSummonerSet());
-	} else { // automatic start since a game is running and the app will start with league
-		// here we assume summoner already got set somewhen, else this option couldn't have been set
-		if (!settings.hideHomeAtStart()){
-			main.start(settings.isSummonerSet());
-		}
-		settings.attr('startMatchCollapsed', true);
-		if (settings.isSummonerSet()){ // If Summoner is set start the matchwindow right away
-			main.constructor.openMatch(SettingsModel.sideViewEnabled());
-		} // otherwise user has to open it manually ot start a game after setting the summoner
-	}
-});

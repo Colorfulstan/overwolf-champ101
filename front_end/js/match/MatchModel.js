@@ -1,49 +1,54 @@
-require('global');
-var can = require('can');
-/**
- * Data about the current Match
- * @constructor
- */
-var MatchModel = can.Model.extend('MatchModel', {},{
-	init : function(){
-	},
+"use strict";
+steal(
+	'can'
+	, 'global.js'
+	, function (/**can*/ can) {
 
-	/** The region-Code of a server
-	 * @property
-	 * @type {String}*/
-	server : null,
+		/**
+		 * Data about the current Match
+		 * @constructor
+		 */
+		var MatchModel = can.Model.extend('MatchModel', {}, {
+			init: function () {
+			},
 
-	/** @property
-	 * @type {String} */
-	summonerId : null,
+			/** The region-Code of a server
+			 * @property
+			 * @type {String}*/
+			server: null,
 
-	/** Team 100
-	* @property
-	* @type {SummonerModel[]} */
-	blue : [],
+			/** @property
+			 * @type {String} */
+			summonerId: null,
 
-	/** Team 200
-	* @property
-	* @type {SummonerModel[]} */
-	purple : [],
+			/** Team 100
+			 * @property
+			 * @type {SummonerModel[]} */
+			blue: [],
 
-	/**
-	 * Different representation of blue and purple.
-	 * @property
-	 * @type {Object}
-	 */
-	participantsByChamp : {},
+			/** Team 200
+			 * @property
+			 * @type {SummonerModel[]} */
+			purple: [],
 
-	/** The most recent Version of the ddragon cdn ressources
-	 * Used within the ddragon URL
-	 * @property
-	 * @type {String}*/
-	version : null,
+			/**
+			 * Different representation of blue and purple.
+			 * @property
+			 * @type {Object}
+			 */
+			participantsByChamp: {},
 
-	/** The most recent GameId of the given summoner
-	 * @property
-	 * @type {number}*/
-	gameId : null
-});
-module.exports = MatchModel;
+			/** The most recent Version of the ddragon cdn ressources
+			 * Used within the ddragon URL
+			 * @property
+			 * @type {String}*/
+			version: null,
 
+			/** The most recent GameId of the given summoner
+			 * @property
+			 * @type {number}*/
+			gameId: null
+		});
+
+		return MatchModel;
+	});

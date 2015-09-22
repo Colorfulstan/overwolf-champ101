@@ -1,13 +1,17 @@
-"use strict";
-
-var Hotkeys = require('Hotkeys');
-var MatchCtrl = require('MatchCtrl');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Entry point for match.html
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+"use strict";
+steal(
+	'Hotkeys.js'
+	, 'MatchCtrl.js'
+	, 'Routes.js'
+	, function (Hotkeys
+		, /** MatchCtrl */ MatchCtrl
+		, /** Routes */ Routes) {
 
-var Routes = require('Routes');
-Routes.ready();
+		Routes.ready();
+		Hotkeys.registerHotkeys();
+		var match = new MatchCtrl('html');
+	});
 
-Hotkeys.registerHotkeys();
-var match = new MatchCtrl('html');

@@ -1,18 +1,22 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Entry point for settings.html
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 "use strict";
-var SettingsCtrl = require('SettingsCtrl');
-var SettingsModel = require('SettingsModel');
+steal(
+	'SettingsCtrl.js'
+	, 'SettingsModel.js'
+	, 'Routes.js'
+	, function (/**SettingsCtrl*/ SettingsCtrl
+		, /**SettingsModel*/ SettingsModel
+		, /**Routes*/ Routes) {
+		Routes.ready();
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Entry point for settings.html
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		var settings = new SettingsModel();
+		steal.dev.log('Settings initialized:', settings);
 
-var Routes = require('Routes');
-Routes.ready();
+		$.when(settings.loadHotKeys()).then(function () {
+			new SettingsCtrl('html', {settings: settings});
+		});
 
-var settings = new SettingsModel();
-steal.dev.log('Settings initialized:', settings);
-
-$.when(settings.loadHotKeys()).then(function () {
-	new SettingsCtrl('html', {settings: settings});
-});
+		return settings;
+	});
