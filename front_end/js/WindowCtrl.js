@@ -208,8 +208,10 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 
 	// Eventhandler
 	'{closeBtn} mousedown': function (el, ev) {
-		this.constructor.close(this.options.name);
-		ev.stopPropagation();
+		if (event.which == 1){
+			this.constructor.close(this.options.name);
+			ev.stopPropagation();
+		}
 	}
 	,
 	'{resizeBtn} mousedown': function (el, ev) {
@@ -224,14 +226,18 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	}
 	,
 	'{settingsBtn} mousedown': function (el, ev) {
-		steal.dev.log('WindowCtrl: open settings');
-		this.constructor.openSettings();
-		ev.stopPropagation();
+		if (ev.which == 1){
+			steal.dev.log('WindowCtrl: open settings');
+			this.constructor.openSettings();
+			ev.stopPropagation();
+		}
 	}
 	,
 	'{homeBtn} mousedown': function ($el, ev) {
-		this.constructor.open('Main');
-		ev.stopPropagation();
+		if (ev.which == 1){
+			this.constructor.open('Main');
+			ev.stopPropagation();
+		}
 	}
 	,
 	/**
@@ -244,14 +250,17 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	}
 	//,
 	//'{helpBtn} mousedown': function ($el, ev) {
+	// if (event.which == 1) {
 	//	this.constructor.openHelp();
 	//	ev.stopPropagation();
+	// }
 	//}
 	//,
 	//'{feedbackBtn} mousedown': function ($el, ev) {
-	//	debugger;
+	// if (event.which == 1) {
 	//	this.constructor.openFeedback();
 	//	ev.stopPropagation();
+	// }
 	//}
 });
 module.exports = WindowCtrl;
