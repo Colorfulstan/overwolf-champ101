@@ -147,7 +147,7 @@
   background: #0372a5; }
 
 .purple {
-  background: #ac2e1a; }
+  background: #a02a1f; }
 
 .vertical-center {
   transform: translateY(45%); }
@@ -10146,9 +10146,9 @@ i.fa {
     .champion-panel.blue .champion-spell:after {
       color: #0372a5; }
   .champion-panel.purple {
-    background-color: #ac2e1a; }
+    background-color: #a02a1f; }
     .champion-panel.purple .champion-spell:after {
-      color: #ac2e1a; }
+      color: #a02a1f; }
   .champion-panel .passive {
     width: 48px;
     height: 48px;
@@ -10283,15 +10283,28 @@ select {
   width: 700px;
   margin: 1px auto 0;
   margin-bottom: -2px; }
+  .match-side-view #panel-container {
+    margin: 0 0 0 1px;
+    margin-right: -2px;
+    float: left; }
 
 #match-app-bar {
+  position: relative;
   left: 32%;
   width: 36%;
   height: 30px;
   background-color: rgba(0, 0, 0, 0.01);
   margin-top: 1px;
-  overflow: hidden;
-  position: relative; }
+  overflow: hidden; }
+  .match-side-view #match-app-bar {
+    position: relative;
+    float: left;
+    right: 0;
+    top: 0;
+    margin: 0 0 0 1px;
+    left: initial;
+    width: 100px;
+    height: 60px; }
   #match-app-bar:hover .app-buttons {
     display: block; }
   #match-app-bar:hover #handle {
@@ -10307,6 +10320,11 @@ select {
     background-color: rgba(6, 16, 19, 0.9);
     border-radius: 100%;
     position: absolute; }
+    .match-side-view #match-app-bar #handle {
+      left: -15px;
+      top: 0;
+      height: 100%;
+      width: 30px; }
     #match-app-bar #handle.animated-bg {
       -webkit-animation: colorchange 2s linear infinite;
       animation: colorchange 2s linear infinite;
@@ -10315,6 +10333,12 @@ select {
     display: none;
     width: 120px;
     margin-top: 5px; }
+    .match-side-view #match-app-bar .app-buttons {
+      width: 40%;
+      float: right !important;
+      margin-top: 8px; }
+      .match-side-view #match-app-bar .app-buttons .icon {
+        height: 25px; }
 
 @-webkit-keyframes colorchange {
   0% {
@@ -10425,6 +10449,11 @@ ul li {
 
 a, label {
   cursor: url("../img/cursor/hand-pointer-o_000000_20.png"), auto !important; }
+
+a:hover {
+  text-decoration: underline; }
+  table a:hover {
+    text-decoration: underline; }
 
 font {
   font-size: inherit !important; }

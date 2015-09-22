@@ -79,6 +79,12 @@ ul {
 a, label {
   cursor: url('../img/cursor/hand-pointer-o_000000_20.png'),auto !important;
 }
+a:hover {
+  text-decoration: underline;
+  table & {
+    text-decoration: none;
+  }
+}
 
 font {
   font-size: inherit !important;

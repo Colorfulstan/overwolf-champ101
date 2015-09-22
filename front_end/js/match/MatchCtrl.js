@@ -28,6 +28,8 @@ var MatchCtrl = WindowCtrl.extend({
 		reloadBtn: '.btn-reload',
 		appBar: '#match-app-bar',
 		handle: '#handle',
+		matchViewSideClass: 'match-side-view',
+
 		loadingTmpl: 'templates/parts/match-loading.mustache',
 
 		handleAnimationClass: 'animated-bg',
@@ -63,6 +65,10 @@ var MatchCtrl = WindowCtrl.extend({
 			self.hidePanels();
 			$(self.options.handle).addClass(self.options.handleAnimationClass);
 			$(self.options.appBar).addClass(self.options.animatedHandleClass);
+		}
+
+		if (SettingsModel.sideViewEnabled()){
+			self.element.addClass(self.options.matchViewSideClass);
 		}
 
 		window.name = "Match Window"; // DEBUG INFO
@@ -165,12 +171,24 @@ var MatchCtrl = WindowCtrl.extend({
 		}
 	},
 	expandPanels: function () {
-		$(this.options.appBar).removeClass('collapsed');
-		this.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
+		var $panelContainer = this.options.$panelContainer;
+		var $appBar = $(this.options.appBar);
+		if (SettingsModel.sideViewEnabled() && $appBar.hasClass('collapsed')){
+				$panelContainer.animate({width: "toggle"}, ANIMATION_SLIDE_SPEED_PER_PANEL);
+		} else {
+			$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
+		}
+		$appBar.removeClass('collapsed');
 	},
 	hidePanels: function () {
-		$(this.options.appBar).addClass('collapsed');
-		this.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
+		var $panelContainer = this.options.$panelContainer;
+		var $appBar = $(this.options.appBar);
+		if (SettingsModel.sideViewEnabled() && !$appBar.hasClass('collapsed')){
+			$panelContainer.animate({width: "toggle"}, ANIMATION_SLIDE_SPEED_PER_PANEL);
+		} else {
+			$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
+		}
+		$appBar.addClass('collapsed');
 	},
 
 	// Eventhandler
