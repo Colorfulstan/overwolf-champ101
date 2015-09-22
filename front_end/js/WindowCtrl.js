@@ -73,16 +73,13 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	 * @memberOf WindowCtrl
 	 * @returns {Promise} Promise that resolves into the overwolf-window object
 	 */
-	open: function (name, width, height) {
+	open: function (name) {
 		var deferred = $.Deferred();
 		overwolf.windows.obtainDeclaredWindow(name, function (result) {
 			if (result.status == "success") {
 				var ow_window = result.window;
 				debugger;
 				overwolf.windows.restore(ow_window.id, function (result) {
-					//if (width && height) {
-					//	overwolf.windows.changeSize(ow_window.id, width, height); // TODO: try through manifest
-					//}
 					debugger;
 					deferred.resolve(ow_window);
 				});
@@ -151,15 +148,16 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 		return deferred.promise();
 	},
 	openMatch: function (displaySideView) {
-		var width = 750, height = 1000, self = this;
+		var self = this;
 
-		$.when(this.open('Match', width, height)).then(function (ow_window) {
-			debugger;
+		$.when(this.open('Match')).then(function (ow_window) {
 			steal.dev.log("WindowCtrl.openMatch: ", ow_window);
-			var x, y;
-			if (displaySideView){
-				x = 0; y = 100;
-			} else { x = self.getCenteredX(ow_window.width); y = 0; }
+			debugger;
+			var x = self.getCenteredX(ow_window.width), y = 0;
+			if (displaySideView) {
+				x = 0;
+				y = 200;
+			}
 			overwolf.windows.changePosition(ow_window.id, x, y);
 		});
 	},
@@ -211,7 +209,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 
 	// Eventhandler
 	'{closeBtn} mousedown': function (el, ev) {
-		if (event.which == 1){
+		if (event.which == 1) {
 			this.constructor.close(this.options.name);
 			ev.stopPropagation();
 		}
@@ -229,7 +227,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	}
 	,
 	'{settingsBtn} mousedown': function (el, ev) {
-		if (ev.which == 1){
+		if (ev.which == 1) {
 			steal.dev.log('WindowCtrl: open settings');
 			this.constructor.openSettings();
 			ev.stopPropagation();
@@ -237,7 +235,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl', {
 	}
 	,
 	'{homeBtn} mousedown': function ($el, ev) {
-		if (ev.which == 1){
+		if (ev.which == 1) {
 			this.constructor.open('Main');
 			ev.stopPropagation();
 		}
