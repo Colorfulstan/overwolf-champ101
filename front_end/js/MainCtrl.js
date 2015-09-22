@@ -51,7 +51,7 @@ var MainCtrl = WindowCtrl.extend({
 	},
 	'{matchBtn} mousedown': function (el, ev) {
 		steal.dev.log('WindowCtrl: open match');
-		this.constructor.openMatch();
+		this.constructor.openMatch(SettingsModel.sideViewEnabled());
 	}
 });
 module.exports = MainCtrl;

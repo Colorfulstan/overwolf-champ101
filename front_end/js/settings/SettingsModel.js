@@ -17,6 +17,7 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 	STORAGE_KEY_ID: 'summoner-id',
 	STORAGE_KEY_HOME_AT_START: 'setting-home-at-startup',
 	STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
+	STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
 	//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
 
 	getManifest: function () {
@@ -66,36 +67,52 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 			deferred.resolve(result);
 		});
 		return deferred.promise();
+	},
+	sideViewEnabled: function () {
+		debugger;
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true'
 	}
-
 }, {
 	init: function () {
+		/**@property summonerName attr('summonerName') */ // TODO: how to document this?
 		this.attr('summonerName', this._summonerName());
-		this.attr('summonerId', this._summonerId());
-		this.attr('server', this._server());
-		//this.attr('mouseOutTimeout', this._mouseOutTimeout());
-		this.attr('hideHomeAtStart', this._hideHomeAtStart());
-		this.attr('startMatchCollapsed', this._startMatchCollapsed());
-		// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
-
 		this.bind('summonerName', this._summonerName);
+
+		/**@property summonerId attr('summonerId') */ // TODO: how to document this?
+		this.attr('summonerId', this._summonerId());
 		this.bind('summonerId', this._summonerId);
+
+		/**@property server attr('server') */ // TODO: how to document this?
+		this.attr('server', this._server());
 		this.bind('server', this._server);
-		//this.bind('mouseOutTimeout', this._mouseOutTimeout);
-		this.bind('hideHomeAtStart', this._hideHomeAtStart);
+
+		/**@property startMatchCollapsed attr('startMatchCollapsed') */ // TODO: how to document this?
+		this.attr('startMatchCollapsed', this._startMatchCollapsed());
 		this.bind('startMatchCollapsed', this._startMatchCollapsed);
-		//this.bind('hotkeys', SettingsModel.getHotKeys());
 
-
+		/**@property hideHomeAtStart attr('hideHomeAtStart') */ // TODO: how to document this?
+		this.attr('hideHomeAtStart', this._hideHomeAtStart());
+		this.bind('hideHomeAtStart', this._hideHomeAtStart);
+		/**@property hideHomeAtStartInfo attr('hideHomeAtStartInfo')
+		 * @readonly */ // TODO: how to document this?
 		this.attr('hideHomeAtStartInfo', "This will prevent the Start Window to show up when you enter a Game");
 
-		// TODO: Hotkey Änderung binden??
+		/**@property startMatchCollapsed attr('startMatchCollapsed') */ // TODO: how to document this?
+		this.attr('sideViewEnabled', this._sideViewEnabled());
+		this.bind('sideViewEnabled', this._sideViewEnabled);
+		/**@property sideViewEnabledInfo attr('sideViewEnabledInfo')
+		 * @readonly */ // TODO: how to document this?
+		this.attr('sideViewEnabledInfo', "This will display the Match Window on the left edge of the screen instead of the top edge");
+
+		// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
+		//this.bind('hotkeys', SettingsModel.getHotKeys()); // TODO: Hotkey Änderung binden??
 
 	},
 	/** @private */
 	_server: function (ev, newVal, oldVal) {
 		if (newVal == undefined)return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION);
-		if (newVal !== oldVal) {localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
+		if (newVal !== oldVal) {
+			localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
 			localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
 		}
 	},
@@ -115,12 +132,15 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 			localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
 		}
 	},
+	/** @private */
 	_hideHomeAtStart: function (ev, newVal, oldVal) {
 		if (newVal == undefined) {
 			return this.hideHomeAtStart();
 		}
-		if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_HOME_AT_START, newVal);
+		if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_HOME_AT_START);
+		else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_HOME_AT_START, newVal);
 	},
+	/** @private */
 	_startMatchCollapsed: function (ev, newVal, oldVal) {
 		if (newVal == undefined) {
 			debugger;
@@ -130,10 +150,17 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 		if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED);
 		else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED, newVal);
 	},
-	// Todo: need??
-	//clearSummonerId: function () {
-	//	return localStorage.removeItem(SettingsModel.STORAGE_KEY_ID)
-	//},
+	/** @private */
+	_sideViewEnabled: function (ev, newVal, oldVal) {
+		if (newVal == undefined) {
+			debugger;
+			return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true';
+		}
+		// localstorage entry gets removed for falsy statement
+		if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE);
+		else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE, newVal);
+	},
+	// TODO: make these static
 	isSummonerSet: function () {
 		return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
 	},
@@ -166,11 +193,19 @@ var SettingsModel = can.Model.extend('SettingsModel', {
 		});
 		return deferred.promise();
 	},
+	/**
+	 * rturns a new instance with all the .attr() copied into it
+	 * @return {SettingsModel}
+	 */
 	clone: function () {
 		var data = this.attr();
 		delete data[this.constructor.id];
 		return new this.constructor(data);
 	},
+	/**
+	 * sets all attr() from the given Model in this instance
+	 * @param settingsModel
+	 */
 	copyFrom: function (settingsModel) {
 		for (var attrKey in settingsModel.attr()) {
 			debugger;
