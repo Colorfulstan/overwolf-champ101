@@ -1,7 +1,7 @@
 "use strict";
 steal(
 	'global.js'
-	, function (global) {
+	, function () {
 
 		var ImageModel = can.Model.extend('ImageModel', {}, {
 			init: function (options) {

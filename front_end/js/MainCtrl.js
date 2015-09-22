@@ -4,60 +4,68 @@ steal(
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
 	, function (can
-		, /**WindowCtrl*/ WindowCtrl
-		, /**SettingsModel*/ SettingsModel
-		) {
+		, /** WindowCtrl */ WindowCtrl
+		, /**SettingsModel*/ SettingsModel) {
 
 		/**
-		 * An Object containing the "Main" view. (main.html / main.js)
-		 * Represents the Main crossing point for the components of the app
-		 * as it initiates and manages the controllers.
-		 * @inheritDoc WindowCtrl
+		 * @class {MainCtrl} MainCtrl
+		 * @extends WindowCtrl
+		 * @constructor {@link MainCtrl.init}
 		 */
-		var MainCtrl = WindowCtrl.extend({
-			defaults: {
-				name: 'Main'
-				, matchBtn: '.btn-match'
-				, hideHomeCB: '#hideHome'
-				, settingsTmpl: '#settings-tmpl'
-			},
-			/** will be set to true when main.start() got called */
-			gameStarted: function (result) {
-				return result.gameInfo !== null &&
-					result.gameInfo.title == "League of Legends" &&
-					result.gameChanged;
-				// gamechanged indiziert das Game gestartet wurde
-			},
-			gameFinished: function (result) {
-				return result.gameInfo !== null &&
-					result.gameInfo.title == "League of Legends" &&
-					result.runningChanged;
-				// runningchanged indiziert, dass Game beendet wurde
-			}
-		}, { // Instance
-			init: function () {
-				WindowCtrl.prototype.init.apply(this, arguments);
-
-				debugger;
-				this.element.find('#content').append(
-					can.view(this.options.settingsTmpl, new SettingsModel())
-				);
-				steal.dev.log('MainCtrl initialized :', this);
-			}
-			, start: function (isSummonerSet) {
-				var self = this;
-				$.when(this.constructor.open('Main')).then(function (ow_window) {
-					self.ow_window = ow_window;
-				});
-
-				if (!isSummonerSet) {
-					this.constructor.openSettings();
+		var MainCtrl = WindowCtrl.extend(
+			/** @lends MainCtrl */
+			{
+				defaults: {
+					name: 'Main'
+					, matchBtn: '.btn-match'
+					, hideHomeCB: '#hideHome'
+					, settingsTmpl: '#settings-tmpl'
+				},
+				/** @param {GameInfoChangeData} changeData
+				 * @returns {bool} */
+				gameStarted: function (changeData) {
+					return changeData.gameInfo !== null &&
+						changeData.gameInfo.title == "League of Legends" &&
+						changeData.gameChanged; // gamechanged indicates that Game just started
+				},
+				/**
+				 * @param {GameInfoChangeData} changeData
+				 * @returns {bool}
+				 * */
+				gameFinished: function (changeData) {
+					return changeData.gameInfo !== null &&
+						changeData.gameInfo.title == "League of Legends" &&
+						changeData.runningChanged; // runningchanged indicates that Game just finished
 				}
 			},
-			'{matchBtn} mousedown': function (el, ev) {
-				steal.dev.log('WindowCtrl: open match');
-				this.constructor.openMatch(SettingsModel.sideViewEnabled());
-			}
-		});
+			/** @lends MainCtrl */
+			{ // Instance
+				/**
+				 * @constructs {MainCtrl}
+				 */
+				init: function () {
+					WindowCtrl.prototype.init.apply(this, arguments);
+
+					debugger;
+					this.element.find('#content').append(
+						can.view(this.options.settingsTmpl, new SettingsModel())
+					);
+					steal.dev.log('MainCtrl initialized :', this);
+				}
+				, start: function (isSummonerSet) {
+					var self = this;
+					$.when(this.constructor.open('Main')).then(function (/**ODKWindow*/ odkWindow) {
+						self.odkWindow = odkWindow;
+					});
+
+					if (!isSummonerSet) {
+						this.constructor.openSettings();
+					}
+				},
+				'{matchBtn} mousedown': function (el, ev) {
+					steal.dev.log('WindowCtrl: open match');
+					this.constructor.openMatch(SettingsModel.sideViewEnabled());
+				}
+			});
 		return MainCtrl;
 	});

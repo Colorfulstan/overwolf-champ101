@@ -3,7 +3,12 @@ steal(
 	'ChampionModel.js'
 	, function (/**ChampionModel*/ ChampionModel) {
 
+		/**
+		 * @class
+		 * @constructor {@link MatchDAO.init}
+		 */
 		var MatchDAO = can.Construct.extend('MatchDAO', {}, {
+			/** @constructs */
 			init: function () {
 			},
 			/**

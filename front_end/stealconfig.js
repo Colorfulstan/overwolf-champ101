@@ -25,6 +25,10 @@ System.config({
 		'WindowCtrl': './js/WindowCtrl.js',
 		'global': './js/Utility/global.js',
 		'MainCtrl': './js/MainCtrl.js',
-		'FeedbackCtrl': './js/feedback/FeedbackCtrl.js'
+		'FeedbackCtrl': './js/feedback/FeedbackCtrl.js',
+
+
+		'steal-jasmine': './node_modules/steal-jasmine/steal-jasmine.js',
+		'jasmine-core/*': './node_modules/jasmine-core/*.js'
 	}
 });
