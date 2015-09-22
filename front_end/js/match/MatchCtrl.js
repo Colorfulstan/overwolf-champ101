@@ -175,16 +175,18 @@ var MatchCtrl = WindowCtrl.extend({
 
 	// Eventhandler
 	'{appBar} mousedown': function (appBar, ev) {
-		this.togglePanels(appBar);
+		if (ev.which == 1) this.togglePanels(appBar);
 	},
 	'{reloadBtn} mousedown': function ($el, ev) {
-		delete this.options.settings;
-		this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
-		this.options.model.attr('server', this.options.settings._server());
-		this.options.model.attr('summonerId', this.options.settings._summonerId());
+		if (ev.which == 1){
+			delete this.options.settings;
+			this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
+			this.options.model.attr('server', this.options.settings._server());
+			this.options.model.attr('summonerId', this.options.settings._summonerId());
 
-		this.loadMatch(this.options.model);
-		ev.stopPropagation();
+			this.loadMatch(this.options.model);
+			ev.stopPropagation();
+		}
 	},
 	'{toggleAllRoute} route': function (routeData) {
 		steal.dev.log('toggle/all route');
