@@ -8,7 +8,7 @@
   margin-bottom: -2px; // visual compensation for 1px at app-bar
 }
 
-$app-bar-height: $spacer;
+$app-bar-height: 30px;
 #match-app-bar {
   left: 32%;
   width: 36%;
@@ -50,7 +50,7 @@ $app-bar-height: $spacer;
 
   .app-buttons {
     display: none;
-    width: $spacer*4;
+    width: 120px;
     margin-top: 5px;
   }
 }
@@ -95,7 +95,7 @@ $app-bar-height: $spacer;
     background-color: $color-bg;
     overflow: hidden;
     p {
-      font-size: $spacer;
+      font-size: 30px;
       text-align: center;
 //      width: 100%;
     }

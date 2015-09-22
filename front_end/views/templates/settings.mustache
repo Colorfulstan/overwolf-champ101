@@ -1,11 +1,11 @@
 <div class="col-sm-6">
-	<ul class="padded-bot-half">
-		<li><i class="fa fa-info-circle pull-left padded-right"></i>
+	<ul class="padded-bot">
+		<li><i class="fa fa-info-circle pull-left padded-right-2"></i>
 
 			<p>To receive any data for your game you need to set your summoner name and the server you play on.
 			</p>
 		</li>
-		<li><i class="fa fa-exclamation-triangle pull-left padded-right"></i>
+		<li><i class="fa fa-exclamation-triangle pull-left padded-right-2"></i>
 
 			<p>Your summoner name is the name displayed within the game, not your account name. We will never ask you
 			   about your password or account name
@@ -36,13 +36,13 @@
 				<option value="PBE">PBE</option>
 			</select></div>
 		<div class="row">
-			<div class="padded-bot padded-top">
+			<div class="padded-bot-2 padded-top-2">
 				<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
 				<label for="hideHome">Don't show main window at startup
 					<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a></label>
 			</div>
 		</div>
-		<div class="padded-top">
+		<div class="padded-top-2">
 			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
 			<div id="btn-cancel" class="btn col-xs-6 failed"><i class="fa fa-times"></i></div>
 		</div>
@@ -53,7 +53,7 @@
 <div class="col-sm-5">
 	<div class="col-xs-8 col-xs-offset-2 col-sm-12 col-sm-offset-0">
 		<ul>
-			<li><i class="fa fa-info-circle pull-left padded-right-half"></i>
+			<li><i class="fa fa-info-circle pull-left padded-right"></i>
 
 				<p>Hotkeys only work from within the game.</p>
 			</li>
@@ -68,9 +68,9 @@
 			{{#hotkeys}}
 				<tr>
 					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-						   class="padded-top-half padded-bot-half">{{ title }}</a></td>
+						   class="padded-top padded-bot">{{ title }}</a></td>
 					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-						   class="padded-top-half padded-bot-half">{{ string }}</a></td>
+						   class="padded-top padded-bot">{{ string }}</a></td>
 				</tr>
 			{{/hotkeys}}
 			</tbody>

@@ -1,18 +1,21 @@
 <div class="table">
 	<div class="col-xs-6 padded-right line-right">
-		<h2 class="spell-name">{{name}}</h2>
+		<div class="padded-right">
+			<h2 class="spell-name">{{name}}</h2>
 
-		<p class="spell-description text-body">
-			{{#tooltip}}{{{.}}}{{/tooltip}}
-			{{^tooltip}}{{{description}}}{{/tooltip}}
-		</p>
+			<p class="spell-description text-body">
+				{{#tooltip}}{{{.}}}{{/tooltip}}
+				{{^tooltip}}{{{description}}}{{/tooltip}}
+			</p>
+		</div>
 	</div>
 	<div class="col-xs-6 padded-left line-left collapse-border-left">
-		<div class="spell-values row">
-			<table class="spell-values-table">
+		<div class="padded-left">
+			<div class="spell-values row">
+			<table class="spell-values-table padded-bot">
 				<tbody>
 				{{#cooldownBurn}} <tr> <td>Cooldown</td> <td>{{.}}</td> </tr> {{/cooldownBurn}}
-				{{#costBurn}} <tr> <td>Cost</td> <td>{{.}} {{costType}}</td> </tr> {{/costBurn}}
+				{{#costBurn}} <tr class="{{costType}}"> <td>Cost</td> <td>{{.}}</td> </tr> {{/costBurn}}
 				{{#rangeBurn}} <tr> <td>Range</td> <td>{{.}}</td> </tr> {{/rangeBurn}}
 				</tbody>
 			</table>
@@ -21,5 +24,6 @@
 		<div id="spell-video-container" class="row">
 		</div>
 		{{ /videoAvailable }}
+		</div>
 	</div>
 </div>

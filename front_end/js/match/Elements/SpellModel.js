@@ -1,6 +1,7 @@
 "use strict";
 var can = require('can');
 var ImageModel = require('ImageModel');
+var TooltipCtrl = require('TooltipCtrl');
 require('global');
 
 /** * // TODO: add more from backend and doc here
@@ -8,81 +9,6 @@ require('global');
  * @see SpellModel.init()
  * */
 var SpellModel = can.Model.extend('SpellModel', {
-	/**
-	 *
-	 * @param string
-	 * @param effect
-	 * @param vars
-	 * @return {*}
-	 */
-	tooltipValued: function (string, effect, vars) {
-		var ttNew = string;
-		var pattern;
-
-
-		/**
-		 * builds a string from an array - x / y / z / ... / or a single value if all values are the same.
-		 * @param valuesArr
-		 * @return {string}
-		 */
-		function buildValueString(valuesArr) {
-			var max = valuesArr.length - 1;
-			var allTheSame = (valuesArr[0] == valuesArr[max]);
-			var k = 0;
-			if (allTheSame) k = max; // don't include doubling values
-			var string = "";
-			for (k; k <= max; k++) {
-				string += valuesArr[k] + ' / ';
-			}
-			string = string.substring(0, string.length - 2);
-			return string;
-		}
-
-		/* vars
-		 * {{ aX }} are always within the vars Array.
-		 * sometimes {{ fX }} are found there too, sometimes {{ fX }} refers to the effects / effectsBurn Array
-		 * so we first check the certain keys within vars and replace them.
-		 * After that, we replace the {{ eX }} variables since those are unambiguosly within the effects / effectsBurn Array.
-		 * If after that still {{ fX }} remain, they will be replaced through the effects / effectsBurn Array.
-		 */
-		if (vars) {
-			for (var j = 0; j < vars.length; j++) {
-				// TODO: remove spans or give them classes
-				var valueString = "";
-				var link = vars[j].link;
-				if (vars[j].coeff) {
-					valueString = buildValueString(vars[j].coeff);
-				}
-				if (link == "@ignore") {
-					valueString = "";
-					link = ""
-				} // Value has no Meaning but might still be included!
-
-				pattern = new RegExp('{{ ' + vars[j].key + ' }}', 'g');
-				ttNew = ttNew.replace(pattern, '<span style="color:yellow">' + valueString + link + '</span>');
-			}
-		}
-
-		// effects
-		if (effect) {
-			for (var i = 1; i < effect.length; i++) {
-				// {{ eX }} always referring to the effect / effectBurn Array
-				pattern = new RegExp('{{ e' + i + ' }}', 'g');
-
-				var effectValues = effect[i];
-				if (effectValues == null) { continue }
-				var effectString = buildValueString(effectValues);
-				ttNew = ttNew.replace(pattern, '<span style="color:red">' + effectString + '</span>');
-
-				// {{ fX }} was not found within the vars array, the achording index within effects / effectsburn will be used
-				// sometimes instead of {{ eX }} used eg Sona
-				pattern = new RegExp('{{ f' + i + ' }}', 'g');
-				ttNew = ttNew.replace(pattern, '<span style="color:green">' + effectString + '</span>');
-			}
-		}
-
-		return ttNew;
-	}
 }, {
 	/**
 	 * @param options.name {String}
@@ -135,7 +61,8 @@ var SpellModel = can.Model.extend('SpellModel', {
 		}
 
 		if (options.tooltip != null && options.tooltip != undefined) {
-			this.attr('tooltip', SpellModel.tooltipValued(options.tooltip, options.effect, options.vars));
+			// TODO: does this have to know TooltipCtrl to get the valued Tooltip?
+			this.attr('tooltip', TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars));
 		}
 	},
 

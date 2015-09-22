@@ -39,6 +39,82 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 		tooltipChampionRoute: Routes.tooltipChampion,
 		tooltipHideRoute: Routes.tooltipHide,
 		tooltipSpellRoute: Routes.tooltipSpell
+	},
+
+	/**
+	 * TODO: is this the right place for this?
+	 * @param string
+	 * @param effect
+	 * @param vars
+	 * @return {*}
+	 */
+	tooltipValued : function (string, effect, vars) {
+		var ttNew = string;
+		var pattern;
+
+
+		/**
+		 * builds a string from an array - x / y / z / ... / or a single value if all values are the same.
+		 * @param valuesArr
+		 * @return {string}
+		 */
+		function buildValueString(valuesArr) {
+			var max = valuesArr.length - 1;
+			var allTheSame = (valuesArr[0] == valuesArr[max]);
+			var k = 0;
+			if (allTheSame) k = max; // don't include doubling values
+			var string = "";
+			for (k; k <= max; k++) {
+				string += valuesArr[k] + ' / ';
+			}
+			string = string.substring(0, string.length - 2);
+			return string;
+		}
+
+		// TODO: include this explanation within collection-thread in riot dev forum
+		/* vars (represent scaling-values)
+		 * {{ aX }} are always within the vars Array.
+		 * sometimes {{ fX }} are found there too, sometimes {{ fX }} refers to the effects / effectsBurn Array
+		 * so we first check the certain keys within vars and replace them.
+		 * After that, we replace the {{ eX }} variables since those are unambiguosly within the effects / effectsBurn Array.
+		 * If after that still {{ fX }} remain, they will be replaced through the effects / effectsBurn Array.
+		 */
+		if (vars) {
+			for (var j = 0; j < vars.length; j++) {
+				var valueString = "";
+				var link = vars[j].link;
+				if (vars[j].coeff) {
+					valueString = buildValueString(vars[j].coeff);
+				}
+				if (link == "@ignore") {
+					valueString = "";
+					link = ""
+				} // Value has no Meaning but might still be included!
+
+				pattern = new RegExp('{{ ' + vars[j].key + ' }}', 'g');
+				ttNew = ttNew.replace(pattern, '<span class="scaling-values">' + valueString + link + '</span>');
+			}
+		}
+
+		// effects
+		if (effect) {
+			for (var i = 1; i < effect.length; i++) {
+				// {{ eX }} always referring to the effect / effectBurn Array
+				pattern = new RegExp('{{ e' + i + ' }}', 'g');
+
+				var effectValues = effect[i];
+				if (effectValues == null) { continue }
+				var effectString = buildValueString(effectValues);
+				ttNew = ttNew.replace(pattern, '<span class="effect-e-values">' + effectString + '</span>');
+
+				// {{ fX }} was not found within the vars array, the achording index within effects / effectsburn will be used.
+				// sometimes this is used instead of {{ eX }} (eg Sona)
+				pattern = new RegExp('{{ f' + i + ' }}', 'g');
+				ttNew = ttNew.replace(pattern, '<span class="effect-f-values">' + effectString + '</span>');
+			}
+		}
+
+		return ttNew;
 	}
 }, {
 	/**
@@ -98,7 +174,6 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl', {
 			var cssClass = this.className;
 			if (cssClass && cssClass.indexOf('color') == 0){
 				this.style.color = '#' + cssClass.substr(5);
-				steal.dev.log('css color set to:', '#' + cssClass.substr(5));
 				$(this).removeClass(cssClass);
 			}
 		});

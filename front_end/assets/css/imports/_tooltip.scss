@@ -15,7 +15,67 @@
   &:hover, &:active, &:focus {
     opacity: 1;
   }
-}
+
+  // values replacing out of vars array
+  .scaling-values {
+    color: inherit;
+  }
+  // values replacing { eX }
+  .effect-e-values {
+    color: inherit;
+    font-weight: bold;
+  }
+  // values replacing { fX } when not found within vars Array
+  .effect-f-values {
+    color: inherit;
+    font-weight: bold;
+  }
+
+  .spell-values-table {
+    margin-bottom: $spacer;
+    td {
+      padding-top: $spacer/2;
+      padding-bottom: $spacer/2;
+    }
+
+    tr {
+
+      // costType classes set through API response costType value
+      &.NoCost, &.none {
+        display: none;
+      }
+      &[class*="Health"] { // TODO: check this with Zac / Mundo
+        td:last-child {
+          color: $color-ressource-health;
+        }
+      }
+      &[class*="Mana"] {
+        td:last-child {
+          color: $color-ressource-mana;
+        }
+      }
+      &[class*="Energy"] {
+        td:last-child {
+          color: $color-ressource-energy;
+        }
+      }
+      // TODO: use "ressource" string provided instead!?
+      &[class*="perSecond"] {
+        td:last-child:after {
+          display: inline;
+          content: ' per second';
+        }
+      }
+      &[class*="10pMaxHealth"] {
+        td:last-child:after {
+          display: inline;
+          content: ', 10% max health';
+          color: $color-ressource-health;
+        }
+      }
+    } // tr
+  } // .spell-values-table
+} // #tooltip-container
 
 
 #spell-video-container {

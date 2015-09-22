@@ -147,41 +147,51 @@
   background: #0372a5; }
 
 .purple {
-  background: #a02a1f; }
+  background: #ac2e1a; }
 
 .vertical-center {
   transform: translateY(45%); }
 
 .padded {
-  padding: 30px; }
+  padding: 15px; }
   .padded-left {
-    padding-left: 30px; }
+    padding-left: 15px; }
     .padded-left-0 {
       padding-left: 0; }
     .padded-left-half {
-      padding-left: 15px; }
+      padding-left: 7.5px; }
+    .padded-left-2 {
+      padding-left: 30px; }
   .padded-right {
-    padding-right: 30px; }
+    padding-right: 15px; }
     .padded-right-0 {
       padding-right: 0; }
     .padded-right-half {
-      padding-right: 15px; }
+      padding-right: 7.5px; }
+    .padded-right-2 {
+      padding-right: 30px; }
   .padded-top {
-    padding-top: 30px; }
+    padding-top: 15px; }
     .padded-top-0 {
       padding-top: 0; }
     .padded-top-half {
-      padding-top: 15px; }
+      padding-top: 7.5px; }
+    .padded-top-2 {
+      padding-top: 30px; }
   .padded-bot {
-    padding-bottom: 30px; }
+    padding-bottom: 15px; }
     .padded-bot-0 {
       padding-bottom: 0; }
     .padded-bot-half {
-      padding-bottom: 15px; }
+      padding-bottom: 7.5px; }
+    .padded-bot-2 {
+      padding-bottom: 30px; }
   .padded-0 {
     padding: 0; }
   .padded-half {
-    padding: 15px; }
+    padding: 7.5px; }
+  .padded-2 {
+    padding: 30px; }
 
 .line-right {
   border-right: 1px solid #eee; }
@@ -10039,6 +10049,34 @@ i.fa {
   display: none; }
   #tooltip-container:hover, #tooltip-container:active, #tooltip-container:focus {
     opacity: 1; }
+  #tooltip-container .scaling-values {
+    color: inherit; }
+  #tooltip-container .effect-e-values {
+    color: inherit;
+    font-weight: bold; }
+  #tooltip-container .effect-f-values {
+    color: inherit;
+    font-weight: bold; }
+  #tooltip-container .spell-values-table {
+    margin-bottom: 15px; }
+    #tooltip-container .spell-values-table td {
+      padding-top: 7.5px;
+      padding-bottom: 7.5px; }
+    #tooltip-container .spell-values-table tr.NoCost, #tooltip-container .spell-values-table tr.none {
+      display: none; }
+    #tooltip-container .spell-values-table tr[class*="Health"] td:last-child {
+      color: #ac2e1a; }
+    #tooltip-container .spell-values-table tr[class*="Mana"] td:last-child {
+      color: #3c77ff; }
+    #tooltip-container .spell-values-table tr[class*="Energy"] td:last-child {
+      color: #e4e35f; }
+    #tooltip-container .spell-values-table tr[class*="perSecond"] td:last-child:after {
+      display: inline;
+      content: ' per second'; }
+    #tooltip-container .spell-values-table tr[class*="10pMaxHealth"] td:last-child:after {
+      display: inline;
+      content: ', 10% max health';
+      color: #ac2e1a; }
 
 #champion-container {
   height: auto;
@@ -10108,9 +10146,9 @@ i.fa {
     .champion-panel.blue .champion-spell:after {
       color: #0372a5; }
   .champion-panel.purple {
-    background-color: #a02a1f; }
+    background-color: #ac2e1a; }
     .champion-panel.purple .champion-spell:after {
-      color: #a02a1f; }
+      color: #ac2e1a; }
   .champion-panel .passive {
     width: 48px;
     height: 48px;
@@ -10335,7 +10373,8 @@ select {
 * {
   overflow: hidden;
   color: #fff;
-  font-family: 'Roboto'; }
+  font-family: 'Roboto';
+  letter-spacing: 0.02em; }
 
 html {
   font-size: 14px;
@@ -10379,7 +10418,7 @@ body#settings, body#main, body#feedback {
   background-color: rgba(6, 16, 19, 0.9); }
 
 ul li {
-  padding-top: 15px;
+  padding-top: 7.5px;
   line-height: 1.3rem; }
   ul li .fa {
     padding-top: 2px; }
