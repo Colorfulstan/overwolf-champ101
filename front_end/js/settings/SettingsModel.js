@@ -149,7 +149,6 @@ steal(
 			/** @private */
 			_startMatchCollapsed: function (ev, newVal, oldVal) {
 				if (newVal == undefined) {
-					debugger;
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED) == 'true';
 				}
 				// localstorage entry gets removed for falsy statement
@@ -159,7 +158,6 @@ steal(
 			/** @private */
 			_sideViewEnabled: function (ev, newVal, oldVal) {
 				if (newVal == undefined) {
-					debugger;
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true';
 				}
 				// localstorage entry gets removed for falsy statement
@@ -214,7 +212,6 @@ steal(
 			 */
 			copyFrom: function (settingsModel) {
 				for (var attrKey in settingsModel.attr()) {
-					debugger;
 					this.attr(attrKey, settingsModel.attr(attrKey));
 				}
 			}

@@ -80,7 +80,6 @@ steal(
 				}, 1);
 			},
 			addCloseAllBtn: function () {
-				debugger;
 				$('#close-all-btn').removeClass('hidden')
 			},
 			removeCloseAllBtn: function () {
@@ -112,7 +111,6 @@ steal(
 			},
 			removePanelById: function (id) { // TODO: currently unused - maybe useful if new panel after max is added on the end and first one gets removed
 				var panel = this.options.panels.splice(id, 1)[0];
-				debugger;
 				if (this.options.panels.length <= 1) {
 					this.removeCloseAllBtn();
 				}
@@ -120,7 +118,6 @@ steal(
 			},
 			/** * @param team 'blue' or 'purple' */
 			showTeam: function (team) {
-				debugger;
 				var self = this;
 				self.closeAllPanels();
 				var teamList = new can.List();
@@ -182,7 +179,6 @@ steal(
 			},
 
 			'.spell mouseenter': function ($el, ev) {
-				debugger;
 				var $panel = this.mouseenterHandler($el);
 				can.route.attr({
 					route: Routes.tooltipSpell,

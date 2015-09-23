@@ -31,7 +31,6 @@ steal(
 				$.when(self.constructor.open('Settings')).then(function ( /**ODKWindow*/ odkWindow) {
 					self.odkWindow = odkWindow;
 				});
-				debugger;
 				this.element.find('#content').html(
 					can.view(self.options.settingsTmpl, self.options.settings)
 				);
@@ -46,7 +45,6 @@ steal(
 					&& self.options.settingsBackup.attr('summonerName') == settings.attr('summonerName')
 					&& settings.attr('summonerName') != "---" // testing string
 				) {	// no change - spare the request
-					debugger;
 					self.constructor.close(self.odkWindow.name);
 				} else {
 					$.get(

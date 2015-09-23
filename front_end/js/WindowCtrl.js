@@ -162,12 +162,12 @@ steal(
 
 					$.when(this.open('Match')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openMatch: ", odkWindow);
-						var x = self.getCenteredX(odkWindow.width), y = 0;
-						if (SettingsModel.sideViewEnabled()) {
-							x = 0;
-							y = 200;
-						}
-						overwolf.windows.changePosition(odkWindow.id, x, y);
+						//var x = self.getCenteredX(odkWindow.width), y = 0;
+						//if (SettingsModel.sideViewEnabled()) {
+						//	x = 0;
+						//	y = 200;
+						//}
+						//overwolf.windows.changePosition(odkWindow.id, x, y);
 					});
 				},
 				/** closes the Match-Window */

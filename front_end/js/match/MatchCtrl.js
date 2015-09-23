@@ -59,23 +59,21 @@ steal('can.js'
 					var self = this;
 					WindowCtrl.prototype.init.apply(self, arguments);
 
-					//overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** ODKWindow */ result) {
-					//	self.options.odkWindow = result.window;
-					//
-					//	var x = self.constructor.getCenteredX(self.options.odkWindow.width), y = 0;
-					//	if (SettingsModel.sideViewEnabled()) {
-					//		x = 0;
-					//		y = 200;
-					//	}
-					//	overwolf.windows.changePosition(self.options.name, x, y);
+					overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
+						self.options.odkWindow = result.window;
+debugger;
+						var x = self.constructor.getCenteredX(self.options.odkWindow.width), y = 0;
+						if (SettingsModel.sideViewEnabled()) {
+							x = 0;
+							y = 200;
+						}
+						overwolf.windows.changePosition(self.options.odkWindow.id, x, y);
 
 						self.initAppBar(SettingsModel.sideViewEnabled());
 
 						options.model.attr('summonerId', options.settings.attr('summonerId'));
 						options.model.attr('server', options.settings.attr('server'));
-						debugger;
 						if (options.settings.attr('startMatchCollapsed')) {
-							debugger;
 							self.hidePanels();
 							$(self.options.handle).addClass(self.options.handleAnimationClass);
 							$(self.options.appBar).addClass(self.options.animatedHandleClass);
@@ -88,7 +86,7 @@ steal('can.js'
 						// After successfully loading the Match-Data
 						self.loadMatch(options.model)
 
-					//});
+					});
 
 				},
 				/**
@@ -123,7 +121,6 @@ steal('can.js'
 					var deferred = $.Deferred();
 
 					var self = this;
-					debugger;
 
 					var name = this.options.settings.attr('summonerName');
 					self.options.$overviewContainer.html(can.view(this.options.loadingTmpl, {summonerName: name}));
@@ -165,7 +162,6 @@ steal('can.js'
 						.then(function (matchModel) {
 							deferred.resolve(matchModel);
 							self.options.$overviewContainer.removeClass('loading');
-							debugger;
 							// Controller for Overview-Panel
 							self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
 							// Controller for Champion-Panels
@@ -184,7 +180,6 @@ steal('can.js'
 					return deferred.promise();
 				},
 				togglePanels: function (appBar) {
-					debugger;
 					if ($(appBar).hasClass('collapsed')) {
 						$(this.options.handle).removeClass(this.options.handleAnimationClass);
 						$(appBar).removeClass(this.options.animatedHandleClass);
