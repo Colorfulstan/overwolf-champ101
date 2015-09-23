@@ -8,12 +8,12 @@ steal(
 		, /**SettingsModel*/ SettingsModel) {
 
 		/**
-		 *
 		 * Provides basic Window-Interaction Methods and Eventhandler for common Elements
 		 * Like dragging / resizing, closing, etc.
+		 * @class
 		 * @abstract
 		 * @static
-		 * @class {WindowCtrl} WindowCtrl
+		 * @typedef {can.Control} WindowCtrl
 		 * @extends {can.Control}
 		 * @constructor {@link WindowCtrl.init}
 		 */
@@ -37,32 +37,6 @@ steal(
 				SCREEN_WIDTH: window.screen.availWidth,
 				/**@static*/
 				SCREEN_HEIGHT: window.screen.availHeight,
-
-
-				/** Register handlers for window-events here
-				 * @static*/
-				registerOverwolfHandlers: function () {
-					var self = this;
-					overwolf.windows.onStateChanged.addListener(function (/** WindowStateChangeData */ result) {
-						steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
-					});
-					overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) {
-						steal.dev.log('debug', "MainCtrl - overwolf.windows.onMainWindowRestored:", result);
-					});
-					overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
-						steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
-						if (self.gameStarted(result)) {
-							localStorage.setItem('lock_getCachedGame', "1"); // TODO: move into Settings
-							steal.dev.warn('League of Legends game started', new Date());
-							self.openMatch(SettingsModel.sideViewEnabled());
-						}
-						if (self.gameFinished(result)) {
-							localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
-							steal.dev.warn('League of Legends game finished', new Date());
-							self.closeMatch()
-						}
-					});
-				},
 
 				/**@static*/
 				getCenteredX: function (winWidth) {
@@ -226,10 +200,10 @@ steal(
 				,
 
 				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left Mousebutton
 				 * @param $el
 				 * @param ev
 				 *
-				 * @listens MouseEvent#mousedown for the left Mousebutton
 				 * @see WindowCtrl.defaults.closeBtn
 				 */
 				'{closeBtn} mousedown': function ($el, ev) {
@@ -240,9 +214,9 @@ steal(
 				}
 				,
 				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown
 				 * @param $el
 				 * @param ev
-				 * @listens MouseEvent#mousedown
 				 * @see WindowCtrl.defaults.resizeBtn*/
 				'{resizeBtn} mousedown': function ($el, ev) {
 					this.constructor.dragResize(this.options.name, 'BottomRight');
@@ -250,9 +224,9 @@ steal(
 				}
 				,
 				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown
 				 * @param $el
 				 * @param ev
-				 * @listens MouseEvent#mousedown
 				 * @see WindowCtrl.defaults.minimizeBtn*/
 				'{minimizeBtn} mousedown': function ($el, ev) {
 					steal.dev.log('WindowCtrl: minimize window');
@@ -261,9 +235,9 @@ steal(
 				}
 				,
 				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left MouseButton
 				 * @param $el
 				 * @param ev
-				 * @listens MouseEvent#mousedown for the left MouseButton
 				 * @see WindowCtrl.defaults.settingsBtn*/
 				'{settingsBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
@@ -274,9 +248,9 @@ steal(
 				}
 				,
 				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left MouseButton
 				 * @param $el
 				 * @param ev
-				 * @listens MouseEvent#mousedown for the left MouseButton
 				 * @see WindowCtrl.defaults.homeBtn*/
 				'{homeBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
