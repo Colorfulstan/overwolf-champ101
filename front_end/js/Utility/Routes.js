@@ -2,6 +2,12 @@
 steal(
 	'can'
 	, function (/**can*/ can) {
+		/**
+		 * @class {Routes} Routes
+		 * @static
+		 * @readonly
+		 * @typedef {Object} Routes
+		 * */
 		var Routes = {
 			// TooltipCtrl
 			tooltipChampion: 'tooltip/champ/:champ',
@@ -31,6 +37,7 @@ steal(
 			refreshWindow: 'refresh/:window',
 			toggleWindow: 'toggle/:window',
 
+			/** initializes all available routes and calls can.route.ready() */
 			ready: function () {
 
 				// TooltipCtrl
