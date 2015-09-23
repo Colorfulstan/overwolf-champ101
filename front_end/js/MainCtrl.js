@@ -8,12 +8,12 @@ steal(
 		, /**SettingsModel*/ SettingsModel) {
 
 		/**
-		 * @class {MainCtrl} MainCtrl
+		 * The WindowController for the main window ( main.js / main.html )
+		 * @class {MainCtrl}
 		 * @extends WindowCtrl
 		 * @constructor {@link MainCtrl.init}
 		 */
 		var MainCtrl = WindowCtrl.extend(
-			/** @lends MainCtrl */
 			{
 				defaults: {
 					name: 'Main'
@@ -21,8 +21,38 @@ steal(
 					, hideHomeCB: '#hideHome'
 					, settingsTmpl: '#settings-tmpl'
 				},
-				/** @param {GameInfoChangeData} changeData
-				 * @returns {bool} */
+
+				/** Register handlers for window-events here
+				 * @memberOf {MainCtrl}
+				 * @static*/
+				registerOverwolfHandlers: function () {
+					debugger;
+					var self = this;
+					overwolf.windows.onStateChanged.addListener(function (/** WindowStateChangeData */ result) {
+						steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
+					});
+					overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) {
+						steal.dev.log('debug', "MainCtrl - overwolf.windows.onMainWindowRestored:", result);
+					});
+					overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
+						steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
+						if (self.gameStarted(result)) {
+							localStorage.setItem('lock_getCachedGame', "1"); // TODO: move into Settings
+							steal.dev.warn('League of Legends game started', new Date());
+							self.openMatch();
+						}
+						if (self.gameFinished(result)) {
+							localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
+							steal.dev.warn('League of Legends game finished', new Date());
+							self.closeMatch()
+						}
+					});
+				},
+				/**
+				 * @param {GameInfoChangeData} changeData
+				 * @returns {bool} true if a game has been started, according to the given data
+				 * @see MainCtrl.registerOverwolfHandlers method gets called there through overwolf-handlers
+				 * */
 				gameStarted: function (changeData) {
 					return changeData.gameInfo !== null &&
 						changeData.gameInfo.title == "League of Legends" &&
@@ -30,7 +60,8 @@ steal(
 				},
 				/**
 				 * @param {GameInfoChangeData} changeData
-				 * @returns {bool}
+				 * @returns {bool} true if a game has been finished, according to the given data
+				 * @see MainCtrl.registerOverwolfHandlers method gets called there through overwolf-handlers
 				 * */
 				gameFinished: function (changeData) {
 					return changeData.gameInfo !== null &&
@@ -38,11 +69,9 @@ steal(
 						changeData.runningChanged; // runningchanged indicates that Game just finished
 				}
 			},
-			/** @lends MainCtrl */
 			{ // Instance
-				/**
-				 * @constructs {MainCtrl}
-				 */
+				/** @constructs
+				 * @see MainCtrl.start opening of the Window separated into start() to enable more detailed control over the start of the app */
 				init: function () {
 					WindowCtrl.prototype.init.apply(this, arguments);
 
@@ -51,7 +80,13 @@ steal(
 					);
 					steal.dev.log('MainCtrl initialized :', this);
 				}
-				, start: function (isSummonerSet) {
+				,
+
+				/**
+				 * Opens the Main Window and SettingsWindow if Summoner is not set
+				 * @param isSummonerSet
+				 */
+				start: function (isSummonerSet) {
 					var self = this;
 					$.when(this.constructor.open('Main')).then(function (/**ODKWindow*/ odkWindow) {
 						self.odkWindow = odkWindow;
@@ -61,9 +96,15 @@ steal(
 						this.constructor.openSettings();
 					}
 				},
+				/**
+				 *
+				 * calls {@link WindowCtrl.openMatch}
+				 * @param el
+				 * @param ev
+				 */
 				'{matchBtn} mousedown': function (el, ev) {
 					steal.dev.log('WindowCtrl: open match');
-					this.constructor.openMatch(SettingsModel.sideViewEnabled());
+					this.constructor.openMatch();
 				}
 			});
 		return MainCtrl;
