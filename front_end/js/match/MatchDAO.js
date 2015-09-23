@@ -25,7 +25,6 @@ steal(
 
 				var params = {summonerId: transfer.summonerId, server: transfer.server};
 				if (localStorage.getItem('lock_getCachedGame') == "1"){
-					debugger;
 					params['gameId'] = localStorage.getItem('temp_gameId');
 				}
 				steal.dev.log('request for gamedata with params:', params);

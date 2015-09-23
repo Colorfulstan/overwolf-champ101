@@ -37,7 +37,6 @@ steal(
 			// Eventhandler
 			'{reloadMatchRoute} route': function (routeData) {
 				steal.dev.log('refresh Route triggered in OverviewCtrl');
-				debugger;
 				this.options.match = routeData.match;
 				this.renderView(this.options.match.blue,this.options.match.purple);
 			},

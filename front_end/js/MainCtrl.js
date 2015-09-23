@@ -46,7 +46,6 @@ steal(
 				init: function () {
 					WindowCtrl.prototype.init.apply(this, arguments);
 
-					debugger;
 					this.element.find('#content').append(
 						can.view(this.options.settingsTmpl, new SettingsModel())
 					);
