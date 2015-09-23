@@ -156,15 +156,14 @@ steal(
 					});
 					return deferred.promise();
 				},
-				/** Opens the Match Window
-				 * @param {bool} displaySideView is the Window displayed on the side of the screen or on top */
-				openMatch: function (displaySideView) {
+				/** Opens the Match Window */
+				openMatch: function () {
 					var self = this;
 
 					$.when(this.open('Match')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openMatch: ", odkWindow);
 						var x = self.getCenteredX(odkWindow.width), y = 0;
-						if (displaySideView) {
+						if (SettingsModel.sideViewEnabled()) {
 							x = 0;
 							y = 200;
 						}

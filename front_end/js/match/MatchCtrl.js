@@ -2,20 +2,20 @@
 steal('can.js'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
-	, 'OverviewCtrl.js',
-	'ChampionCtrl.js',
-	'TooltipCtrl.js',
-	'FeedbackCtrl.js',
-	'Routes.js',
-	'global.js'
-	, function (can,
-				/**WindowCtrl*/ WindowCtrl
+	, 'OverviewCtrl.js'
+	, 'ChampionCtrl.js'
+	, 'TooltipCtrl.js'
+	, 'FeedbackCtrl.js'
+	, 'Routes.js'
+	, 'global.js'
+	, function (can
+		, /**WindowCtrl*/ WindowCtrl
 		, /**SettingsModel*/ SettingsModel
-		, /**OverviewCtrl*/ OverviewCtrl,
-				/**ChampionCtrl*/ ChampionCtrl,
-				/**TooltipCtrl*/ TooltipCtrl,
-				/**FeedbackCtrl*/ FeedbackCtrl,
-				/**Routes*/ Routes) {
+		, /**OverviewCtrl*/ OverviewCtrl
+		, /**ChampionCtrl*/ ChampionCtrl
+		, /**TooltipCtrl*/ TooltipCtrl
+		, /**FeedbackCtrl*/ FeedbackCtrl
+		, /**Routes*/ Routes) {
 
 		/**
 		 *  Controller for the "Match" view (match.html / match.js)
@@ -59,29 +59,50 @@ steal('can.js'
 					var self = this;
 					WindowCtrl.prototype.init.apply(self, arguments);
 
-					options.model.attr('summonerId', options.settings.attr('summonerId'));
-					options.model.attr('server', options.settings.attr('server'));
-					debugger;
-					if (options.settings.attr('startMatchCollapsed')) {
+					//overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** ODKWindow */ result) {
+					//	self.options.odkWindow = result.window;
+					//
+					//	var x = self.constructor.getCenteredX(self.options.odkWindow.width), y = 0;
+					//	if (SettingsModel.sideViewEnabled()) {
+					//		x = 0;
+					//		y = 200;
+					//	}
+					//	overwolf.windows.changePosition(self.options.name, x, y);
+
+						self.initAppBar(SettingsModel.sideViewEnabled());
+
+						options.model.attr('summonerId', options.settings.attr('summonerId'));
+						options.model.attr('server', options.settings.attr('server'));
 						debugger;
-						self.hidePanels();
-						$(self.options.handle).addClass(self.options.handleAnimationClass);
-						$(self.options.appBar).addClass(self.options.animatedHandleClass);
+						if (options.settings.attr('startMatchCollapsed')) {
+							debugger;
+							self.hidePanels();
+							$(self.options.handle).addClass(self.options.handleAnimationClass);
+							$(self.options.appBar).addClass(self.options.animatedHandleClass);
+						}
+
+						self.hidePanelsOnClickHandler = $.proxy(self.hidePanels, self);
+						localStorage.setItem('lock_getCachedGame', '0');
+						localStorage.removeItem('temp_gameId');
+
+						// After successfully loading the Match-Data
+						self.loadMatch(options.model)
+
+					//});
+
+				},
+				/**
+				 * Initializes the HTML element depending on if it is shown on the side or top of the screen.
+				 * makes the App bar visible
+				 * @param sideViewEnabled true if Match window is displayed on the side of the screen
+				 */
+				initAppBar: function (sideViewEnabled) {
+					if (sideViewEnabled) {
+						this.element.addClass(this.options.matchViewSideClass);
+					} else {
+						this.element.removeClass(this.options.matchViewSideClass);
 					}
-
-					if (SettingsModel.sideViewEnabled()) {
-						self.element.addClass(self.options.matchViewSideClass);
-					}
-
-					window.name = "Match Window"; // DEBUG INFO
-
-					self.hidePanelsOnClickHandler = $.proxy(self.hidePanels, self);
-					localStorage.setItem('lock_getCachedGame', '0');
-					localStorage.removeItem('temp_gameId');
-
-					// After successfully loading the Match-Data
-					self.loadMatch(options.model)
-
+					$(this.options.appBar).show();
 				},
 				addMatchWindowBlurHandler: function (handler) {
 					if (localStorage.getItem('lock_matchWindowHandler') != "1") {
@@ -199,12 +220,14 @@ steal('can.js'
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						delete this.options.settings;
-						this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
-						this.options.model.attr('server', this.options.settings._server());
-						this.options.model.attr('summonerId', this.options.settings._summonerId());
-
-						this.loadMatch(this.options.model);
+						//delete this.options.settings;
+						//this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
+						//this.options.model.attr('server', this.options.settings._server());
+						//this.options.model.attr('summonerId', this.options.settings._summonerId());
+						//
+						//this.loadMatch(this.options.model);
+						//this.constructor.openMatch(SettingsModel.sideViewEnabled());
+						location.reload();
 						ev.stopPropagation();
 					}
 				},
