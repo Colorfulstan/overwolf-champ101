@@ -10289,6 +10289,7 @@ select {
     float: left; }
 
 #match-app-bar {
+  display: none;
   position: relative;
   left: 32%;
   width: 36%;
@@ -10453,7 +10454,7 @@ a, label {
 a:hover {
   text-decoration: underline; }
   table a:hover {
-    text-decoration: underline; }
+    text-decoration: none; }
 
 font {
   font-size: inherit !important; }
