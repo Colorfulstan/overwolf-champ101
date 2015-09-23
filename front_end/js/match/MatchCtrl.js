@@ -79,7 +79,6 @@ debugger;
 							$(self.options.appBar).addClass(self.options.animatedHandleClass);
 						}
 
-						self.hidePanelsOnClickHandler = $.proxy(self.hidePanels, self);
 						localStorage.setItem('lock_getCachedGame', '0');
 						localStorage.removeItem('temp_gameId');
 
@@ -87,8 +86,8 @@ debugger;
 						self.loadMatch(options.model)
 
 					});
-
 				},
+				hidePanelsOnClickHandler: $.proxy(this.hidePanels, this),
 				/**
 				 * Initializes the HTML element depending on if it is shown on the side or top of the screen.
 				 * makes the App bar visible
@@ -102,6 +101,12 @@ debugger;
 					}
 					$(this.options.appBar).show();
 				},
+				/**
+				 * Adds the given handler if there is none already set (tracked about localStorage settings)
+				 * @listens MouseEvent#mouseup
+				 * @fires MatchCtrl#hidePanelsOnClickHandler
+				 * @param handler
+				 */
 				addMatchWindowBlurHandler: function (handler) {
 					if (localStorage.getItem('lock_matchWindowHandler') != "1") {
 						overwolf.games.inputTracking.onMouseUp.addListener(handler);
@@ -109,6 +114,12 @@ debugger;
 						localStorage.setItem('lock_matchWindowHandler', "1");
 					}
 				},
+				/**
+				 * removes the given handler if there is none already set (tracked about localStorage settings)
+				 * @listens MouseEvent#mouseup
+				 * @fires MatchCtrl#hidePanelsOnClickHandler
+				 * @param handler
+				 */
 				removeMatchWindowBlurHandler: function (handler) {
 					if (localStorage.getItem('lock_matchWindowHandler') == "1") {
 						overwolf.games.inputTracking.onMouseUp.removeListener(handler);
@@ -221,7 +232,7 @@ debugger;
 						//this.options.model.attr('summonerId', this.options.settings._summonerId());
 						//
 						//this.loadMatch(this.options.model);
-						//this.constructor.openMatch(SettingsModel.sideViewEnabled());
+						//this.constructor.openMatch();
 						location.reload();
 						ev.stopPropagation();
 					}

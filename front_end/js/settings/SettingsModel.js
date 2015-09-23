@@ -4,7 +4,8 @@ steal(
 	, 'global.js'
 	, function (can) {
 		/**
-		 * @class {SettingsModel} SettingsModel
+		 * @class {can.Model} SettingsModel
+		 * @extends {can.Model}
 		 * @constructor {@link SettingsModel.init}
 		 * @property summonerName {String}
 		 * @property summonerId {number}
@@ -79,7 +80,7 @@ steal(
 			/**
 			 * @constructs
 			 */
-			init: function () {
+			init: function () { // TODO: refactor this class into a can.Map with can.computes as properties
 				/**@property summonerName attr('summonerName') */ // TODO: how to document this?
 				this.attr('summonerName', this._summonerName());
 				this.bind('summonerName', this._summonerName);
