@@ -1,7 +1,9 @@
 "use strict";
 steal(
-	'ChampionModel.js'
-	, function (/**ChampionModel*/ ChampionModel) {
+	'ChampionModel.js',
+	'SettingsModel.js'
+	, function (/**ChampionModel*/ ChampionModel,
+	/** SettingsModel */ SettingsModel) {
 
 		/**
 		 * @class
@@ -23,9 +25,11 @@ steal(
 			_loadDataFromServer: function (transfer) {
 				var deferred = $.Deferred();
 
+				var settings = new SettingsModel();
+
 				var params = {summonerId: transfer.summonerId, server: transfer.server};
-				if (localStorage.getItem('lock_getCachedGame') == "1"){
-					params['gameId'] = localStorage.getItem('temp_gameId');
+				if (settings.cachedGameAvailable()){
+					params['gameId'] = settings.cachedGameId();
 				}
 				steal.dev.log('request for gamedata with params:', params);
 				jQuery.get(RIOT_ADAPTER_URL
@@ -51,11 +55,13 @@ steal(
 				var deferred = $.Deferred();
 				var self = this;
 
+				var settings = new SettingsModel();
 
 				$.when(self._loadDataFromServer(transfer))
 					.then(function (dataArray) {
-						localStorage.setItem('temp_gameId', dataArray['gameId']);
-						localStorage.setItem('lock_getCachedGame', "1");
+
+						settings.cachedGameId(dataArray['gameId']);
+						settings.cachedGameAvailable(true);
 
 						self._extractParticipants(transfer, dataArray, 'blue');
 						self._extractParticipants(transfer, dataArray, 'purple');
@@ -66,8 +72,7 @@ steal(
 						dataArray = null;
 					}).fail(function (data, status, jqXHR) {
 
-						localStorage.setItem('lock_getCachedGame', "0");
-
+						settings.cachedGameAvailable(false);
 						steal.dev.warn("Loading MatchModel failed!", data, status, jqXHR);
 
 						deferred.reject(data, status, jqXHR);

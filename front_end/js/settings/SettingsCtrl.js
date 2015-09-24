@@ -18,7 +18,6 @@ steal(
 		}, {
 			/**
 			 * @param options
-			 * @param options.settings {SettingsModel} - the SettingsModel object
 			 */
 			init: function (options) {
 				var self = this;
@@ -38,21 +37,22 @@ steal(
 			},
 
 			saveAndCloseHandler: function (self, $btn) {
+				/**@type {SettingsModel} */
 				var settings = self.options.settings;
 				if (
-					settings.isSummonerSet()
-					&& self.options.settingsBackup.attr('server') == settings.attr('server')
-					&& self.options.settingsBackup.attr('summonerName') == settings.attr('summonerName')
-					&& settings.attr('summonerName') != "---" // testing string
+					SettingsModel.isSummonerSet()
+					&& self.options.settingsBackup.server() == settings.server()
+					&& self.options.settingsBackup.summonerName() == settings.summonerName()
+					&& settings.summonerName() != "---" // testing string
 				) {	// no change - spare the request
 					self.constructor.close(self.odkWindow.name);
 				} else {
 					$.get(
 						RIOT_ADAPTER_URL + '/getSummonerId.php'
-						, {'server': settings.attr('server'), 'summoner': settings.attr('summonerName')}
+						, {'server': settings.server(), 'summoner': settings.summonerName()}
 						, function (summonerId, status, jqXHR) {
 							steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
-							settings.attr('summonerId', summonerId);
+							settings.summonerId(summonerId);
 							//delete self.options.settingsBackup;
 							//self.options.settingsBackup = settings.clone();
 							self.constructor.close(self.odkWindow.name);
@@ -60,7 +60,7 @@ steal(
 						.fail(function (data, status, jqXHR) {
 							steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
 							//Error.summonerSettings(data.responseText); // TODO
-							settings.attr('summonerId', null);
+							settings.summonerId(null);
 							// TODO: Error message and try again on the button
 							// 503 temp unavailable
 							// 404 not found
@@ -86,10 +86,10 @@ steal(
 				this.constructor.close(this.odkWindow.name);
 			},
 			'#server-region-select change': function ($el, ev) {
-				this.options.settings.attr('server', $el.val());
+				this.options.settings.server($el.val());
 			},
 			'#summoner-name-input change': function ($el, ev) {
-				this.options.settings.attr('summonerName', $el.val());
+				this.options.settings.summonerName($el.val());
 			},
 			'#summoner-name-input focus': function ($el, ev) {
 				$el.val('');
