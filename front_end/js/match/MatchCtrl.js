@@ -52,7 +52,7 @@ steal('can.js'
 				 * @param {boolean} options.startCollapsed if true, start minimized and add class for bg-animation
 				 * @param {MatchDAO} options.dao
 				 * @param {MatchModel} options.model
-				 * @constructs MatchCtrl
+				 * @constructs
 				 */
 				init: function (element, options) {
 
@@ -61,7 +61,6 @@ steal('can.js'
 
 					overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
 						self.options.odkWindow = result.window;
-debugger;
 						var x = self.constructor.getCenteredX(self.options.odkWindow.width), y = 0;
 						if (SettingsModel.sideViewEnabled()) {
 							x = 0;
@@ -71,9 +70,9 @@ debugger;
 
 						self.initAppBar(SettingsModel.sideViewEnabled());
 
-						options.model.attr('summonerId', options.settings.attr('summonerId'));
-						options.model.attr('server', options.settings.attr('server'));
-						if (options.settings.attr('startMatchCollapsed')) {
+						options.model.attr('summonerId', options.settings.summonerId()); // TODO: model refactoring for computes
+						options.model.attr('server', options.settings.server()); // TODO: model refactoring for computes
+						if (options.settings.startMatchCollapsed()) {
 							self.hidePanels();
 							$(self.options.handle).addClass(self.options.handleAnimationClass);
 							$(self.options.appBar).addClass(self.options.animatedHandleClass);
@@ -133,7 +132,7 @@ debugger;
 
 					var self = this;
 
-					var name = this.options.settings.attr('summonerName');
+					var name = this.options.settings.summonerName();
 					self.options.$overviewContainer.html(can.view(this.options.loadingTmpl, {summonerName: name}));
 					self.options.$overviewContainer.removeClass('failed').addClass('loading');
 
@@ -226,13 +225,6 @@ debugger;
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						//delete this.options.settings;
-						//this.options.settings = new SettingsModel(); // new SettingsModel to get update from localstorage
-						//this.options.model.attr('server', this.options.settings._server());
-						//this.options.model.attr('summonerId', this.options.settings._summonerId());
-						//
-						//this.loadMatch(this.options.model);
-						//this.constructor.openMatch();
 						location.reload();
 						ev.stopPropagation();
 					}

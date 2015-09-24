@@ -37,12 +37,13 @@ steal(
 					overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
 						steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 						if (self.gameStarted(result)) {
-							localStorage.setItem('lock_getCachedGame', "1"); // TODO: move into Settings
+							var settings = new SettingsModel();
+							settings.cachedGameAvailable(true);
 							steal.dev.warn('League of Legends game started', new Date());
 							self.openMatch();
 						}
 						if (self.gameFinished(result)) {
-							localStorage.setItem('lock_getCachedGame', "0"); // TODO: move into Settings
+							settings.cachedGameAvailable(false);
 							steal.dev.warn('League of Legends game finished', new Date());
 							self.closeMatch()
 						}
