@@ -1,10 +1,6 @@
 "use strict";
 steal('can', 'Routes.js', function (can, Routes) {
-	/**
-	 * @type {Object}
-	 * @module Hotkeys
-	 * @constructor
-	 */
+
 	var Hotkeys = function () {};
 	Hotkeys.registerHotkeys = function () {
 		overwolf.settings.registerHotKey("toggle_panels", function (result) {

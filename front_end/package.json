@@ -1,5 +1,5 @@
 {
-  "main": "index.js",
+  "main": "js/main.js",
   "dependencies": {
     "can": "^2.2.7",
     "jquery": "^2.1.4",
@@ -10,10 +10,8 @@
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "^0.8.1",
-    "jasmine-core": "^2.3.4",
-    "karma": "^0.13.9",
-    "karma-jasmine": "^0.3.6",
     "steal": "^0.10.5",
+    "steal-jasmine": "0.0.2",
     "steal-tools": "^0.10.7"
   },
   "scripts": {
