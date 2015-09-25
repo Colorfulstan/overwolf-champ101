@@ -26,7 +26,6 @@ steal(
 				 * @memberOf {MainCtrl}
 				 * @static*/
 				registerOverwolfHandlers: function () {
-					debugger;
 					var self = this;
 					overwolf.windows.onStateChanged.addListener(function (/** WindowStateChangeData */ result) {
 						steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
@@ -35,9 +34,9 @@ steal(
 						steal.dev.log('debug', "MainCtrl - overwolf.windows.onMainWindowRestored:", result);
 					});
 					overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
+						var settings = new SettingsModel();
 						steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 						if (self.gameStarted(result)) {
-							var settings = new SettingsModel();
 							settings.cachedGameAvailable(true);
 							steal.dev.warn('League of Legends game started', new Date());
 							self.openMatch();
