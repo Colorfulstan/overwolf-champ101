@@ -10,7 +10,7 @@ steal(
 		, /** SettingsModel*/ SettingsModel
 		, /** Routes */ Routes) {
 
-		Routes.ready();
+		//Routes.ready();
 
 		var main = new MainCtrl('html');
 		var settings = new SettingsModel();

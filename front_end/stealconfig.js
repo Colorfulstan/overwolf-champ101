@@ -1,6 +1,7 @@
 System.config({
 	paths: {
 		'jquery/jquery': './node_modules/jquery/dist/jquery.js',
+		'jquery': './node_modules/jquery/dist/jquery.js',
 		'can':'./node_modules/can/can.js',
 		'can/*':'./node_modules/can/*.js',
 		'materialize':'./node_modules/materialize-css/bin/materialize.js',
@@ -27,8 +28,11 @@ System.config({
 		'MainCtrl': './js/MainCtrl.js',
 		'FeedbackCtrl': './js/feedback/FeedbackCtrl.js',
 
-
 		'steal-jasmine': './node_modules/steal-jasmine/steal-jasmine.js',
-		'jasmine-core/*': './node_modules/jasmine-core/*.js'
+
+		'jasmine-core/lib/jasmine-core/jasmine': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
+		'jasmine-core/lib/jasmine-core/jasmine-html': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
+		'jasmine-core/lib/jasmine-core/boot': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/boot.js',
+		'jasmine-core/lib/jasmine-core/jasmine.css': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
 	}
 });

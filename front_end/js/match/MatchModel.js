@@ -6,6 +6,7 @@ steal(
 
 		/**
 		 * Data about the current Match
+		 * @class
 		 * @constructor
 		 */
 		var MatchModel = can.Model.extend('MatchModel', {}, {
