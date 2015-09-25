@@ -132,7 +132,7 @@ steal(
 				},
 				/** Opens the Match Window */
 				openMatch: function () {
-					var self = this;
+					//var self = this;
 
 					$.when(this.open('Match')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openMatch: ", odkWindow);
