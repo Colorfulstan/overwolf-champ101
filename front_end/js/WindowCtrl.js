@@ -132,16 +132,14 @@ steal(
 				},
 				/** Opens the Match Window */
 				openMatch: function () {
-					//var self = this;
-
 					$.when(this.open('Match')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openMatch: ", odkWindow);
-						//var x = self.getCenteredX(odkWindow.width), y = 0;
-						//if (SettingsModel.sideViewEnabled()) {
-						//	x = 0;
-						//	y = 200;
-						//}
-						//overwolf.windows.changePosition(odkWindow.id, x, y);
+					});
+				},
+				/** Opens the Home / Main Window */
+				openMain: function () {
+					$.when(this.open('Main')).then(function (/**ODKWindow*/ odkWindow) {
+						steal.dev.log("WindowCtrl.openMain: ", odkWindow);
 					});
 				},
 				/** closes the Match-Window */
@@ -230,8 +228,10 @@ steal(
 				 * @see WindowCtrl.defaults.minimizeBtn*/
 				'{minimizeBtn} mousedown': function ($el, ev) {
 					steal.dev.log('WindowCtrl: minimize window');
-					this.constructor.minimize(this.options.name);
-					ev.stopPropagation();
+					if (ev.which == 1) {
+						this.constructor.minimize(this.options.name);
+						ev.stopPropagation();
+					}
 				}
 				,
 				/** Does prevent Event propagation
@@ -254,7 +254,7 @@ steal(
 				 * @see WindowCtrl.defaults.homeBtn*/
 				'{homeBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						this.constructor.open('Main');
+						this.constructor.openMain();
 						ev.stopPropagation();
 					}
 				}
@@ -267,8 +267,10 @@ steal(
 				 * */
 				'{toggleWindowRoute} route': function (routeData) {
 					steal.dev.log('toggle/:window - routeData:', routeData);
-					this.constructor.toggle(routeData.window);
+					debugger;
+					WindowCtrl.toggle(routeData.window);
 					can.route.attr({'route': Routes.expandPanels});
+
 				}
 				//,
 				//'{helpBtn} mousedown': function ($el, ev) {
