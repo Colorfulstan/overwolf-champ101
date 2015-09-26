@@ -114,11 +114,11 @@ steal(function () {
 
 		});
 
-		it("can.Model s can be used wherever after included once (but still should be explicitly included)", function () {
-			expect(window.MatchModel).toBeDefined();
-		});
-		it("can.Control s has to be included where they are needed", function () {
-			expect(window.MainCtrl).toBeUndefined();
-		});
+		//it("can.Model s can be used wherever after included once (but still should be explicitly included)", function () {
+		//	expect(window.MatchModel).toBeDefined();
+		//});
+		//it("can.Control s has to be included where they are needed", function () {
+		//	expect(window.MainCtrl).toBeUndefined();
+		//});
 	});
 });
