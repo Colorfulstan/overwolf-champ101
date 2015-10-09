@@ -1,0 +1,24 @@
+@import "../helper/colors";
+
+.hotkeys__container--loading {
+  display: none;
+  width: 100%;
+  height: 200px;
+  padding-top: 50px;
+}
+$spinner-dim: 90px;
+
+.hotkeys-spinner {
+  margin: 0 auto;
+  height: $spinner-dim;
+  width: $spinner-dim;
+  animation: rotate 0.8s infinite linear;
+  border: 16px solid $color-accent-2;
+  border-right-color: transparent;
+  border-radius: 50%;
+}
+
+@keyframes rotate {
+  0%    { transform: rotate(0deg); }
+  100%  { transform: rotate(360deg); }
+}

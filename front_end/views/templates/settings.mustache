@@ -68,17 +68,20 @@
 				<th>Hotkeys</th>
 			</tr>
 			</thead>
-			<tbody>
+			<tbody id="hotkeys-rows">
 			{{#hotkeys}}
 				<tr>
 					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-						   class="padded-top padded-bot">{{ title }}</a></td>
+						   class="padded-top padded-bot hotkey-btn">{{ title }}</a></td>
 					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-						   class="padded-top padded-bot">{{ string }}</a></td>
+						   class="padded-top padded-bot hotkey-btn">{{ string }}</a></td>
 				</tr>
 			{{/hotkeys}}
 			</tbody>
 		</table>
+		<div class="hotkeys__container--loading">
+			<div class="hotkeys-spinner"></div>
+		</div>
 	</div>
 </div>
 <div class="btn-resize fa fa-rss fa-rotate-270"></div>
