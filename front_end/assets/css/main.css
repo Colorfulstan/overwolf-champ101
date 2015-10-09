@@ -10078,6 +10078,17 @@ i.fa {
       content: ', 10% max health';
       color: #ac2e1a; }
 
+.append-spell-key[data-index-1="1"]::after {
+  content: ' (Passive)'; }
+.append-spell-key[data-index-1="2"]::after {
+  content: ' (Q)'; }
+.append-spell-key[data-index-1="3"]::after {
+  content: ' (W)'; }
+.append-spell-key[data-index-1="4"]::after {
+  content: ' (E)'; }
+.append-spell-key[data-index-1="5"]::after {
+  content: ' (R)'; }
+
 #champion-container {
   height: auto;
   position: relative; }

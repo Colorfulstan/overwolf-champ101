@@ -12,13 +12,7 @@
 	<div class="col-xs-6 padded-left line-left collapse-border-left">
 		<div class="padded-left">
 			<div class="spell-values row">
-			<table class="spell-values-table padded-bot">
-				<tbody>
-				{{#cooldownBurn}} <tr> <td>Cooldown</td> <td>{{.}}</td> </tr> {{/cooldownBurn}}
-				{{#costBurn}} <tr class="{{costType}}"> <td>Cost</td> <td>{{.}}</td> </tr> {{/costBurn}}
-				{{#rangeBurn}} <tr> <td>Range</td> <td>{{.}}</td> </tr> {{/rangeBurn}}
-				</tbody>
-			</table>
+			{{>templates/parts/spell-values-table.mustache}}
 		</div>
 		{{ #videoAvailable }}
 		<div id="spell-video-container" class="row">

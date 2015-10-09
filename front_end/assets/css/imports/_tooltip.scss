@@ -87,3 +87,16 @@
 //    display: none;
   }
 }
+
+.append-spell-key {
+  &[data-index-1="1"]::after {
+    content: ' (Passive)'; }
+  &[data-index-1="2"]::after {
+    content: ' (Q)'; }
+  &[data-index-1="3"]::after {
+    content: ' (W)'; }
+  &[data-index-1="4"]::after {
+    content: ' (E)'; }
+  &[data-index-1="5"]::after {
+    content: ' (R)'; }
+}
