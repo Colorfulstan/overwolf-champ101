@@ -10278,6 +10278,26 @@ select {
   height: 30px;
   padding-top: 8px; }
 
+.hotkeys__container--loading {
+  display: none;
+  width: 100%;
+  height: 200px;
+  padding-top: 50px; }
+
+.hotkeys-spinner {
+  margin: 0 auto;
+  height: 90px;
+  width: 90px;
+  animation: rotate 0.8s infinite linear;
+  border: 16px solid #26a69a;
+  border-right-color: transparent;
+  border-radius: 50%; }
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
 #panel-container {
   height: auto;
   width: 700px;

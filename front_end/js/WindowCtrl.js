@@ -163,6 +163,10 @@ steal(
 				 * @param {string} [options.name] - {@link ODKWindow.name} for debug-purposes */ // TODO: options.name here neccessary / given?
 				init: function (el, options) {
 					steal.dev.log('WindowCtrl initialized for ', options.name);
+					// delegate focus/blur-event to document
+					// enables using and testing document.focus() since $(window).focus() does nothing
+					$(window).on('focus', function () {$(document).focus()});
+					$(window).on('blur', function () {$(document).blur()});
 				}
 				,
 				/** @type {ODKWindow} */
@@ -187,9 +191,7 @@ steal(
 					} else { // just open it
 						$el.parent().after(newNodeString);
 					}
-				}
-				,
-
+				},
 
 				'.drag-window-handle mousedown': function ($el, ev) {
 					steal.dev.log('dragging');
