@@ -99,8 +99,8 @@ steal(
 			'.hotkey-btn click': function ($el, ev) {
 				var self = this;
 
-				$(document).on('blur', setFocusHandler);
-				function setFocusHandler(){
+				$(document).on('blur', getFocusHandler);
+				function getFocusHandler(){
 					// show loading animation on hotkeys table
 					// materialize spinner
 					$('.hotkeys__container--loading').show();
@@ -108,6 +108,7 @@ steal(
 
 					// set a listener to window that listens to focus for removing the interval and the eventlistener on window
 					$(document).on('focus', focusHandler);
+					$(document).off('blur', getFocusHandler);
 				}
 				function focusHandler(){
 					steal.dev.log('focusHandler after hotkey-btn click called');
@@ -116,6 +117,7 @@ steal(
 						self.renderView();
 					 });
 					$(document).off('focus', focusHandler);
+					$(document).on('blur', getFocusHandler);
 				}
 			},
 			'#summoner-name-input focus': function ($el, ev) {
