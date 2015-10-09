@@ -182,20 +182,27 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			SettingsModel.getHotKeys = jasmine.createSpy('"getHotKeys spy"');
 
 			$hotkeyBtn.click();
+			$(document).blur();
+
 		});
-		it("should add a listener to document listening for focus-event", function () {
+		it("should add a listener to document listening for blur-event", function () {
+			expect($._data(document, 'events').blur).toBeDefined();
+			expect($._data(document, 'events').blur).not.toBeEmpty();
+		});
+		it("should add a listener to document listening for focus-event, when out of focus", function () {
+			expect($._data(document, 'events').blur).not.toBeDefined();
 			expect($._data(document, 'events').focus).toBeDefined();
-			expect($._data(document, 'events').focus).not.toBeEmpty();
 		});
-		it("should remove the eventlistener after the document gets focus", function () {
+		it("should remove the eventlistener for focus after the document gets focus back", function () {
+			expect($._data(document, 'events').focus).toBeDefined();
 			$(document).focus();
-			expect($._data(document, 'events')).not.toBeDefined();
+			expect($._data(document, 'events').focus).not.toBeDefined();
 		});
 		it("should call renderView after loading the Hotkeys", function () {
 			settingsCtrl.renderView = jasmine.createSpy('"renderView spy"');
-
 			$(document).focus();
 			expect(settingsCtrl.renderView).toHaveBeenCalled();
+
 		});
 	});
 });
