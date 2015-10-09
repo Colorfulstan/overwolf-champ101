@@ -127,7 +127,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			expect(settingsCtrl.constructor.close).not.toHaveBeenCalled();
 			jasmine.Ajax.uninstall();
 		});
-		describe("error-code handling", function () {
+		describe("error-code handling", function () { // TODO: write tests
 			// https://developer.riotgames.com/docs/response-codes
 			describe("400 - Bad Request", function () {
 				//This error indicates that there is a syntax error in the request and the request has therefore been denied. The client should not continue to make similar requests without modifying the syntax or the requests being made.
@@ -163,6 +163,39 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			describe("503 - Service temporarily unavailable", function () {
 				//This error indicates the server is currently unavailable to handle requests because of an unknown reason. The Service Unavailable response implies a temporary condition which will be alleviated after some delay.
 			});
+		});
+	});
+
+	describe("click on a hotkey-button (.hotkey-btn click) ", function () {
+		var $hotkeyBtn;
+		var hotkeyBtnClass = 'hotkey-btn';
+		function setUpHTMLHotkeyButtonFixture() {
+			jasmine.getFixtures().set('' +
+				'<a href="" class="' + hotkeyBtnClass + '">'
+			);
+		}
+		beforeEach(function () {
+			setUpHTMLHotkeyButtonFixture();
+			$hotkeyBtn = $('.' + hotkeyBtnClass);
+			spyOn(settingsModel, 'loadHotKeys').and.returnValue(true);
+			//settingsModel.loadHotKeys = jasmine.createSpy('"loadHotKeys spy"');
+			SettingsModel.getHotKeys = jasmine.createSpy('"getHotKeys spy"');
+
+			$hotkeyBtn.click();
+		});
+		it("should add a listener to document listening for focus-event", function () {
+			expect($._data(document, 'events').focus).toBeDefined();
+			expect($._data(document, 'events').focus).not.toBeEmpty();
+		});
+		it("should remove the eventlistener after the document gets focus", function () {
+			$(document).focus();
+			expect($._data(document, 'events')).not.toBeDefined();
+		});
+		it("should call renderView after loading the Hotkeys", function () {
+			settingsCtrl.renderView = jasmine.createSpy('"renderView spy"');
+
+			$(document).focus();
+			expect(settingsCtrl.renderView).toHaveBeenCalled();
 		});
 	});
 });

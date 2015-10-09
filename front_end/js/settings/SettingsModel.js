@@ -17,6 +17,7 @@ steal(
 			STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
 			//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
 
+			/** @static */
 			getManifest: function () {
 				var deferred = $.Deferred();
 				overwolf.extensions.current.getManifest(function (r) {
@@ -26,6 +27,7 @@ steal(
 				return deferred.promise();
 			},
 			/**
+			 * @static
 			 * @returns {{ Hotkey[] }} hotkeys
 			 * @throws Error if arguments are given
 			 */
@@ -57,6 +59,7 @@ steal(
 				return deferred.promise();
 
 			},
+			/** @static */
 			getHotKey: function (id) {
 				var deferred = $.Deferred();
 				overwolf.settings.getHotKey(id, function (result) {
@@ -66,13 +69,16 @@ steal(
 				return deferred.promise();
 			},
 			/** Is the Match window being displayed on the side of the screen or on top?
+			 * @static
 			 * @returns {boolean} */
 			sideViewEnabled: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true'
 			},
+			/** @static */
 			hideHomeAtStart: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_HOME_AT_START) == 'true'
 			},
+			/** @static */
 			isSummonerSet: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
 			}
@@ -209,8 +215,9 @@ debugger;
 			}),
 
 			/**
-			 * Loads Hotkeys from the Manifest / overwolf settings and stores them into the SettingsModel instance
-			 * @return {Promise} that gets resolved after Hotkeys has been set for this.attr('hotkeys'). Does not resolve into any value
+			 * Loads Hotkeys from the overwolf settings and stores them
+			 * into the SettingsModel instance as attr('hotkeys')
+			 * @return  {null} Promise that gets resolved after Hotkeys has been set for this.attr('hotkeys'). Does not resolve into any value
 			 */
 			loadHotKeys: function () {
 				var deferred = $.Deferred();
