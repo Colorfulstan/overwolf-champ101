@@ -155,13 +155,13 @@ steal('can.js'
 							//	}
 							//});
 
-							$(window).on('blur', function () {
+							$(document).on('blur', function () {
 								steal.dev.log('Matchwindow lost focus');
 								localStorage.removeItem('lock_matchWindowJustRestored');
 								self.hidePanels();
 								self.addMatchWindowBlurHandler(self.hidePanelsOnClickHandler);
 							});
-							$(window).on('focus', function () {
+							$(document).on('focus', function () {
 								steal.dev.log('Matchwindow gained focus');
 								self.removeMatchWindowBlurHandler(self.hidePanelsOnClickHandler);
 							});

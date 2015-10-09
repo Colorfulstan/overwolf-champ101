@@ -3,7 +3,7 @@
   "type": "WebApp",
   "meta": {
 	"name": "LoL Champion Info",
-	"version": "0.8.2",
+	"version": "0.8.3",
 	"minimum-overwolf-version": "0.87.00",
 	"author": "Colorfulstan",
 	"icon": "assets/img/icon.png",

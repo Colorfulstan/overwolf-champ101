@@ -27,10 +27,14 @@ steal(
 				$.when(self.constructor.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 					self.odkWindow = odkWindow;
 				});
-				this.element.find('#content').html(
-					can.view(self.options.settingsTmpl, self.options.settings)
-				);
+				self.renderView();
+
 				//this.element.find('#summoner-name-input').focus();
+			},
+			renderView(){
+				this.element.find('#content').html(
+					can.view(this.options.settingsTmpl, this.options.settings)
+				);
 			},
 
 			noRequestNeccessary: function () {
@@ -91,6 +95,28 @@ steal(
 			},
 			'#summoner-name-input change': function ($el, ev) {
 				this.options.settings.summonerName($el.val());
+			},
+			'.hotkey-btn click': function ($el, ev) {
+				var self = this;
+
+				$(document).on('blur', setFocusHandler);
+				function setFocusHandler(){
+					// show loading animation on hotkeys table
+					// materialize spinner
+					$('.hotkeys__container--loading').show();
+					$('#hotkeys-rows').hide();
+
+					// set a listener to window that listens to focus for removing the interval and the eventlistener on window
+					$(document).on('focus', focusHandler);
+				}
+				function focusHandler(){
+					steal.dev.log('focusHandler after hotkey-btn click called');
+					 $.when(self.options.settings.loadHotKeys()).then(function (noValueGiven) {
+						 steal.dev.log('hotkeys reloaded');
+						self.renderView();
+					 });
+					$(document).off('focus', focusHandler);
+				}
 			},
 			'#summoner-name-input focus': function ($el, ev) {
 				$el.val('');
