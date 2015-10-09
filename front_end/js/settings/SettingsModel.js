@@ -13,6 +13,7 @@ steal(
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
 			STORAGE_KEY_HOME_AT_START: 'setting-home-at-startup',
+			STORAGE_KEY_ADVANCED_CHAMPION_TOOLTIP: 'settings-advanced-tooltip',
 			STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 			STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
 			//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
@@ -79,6 +80,10 @@ steal(
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_HOME_AT_START) == 'true'
 			},
 			/** @static */
+			advancedChampionTooltip: function () {
+				return localStorage.getItem(SettingsModel.STORAGE_KEY_ADVANCED_CHAMPION_TOOLTIP) == 'true'
+			},
+			/** @static */
 			isSummonerSet: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
 			}
@@ -128,7 +133,6 @@ steal(
 				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION); // getter
 				else { // setter
 					var oldVal = this.server();
-debugger;
 					localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
 					this.valueChanged('server', oldVal);
 
@@ -166,6 +170,23 @@ debugger;
 			 * @propterty
 			 * @readonly */
 			hideHomeAtStartInfo: "This will prevent the Start Window to show up when you enter a Game",
+			/** @type {boolean}
+			 * @propterty */
+			advancedChampionTooltip: can.compute(function (newVal) {
+				if (newVal == undefined) {
+					return this.constructor.advancedChampionTooltip();
+				} else { // setter
+					var oldVal = this.advancedChampionTooltip();
+
+					this.valueChanged('advancedChampionTooltip', oldVal);
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_ADVANCED_CHAMPION_TOOLTIP);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_ADVANCED_CHAMPION_TOOLTIP, newVal);
+				}
+			}),
+			/** @type {string}
+			 * @propterty
+			 * @readonly */
+			advancedChampionTooltipInfo: "If disabled, general Tips for the Champions will be displayed in the Match-Overview when hovering over a Champion Portrait. If enabled a Summary of their Skills will be shown.",
 			/** @type {boolean}
 			 * @property */
 			sideViewEnabled: can.compute(function (newVal) {

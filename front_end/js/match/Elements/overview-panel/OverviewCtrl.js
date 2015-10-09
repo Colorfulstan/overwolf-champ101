@@ -46,6 +46,7 @@ steal(
 				can.route.attr({
 					route: Routes.tooltipChampion,
 					champ: $el.attr('title'),
+					overview: true,
 					y: $panel.offset().top + $panel.height()
 				});
 			},

@@ -42,6 +42,7 @@ steal(
 			defaults: {
 				spellTmpl: 'templates/tooltip-spell.mustache',
 				championTmpl: 'templates/tooltip-champ.mustache',
+				championSummaryTmpl: 'templates/tooltip-champ-summary.mustache',
 				videoTmpl: 'templates/video.mustache',
 
 				// handled Routes
@@ -80,7 +81,6 @@ steal(
 					return string;
 				}
 
-				// TODO: include this explanation within collection-thread in riot dev forum
 				/* vars (represent scaling-values)
 				 * {{ aX }} are always within the vars Array.
 				 * sometimes {{ fX }} are found there too, sometimes {{ fX }} refers to the effects / effectsBurn Array
@@ -176,7 +176,14 @@ steal(
 						break;
 					case 'champ':
 						var champ = this.options.match.participantsByChamp[routeData.champ].champ;
-						this.element.html(can.view(this.options.championTmpl, champ));
+						var champTooltipView;
+						if (routeData.overview && SettingsModel.advancedChampionTooltip()){
+							champTooltipView = can.view(this.options.championSummaryTmpl, champ);
+						} else {
+							champTooltipView = can.view(this.options.championTmpl, champ);
+						}
+						this.element.html(champTooltipView);
+
 						break;
 				}
 				this.element.css('top', routeData.y + 'px');
