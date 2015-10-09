@@ -31,7 +31,7 @@ steal(
 
 				//this.element.find('#summoner-name-input').focus();
 			},
-			renderView(){
+			renderView: function(){
 				this.element.find('#content').html(
 					can.view(this.options.settingsTmpl, this.options.settings)
 				);
