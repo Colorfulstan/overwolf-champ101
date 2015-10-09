@@ -82,56 +82,79 @@ steal(
 			 */
 			init: function () {
 
+				/** Holds the original values of the settings if they where changed.
+				 * @typer {string: propName, *: originialValue } */
+				this.changedProps = {};
+
 				// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
 				//this.bind('hotkeys', SettingsModel.getHotKeys()); // TODO: Hotkey Änderung binden??
 			},
+
+			// TODO: save oldValues ( the first time they get changed) within JSON objs and implement "reset" to restore those values instead of cloning
 			/** @type {string}
 			 * @property */
-			summonerName: can.compute(function (newVal, oldVal) {
-				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_NAME);
-				if (newVal !== oldVal) {
+			summonerName: can.compute(function (newVal) {
+				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_NAME); // getter
+				else { // setter
+					var oldVal = this.summonerName();
 					localStorage.setItem(SettingsModel.STORAGE_KEY_NAME, newVal);
-					debugger;
+					this.valueChanged('summonerName', oldVal);
+
 					this.cachedGameAvailable(false); // TODO: TEST
 				}
-			},this),
+			}, this),
 			/** @type {string}
 			 * @propterty */
-			summonerId: can.compute(function (newVal, oldVal) {
-				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
-				if (newVal !== oldVal) {
+			summonerId: can.compute(function (newVal) {
+				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_ID); // getter
+				else { // setter
+					var oldVal = this.summonerId();
+
 					localStorage.setItem(SettingsModel.STORAGE_KEY_ID, newVal);
-					debugger;
+					this.valueChanged('summonerId', oldVal);
+
 					this.cachedGameAvailable(false); // TODO: TEST
 				}
-			},false),
+			}, false),
 			/** @type {string}
 			 * @propterty */
-			server: can.compute(function (newVal, oldVal) {
-				if (newVal == undefined)return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION);
-				if (newVal !== oldVal) {
+			server: can.compute(function (newVal) {
+				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION); // getter
+				else { // setter
+					var oldVal = this.server();
+debugger;
 					localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
-					debugger;
+					this.valueChanged('server', oldVal);
+
 					this.cachedGameAvailable(false); // TODO: TEST
 				}
 			}),
 			/** @type {boolean}
 			 * @propterty */
-			startMatchCollapsed: can.compute(function (newVal, oldVal) {
+			startMatchCollapsed: can.compute(function (newVal) {
 				if (newVal == undefined) {
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED) == 'true';
+				} else { // setter
+					var oldVal = this.startMatchCollapsed();
+
+					this.valueChanged('startMatchCollapsed', oldVal);
+
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED, newVal);
 				}
-				if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED);
-				else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED, newVal);
 			}),
 			/** @type {boolean}
 			 * @propterty */
-			hideHomeAtStart: can.compute(function (newVal, oldVal) {
+			hideHomeAtStart: can.compute(function (newVal) {
 				if (newVal == undefined) {
 					return this.constructor.hideHomeAtStart();
+				} else { // setter
+					var oldVal = this.hideHomeAtStart();
+
+					this.valueChanged('hideHomeAtStart', oldVal);
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_HOME_AT_START);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_HOME_AT_START, newVal);
 				}
-				if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_HOME_AT_START);
-				else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_HOME_AT_START, newVal);
 			}),
 			/** @type {string}
 			 * @propterty
@@ -139,12 +162,16 @@ steal(
 			hideHomeAtStartInfo: "This will prevent the Start Window to show up when you enter a Game",
 			/** @type {boolean}
 			 * @property */
-			sideViewEnabled: can.compute(function (newVal, oldVal) {
+			sideViewEnabled: can.compute(function (newVal) {
 				if (newVal == undefined) {
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true';
+				} else { // setter
+					var oldVal = this.sideViewEnabled();
+
+					this.valueChanged('sideViewEnabled', oldVal);
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE, newVal);
 				}
-				if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE);
-				else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE, newVal);
 			}),
 			/**
 			 * @type {string}
@@ -156,21 +183,26 @@ steal(
 			 * @property
 			 * @type {string}
 			 */
-			cachedGameId: can.compute(function (newVal, oldVal) {
+			cachedGameId: can.compute(function (newVal) {
 				if (newVal == undefined) { // getter
 					return localStorage.getItem('temp_gameId');
+				} else { // setter
+					var oldVal = this.cachedGameId();
+					this.valueChanged('cachedGameId', oldVal);
+					if (newVal == false) localStorage.removeItem('temp_gameId');
+					else if (newVal !== oldVal) localStorage.setItem('temp_gameId', newVal);
 				}
-				if (newVal == false) localStorage.removeItem('temp_gameId');
-				else if (newVal !== oldVal) localStorage.setItem('temp_gameId', newVal);
 			}),
 			/**
 			 * @property
 			 * @type {boolean}
 			 */
-			cachedGameAvailable: can.compute(function (newVal, oldVal) {
+			cachedGameAvailable: can.compute(function (newVal) {
 				if (newVal == undefined) { // getter
 					return localStorage.getItem('lock_getCachedGame') == 'true';
 				} else { // setter
+					var oldVal = this.cachedGameAvailable();
+					this.valueChanged('cachedGameId', oldVal);
 					if (newVal == false) localStorage.removeItem('lock_getCachedGame');
 					else if (newVal !== oldVal) localStorage.setItem('lock_getCachedGame', newVal);
 				}
@@ -197,6 +229,7 @@ steal(
 				var data = this.attr();
 				delete data[this.constructor.id];
 				return new this.constructor(data);
+				// TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
 			},
 			/**
 			 * sets all attr() from the given Model in this instance
@@ -205,6 +238,23 @@ steal(
 			copyFrom: function (settingsModel) {
 				for (var attrKey in settingsModel.attr()) {
 					this.attr(attrKey, settingsModel.attr(attrKey));
+				} // TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
+			},
+			/**
+			 * restores the original-values for this settingsModel Object
+			 * by calling the setters with the original values
+			 */
+			reset: function () {
+				debugger;
+				for (var prop in this.changedProps) {
+					this[prop](this.changedProps[prop]);
+				}
+			},
+			/** If the given propName wasn't changed already, oldVal gets stored under the propName as key */
+			valueChanged: function (propName, oldVal) {
+				if (this.changedProps[propName] == undefined){
+					debugger;
+					this.changedProps[propName] = oldVal;
 				}
 			}
 		});
