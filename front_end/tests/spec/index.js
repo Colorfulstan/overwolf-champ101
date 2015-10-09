@@ -17,6 +17,7 @@ import './DocumentationSpec';
 //import './matchSpec';
 import './MainCtrlSpec';
 import './WindowCtrlSpec';
+import './SettingsCtrlSpec';
 
 beforeEach(function () {
 	localStorage.clear();
