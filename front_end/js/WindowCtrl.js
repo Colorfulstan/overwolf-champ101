@@ -272,7 +272,6 @@ steal(
 					debugger;
 					WindowCtrl.toggle(routeData.window);
 					can.route.attr({'route': Routes.expandPanels});
-
 				}
 				//,
 				//'{helpBtn} mousedown': function ($el, ev) {
