@@ -3,7 +3,8 @@ steal(
 	'can'
 	, 'WindowCtrl.js'
 	, function (can
-		, /**WindowCtrl*/ WindowCtrl) {
+		, /**WindowCtrl*/ WindowCtrl
+	) {
 
 		/**
 		 * Controller for the "Settings" view (settings.html / settings.js)
@@ -44,13 +45,14 @@ steal(
 					&& typeof settings.changedProps.server === "undefined"
 					&& typeof settings.changedProps.summonerName === "undefined"
 					&& settings.summonerName() != "---";
-			}, saveAndCloseHandler: function (self, $btn) {
+			},
+			saveAndCloseHandler: function (self, $btn) {
 				/**@type {SettingsModel} */
 				var settings = self.options.settings;
 				if (
 					self.noRequestNeccessary()
 				) {	// no change - spare the request
-					self.constructor.close(self.odkWindow.name);
+					self.closeSettings();
 				} else {
 					this.requestSummonerId(settings, self, $btn);
 				}
@@ -62,7 +64,7 @@ steal(
 					, function (summonerId, status, jqXHR) {
 						steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
 						settings.summonerId(summonerId);
-						self.constructor.close(self.odkWindow.name);
+						self.closeSettings();
 					})
 					.fail(function (data, status, jqXHR) {
 						steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
@@ -74,6 +76,10 @@ steal(
 						$btn.text(data.statusText);
 					});
 			},
+			closeSettings: function () {
+				var self = this;
+				self.constructor.close(self.odkWindow.name);
+			},
 			'#btn-save-close click': function ($btn, ev) {
 				$btn.text('checking'); // TODO: replace with class
 				this.saveAndCloseHandler(this, $btn);
@@ -81,7 +87,7 @@ steal(
 			'.btn-close click': function ($el, ev) {
 				var self = this;
 				window.setTimeout(function () {
-					self.constructor.close(self.odkWindow.name);
+					self.closeSettings();
 				}, 100);
 			},
 			'#btn-cancel click': function ($el, ev) {
