@@ -273,7 +273,6 @@ steal(
 			 * by calling the setters with the original values
 			 */
 			reset: function () {
-				debugger;
 				for (var prop in this.changedProps) {
 					this[prop](this.changedProps[prop]);
 				}
@@ -281,7 +280,6 @@ steal(
 			/** If the given propName wasn't changed already, oldVal gets stored under the propName as key */
 			valueChanged: function (propName, oldVal) {
 				if (this.changedProps[propName] == undefined){
-					debugger;
 					this.changedProps[propName] = oldVal;
 				}
 			}

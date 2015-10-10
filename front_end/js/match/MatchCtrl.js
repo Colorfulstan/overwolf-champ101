@@ -40,7 +40,7 @@ steal('can.js'
 					animatedHandleClass: 'animated-handle',
 
 					// handled routes
-					toggleAllRoute: Routes.togglePanels,
+					togglePanelsRoute: Routes.togglePanels,
 					expandPanelsRoute: Routes.expandPanels
 				}
 
@@ -86,7 +86,6 @@ steal('can.js'
 
 					});
 				},
-				hidePanelsOnClickHandler: $.proxy(this.hidePanels, this),
 				/**
 				 * Initializes the HTML element depending on if it is shown on the side or top of the screen.
 				 * makes the App bar visible
@@ -100,33 +99,6 @@ steal('can.js'
 					}
 					$(this.options.appBar).show();
 				},
-				/**
-				 * Adds the given handler if there is none already set (tracked about localStorage settings)
-				 * @listens MouseEvent#mouseup
-				 * @fires MatchCtrl#hidePanelsOnClickHandler
-				 * @param handler
-				 */
-				addMatchWindowBlurHandler: function (handler) {
-					if (localStorage.getItem('lock_matchWindowHandler') != "1") {
-						overwolf.games.inputTracking.onMouseUp.addListener(handler);
-						steal.dev.warn("added hidePanelsOnKlickHandler", handler, localStorage.getItem('lock_matchWindowHandler'));
-						localStorage.setItem('lock_matchWindowHandler', "1");
-					}
-				},
-				/**
-				 * removes the given handler if there is none already set (tracked about localStorage settings)
-				 * @listens MouseEvent#mouseup
-				 * @fires MatchCtrl#hidePanelsOnClickHandler
-				 * @param handler
-				 */
-				removeMatchWindowBlurHandler: function (handler) {
-					if (localStorage.getItem('lock_matchWindowHandler') == "1") {
-						overwolf.games.inputTracking.onMouseUp.removeListener(handler);
-						steal.dev.warn("removed hidePanelsOnKlickHandler", handler, localStorage.getItem('lock_matchWindowHandler'));
-						localStorage.setItem('lock_matchWindowHandler', "0");
-					}
-				}
-				,
 				loadMatch: function () {
 					var deferred = $.Deferred();
 
@@ -144,8 +116,10 @@ steal('can.js'
 					overwolf.games.getRunningGameInfo(function (data) {
 						var gameIsRunning = !(data == undefined || data == null);
 						if (gameIsRunning) {
+							var $document = $(document);
 
-							//// retain the behaviour of collapsing when clicking outside of the Window even after minimizing and restoring it
+							//localStorage.setItem('lock_matchWindowJustRestored', "1");
+							////// retain the behaviour of collapsing when clicking outside of the Window even after minimizing and restoring it
 							//overwolf.windows.onStateChanged.addListener(function (result) {
 							//	steal.dev.log('debug', "MatchCtrl - overwolf.windows.onStateChanged:", result);
 							//	if (result.window_state == "normal") {
@@ -154,17 +128,8 @@ steal('can.js'
 							//		localStorage.setItem('lock_matchWindowJustRestored', "0");
 							//	}
 							//});
-
-							$(document).on('blur', function () {
-								steal.dev.log('Matchwindow lost focus');
-								localStorage.removeItem('lock_matchWindowJustRestored');
-								self.hidePanels();
-								self.addMatchWindowBlurHandler(self.hidePanelsOnClickHandler);
-							});
-							$(document).on('focus', function () {
-								steal.dev.log('Matchwindow gained focus');
-								self.removeMatchWindowBlurHandler(self.hidePanelsOnClickHandler);
-							});
+							var callback = $.proxy(self.hidePanels, self);
+							self.addDocumentEventhandlers($document, callback);
 						}
 					});
 
@@ -189,6 +154,68 @@ steal('can.js'
 						});
 					return deferred.promise();
 				},
+				addDocumentEventhandlers: function ($document, callback) {
+					localStorage.setItem('lock_OnBlurHandlerIsAdded', "0");
+
+					var self = this;
+					self._addBlurHandler(callback);
+
+					$document.on('blur', function () {
+						steal.dev.log('Matchwindow lost focus');
+						self._addBlurHandler(callback);
+					});
+					$document.on('focus', function () {
+						steal.dev.log('Matchwindow gained focus');
+						//// the window actually gets focus BEFORE this value changes through overwolf.window.onstatechanged callback
+						//// so we want to remove the handler, if the window not just got restored, but the value will be 1
+						//// TODO: fix this through timeout? For better readability
+						//if (localStorage.getItem('lock_matchWindowJustRestored') != "1") {
+							self._removeBlurHandler(callback)
+						//} else {
+						//	//$document.blur();
+						//}
+					});
+				}
+				,
+				removeDocumentEventhandlers: function ($document) {
+					$document.off('blur');
+					$document.off('focus');
+				},
+				/**
+				 * Adds the given handler if there is none already set (tracked about localStorage settings)
+				 * @listens MouseEvent#mouseup
+				 * @fires MatchCtrl#hidePanelsOnClickHandler
+				 * @param handler
+				 * @private
+				 */
+				_addBlurHandler: function (handler) {
+					if (localStorage.getItem('lock_OnBlurHandlerIsAdded') != "1") {
+						steal.dev.warn("adding BlurHandler ", handler);
+						localStorage.setItem('lock_OnBlurHandlerIsAdded', "1");
+
+						overwolf.games.inputTracking.onMouseUp.addListener(handler);
+					}
+				},
+				/**
+				 * removes the given handler if there is none already set (tracked about localStorage settings)
+				 * @listens MouseEvent#mouseup
+				 * @fires MatchCtrl#hidePanelsOnClickHandler
+				 * @param handler
+				 * @private
+				 */
+				_removeBlurHandler: function (handler) {
+					if (localStorage.getItem('lock_OnBlurHandlerIsAdded') == "1") {
+						steal.dev.warn("removing BlurHandler ", handler);
+						localStorage.setItem('lock_OnBlurHandlerIsAdded', "0");
+
+						overwolf.games.inputTracking.onMouseUp.removeListener(handler);
+					}
+				}
+				,
+				/**
+				 * collapses or expands the champion-panels
+				 * @param appBar the html Node handle of the Match-Window
+				 */
 				togglePanels: function (appBar) {
 					if ($(appBar).hasClass('collapsed')) {
 						$(this.options.handle).removeClass(this.options.handleAnimationClass);
@@ -208,6 +235,7 @@ steal('can.js'
 					}
 					$appBar.removeClass('collapsed');
 				},
+				/** Collapse the champion panels */
 				hidePanels: function () {
 					var $panelContainer = this.options.$panelContainer;
 					var $appBar = $(this.options.appBar);
@@ -229,7 +257,7 @@ steal('can.js'
 						ev.stopPropagation();
 					}
 				},
-				'{toggleAllRoute} route': function (routeData) {
+				'{togglePanelsRoute} route': function (routeData) {
 					steal.dev.log('toggle/all route');
 					can.route.attr({'route': ''});
 					this.togglePanels($(this.options.appBar));

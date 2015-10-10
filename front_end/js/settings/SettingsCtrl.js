@@ -99,30 +99,20 @@ steal(
 			'.hotkey-btn click': function ($el, ev) {
 				var self = this;
 
-				$(document).on('blur', getFocusHandler);
-				function getFocusHandler(){
-					// show loading animation on hotkeys table
-					// materialize spinner
-					$('.hotkeys__container--loading').show();
-					$('#hotkeys-rows').hide();
-
-					// set a listener to window that listens to focus for removing the interval and the eventlistener on window
-					$(document).on('focus', focusHandler);
-					$(document).off('blur', getFocusHandler);
-				}
+				// TODO: find a cleaner solution
+				$(document).off('focus');
+				$(document).on('focus', focusHandler);
+				steal.dev.warn('document events:', $._data(document, 'events'));
 				function focusHandler(){
 					steal.dev.log('focusHandler after hotkey-btn click called');
 					 $.when(self.options.settings.loadHotKeys()).then(function (noValueGiven) {
 						 steal.dev.log('hotkeys reloaded');
 						self.renderView();
 					 });
-					$(document).off('focus', focusHandler);
-					$(document).on('blur', getFocusHandler);
 				}
 			},
 			'#summoner-name-input focus': function ($el, ev) {
 				$el.val('');
-				console.log('yub');
 			}
 		});
 		return SettingsCtrl;

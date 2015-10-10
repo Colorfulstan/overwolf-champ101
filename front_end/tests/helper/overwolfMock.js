@@ -1,15 +1,5 @@
 window.overwolf = {
 	windows: {
-		//	windows.dragResize(name, edge);
-		//windows.dragMove(name);
-		//windows.minimize(name);
-		//windows.obtainDeclaredWindow(name, function (result) {});
-		//windows.restore(odkWindow.id, function (result) {});
-		//windows.changePosition(odkWindow.id, x, y);
-		//windows.close(odkWindow.id, function (/** ODKWindow */ result) {});
-		//overwolf.windows.onStateChanged.addListener(function (/** WindowStateChangeData */ result) {});
-		//overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) {});
-
 		dragResize: jasmine.createSpy('overwolf.window.dragResize spy'),
 		dragMove: jasmine.createSpy('overwolf.window.dragMove spy'),
 		minimize: jasmine.createSpy('overwolf.window.minimize spy'),
@@ -33,6 +23,34 @@ window.overwolf = {
 		onGameInfoUpdated: {
 			addListener: jasmine.createSpy('overwolf.games.onGameInfoUpdated.addListener spy'),
 			removeListener: jasmine.createSpy('overwolf.games.onGameInfoUpdated.removeListener spy')
+		},
+		onGameLaunched: {
+			addListener: jasmine.createSpy('overwolf.games.onGameLaunched.addListener spy'),
+			removeListener: jasmine.createSpy('overwolf.games.onGameLaunched.removeListener spy')
+		},
+		onMajorFrameRateChange: {
+			addListener: jasmine.createSpy('overwolf.games.onMajorFrameRateChange.addListener spy'),
+			removeListener: jasmine.createSpy('overwolf.games.onMajorFrameRateChange.removeListener spy')
+		},
+		inputTracking: {
+			onMouseUp : {
+				addListener : jasmine.createSpy('overwolf.games.inputTracking.onMouseUp.addListener spy'),
+				removeListener : jasmine.createSpy('overwolf.games.inputTracking.onMouseUp.removeListener spy'),
+			}
+		},
+		events : {
+			onError: {
+				addListener : jasmine.createSpy('overwolf.games.events.onError.addListener spy'),
+				removeListener : jasmine.createSpy('overwolf.games.events.onError.removeListener spy')
+			},
+			onInfoUpdates: {
+				addListener : jasmine.createSpy('overwolf.games.events.onInfoUpdates.addListener spy'),
+				removeListener : jasmine.createSpy('overwolf.games.events.onInfoUpdates.removeListener spy')
+			},
+			onNewEvents: {
+				addListener : jasmine.createSpy('overwolf.games.events.onNewEvents.addListener spy'),
+				removeListener : jasmine.createSpy('overwolf.games.events.onNewEvents.removeListener spy')
+			}
 		}
 
 	}

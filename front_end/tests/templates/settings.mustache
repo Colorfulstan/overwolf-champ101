@@ -1,0 +1,90 @@
+<div class="col-sm-6">
+	<ul class="padded-bot">
+		<li><i class="fa fa-info-circle pull-left padded-right-2"></i>
+
+			<p>To receive any data for your game you need to set your summoner name and the server you play on.
+			</p>
+		</li>
+		<li><i class="fa fa-exclamation-triangle pull-left padded-right-2"></i>
+
+			<p>Your summoner name is the name displayed within the game, not your account name. We will never ask you
+			   about your password or account name
+			</p>
+		</li>
+	</ul>
+
+	<form onsubmit="return false" id="summoner-form">
+		<div><label for="summoner-name-input">Summonername <br />
+											  (currently set: <strong>{{ summonerName }}</strong>)</label>
+			<br>
+			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
+				   can-value='summonerName' autofocus /></div>
+
+		<div><label for="server-region-select">Region</label>
+			<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
+				<option hidden>No Region set!</option>
+				<option value="BR">BR</option
+				<option value="EUNE">EUNE</option>
+				<option value="EUW">EUW</option>
+				<option value="KR">KR</option>
+				<option value="LAN">LAN</option>
+				<option value="LAS">LAS</option>
+				<option value="NA">NA</option>
+				<option value="OCE">OCE</option>
+				<option value="TR">TR</option>
+				<option value="RU">RU</option>
+				<option value="PBE">PBE</option>
+			</select></div>
+		<div class="row">
+			<div class="padded-bot-2 padded-top-2">
+				<!--suppress HtmlUnknownAttribute -->
+				<input type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" />
+				<label for="hideHome">Don't show main window at startup
+					<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What's this?)</a></label>
+				<input type="checkbox" name="sideView" id="sideView" can-value="sideViewEnabled" />
+				<label for="sideView">Side View
+					<a class="whats-this" title="{{sideViewEnabledInfo}}" href="#">(What's this?)</a></label>
+				<input type="checkbox" name="advancedTooltip" id="advancedTooltip" can-value="advancedChampionTooltip" />
+				<label for="advancedTooltip">Summary Tooltip in Match-Overview
+					<a class="whats-this" title="{{advancedChampionTooltipInfo}}" href="#">(What's this?)</a></label>
+			</div>
+		</div>
+		<div class="padded-top-2">
+			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
+			<div id="btn-cancel" class="btn col-xs-6 failed"><i class="fa fa-times"></i></div>
+		</div>
+	</form>
+
+</div>
+<div class="hidden-xs col-sm-1">&nbsp;</div>
+<div class="col-sm-5">
+	<div class="col-xs-8 col-xs-offset-2 col-sm-12 col-sm-offset-0">
+		<ul>
+			<li><i class="fa fa-info-circle pull-left padded-right"></i>
+
+				<p>Hotkeys only work from within the game.</p>
+			</li>
+		</ul>
+		<table class="hoverable">
+			<thead>
+			<tr>
+				<th>Hotkeys</th>
+			</tr>
+			</thead>
+			<tbody id="hotkeys-rows">
+			{{#hotkeys}}
+				<tr>
+					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
+						   class="padded-top padded-bot hotkey-btn">{{ title }}</a></td>
+					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
+						   class="padded-top padded-bot hotkey-btn">{{ string }}</a></td>
+				</tr>
+			{{/hotkeys}}
+			</tbody>
+		</table>
+		<div class="hotkeys__container--loading">
+			<div class="hotkeys-spinner"></div>
+		</div>
+	</div>
+</div>
+<div class="btn-resize fa fa-rss fa-rotate-270"></div>
