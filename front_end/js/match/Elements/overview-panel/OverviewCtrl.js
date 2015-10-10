@@ -10,10 +10,7 @@ steal(
 		 */
 		var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 			defaults: {
-				overviewTmpl: 'templates/match-overview.mustache',
-
-				// handled routes
-				reloadMatchRoute: Routes.reloadMatch
+				overviewTmpl: 'templates/match-overview.mustache'
 			}
 		}, {
 			/**
@@ -33,12 +30,6 @@ steal(
 						purple: teamPurple
 					})
 				);
-			},
-			// Eventhandler
-			'{reloadMatchRoute} route': function (routeData) {
-				steal.dev.log('refresh Route triggered in OverviewCtrl');
-				this.options.match = routeData.match;
-				this.renderView(this.options.match.blue,this.options.match.purple);
 			},
 			'.portrait mouseenter': function ($el, ev) {
 				//steal.dev.log('.portrait mouseenter');

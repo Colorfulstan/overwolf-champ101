@@ -172,7 +172,6 @@ steal(
 				/** @type {ODKWindow} */
 				odkWindow: null, // TODO: is this neccessary to have? Not used within WindowCtrl
 
-
 				/** a) opens the text for the "what's this" link clicked
 				 * b) closes all other open "what's this" texts and opens it for the target
 				 * c) closes the targeted "what's this" links text
@@ -245,6 +244,17 @@ steal(
 					if (ev.which == 1) {
 						steal.dev.log('WindowCtrl: open settings');
 						this.constructor.openSettings();
+
+						// Reload the Match-Window after Settings-Window gets closed
+						var interval = window.setInterval(function () {
+							overwolf.windows.getWindowState('Settings', function(/** WindowStateData */ result){
+								if (result.status == "success" && result.window_state == 'closed'){
+									can.route.attr({route: Routes.reloadMatch});
+									window.clearInterval(interval);
+								}
+							})
+						},100);
+
 						ev.stopPropagation();
 					}
 				}

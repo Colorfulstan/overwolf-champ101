@@ -41,7 +41,8 @@ steal('can.js'
 
 					// handled routes
 					togglePanelsRoute: Routes.togglePanels,
-					expandPanelsRoute: Routes.expandPanels
+					expandPanelsRoute: Routes.expandPanels,
+					reloadMatchRoute: Routes.reloadMatch
 				}
 
 			}, {
@@ -170,7 +171,7 @@ steal('can.js'
 						//// so we want to remove the handler, if the window not just got restored, but the value will be 1
 						//// TODO: fix this through timeout? For better readability
 						//if (localStorage.getItem('lock_matchWindowJustRestored') != "1") {
-							self._removeBlurHandler(callback)
+						self._removeBlurHandler(callback)
 						//} else {
 						//	//$document.blur();
 						//}
@@ -253,7 +254,7 @@ steal('can.js'
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						location.reload();
+						can.route.attr({route: Routes.reloadMatch});
 						ev.stopPropagation();
 					}
 				},
@@ -266,6 +267,13 @@ steal('can.js'
 					steal.dev.log('show/all - routeData:', routeData);
 					this.expandPanels();
 					can.route.attr({'route': ""});
+				},
+				'{reloadMatchRoute} route': function (routeData) {
+					//steal.dev.log('refresh Route triggered in OverviewCtrl');
+					//this.options.match = routeData.match;
+					//this.renderView(this.options.match.blue,this.options.match.purple);
+					location.reload();
+					can.route.attr({}, true);
 				}
 			});
 		return MatchCtrl;

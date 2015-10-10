@@ -21,13 +21,12 @@ steal(
 			/** removes the panel with given id (0 = uppermost panel) */
 			closePanel: 'close/panel/:id',
 			closeAllPanels: 'close/panel/all',
+			reloadMatch: 'reload/match',
 
 			// ChampionCtrl
 			panelChampion: 'add/:champ',
 			panelTeam: 'show/:team',
 
-			// OverviewController
-			reloadMatch: 'reload/match',
 
 			// WindowController
 			openWindow: 'open/:window',
