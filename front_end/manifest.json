@@ -2,7 +2,7 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-	"name": "LoL Champion Info",
+	"name": "[Champ] 101 - Basic Champion Knowledge",
 	"version": "0.9.2",
 	"minimum-overwolf-version": "0.87.00",
 	"author": "Colorfulstan",
