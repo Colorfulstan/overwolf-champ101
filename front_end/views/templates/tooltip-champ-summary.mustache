@@ -1,26 +1,18 @@
 <div class="row">
-	{{ #videoAvailable }}
-	<div class="col-xs-6"> {{ /videoAvailable }}
-		{{ ^videoAvailable }}
-		<div class="col-xs-12"> {{ /videoAvailable }}
-			<h2 class="champ-name padded-bot-0 text-center">{{name}}</h2>
-			<h6 class="champ-title padded-bot text-center">{{title}}</h6>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-6 padded-left padded-right line-right">
-			{{#spells}}
-				<h4 class="text-center append-spell-key" data-index-1="{{ number }}">{{name}}</h4>
-				{{>templates/parts/spell-values-table.mustache}}
-			{{/spells}}
-		</div>
-		<div class="col-xs-6 padded-left padded-right line-left collapse-border-left">
-			{{#passive}}
-				<h4 class="text-center append-spell-key padded-left" data-index-1="{{number}}">{{name}}</h4>
-				<p class="spell-description text-body padded-left">
-					{{#tooltip}}{{{.}}}{{/tooltip}}
-					{{^tooltip}}{{{description}}}{{/tooltip}}
-				</p>
-			{{/passive}}
-		</div>
-	</div>
+	<h2 class="champ-name padded-bot-0 text-center">{{name}}</h2>
+	<h6 class="champ-title padded-bot text-center">{{title}}</h6>
+</div>
+<hr class="width-100" />
+<div class="row padded-top padded-left padded-right">
+	{{>templates/parts/champ-spells-overview-table.mustache}}
+</div>
+<hr class="width-100" />
+<div class="row padded-left padded-right padded-top">
+	{{#passive}}
+		<h4 class="append-spell-key" data-index-1="{{number}}">{{name}}</h4>
+		<p class="spell-description text-body">
+			{{#tooltip}}{{{.}}}{{/tooltip}}
+			{{^tooltip}}{{{description}}}{{/tooltip}}
+		</p>
+	{{/passive}}
+</div>

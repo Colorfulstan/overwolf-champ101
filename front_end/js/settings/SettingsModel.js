@@ -186,7 +186,10 @@ steal(
 			/** @type {string}
 			 * @propterty
 			 * @readonly */
-			advancedChampionTooltipInfo: "If disabled, general Tips for the Champions will be displayed in the Match-Overview when hovering over a Champion Portrait. If enabled a Summary of their Skills will be shown.",
+			advancedChampionTooltipInfo: "<strong>Disabled:</strong> <br/>" +
+			"General Tips for the Champions will be displayed in the Match-Overview when hovering over a Champion Portrait.<br/>" +
+			"<strong>Enabled:</strong><br/>" +
+			"A Summary of their Skills will be shown.",
 			/** @type {boolean}
 			 * @property */
 			sideViewEnabled: can.compute(function (newVal) {

@@ -1,15 +1,17 @@
 <div class="table">
-	<div class="col-xs-6 padded-right line-right">
+<div class="row padded-left padded-right text-center">
+	<h2 class="spell-name"><span class="spell-key-icon" data-index-1="{{ number }}"></span> {{name}}</h2>
+</div>
+	<hr class="width-100"/>
+	<div class="col-xs-6 padded-right padded-top">
 		<div class="padded-right">
-			<h2 class="spell-name">{{name}}</h2>
-
 			<p class="spell-description text-body">
 				{{#tooltip}}{{{.}}}{{/tooltip}}
 				{{^tooltip}}{{{description}}}{{/tooltip}}
 			</p>
 		</div>
 	</div>
-	<div class="col-xs-6 padded-left line-left collapse-border-left">
+	<div class="col-xs-6 padded-left padded-top">
 		<div class="padded-left">
 			<div class="spell-values row">
 			{{>templates/parts/spell-values-table.mustache}}
