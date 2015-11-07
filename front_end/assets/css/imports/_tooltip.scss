@@ -2,15 +2,15 @@
 @import "../helper/colors";
 
 #tooltip-container {
-  width: $match-window-width;
   background-color: $color-bg;
   color: $color-font-bright;
+  display: none;
 
   padding: 30px;
 
   position: absolute;
+  width: $match-window-width;
   z-index: 9999;
-  display: none;
 
   &:hover, &:active, &:focus {
     opacity: 1;
@@ -33,70 +33,125 @@
 
   .spell-values-table {
     margin-bottom: $spacer;
-    td {
-      padding-top: $spacer/2;
-      padding-bottom: $spacer/2;
+    thead {
+      border-bottom: none;
     }
+    td {
+      font-weight: 300;
+      padding-bottom: $spacer/2;
+      padding-top: $spacer/2;
 
-    tr {
-
-      // costType classes set through API response costType value
-      &.NoCost, &.none {
-        display: none;
+      span {
+        color: inherit;
       }
-      &[class*="Health"] { // TODO: check this with Zac / Mundo
-        td:last-child {
-          color: $color-ressource-health;
+
+      // costType classes set through API response "costType" value
+      &.NoCost, &.none, &.Builds1Ferocity, &.Heat {
+        & span { display: none; }
+        &::after {
+          content: ' / ';
         }
+      }
+
+      &.NoCostor50Fury {
+        & span { display: none; }
+        &::after {
+          color: $color-ressource-fury;
+          content: '0 / 50';
+        }
+      }
+
+      &[class*="Health"] {
+        // TODO: check this with Zac / Mundo
+        color: $color-ressource-health;
       }
       &[class*="Mana"] {
-        td:last-child {
-          color: $color-ressource-mana;
-        }
+        color: $color-ressource-mana;
       }
       &[class*="Energy"] {
-        td:last-child {
-          color: $color-ressource-energy;
-        }
+        color: $color-ressource-energy;
       }
       // TODO: use "ressource" string provided instead!?
       &[class*="perSecond"] {
-        td:last-child:after {
-          display: inline;
+        &::after {
           content: ' per second';
+          display: inline;
         }
       }
       &[class*="10pMaxHealth"] {
-        td:last-child:after {
-          display: inline;
-          content: ', 10% max health';
+        &::after {
           color: $color-ressource-health;
+          content: ', 10% max health';
+          display: inline;
         }
       }
-    } // tr
-  } // .spell-values-table
-} // #tooltip-container
 
+    }
+    // td
+    tr {
+      border-bottom: 1px solid $color-lines-muted;
+    }
+    // tr
+  }
+  // .spell-values-table
+}
+
+// #tooltip-container
 
 #spell-video-container {
-//  width: 348px;
-//  height: 196px;
+  //  width: 348px;
+  //  height: 196px;
 
   #videoPlayer {
     //    not shown until certain there is no error
-//    display: none;
+    //    display: none;
   }
 }
 
 .append-spell-key {
   &[data-index-1="1"]::after {
-    content: ' (Passive)'; }
+    content: ' (Passive)';
+  }
   &[data-index-1="2"]::after {
-    content: ' (Q)'; }
+    content: ' (Q)';
+  }
   &[data-index-1="3"]::after {
-    content: ' (W)'; }
+    content: ' (W)';
+  }
   &[data-index-1="4"]::after {
-    content: ' (E)'; }
+    content: ' (E)';
+  }
   &[data-index-1="5"]::after {
-    content: ' (R)'; }
+    content: ' (R)';
+  }
+}
+
+.spell-key-icon {
+  text-align: center !important;
+  &[data-index-1]::after {
+    border: 2px solid $color-lines;
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    display: inline-block;
+    font-size: 25px;
+    font-weight: 800;
+    height: 40px;
+    margin: 0 auto;
+
+    padding-top: 5px;
+    width: 40px;
+  }
+  &[data-index-1="2"]::after {
+    content: 'Q';
+  }
+  &[data-index-1="3"]::after {
+    content: 'W';
+  }
+  &[data-index-1="4"]::after {
+    content: 'E';
+  }
+  &[data-index-1="5"]::after {
+    content: 'R';
+  }
 }

@@ -2,6 +2,7 @@ $color-bg : rgba(6,16,19,0.9);
 $color-blue: #0372a5;
 $color-purple: #a02a1f;
 $color-lines: #eee;
+$color-lines-muted: rgba(238,238,238,0.05);
 
 $color-accent-1: #039be5;
 $color-accent-2: #26a69a;
@@ -11,6 +12,7 @@ $color-font-bright: #fff;
 
 $style-border-line-width: 1px;
 $style-border-line: $style-border-line-width solid $color-lines;
+$style-border-line-muted: $style-border-line-width solid $color-lines-muted;
 $color-icons: #fff;
 
 $color-success: rgba(0,255,0,0.5);
@@ -21,3 +23,4 @@ $color-failed: rgba(255,0,0,0.5);
 $color-ressource-mana: #3c77ff;
 $color-ressource-energy: #e4e35f;
 $color-ressource-health: #ac2e1a;
+$color-ressource-fury: #ac2e1a;

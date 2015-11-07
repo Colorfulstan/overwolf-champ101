@@ -1,7 +1,7 @@
 <table class="spell-values-table padded-bot">
 	<tbody>
-	{{#cooldownBurn}} <tr> <td>Cooldown</td> <td>{{.}}</td> </tr> {{/cooldownBurn}}
-	{{#costBurn}} <tr class="{{costType}}"> <td>Cost</td> <td>{{.}}</td> </tr> {{/costBurn}}
-	{{#rangeBurn}} <tr> <td>Range</td> <td>{{.}}</td> </tr> {{/rangeBurn}}
+	{{#cooldownBurn}} <tr> <td>Cooldown</td> <td class="text-center">{{.}}</td> </tr> {{/cooldownBurn}}
+	{{#costBurn}} <tr> <td>Cost</td> <td class="text-center {{costType}}"><span>{{.}}</span></td> </tr> {{/costBurn}}
+	{{#rangeBurn}} <tr> <td>Range</td> <td class="text-center">{{.}}</td> </tr> {{/rangeBurn}}
 	</tbody>
 </table>

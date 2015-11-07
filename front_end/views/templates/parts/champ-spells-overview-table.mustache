@@ -1,0 +1,47 @@
+<table class="spell-values-table padded-bot">
+	<thead>
+	<tr class="no-border">
+		<td></td>
+		{{#spells}}
+			<td><p class="spell-key-icon text-center padded-bot-half" data-index-1="{{ number }}"></p></td>
+		{{/spells }}
+	</tr>
+	<tr>
+		<td></td>
+		{{#spells}}
+			<td><h5 class="headline-muted text-center">{{name}}</h5></td>
+		{{/spells }}
+	</tr>
+	</thead>
+	<tbody>
+	<tr class="spells-overview-table__cooldown">
+		<td>Cooldown</td>
+		{{#spells}}
+			<td class="text-center">
+				{{#cooldownBurn}}{{.}}{{/cooldownBurn}}
+				{{^cooldownBurn}}&nbsp;–&nbsp;{{/cooldownBurn}}
+			</td>
+		{{/spells }}
+	</tr>
+	<tr class="spells-overview-table__cost">
+		<td>Cost</td>
+		{{#spells}}
+			<td class="text-center {{costType}}">
+					<span>
+						{{#costBurn}} {{.}} {{/costBurn}}
+						{{^costBurn}} &nbsp;–&nbsp; {{/costBurn}}
+					</span>
+			</td>
+		{{/spells }}
+	</tr>
+	<tr class="spells-overview-table__range">
+		<td>Range</td>
+		{{#spells}}
+			<td class="text-center">
+				{{#rangeBurn}} {{.}} {{/rangeBurn}}
+				{{^rangeBurn}} &nbsp;–&nbsp; {{/rangeBurn}}
+			</td>
+		{{/spells }}
+	</tr>
+	</tbody>
+</table>
