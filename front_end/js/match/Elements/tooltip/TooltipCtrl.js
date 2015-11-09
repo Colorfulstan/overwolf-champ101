@@ -125,7 +125,36 @@ steal(
 
 				return ttNew;
 			}
-		}, {
+		,
+				/**
+				 * Replaces the placeholder within the ressource-string of a spell with the acchording
+				 * value and returns the new String
+				 * @param string e.g. { x } Mana
+				 * @param effectArr Array with the effect-values for the champ as given from Rriot API
+				 * @param costBurn The costburn for the spell
+				 * @param [varsArr]
+				 */
+				ressourceValued: function (string, effectBurnArr, costBurn, varsArr){
+					var pattern;
+					var newString = string;
+
+					pattern = new RegExp('{{ e(.) }}', 'g');
+					newString = newString.replace(pattern, function(a,b){
+						var i = parseInt(b);
+						return effectBurnArr[i];
+					});
+
+					pattern = new RegExp('{{ a(.) }}', 'g');
+					newString = newString.replace(pattern, function(a,b){
+						var i = parseInt(b);
+						return varsArr[i];
+					});
+
+					pattern = new RegExp('{{ cost }}', 'g');
+					newString = newString.replace(pattern, costBurn);
+					return newString;
+				}
+			}, {
 			/**
 			 *
 			 * @constructs TooltipCtrl

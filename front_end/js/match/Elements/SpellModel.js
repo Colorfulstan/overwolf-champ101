@@ -4,17 +4,15 @@ steal(
 	, 'ImageModel.js'
 	, 'TooltipCtrl.js'
 	, 'global.js'
-	, function ( can
+	, function (can
 		, /**ImageModel*/ ImageModel
-		, /**TooltipCtrl*/ TooltipCtrl
-	) {
+		, /**TooltipCtrl*/ TooltipCtrl) {
 
 		/** * // TODO: add more from backend and doc here
 
 		 * @see SpellModel.init()
 		 * */
-		var SpellModel = can.Model.extend('SpellModel', {
-		}, {
+		var SpellModel = can.Model.extend('SpellModel', {}, {
 			/**
 			 * @param options.name {String}
 			 * @param options.type {String}
@@ -65,9 +63,15 @@ steal(
 					}
 				}
 
-				if (options.tooltip != null && options.tooltip != undefined) {
+				if (options.tooltip != undefined && options.tooltip != null) {
 					// TODO: does this have to know TooltipCtrl to get the valued Tooltip?
 					this.attr('tooltip', TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars));
+				}
+				if (options.resource != undefined && options.resource != null) {
+					// TODO: does this have to know TooltipCtrl to get the valued ressource String?
+					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars));
+				} else {
+					this.attr('resource', options.costBurn);
 				}
 			},
 
