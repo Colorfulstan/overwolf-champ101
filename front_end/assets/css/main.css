@@ -10077,28 +10077,22 @@ i.fa {
       padding-top: 7.5px; }
       #tooltip-container .spell-values-table td span {
         color: inherit; }
-      #tooltip-container .spell-values-table td.NoCost span, #tooltip-container .spell-values-table td.none span, #tooltip-container .spell-values-table td.Builds1Ferocity span, #tooltip-container .spell-values-table td.Heat span {
+      #tooltip-container .spell-values-table td.NoCost span, #tooltip-container .spell-values-table td.none span {
         display: none; }
-      #tooltip-container .spell-values-table td.NoCost::after, #tooltip-container .spell-values-table td.none::after, #tooltip-container .spell-values-table td.Builds1Ferocity::after, #tooltip-container .spell-values-table td.Heat::after {
+      #tooltip-container .spell-values-table td.NoCost::after, #tooltip-container .spell-values-table td.none::after {
         content: ' / '; }
-      #tooltip-container .spell-values-table td.NoCostor50Fury span {
-        display: none; }
-      #tooltip-container .spell-values-table td.NoCostor50Fury::after {
-        color: #ac2e1a;
-        content: '0 / 50'; }
       #tooltip-container .spell-values-table td[class*="Health"] {
         color: #ac2e1a; }
       #tooltip-container .spell-values-table td[class*="Mana"] {
-        color: #3c77ff; }
+        color: #44ddff; }
       #tooltip-container .spell-values-table td[class*="Energy"] {
         color: #e4e35f; }
-      #tooltip-container .spell-values-table td[class*="perSecond"]::after {
-        content: ' per second';
-        display: inline; }
-      #tooltip-container .spell-values-table td[class*="10pMaxHealth"]::after {
-        color: #ac2e1a;
-        content: ', 10% max health';
-        display: inline; }
+      #tooltip-container .spell-values-table td[class*="Fury"] {
+        color: #ac2e1a; }
+      #tooltip-container .spell-values-table td[class*="Ferocity"] {
+        color: #ac2e1a; }
+      #tooltip-container .spell-values-table td[class*="Heat"] {
+        color: #e4e35f; }
     #tooltip-container .spell-values-table tr {
       border-bottom: 1px solid rgba(238, 238, 238, 0.05); }
 

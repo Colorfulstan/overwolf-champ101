@@ -46,23 +46,16 @@
       }
 
       // costType classes set through API response "costType" value
-      &.NoCost, &.none, &.Builds1Ferocity, &.Heat {
-        & span { display: none; }
+      &.NoCost, &.none {
+        & span {
+          display: none;
+        }
         &::after {
           content: ' / ';
         }
       }
 
-      &.NoCostor50Fury {
-        & span { display: none; }
-        &::after {
-          color: $color-ressource-fury;
-          content: '0 / 50';
-        }
-      }
-
       &[class*="Health"] {
-        // TODO: check this with Zac / Mundo
         color: $color-ressource-health;
       }
       &[class*="Mana"] {
@@ -71,20 +64,36 @@
       &[class*="Energy"] {
         color: $color-ressource-energy;
       }
+      &[class*="Fury"] {
+        color: $color-ressource-fury;
+      }
+      &[class*="Ferocity"] {
+        color: $color-ressource-ferocity;
+      }
+      &[class*="Heat"] {
+        color: $color-ressource-heat;
+      }
       // TODO: use "ressource" string provided instead!?
-      &[class*="perSecond"] {
-        &::after {
-          content: ' per second';
-          display: inline;
-        }
-      }
-      &[class*="10pMaxHealth"] {
-        &::after {
-          color: $color-ressource-health;
-          content: ', 10% max health';
-          display: inline;
-        }
-      }
+//      &[class*="perSecond"] {
+//        &::after {
+//          content: ' per second';
+//          display: inline;
+//        }
+//      }
+//      &[class*="10pMaxHealth"] {
+//        &::after {
+//          color: $color-ressource-health;
+//          content: ', 10% max health';
+//          display: inline;
+//        }
+//      }
+//      &[class*="pofcurrentHealth"] {
+//        &::after {
+//          color: $color-ressource-health;
+//          content: '% current health';
+//          display: inline;
+//        }
+//      }
 
     }
     // td
