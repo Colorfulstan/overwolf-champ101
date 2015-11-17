@@ -19,7 +19,7 @@ steal('can', 'Routes.js', function (can, Routes) {
 		overwolf.settings.registerHotKey("open_panels_team_blue", function (result) {
 			team_handler(result, 'blue');
 		});
-		overwolf.settings.registerHotKey("open_panels_team_purple", function (result) {
+		overwolf.settings.registerHotKey("open_panels_team_red", function (result) {
 			team_handler(result, 'purple');
 		});
 		overwolf.settings.registerHotKey("close_panels", function (result) {
