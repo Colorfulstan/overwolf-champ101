@@ -32,7 +32,6 @@ steal('can.js'
 					reloadBtn: '.btn-reload',
 					appBar: '#match-app-bar',
 					handle: '#handle',
-					matchViewSideClass: 'match-side-view',
 
 					loadingTmpl: 'templates/parts/match-loading.mustache',
 
@@ -63,13 +62,9 @@ steal('can.js'
 					overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
 						self.options.odkWindow = result.window;
 						var x = self.constructor.getCenteredX(self.options.odkWindow.width), y = 0;
-						if (SettingsModel.sideViewEnabled()) {
-							x = 0;
-							y = 200;
-						}
 						overwolf.windows.changePosition(self.options.odkWindow.id, x, y);
 
-						self.initAppBar(SettingsModel.sideViewEnabled());
+						self.initAppBar();
 
 						options.model.attr('summonerId', options.settings.summonerId()); // TODO: model refactoring for computes
 						options.model.attr('server', options.settings.server()); // TODO: model refactoring for computes
@@ -90,14 +85,8 @@ steal('can.js'
 				/**
 				 * Initializes the HTML element depending on if it is shown on the side or top of the screen.
 				 * makes the App bar visible
-				 * @param sideViewEnabled true if Match window is displayed on the side of the screen
 				 */
-				initAppBar: function (sideViewEnabled) {
-					if (sideViewEnabled) {
-						this.element.addClass(this.options.matchViewSideClass);
-					} else {
-						this.element.removeClass(this.options.matchViewSideClass);
-					}
+				initAppBar: function () {
 					$(this.options.appBar).show();
 				},
 				loadMatch: function () {
@@ -229,22 +218,14 @@ steal('can.js'
 				expandPanels: function () {
 					var $panelContainer = this.options.$panelContainer;
 					var $appBar = $(this.options.appBar);
-					if (SettingsModel.sideViewEnabled() && $appBar.hasClass('collapsed')) {
-						$panelContainer.animate({width: "toggle"}, ANIMATION_SLIDE_SPEED_PER_PANEL);
-					} else {
-						$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
-					}
+					$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
 					$appBar.removeClass('collapsed');
 				},
 				/** Collapse the champion panels */
 				hidePanels: function () {
 					var $panelContainer = this.options.$panelContainer;
 					var $appBar = $(this.options.appBar);
-					if (SettingsModel.sideViewEnabled() && !$appBar.hasClass('collapsed')) {
-						$panelContainer.animate({width: "toggle"}, ANIMATION_SLIDE_SPEED_PER_PANEL);
-					} else {
-						$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
-					}
+					$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
 					$appBar.addClass('collapsed');
 				},
 

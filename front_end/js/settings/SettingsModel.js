@@ -69,12 +69,6 @@ steal(
 				});
 				return deferred.promise();
 			},
-			/** Is the Match window being displayed on the side of the screen or on top?
-			 * @static
-			 * @returns {boolean} */
-			sideViewEnabled: function () {
-				return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true'
-			},
 			/** @static */
 			hideHomeAtStart: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_HOME_AT_START) == 'true'
@@ -190,25 +184,6 @@ steal(
 			"General Tips for the Champions will be displayed in the Match-Overview when hovering over a Champion Portrait.<br/>" +
 			"<strong>Enabled:</strong><br/>" +
 			"A Summary of their Skills will be shown.",
-			/** @type {boolean}
-			 * @property */
-			sideViewEnabled: can.compute(function (newVal) {
-				if (newVal == undefined) {
-					return localStorage.getItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE) == 'true';
-				} else { // setter
-					var oldVal = this.sideViewEnabled();
-
-					this.valueChanged('sideViewEnabled', oldVal);
-					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE);
-					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_MATCH_WINDOW_ON_SIDE, newVal);
-				}
-			}),
-			/**
-			 * @type {string}
-			 * @propterty
-			 * @readonly */
-			sideViewEnabledInfo: "This will display the Match Window on the left edge of the screen instead of the top edge",
-
 			/**
 			 * @property
 			 * @type {string}
