@@ -18,8 +18,6 @@ steal(
 				defaults: {
 					name: 'Main'
 					, matchBtn: '.btn-match'
-					, hideHomeCB: '#hideHome'
-					, settingsTmpl: '#settings-tmpl'
 				},
 
 				/** Register handlers for window-events here
@@ -37,6 +35,7 @@ steal(
 						var settings = new SettingsModel();
 						steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 						if (self.gameStarted(result)) {
+							settings.startMatchCollapsed(true);
 							settings.cachedGameAvailable(true);
 							steal.dev.warn('League of Legends game started', new Date());
 							self.openMatch();
@@ -74,16 +73,12 @@ steal(
 				 * @see MainCtrl.start opening of the Window separated into start() to enable more detailed control over the start of the app */
 				init: function () {
 					WindowCtrl.prototype.init.apply(this, arguments);
-
-					this.element.find('#content').append(
-						can.view(this.options.settingsTmpl, new SettingsModel())
-					);
 					steal.dev.log('MainCtrl initialized :', this);
 				}
 				,
 
 				/**
-				 * Opens the Main Window and SettingsWindow if Summoner is not set
+				 * Opens the Main Window and if Summoner is not set also the SettingsWindow
 				 * @param isSummonerSet
 				 */
 				start: function (isSummonerSet) {

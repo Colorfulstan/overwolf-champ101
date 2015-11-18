@@ -26,9 +26,9 @@
 		"file": "views/main.html",
 		"transparent": true,
 		"resizable": true,
-		"size": {"width": 400, "height": 670},
-		"min_size": {"width": 400, "height": 670},
-		"max_size": {"width": 400, "height": 1200}
+		"size": {"width": 400, "height": 600},
+		"min_size": {"width": 400, "height": 600},
+		"max_size": {"width": 400, "height": 600}
 	  },
 	  "Settings": {
 		"file": "views/settings.html",

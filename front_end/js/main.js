@@ -36,14 +36,12 @@ steal(
 
 		/** App got started through overwolf */
 		function automaticAppStart() {
-			// here we assume summoner already got set somewhen, else this option couldn't have been set
-			if (!SettingsModel.hideHomeAtStart()) {
-				main.start(SettingsModel.isSummonerSet());
-			}
-			settings.startMatchCollapsed(true);
-			if (SettingsModel.isSummonerSet()) { // If Summoner is set start the matchwindow right away
+			if (!SettingsModel.isSummonerSet()) {
+				main.start(false);
+			} else {
+				settings.startMatchCollapsed(true);
 				main.constructor.openMatch();
-			} // otherwise user has to open it manually ot start a game after setting the summoner
+			}
 		}
 	});
 
