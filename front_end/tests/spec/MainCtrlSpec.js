@@ -47,35 +47,4 @@ describe("MainCtrlSpec - testing the Main-Window", function () {
 			expect(mainCtrl.openMatch).not.toHaveBeenCalled();
 		});
 	});
-
-	function setUpHTMLSettingsTmpFixture(settings) {
-		can.view.mustache('setTmpl',
-			'<div id="content"><div>' +
-			'<input class="pull-left" type="checkbox" name="hideHome" id="hideHome" can-value="hideHomeAtStart" {{ #hideHomeAtStart }} checked="checked" {{ /hideHomeAtStart }}/>' +
-			'<label for="hideHome">Don\'t show at start<a class="whats-this" title="{{hideHomeAtStartInfo}}" href="#">(What\'s this?)</a></label>' +
-			'</div></div>');
-
-		jasmine.getFixtures().set(
-			can.view('setTmpl', settings)
-		)
-	}
-
-	//console.log(jasmine.getFixtures());
-	//}
-	describe("#content settings-integration", function () {
-		beforeEach(function () {
-			settingsModel = new SettingsModel();
-			setUpHTMLSettingsTmpFixture(settingsModel);
-		});
-		//it("should have a script-tag with #settings-tmp", function () { expect($('#settings-tmpl')).toBeInDOM(); });
-		it("should have live binding between input #hideHome and the Setting", function () {
-			expect($('input')).toBeInDOM();
-			expect(settingsModel.hideHomeAtStart()).toBeFalsy();
-			$('#hideHome').trigger("click");
-			expect(settingsModel.hideHomeAtStart()).toBeTruthy();
-			$('#hideHome').trigger("click");
-			expect(settingsModel.hideHomeAtStart()).toBeFalsy();
-		});
-	});
-
 });

@@ -12,7 +12,6 @@ steal(
 			STORAGE_KEY_REGION: 'region-code',
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
-			STORAGE_KEY_HOME_AT_START: 'setting-home-at-startup',
 			STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 			STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
 			//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
@@ -67,10 +66,6 @@ steal(
 					deferred.resolve(result);
 				});
 				return deferred.promise();
-			},
-			/** @static */
-			hideHomeAtStart: function () {
-				return localStorage.getItem(SettingsModel.STORAGE_KEY_HOME_AT_START) == 'true'
 			},
 			/** @static */
 			isSummonerSet: function () {
@@ -131,6 +126,7 @@ steal(
 			/** @type {boolean}
 			 * @propterty */
 			startMatchCollapsed: can.compute(function (newVal) {
+				debugger;
 				if (newVal == undefined) {
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED) == 'true';
 				} else { // setter
@@ -140,19 +136,6 @@ steal(
 
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED);
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED, newVal);
-				}
-			}),
-			/** @type {boolean}
-			 * @propterty */
-			hideHomeAtStart: can.compute(function (newVal) {
-				if (newVal == undefined) {
-					return this.constructor.hideHomeAtStart();
-				} else { // setter
-					var oldVal = this.hideHomeAtStart();
-
-					this.valueChanged('hideHomeAtStart', oldVal);
-					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_HOME_AT_START);
-					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_HOME_AT_START, newVal);
 				}
 			}),
 			/** @type {string}
