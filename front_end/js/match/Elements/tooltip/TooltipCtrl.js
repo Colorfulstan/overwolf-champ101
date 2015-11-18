@@ -206,7 +206,7 @@ steal(
 					case 'champ':
 						var champ = this.options.match.participantsByChamp[routeData.champ].champ;
 						var champTooltipView;
-						if (routeData.overview && SettingsModel.advancedChampionTooltip()){
+						if (routeData.overview){
 							champTooltipView = can.view(this.options.championSummaryTmpl, champ);
 						} else {
 							champTooltipView = can.view(this.options.championTmpl, champ);
