@@ -6,12 +6,6 @@
   width: $match-window-width;
   margin: 1px auto 0;
   margin-bottom: -2px; // visual compensation for 1px at app-bar
-
-  .match-side-view & { // #panel-container
-    margin: 0 0 0 1px;
-    margin-right: -2px; // visual compensation for 1px at app-bar
-    float: left;
-  }
 }
 
 $app-bar-height: 30px;
@@ -25,17 +19,6 @@ $app-bar-height: 30px;
   background-color: rgba(0, 0, 0, 0.01);
   margin-top: 1px; // enables scrolling on the top edge (compensated by panel-container -1px)
   overflow: hidden;
-
-  .match-side-view & { // #match-app-bar
-    position: relative;
-    float: left;
-    right: 0;
-    top: 0;
-    margin: 0 0 0 1px; // enables scrolling on the top edge (compensated by panel-container -1px)
-    left: initial;
-    width: 100px;
-    height: 60px;
-  }
 
   &:hover {
     .app-buttons {
@@ -58,13 +41,6 @@ $app-bar-height: 30px;
     border-radius: 100%;
     position: absolute;
 
-    .match-side-view & { // #handle
-      left: -$app-bar-height / 2;
-      top: 0;
-      height: 100%;
-      width: $app-bar-height;
-    }
-
     &.animated-bg {
       -webkit-animation: colorchange 2s linear infinite;
       animation: colorchange 2s linear infinite;
@@ -77,16 +53,6 @@ $app-bar-height: 30px;
     display: none;
     width: 120px;
     margin-top: 5px;
-
-    .match-side-view & { // .app-buttons
-      width: 40%;
-      float: right !important;
-      margin-top: 8px;
-
-      .icon {
-        height: 25px;
-      }
-    }
   } // .app-buttons
 }
 

@@ -10355,10 +10355,6 @@ select {
   width: 700px;
   margin: 1px auto 0;
   margin-bottom: -2px; }
-  .match-side-view #panel-container {
-    margin: 0 0 0 1px;
-    margin-right: -2px;
-    float: left; }
 
 #match-app-bar {
   display: none;
@@ -10369,15 +10365,6 @@ select {
   background-color: rgba(0, 0, 0, 0.01);
   margin-top: 1px;
   overflow: hidden; }
-  .match-side-view #match-app-bar {
-    position: relative;
-    float: left;
-    right: 0;
-    top: 0;
-    margin: 0 0 0 1px;
-    left: initial;
-    width: 100px;
-    height: 60px; }
   #match-app-bar:hover .app-buttons {
     display: block; }
   #match-app-bar:hover #handle {
@@ -10393,11 +10380,6 @@ select {
     background-color: rgba(6, 16, 19, 0.9);
     border-radius: 100%;
     position: absolute; }
-    .match-side-view #match-app-bar #handle {
-      left: -15px;
-      top: 0;
-      height: 100%;
-      width: 30px; }
     #match-app-bar #handle.animated-bg {
       -webkit-animation: colorchange 2s linear infinite;
       animation: colorchange 2s linear infinite;
@@ -10406,12 +10388,6 @@ select {
     display: none;
     width: 120px;
     margin-top: 5px; }
-    .match-side-view #match-app-bar .app-buttons {
-      width: 40%;
-      float: right !important;
-      margin-top: 8px; }
-      .match-side-view #match-app-bar .app-buttons .icon {
-        height: 25px; }
 
 @-webkit-keyframes colorchange {
   0% {
