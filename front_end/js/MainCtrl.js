@@ -25,6 +25,20 @@ steal(
 				 * @static*/
 				registerOverwolfHandlers: function () {
 					var self = this;
+					var startMatchWhenFPSStable = function(/** FPSInfo */ result) {
+						console.log(result.Fps);
+						var settings = new SettingsModel();
+						if (result.Fps > 30 && settings.mostRecentFPS() > 30) {
+							settings.startMatchCollapsed(true);
+							settings.cachedGameAvailable(true);
+							self.openMatch();
+							steal.dev.log('FPS Info request ends, framerate stable with ' + result.Fps);
+							overwolf.benchmarking.onFpsInfoReady.removeListener(startMatchWhenFPSStable);
+						} else {
+							settings.mostRecentFPS(result.Fps)
+						}
+					};
+
 					overwolf.windows.onStateChanged.addListener(function (/** WindowStateChangeData */ result) {
 						steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
 					});
@@ -33,14 +47,19 @@ steal(
 					});
 					overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
 						var settings = new SettingsModel();
+						var fpsHandler = $.proxy(startMatchWhenFPSStable, self);
 						steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 						if (self.gameStarted(result)) {
-							settings.startMatchCollapsed(true);
-							settings.cachedGameAvailable(true);
 							steal.dev.warn('League of Legends game started', new Date());
-							self.openMatch();
+							// removing it in case game did not finish cleanly
+							overwolf.benchmarking.onFpsInfoReady.removeListener(fpsHandler);
+							overwolf.benchmarking.onFpsInfoReady.addListener(fpsHandler);
+							overwolf.benchmarking.requestFpsInfo(1000, function () { steal.dev.log('FPS Info request starts') })
 						}
 						if (self.gameFinished(result)) {
+							settings.mostRecentFPS(0);
+							steal.dev.log('stopping possible fps requests');
+							overwolf.benchmarking.onFpsInfoReady.removeListener(fpsHandler);
 							settings.cachedGameAvailable(false);
 							steal.dev.warn('League of Legends game finished', new Date());
 							self.closeMatch()

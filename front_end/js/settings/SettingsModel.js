@@ -14,6 +14,7 @@ steal(
 			STORAGE_KEY_ID: 'summoner-id',
 			STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 			STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
+			STORAGE_KEY_FRAME_RATE: 'setting-framerate',
 			//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
 
 			/** @static */
@@ -126,7 +127,6 @@ steal(
 			/** @type {boolean}
 			 * @propterty */
 			startMatchCollapsed: can.compute(function (newVal) {
-				debugger;
 				if (newVal == undefined) {
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED) == 'true';
 				} else { // setter
@@ -136,6 +136,15 @@ steal(
 
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED);
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED, newVal);
+				}
+			}),
+			/** @type {boolean}
+			 * @propterty */
+			mostRecentFPS: can.compute(function (newVal) {
+				if (newVal == undefined) {
+					return localStorage.getItem(SettingsModel.STORAGE_KEY_FRAME_RATE);
+				} else { // setter
+					localStorage.setItem(SettingsModel.STORAGE_KEY_FRAME_RATE, newVal);
 				}
 			}),
 			/** @type {string}
