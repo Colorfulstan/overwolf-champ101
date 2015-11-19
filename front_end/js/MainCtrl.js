@@ -24,20 +24,17 @@ steal(
 				 * @memberOf {MainCtrl}
 				 * @static*/
 				registerOverwolfHandlers: function () {
+
 					var self = this;
-					var startMatchWhenFPSStable = function(/** FPSInfo */ result) {
-						console.log(result.Fps);
-						var settings = new SettingsModel();
-						if (result.Fps > 30 && settings.mostRecentFPS() > 30) {
-							settings.startMatchCollapsed(true);
-							settings.cachedGameAvailable(true);
-							self.openMatch();
-							steal.dev.log('FPS Info request ends, framerate stable with ' + result.Fps);
-							overwolf.benchmarking.onFpsInfoReady.removeListener(startMatchWhenFPSStable);
-						} else {
-							settings.mostRecentFPS(result.Fps)
-						}
-					};
+					var settings = new SettingsModel();
+
+					$(MainCtrl).on('fpsStable', function () {
+						self.removeMatchStartOnStableFpsListener();
+						settings.startMatchCollapsed(true);
+						settings.cachedGameAvailable(true);
+						self.openMatch();
+						//overwolf.benchmarking.stopRequesting(); // MPTE: stopping requesting makes it impossible to start it again until app restarts!?
+					});
 
 					overwolf.windows.onStateChanged.addListener(function (/** WindowStateChangeData */ result) {
 						steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
@@ -46,26 +43,40 @@ steal(
 						steal.dev.log('debug', "MainCtrl - overwolf.windows.onMainWindowRestored:", result);
 					});
 					overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
-						var settings = new SettingsModel();
-						var fpsHandler = $.proxy(startMatchWhenFPSStable, self);
 						steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 						if (self.gameStarted(result)) {
 							steal.dev.warn('League of Legends game started', new Date());
 							// removing it in case game did not finish cleanly
-							overwolf.benchmarking.onFpsInfoReady.removeListener(fpsHandler);
-							overwolf.benchmarking.onFpsInfoReady.addListener(fpsHandler);
-							overwolf.benchmarking.requestFpsInfo(1000, function () { steal.dev.log('FPS Info request starts') })
+							self.removeMatchStartOnStableFpsListener();
+							self.addMatchStartOnStableFpsListener();
 						}
 						if (self.gameFinished(result)) {
 							settings.mostRecentFPS(0);
 							steal.dev.log('stopping possible fps requests');
-							overwolf.benchmarking.onFpsInfoReady.removeListener(fpsHandler);
+							self.removeMatchStartOnStableFpsListener();
 							settings.cachedGameAvailable(false);
 							steal.dev.warn('League of Legends game finished', new Date());
 							self.closeMatch()
 						}
 					});
 				},
+				_startMatchWhenFPSStable : function(/** FPSInfo */ result) {
+					var settings = new SettingsModel();
+					console.log(result.Fps);
+					if (result.Fps > 30 && settings.mostRecentFPS() > 30) {
+						steal.dev.log('FPS Info request ends, framerate stable with ' + result.Fps);
+						$(MainCtrl).trigger('fpsStable');
+					} else {
+						settings.mostRecentFPS(result.Fps)
+					}
+				},
+				addMatchStartOnStableFpsListener: function(){
+					overwolf.benchmarking.onFpsInfoReady.addListener(MainCtrl._startMatchWhenFPSStable);
+				},
+				removeMatchStartOnStableFpsListener: function(){
+					overwolf.benchmarking.onFpsInfoReady.removeListener(MainCtrl._startMatchWhenFPSStable);
+				},
+
 				/**
 				 * @param {GameInfoChangeData} changeData
 				 * @returns {bool} true if a game has been started, according to the given data

@@ -32,6 +32,7 @@ steal(
 		function manualAppStart() {
 			settings.startMatchCollapsed(false);
 			main.start(SettingsModel.isSummonerSet());
+			overwolf.benchmarking.requestFpsInfo(1000, function () { steal.dev.log('FPS Info request starts') });
 		}
 
 		/** App got started through overwolf */
@@ -40,7 +41,9 @@ steal(
 				main.start(false);
 			} else {
 				settings.startMatchCollapsed(true);
-				main.constructor.openMatch();
+				//main.constructor.openMatch();
+				main.constructor.addMatchStartOnStableFpsListener();
+				overwolf.benchmarking.requestFpsInfo(1000, function () { steal.dev.log('FPS Info request starts') });
 			}
 		}
 	});
