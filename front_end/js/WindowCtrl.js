@@ -31,7 +31,8 @@ steal(
 
 					// handled routes
 					/**@inheritDoc Routes.toggleWindow */
-					toggleWindowRoute: Routes.toggleWindow
+					toggleWindowRoute: Routes.toggleWindow,
+					restoreWindowRoute: Routes.restoreWindow
 				},
 				/**@static*/
 				SCREEN_WIDTH: window.screen.availWidth,
@@ -85,9 +86,15 @@ steal(
 					overwolf.windows.obtainDeclaredWindow(name, function (result) {
 						if (result.status == "success") {
 							if (result.window.isVisible) {
+								if (name == 'Match') {
+									SettingsModel.togglePanelsLocked(true);
+								}
 								self.minimize(name);
 								deferred.resolve(null);
 							} else {
+								if (name == 'Match') {
+									SettingsModel.togglePanelsLocked(false);
+								}
 								$.when(self.open(name)).then(function (/**ODKWindow*/ odkWindow) {
 									deferred.resolve(odkWindow);
 								});
@@ -247,13 +254,13 @@ steal(
 
 						// Reload the Match-Window after Settings-Window gets closed
 						var interval = window.setInterval(function () {
-							overwolf.windows.getWindowState('Settings', function(/** WindowStateData */ result){
-								if (result.status == "success" && result.window_state == 'closed'){
+							overwolf.windows.getWindowState('Settings', function (/** WindowStateData */ result) {
+								if (result.status == "success" && result.window_state == 'closed') {
 									can.route.attr({route: Routes.reloadMatch});
 									window.clearInterval(interval);
 								}
 							})
-						},100);
+						}, 100);
 
 						ev.stopPropagation();
 					}
@@ -279,9 +286,22 @@ steal(
 				 * */
 				'{toggleWindowRoute} route': function (routeData) {
 					steal.dev.log('toggle/:window - routeData:', routeData);
-					debugger;
 					WindowCtrl.toggle(routeData.window);
-					can.route.attr({'route': Routes.expandPanels});
+					can.route.attr({'route': ''});
+				}
+				,
+				/**
+				 * calls {@link WindowCtrl.open}
+				 * @listens can.Route#route {@link restoreWindowRoute}
+				 * @param {ODKWindow.name} routeData.window
+				 * */
+				'{restoreWindowRoute} route': function (routeData) {
+					steal.dev.log('restore/:window - routeData:', routeData);
+					WindowCtrl.open(routeData.window);
+					if (routeData.window == 'Match') {
+						SettingsModel.togglePanelsLocked(false);
+					}
+					can.route.attr({'route': ''});
 				}
 				//,
 				//'{helpBtn} mousedown': function ($el, ev) {
