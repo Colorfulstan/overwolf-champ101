@@ -24,7 +24,6 @@ steal(
 				 * @memberOf {MainCtrl}
 				 * @static*/
 				registerOverwolfHandlers: function () {
-
 					var self = this;
 					var settings = new SettingsModel();
 

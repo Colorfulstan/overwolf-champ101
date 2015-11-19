@@ -1,12 +1,24 @@
 "use strict";
-steal('can', 'Routes.js', function (can, Routes) {
+steal('can', 'Routes.js', 'SettingsModel.js', function (can, Routes, SettingsModel) {
 
 	var Hotkeys = function () {};
 	Hotkeys.registerHotkeys = function () {
+		overwolf.settings.registerHotKey("toggle_match", function (result) {
+			steal.dev.log('Hotkey toggle_match triggered', result);
+			if (result.status == "success") {
+				can.route.attr({'route': Routes.toggleWindow, 'window': 'Match'});
+				steal.dev.log('can route after hitting toggle_match', can.route.attr());
+			}
+		});
 		overwolf.settings.registerHotKey("toggle_panels", function (result) {
 			steal.dev.log('Hotkey toggle_panels triggered', result);
 			if (result.status == "success") {
-				can.route.attr({'route': Routes.togglePanels});
+				if (!SettingsModel.togglePanelsLocked()){
+					can.route.attr({'route': Routes.togglePanels}, true);
+				} else {
+					can.route.attr({'route': Routes.restoreWindow, 'window': 'Match'});
+					can.route.attr({'route': Routes.expandPanels}, true);
+				}
 				steal.dev.log('can route after hitting toggle_panels', can.route.attr());
 			}
 		});
@@ -27,13 +39,6 @@ steal('can', 'Routes.js', function (can, Routes) {
 			if (result.status == "success") {
 				can.route.attr({'route': Routes.closeAllPanels});
 				steal.dev.log('can route after hitting close_panels', can.route.attr());
-			}
-		});
-		overwolf.settings.registerHotKey("toggle_match", function (result) {
-			steal.dev.log('Hotkey toggle_match triggered', result);
-			if (result.status == "success") {
-				can.route.attr({'route': Routes.toggleWindow, 'window': 'Match'});
-				steal.dev.log('can route after hitting toggle_match', can.route.attr());
 			}
 		});
 	};

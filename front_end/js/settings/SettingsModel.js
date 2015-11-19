@@ -71,6 +71,14 @@ steal(
 			/** @static */
 			isSummonerSet: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
+			},
+			togglePanelsLocked: function (newVal) {
+				if (newVal == undefined) { // getter
+					return localStorage.getItem('lock_togglePanels') == 'true';
+				} else { // setter
+					if (newVal == false) localStorage.removeItem('lock_togglePanels');
+					else if (newVal == true) localStorage.setItem('lock_togglePanels', 'true');
+				}
 			}
 		}, {
 			/**
