@@ -25,7 +25,8 @@ steal(
 				showTeamRoute: Routes.panelTeam,
 				addChampRoute: Routes.panelChampion,
 				closeAllPanelsRoute: Routes.closeAllPanels,
-				closeSinglePanelsRoute: Routes.closePanel
+				closeSinglePanelsRoute: Routes.closePanel,
+				hideTooltipRoute: Routes.tooltipHide
 			}
 		}, {
 			/**
@@ -146,6 +147,10 @@ steal(
 				steal.dev.log('close/panel/all');
 				can.route.attr({'route': ''});
 				this.closeAllPanels();
+			},
+			'{hideTooltipRoute} route': function (routeData) {
+				$('.sticky-tooltip').removeClass('sticky-tooltip'); // TODO: centralize this somewhere (in tooltip or somewhere)
+				$('.pinnable').removeClass('active'); // TODO: centralize this somewhere (in tooltip or somewhere)
 			},
 			'{closeSinglePanelsRoute} route': function (routeData) {
 				steal.dev.log('close Panel route', routeData);

@@ -29,6 +29,7 @@ steal('can.js'
 					name: 'Match',
 					$panelContainer: $('#panel-container'),
 					$overviewContainer: $('#match-overview-container'),
+
 					reloadBtn: '.btn-reload',
 					appBar: '#match-app-bar',
 					handle: '#handle',
@@ -43,7 +44,6 @@ steal('can.js'
 					expandPanelsRoute: Routes.expandPanels,
 					reloadMatchRoute: Routes.reloadMatch
 				}
-
 			}, {
 
 				/**
@@ -224,6 +224,12 @@ steal('can.js'
 				/** Collapse the champion panels */
 				hidePanels: function () {
 					var $panelContainer = this.options.$panelContainer;
+
+					//// TODO: centralize this somewhere (in tooltip or somewhere)
+					//$panelContainer.find('.sticky-tooltip').removeClass('sticky-tooltip');
+					//$panelContainer.find('.pinnable').removeClass('sticky-tooltip');
+
+					can.route.attr({route: Routes.tooltipHide}, true);
 					var $appBar = $(this.options.appBar);
 					$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
 					$appBar.addClass('collapsed');
