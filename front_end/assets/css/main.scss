@@ -25,6 +25,8 @@
 
   font-family: 'Roboto';
   letter-spacing: 0.02em;
+  -webkit-user-select: none !important; // disables text-selection everywhere;
+  cursor: default;
 }
 
 html {
