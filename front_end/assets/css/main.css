@@ -10447,7 +10447,9 @@ select {
   overflow: hidden;
   color: #fff;
   font-family: 'Roboto';
-  letter-spacing: 0.02em; }
+  letter-spacing: 0.02em;
+  -webkit-user-select: none !important;
+  cursor: default; }
 
 html {
   font-size: 14px;
