@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 		},
 		clean: {
 			preBuild: ['out'],
-			postBuild: ["bundles", 'out']
+			postBuild: ["bundles", 'out', 'dist']
 		},
 		copy: {
 			views: {
