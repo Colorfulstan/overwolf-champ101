@@ -13,7 +13,7 @@ steal('can', 'Routes.js', 'SettingsModel.js', function (can, Routes, SettingsMod
 		overwolf.settings.registerHotKey("toggle_panels", function (result) {
 			steal.dev.log('Hotkey toggle_panels triggered', result);
 			if (result.status == "success") {
-				if (!SettingsModel.togglePanelsLocked()){
+				if (!SettingsModel.isMatchMinimized()){
 					can.route.attr({'route': Routes.togglePanels}, true);
 				} else {
 					can.route.attr({'route': Routes.restoreWindow, 'window': 'Match'});
