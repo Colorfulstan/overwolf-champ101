@@ -57,7 +57,9 @@ steal(
 				},
 				/** @static*/
 				minimize: function (/** ODKWindow.name */ name) {
+					$(WindowCtrl).trigger('pre-minimizing');
 					overwolf.windows.minimize(name);
+					$(WindowCtrl).trigger('minimized');
 				},
 				/** opens the {@link ODKWindow} with the given {@link ODKWindow.name}
 				 * @static
@@ -69,6 +71,7 @@ steal(
 						if (result.status == "success") {
 							var odkWindow = result.window;
 							overwolf.windows.restore(odkWindow.id, function (result) {
+								$(WindowCtrl).trigger('restored');
 								deferred.resolve(odkWindow);
 							});
 						}
@@ -86,17 +89,17 @@ steal(
 					overwolf.windows.obtainDeclaredWindow(name, function (result) {
 						if (result.status == "success") {
 							if (result.window.isVisible) {
-								if (name == 'Match') {
-									SettingsModel.togglePanelsLocked(true);
-								}
 								self.minimize(name);
+								if (name == 'Match') {
+									SettingsModel.isMatchMinimized(true);
+								}
 								deferred.resolve(null);
 							} else {
-								if (name == 'Match') {
-									SettingsModel.togglePanelsLocked(false);
-								}
 								$.when(self.open(name)).then(function (/**ODKWindow*/ odkWindow) {
 									deferred.resolve(odkWindow);
+									if (name == 'Match') {
+										SettingsModel.isMatchMinimized(false);
+									}
 								});
 							}
 						}
@@ -299,7 +302,7 @@ steal(
 					steal.dev.log('restore/:window - routeData:', routeData);
 					WindowCtrl.open(routeData.window);
 					if (routeData.window == 'Match') {
-						SettingsModel.togglePanelsLocked(false);
+						SettingsModel.isMatchMinimized(false);
 					}
 					can.route.attr({'route': ''});
 				}

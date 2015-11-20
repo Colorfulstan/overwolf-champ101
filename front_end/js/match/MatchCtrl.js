@@ -43,7 +43,8 @@ steal('can.js'
 					togglePanelsRoute: Routes.togglePanels,
 					expandPanelsRoute: Routes.expandPanels,
 					reloadMatchRoute: Routes.reloadMatch
-				}
+				},
+				blurHandlersAttached: []
 			}, {
 
 				/**
@@ -57,7 +58,53 @@ steal('can.js'
 				init: function (element, options) {
 
 					var self = this;
+
+					self.countDocumentBlurHandlers = 0;
 					WindowCtrl.prototype.init.apply(self, arguments);
+
+					var documentBlurCB = $.proxy(self.hidePanels, self);
+					self.options.$document = $(document);
+					localStorage.setItem('count_blurHandlers', 0); // TODO: not the right place for this
+					self.addDocumentEventhandlers(self.options.$document, documentBlurCB);
+
+					/**
+					 * @event MatchCtrl#minimized
+					 */
+					$(MatchCtrl).on('pre-minimizing', function () {
+						//debugger;
+						//self.removeDocumentEventhandlersUntilNextFocus(self.options.$document, documentBlurCB);
+						self._removeAllBlurHandler();
+					});
+
+					/**
+					 * @event MatchCtrl#minimized
+					 */
+					$(MatchCtrl).on('minimized', function () {
+						//debugger;
+						self.removeDocumentEventhandlers(self.options.$document);
+					});
+					/**
+					 * @event MatchCtrl#restored
+					 */
+					$(MatchCtrl).on('restored', function () {
+						window.setTimeout(function () {
+							self.addDocumentEventhandlers(self.options.$document, documentBlurCB);
+						}, 100)
+					});
+					/**
+					 * @event MatchCtrl#collapsed
+					 */
+					$(MatchCtrl).on('collapsed', function () {
+						var $appBar = $(self.options.appBar);
+						$appBar.addClass('collapsed');
+					});
+					/**
+					 * @event MatchCtrl#expanded
+					 */
+					$(MatchCtrl).on('expanded', function () {
+						var $appBar = $(self.options.appBar);
+						$appBar.removeClass('collapsed');
+					});
 
 					overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
 						self.options.odkWindow = result.window;
@@ -78,8 +125,7 @@ steal('can.js'
 						localStorage.removeItem('temp_gameId');
 
 						// After successfully loading the Match-Data
-						self.loadMatch(options.model)
-
+						self.loadMatch(options.model);
 					});
 				},
 				/**
@@ -103,25 +149,24 @@ steal('can.js'
 					delete self.options.tooltip;
 
 					// if its started within a game then register onblur Handler to the window to collapse automatically
-					overwolf.games.getRunningGameInfo(function (data) {
-						var gameIsRunning = !(data == undefined || data == null);
-						if (gameIsRunning) {
-							var $document = $(document);
-
-							//localStorage.setItem('lock_matchWindowJustRestored', "1");
-							////// retain the behaviour of collapsing when clicking outside of the Window even after minimizing and restoring it
-							//overwolf.windows.onStateChanged.addListener(function (result) {
-							//	steal.dev.log('debug', "MatchCtrl - overwolf.windows.onStateChanged:", result);
-							//	if (result.window_state == "normal") {
-							//		localStorage.setItem('lock_matchWindowJustRestored', "1");
-							//	} else {
-							//		localStorage.setItem('lock_matchWindowJustRestored', "0");
-							//	}
-							//});
-							var callback = $.proxy(self.hidePanels, self);
-							self.addDocumentEventhandlers($document, callback);
-						}
-					});
+					//overwolf.games.getRunningGameInfo(function (data) {
+					//	var gameIsRunning = !(data == undefined || data == null);
+					//	//if (gameIsRunning) {
+					//	//	//self.options.$document = $(document);
+					//	//
+					//	//	//localStorage.setItem('lock_matchWindowJustRestored', "1");
+					//	//	////// retain the behaviour of collapsing when clicking outside of the Window even after minimizing and restoring it
+					//	//	//overwolf.windows.onStateChanged.addListener(function (result) {
+					//	//	//	steal.dev.log('debug', "MatchCtrl - overwolf.windows.onStateChanged:", result);
+					//	//	//	if (result.window_state == "normal") {
+					//	//	//		localStorage.setItem('lock_matchWindowJustRestored', "1");
+					//	//	//	} else {
+					//	//	//		localStorage.setItem('lock_matchWindowJustRestored', "0");
+					//	//	//	}
+					//	//	//});
+					//	//	//self.addDocumentEventhandlers(self.options.$document, self.options.documentBlurCB);
+					//	//}
+					//});
 
 					$.when(this.options.dao.loadMatchModel(self.options.model))
 						.then(function (matchModel) {
@@ -134,7 +179,8 @@ steal('can.js'
 							// Controller for Tooltip
 							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
 
-						}).fail(function (data, status, jqXHR) {
+						})
+						.fail(function (data, status, jqXHR) {
 							steal.dev.warn("Loading Match failed!", data, status, jqXHR);
 							self.options.$overviewContainer.removeClass('loading').addClass('failed');
 							if (data.status == 503) {
@@ -145,31 +191,16 @@ steal('can.js'
 					return deferred.promise();
 				},
 				addDocumentEventhandlers: function ($document, callback) {
-					localStorage.setItem('lock_OnBlurHandlerIsAdded', "0");
-
 					var self = this;
-					self._addBlurHandler(callback);
 
+					self._addBlurHandler(callback);
 					$document.on('blur', function () {
 						steal.dev.log('Matchwindow lost focus');
 						self._addBlurHandler(callback);
 					});
-					$document.on('focus', function () {
-						steal.dev.log('Matchwindow gained focus');
-						//// the window actually gets focus BEFORE this value changes through overwolf.window.onstatechanged callback
-						//// so we want to remove the handler, if the window not just got restored, but the value will be 1
-						//// TODO: fix this through timeout? For better readability
-						//if (localStorage.getItem('lock_matchWindowJustRestored') != "1") {
-						self._removeBlurHandler(callback)
-						//} else {
-						//	//$document.blur();
-						//}
-					});
-				}
-				,
+				},
 				removeDocumentEventhandlers: function ($document) {
 					$document.off('blur');
-					$document.off('focus');
 				},
 				/**
 				 * Adds the given handler if there is none already set (tracked about localStorage settings)
@@ -179,29 +210,29 @@ steal('can.js'
 				 * @private
 				 */
 				_addBlurHandler: function (handler) {
-					if (localStorage.getItem('lock_OnBlurHandlerIsAdded') != "1") {
-						steal.dev.warn("adding BlurHandler ", handler);
-						localStorage.setItem('lock_OnBlurHandlerIsAdded', "1");
-
-						overwolf.games.inputTracking.onMouseUp.addListener(handler);
+					var self = this;
+					if (MatchCtrl.blurHandlersAttached.length > 0) {
+						self._removeAllBlurHandler();
 					}
+					steal.dev.warn("adding BlurHandler ", handler);
+
+					overwolf.games.inputTracking.onMouseUp.addListener(handler);
+					MatchCtrl.blurHandlersAttached.push(handler);
 				},
 				/**
-				 * removes the given handler if there is none already set (tracked about localStorage settings)
+				 * removes the given handler (all of them if more then once added)
 				 * @listens MouseEvent#mouseup
 				 * @fires MatchCtrl#hidePanelsOnClickHandler
 				 * @param handler
 				 * @private
 				 */
-				_removeBlurHandler: function (handler) {
-					if (localStorage.getItem('lock_OnBlurHandlerIsAdded') == "1") {
+				_removeAllBlurHandler: function () {
+					while (MatchCtrl.blurHandlersAttached.length > 0) {
+						var handler = MatchCtrl.blurHandlersAttached.pop();
 						steal.dev.warn("removing BlurHandler ", handler);
-						localStorage.setItem('lock_OnBlurHandlerIsAdded', "0");
-
 						overwolf.games.inputTracking.onMouseUp.removeListener(handler);
 					}
-				}
-				,
+				},
 				/**
 				 * collapses or expands the champion-panels
 				 * @param appBar the html Node handle of the Match-Window
@@ -215,28 +246,32 @@ steal('can.js'
 						this.hidePanels();
 					}
 				},
+				/**
+				 * @fires MatchCtrl#expanded
+				 */
 				expandPanels: function () {
 					var $panelContainer = this.options.$panelContainer;
-					var $appBar = $(this.options.appBar);
-					$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
-					$appBar.removeClass('collapsed');
+					$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
+						$(MatchCtrl).trigger('expanded');
+					});
 				},
-				/** Collapse the champion panels */
+				/** Collapse the champion panels
+				 * @fires MatchCtrl#collapsed
+				 * */
 				hidePanels: function () {
 					var $panelContainer = this.options.$panelContainer;
-
-					//// TODO: centralize this somewhere (in tooltip or somewhere)
-					//$panelContainer.find('.sticky-tooltip').removeClass('sticky-tooltip');
-					//$panelContainer.find('.pinnable').removeClass('sticky-tooltip');
-
 					can.route.attr({route: Routes.tooltipHide}, true);
-					var $appBar = $(this.options.appBar);
-					$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
-					$appBar.addClass('collapsed');
+					$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
+						$(MatchCtrl).trigger('collapsed');
+					});
 				},
-
-				// Eventhandler
+// Eventhandler
+				'mousedown': function (appBar, ev) {
+					var self = this;
+					self._removeAllBlurHandler();
+				},
 				'{appBar} mousedown': function (appBar, ev) {
+					var self = this;
 					if (ev.which == 1) this.togglePanels(appBar);
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
@@ -264,4 +299,5 @@ steal('can.js'
 				}
 			});
 		return MatchCtrl;
-	});
+	})
+;
