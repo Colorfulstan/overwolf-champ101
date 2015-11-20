@@ -1,23 +1,20 @@
+{{#summonerId}}
+	<div class="app-buttons padded-top padded-right">
+		<div class="btn btn-home icon"><i class="fa fa-home fa-lg"></i></div>
+		<div class="btn btn-cancel icon"><i class="fa fa-times fa-lg"></i></div>
+	</div>
+{{/summonerId}}
 <div class="row padded-0">
-	<div class="logo text-center padded padded-top-0"><img src="../assets/img/logo.png" alt="Champ 101 - Basic Champion Knowledge" /></div>
+	<div class="logo text-center padded padded-top-0"><img src="../assets/img/logo.png"
+														   alt="Champ 101 - Basic Champion Knowledge" width="75" />
+	</div>
 </div>
 <div class="row padded-0">
-	<div class="col-sm-6">
-	<ul class="padded-bot">
-		<li><i class="fa fa-info-circle pull-left padded-right-2"></i>
-			<p>To receive any data for your game you need to set your summoner name and the server you play on.
-			</p>
-		</li>
-		<li><i class="fa fa-exclamation-triangle pull-left padded-right-2"></i>
-			<p>Your summoner name is the name displayed within the game, not your account name. We will never ask you
-			   about your password or account name
-			</p>
-		</li>
-	</ul>
-
 	<form onsubmit="return false" id="summoner-form">
-		<div><label for="summoner-name-input">Summonername <br />
-											  (currently set: <strong>{{ summonerName }}</strong>)</label>
+		<div>
+			<label for="summoner-name-input">Summonername
+				{{#summonerId }}(<strong>{{ summonerName }} | {{ server }}</strong>){{/summonerId }}
+			</label>
 			<br>
 			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
 				   can-value='summonerName' autofocus /></div>
@@ -25,54 +22,47 @@
 		<div><label for="server-region-select">Region</label>
 			<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
 				<option hidden>No Region set!</option>
-				<option value="BR">BR</option
-				<option value="EUNE">EUNE</option>
-				<option value="EUW">EUW</option>
-				<option value="KR">KR</option>
-				<option value="LAN">LAN</option>
-				<option value="LAS">LAS</option>
-				<option value="NA">NA</option>
-				<option value="OCE">OCE</option>
-				<option value="TR">TR</option>
-				<option value="RU">RU</option>
-				<option value="PBE">PBE</option>
+				<option style="display: block; padding: 10px;" value="BR">Brazil (BR)</option>
+				<option style="display: block; padding: 10px;" value="EUNE">EU Nordic & East (EUNE)</option>
+				<option style="display: block; padding: 10px;" value="EUW">EU West (EUW)</option>
+				<option style="display: block; padding: 10px;" value="KR">KR</option>
+				<option style="display: block; padding: 10px;" value="LAN">Latin American North (LAN)</option>
+				<option style="display: block; padding: 10px;" value="LAS">Latin American South (LAS)</option>
+				<option style="display: block; padding: 10px;" value="NA">North America (NA)</option>
+				<option style="display: block; padding: 10px;" value="OCE">Oceania (OCE)</option>
+				<option style="display: block; padding: 10px;" value="RU">Russia (RU)</option>
+				<option style="display: block; padding: 10px;" value="TR">Turkey (TR)</option>
+				<!--<option value="PBE">Public Beta Environment (PBE)</option>-->
 			</select></div>
-		<div class="padded-top-2">
+		<div class="padded-top-2 padded-bot">
 			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
-			<div id="btn-cancel" class="btn col-xs-6 failed"><i class="fa fa-times"></i></div>
+			<div id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></div>
 		</div>
 	</form>
 
-</div>
-<div class="hidden-xs col-sm-1">&nbsp;</div>
-<div class="col-sm-5">
-	<div class="col-xs-8 col-xs-offset-2 col-sm-12 col-sm-offset-0">
-		<ul>
-			<li><i class="fa fa-info-circle pull-left padded-right"></i>
+	<ul class="padded-bot">
+		<li><i class="fa fa-info-circle pull-left padded-right-2"></i>
 
-				<p>Hotkeys only work from within the game.</p>
-			</li>
-		</ul>
-		<table class="hoverable">
-			<thead>
+			<p>To receive data for your game you need to set your summoner (ingame) name and the region-server you play
+			   on.
+			</p>
+		</li>
+	</ul>
+	<table class="hoverable">
+		<thead class="no-border">
+		<tr>
+			<th>In-Game-Hotkeys</th>
+		</tr>
+		</thead>
+		<tbody id="hotkeys-rows">
+		{{#hotkeys}}
 			<tr>
-				<th>Hotkeys</th>
+				<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
+					   class="padded-top padded-bot hotkey-btn">{{ title }}</a></td>
+				<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
+					   class="padded-top padded-bot hotkey-btn">{{ string }}</a></td>
 			</tr>
-			</thead>
-			<tbody id="hotkeys-rows">
-			{{#hotkeys}}
-				<tr>
-					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-						   class="padded-top padded-bot hotkey-btn">{{ title }}</a></td>
-					<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-						   class="padded-top padded-bot hotkey-btn">{{ string }}</a></td>
-				</tr>
-			{{/hotkeys}}
-			</tbody>
-		</table>
-		<div class="hotkeys__container--loading">
-			<div class="hotkeys-spinner"></div>
-		</div>
-	</div>
-</div></div>
-<div class="btn-resize fa fa-rss fa-rotate-270"></div>
+		{{/hotkeys}}
+		</tbody>
+	</table>
+</div>

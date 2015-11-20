@@ -26,17 +26,17 @@
 		"file": "views/main.html",
 		"transparent": true,
 		"resizable": true,
-		"size": {"width": 400, "height": 600},
-		"min_size": {"width": 400, "height": 600},
-		"max_size": {"width": 400, "height": 600}
+		"size": {"width": 400, "height": 570},
+		"min_size": {"width": 400, "height": 570},
+		"max_size": {"width": 400, "height": 570}
 	  },
 	  "Settings": {
 		"file": "views/settings.html",
 		"transparent": true,
 		"resizable": true,
-		"size": {"width": 800, "height": 850},
-		"min_size": {"width": 400, "height": 850},
-		"max_size": {"width": 800, "height": 1200}
+		"size": {"width": 800, "height": 700},
+		"min_size": {"width": 400, "height": 700},
+		"max_size": {"width": 400, "height": 700}
 
 	  },
 	  "Feedback": {
