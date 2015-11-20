@@ -90,7 +90,7 @@ steal(
 					self.closeSettings();
 				}, 100);
 			},
-			'#btn-cancel click': function ($el, ev) {
+			'.btn-cancel click': function ($el, ev) {
 				// restore the old settings-values
 				this.options.settings.reset();
 				// close window

@@ -10448,8 +10448,7 @@ select {
   color: #fff;
   font-family: 'Roboto';
   letter-spacing: 0.02em;
-  -webkit-user-select: none !important;
-  cursor: default; }
+  -webkit-user-select: none !important; }
 
 html {
   font-size: 14px;
@@ -10490,7 +10489,8 @@ hr {
 
 p {
   padding: 0 0 0 0;
-  font-weight: 300; }
+  font-weight: 300;
+  cursor: default; }
 
 body#settings, body#main, body#feedback {
   background-color: rgba(6, 16, 19, 0.9); }
@@ -10512,7 +10512,7 @@ a:hover {
 font {
   font-size: inherit !important; }
 
-#main .app-buttons {
+#main .app-buttons, #settings .app-buttons {
   position: absolute;
   top: 0;
   right: 0; }
