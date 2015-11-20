@@ -3,7 +3,7 @@
   "type": "WebApp",
   "meta": {
 	"name": "LoL Champion Info",
-	"version": "0.9.5",
+	"version": "0.10.0",
 	"minimum-overwolf-version": "0.87.00",
 	"author": "Colorfulstan",
 	"icon": "assets/img/icon.png",
@@ -59,11 +59,11 @@
 	  }
 	},
 	"hotkeys": {
-	  "toggle_panels": { "title": "Hide/Show Champion Panels", "action-type": "custom", "default": "Ctrl+Space"},
-	  "open_panels_team_blue": { "title": "Open Champions Team Blue", "action-type": "custom", "default": "Num 1"},
-	  "open_panels_team_red": { "title": "Open Champions Team Red", "action-type": "custom", "default": "Num 2"},
-	  "close_panels": { "title": "Remove Champion Panels", "action-type": "custom", "default": "Ctrl+Num 1"},
-	  "toggle_match": {"title":"Hide/Show Match Window", "action-type": "custom", "default": "Ctrl+Shift+Space"}
+		"toggle_match": {"title":"Hide/Show Match Window", "action-type": "custom", "default": "Ctrl+Shift+Space"},
+		"toggle_panels": { "title": "Hide/Show Champion Panels", "action-type": "custom", "default": "Ctrl+Space"},
+		"open_panels_team_blue": { "title": "Open Champions Team Blue", "action-type": "custom", "default": "Num 1"},
+		"open_panels_team_red": { "title": "Open Champions Team Red", "action-type": "custom", "default": "Num 2"},
+		"close_panels": { "title": "Remove Champion Panels", "action-type": "custom", "default": "Ctrl+Num 1"}
 	}
   },
   "permissions": [
