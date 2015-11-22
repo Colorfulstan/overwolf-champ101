@@ -10355,6 +10355,10 @@ select {
   width: 700px;
   margin: 1px auto 0;
   margin-bottom: -2px; }
+  #panel-container:hover + #match-app-bar .app-buttons {
+    display: block; }
+  #panel-container:hover + #match-app-bar #handle {
+    opacity: 0.9; }
 
 #match-app-bar {
   display: none;

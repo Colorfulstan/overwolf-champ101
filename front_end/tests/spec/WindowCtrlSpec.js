@@ -5,6 +5,12 @@ import Routes from "Routes";
 describe("WindowCtrlSpec - ", function () {
 	var winCtrl;
 
+	afterEach(function(){
+		if (winCtrl.destroy !== 'undefined'){
+			winCtrl.destroy();
+		}
+	});
+
 	function setUpHTMLButtonsFixture() {
 		jasmine.getFixtures().set('' +
 			'<div class="drag-window-handle">' +
@@ -27,11 +33,11 @@ describe("WindowCtrlSpec - ", function () {
 
 	function setupHTMLWhatsThisFixture() {
 		jasmine.getFixtures().set('' +
-			'<div><a title="whatsThis0" class="whats-this"></a></div>"' +
-			'<div><a title="whatsThis1" class="whats-this"></a></div>"' +
-			'<div><a title="whatsThis2" class="whats-this"></a></div>"' +
-			'<div><a title="whatsThis3" class="whats-this"></a></div>"' +
-			'<div><a title="whatsThis4" class="whats-this"></a></div>"'
+			'<div><a title="whatsThis0" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis1" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis2" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis3" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis4" class="whats-this" href="#"></a></div>"'
 		)
 	}
 
@@ -48,6 +54,7 @@ describe("WindowCtrlSpec - ", function () {
 	describe(".whats-this links should ", function () {
 		beforeEach(function () {
 			setupHTMLWhatsThisFixture();
+			winCtrl = new WindowCtrl('html');
 		});
 		it("display the title of the <a> element as div.whats-this-display", function () {
 			var el = $('.whats-this')[2];
@@ -192,7 +199,7 @@ describe("WindowCtrlSpec - ", function () {
 			can.route.attr({}, true); // reset the route
 		});
 		describe(Routes.toggleWindow + " should ", function () {
-			xit( "redirect to route " + Routes.expandPanels, function () {
+			xit("redirect to route " + Routes.expandPanels, function () {
 				//can.fixture()
 				can.route.attr({'route': Routes.toggleWindow});
 				expect(can.route.attr('route')).toBe(Routes.expandPanels);
@@ -200,7 +207,7 @@ describe("WindowCtrlSpec - ", function () {
 			});
 			it("call WindowCtrl.toggle with the given parameter for window", function () {
 				WindowCtrl.toggle = jasmine.createSpy('"WindowCtrl.toggle spy"');
-				can.route.attr({'route': Routes.toggleWindow, 'window':'test'});
+				can.route.attr({'route': Routes.toggleWindow, 'window': 'test'});
 				expect(WindowCtrl.toggle).toHaveBeenCalledWith('test');
 			});
 		});
