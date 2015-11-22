@@ -64,7 +64,6 @@ steal('can.js'
 
 					var documentBlurCB = $.proxy(self.hidePanels, self);
 					self.options.$document = $(document);
-					localStorage.setItem('count_blurHandlers', 0); // TODO: not the right place for this
 					self.addDocumentEventhandlers(self.options.$document, documentBlurCB);
 
 					/**
@@ -148,26 +147,6 @@ steal('can.js'
 					delete self.options.champions;
 					delete self.options.tooltip;
 
-					// if its started within a game then register onblur Handler to the window to collapse automatically
-					//overwolf.games.getRunningGameInfo(function (data) {
-					//	var gameIsRunning = !(data == undefined || data == null);
-					//	//if (gameIsRunning) {
-					//	//	//self.options.$document = $(document);
-					//	//
-					//	//	//localStorage.setItem('lock_matchWindowJustRestored', "1");
-					//	//	////// retain the behaviour of collapsing when clicking outside of the Window even after minimizing and restoring it
-					//	//	//overwolf.windows.onStateChanged.addListener(function (result) {
-					//	//	//	steal.dev.log('debug', "MatchCtrl - overwolf.windows.onStateChanged:", result);
-					//	//	//	if (result.window_state == "normal") {
-					//	//	//		localStorage.setItem('lock_matchWindowJustRestored', "1");
-					//	//	//	} else {
-					//	//	//		localStorage.setItem('lock_matchWindowJustRestored', "0");
-					//	//	//	}
-					//	//	//});
-					//	//	//self.addDocumentEventhandlers(self.options.$document, self.options.documentBlurCB);
-					//	//}
-					//});
-
 					$.when(this.options.dao.loadMatchModel(self.options.model))
 						.then(function (matchModel) {
 							deferred.resolve(matchModel);
@@ -203,7 +182,7 @@ steal('can.js'
 					$document.off('blur');
 				},
 				/**
-				 * Adds the given handler if there is none already set (tracked about localStorage settings)
+				 * Adds the given handler if there is none already set
 				 * @listens MouseEvent#mouseup
 				 * @fires MatchCtrl#hidePanelsOnClickHandler
 				 * @param handler
@@ -270,8 +249,12 @@ steal('can.js'
 					var self = this;
 					self._removeAllBlurHandler();
 				},
-				'{appBar} mousedown': function (appBar, ev) {
+				'mouseenter': function (element, ev) {
 					var self = this;
+					self._removeAllBlurHandler();
+					self.expandPanels();
+				},
+				'{appBar} mousedown': function (appBar, ev) {
 					if (ev.which == 1) this.togglePanels(appBar);
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
@@ -296,6 +279,39 @@ steal('can.js'
 					//this.renderView(this.options.match.blue,this.options.match.purple);
 					location.reload();
 					can.route.attr({}, true);
+				},
+				/** Does prevent Event propagation
+				 *
+				 * NOTE: because all Windows are independent from each other the reload-routing for Match-Window
+				 * does not work when accessing settings from another Window.
+				 * That's why this event is overwritten here.
+				 *
+				 * @overwrite WindowCtrl {settingsBtn} mousedown
+				 * @listens MouseEvent#mousedown for the left MouseButton
+				 * @param $el
+				 * @param ev
+				 * @see WindowCtrl.defaults.settingsBtn*/
+				'{settingsBtn} mousedown': function ($el, ev) {
+					if (ev.which == 1) {
+						steal.dev.log('MatchCtrl: open settings');
+						this.constructor.openSettings();
+
+						var settings = new SettingsModel();
+						var summonerId = settings.summonerId();
+						// Reload the Match-Window after Settings-Window gets closed
+						var interval = window.setInterval(function () {
+							overwolf.windows.getWindowState('Settings', function (/** WindowStateData */ result) {
+								if (result.status == "success" && result.window_state == 'closed') {
+									if (summonerId != settings.summonerId()) {
+										can.route.attr({route: Routes.reloadMatch});
+									}
+									window.clearInterval(interval);
+								}
+							})
+						}, 100);
+
+						ev.stopPropagation();
+					}
 				}
 			});
 		return MatchCtrl;

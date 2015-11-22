@@ -254,17 +254,6 @@ steal(
 					if (ev.which == 1) {
 						steal.dev.log('WindowCtrl: open settings');
 						this.constructor.openSettings();
-
-						// Reload the Match-Window after Settings-Window gets closed
-						var interval = window.setInterval(function () {
-							overwolf.windows.getWindowState('Settings', function (/** WindowStateData */ result) {
-								if (result.status == "success" && result.window_state == 'closed') {
-									can.route.attr({route: Routes.reloadMatch});
-									window.clearInterval(interval);
-								}
-							})
-						}, 100);
-
 						ev.stopPropagation();
 					}
 				}
