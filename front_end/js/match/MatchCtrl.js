@@ -62,33 +62,30 @@ steal('can.js'
 					self.countDocumentBlurHandlers = 0;
 					WindowCtrl.prototype.init.apply(self, arguments);
 
-					var documentBlurCB = $.proxy(self.hidePanels, self);
-					self.options.$document = $(document);
-					self.addDocumentEventhandlers(self.options.$document, documentBlurCB);
+					var mouseUpCb = function(info){
+						if (info.onGame === true){
+							self.hidePanels();
+						}
+					};
+					overwolf.games.inputTracking.onMouseUp.addListener(mouseUpCb);
 
-					/**
-					 * @event MatchCtrl#minimized
-					 */
-					$(MatchCtrl).on('pre-minimizing', function () {
-						//debugger;
-						//self.removeDocumentEventhandlersUntilNextFocus(self.options.$document, documentBlurCB);
-						self._removeAllBlurHandler();
-					});
+					self.options.$document = $(document);
+
+					options.model.attr('summonerId', options.settings.summonerId()); // TODO: model refactoring for computes
+					options.model.attr('server', options.settings.server()); // TODO: model refactoring for computes
+					self.options.matchPromise = options.dao.loadMatchModel(options.model);
 
 					/**
 					 * @event MatchCtrl#minimized
 					 */
 					$(MatchCtrl).on('minimized', function () {
-						//debugger;
-						self.removeDocumentEventhandlers(self.options.$document);
+
 					});
 					/**
 					 * @event MatchCtrl#restored
 					 */
 					$(MatchCtrl).on('restored', function () {
-						window.setTimeout(function () {
-							self.addDocumentEventhandlers(self.options.$document, documentBlurCB);
-						}, 100)
+
 					});
 					/**
 					 * @event MatchCtrl#collapsed
@@ -118,6 +115,7 @@ steal('can.js'
 							self.hidePanels();
 							$(self.options.handle).addClass(self.options.handleAnimationClass);
 							$(self.options.appBar).addClass(self.options.animatedHandleClass);
+
 						}
 
 						localStorage.setItem('lock_getCachedGame', '0');
@@ -147,7 +145,7 @@ steal('can.js'
 					delete self.options.champions;
 					delete self.options.tooltip;
 
-					$.when(this.options.dao.loadMatchModel(self.options.model))
+					$.when(self.options.matchPromise)
 						.then(function (matchModel) {
 							deferred.resolve(matchModel);
 							self.options.$overviewContainer.removeClass('loading');
@@ -157,6 +155,18 @@ steal('can.js'
 							self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
 							// Controller for Tooltip
 							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+
+							var pollForStableFPS = function(){
+								var interval = window.setInterval(function(){
+									if (self.options.settings.mostRecentFPS() === 'stable'){
+										// FPS is stable - if data loading finishes after FPS-stable, match-opoening will be delayed until settings.mostRecentFPS('stable') got called
+										self.constructor.openMatch();
+										window.clearInterval(interval);
+									}
+								}, 100);
+							};
+							pollForStableFPS();
+
 
 						})
 						.fail(function (data, status, jqXHR) {
@@ -169,48 +179,14 @@ steal('can.js'
 						});
 					return deferred.promise();
 				},
-				addDocumentEventhandlers: function ($document, callback) {
+				reloadMatch: function () {
 					var self = this;
 
-					self._addBlurHandler(callback);
-					$document.on('blur', function () {
-						steal.dev.log('Matchwindow lost focus');
-						self._addBlurHandler(callback);
-					});
-				},
-				removeDocumentEventhandlers: function ($document) {
-					$document.off('blur');
-				},
-				/**
-				 * Adds the given handler if there is none already set
-				 * @listens MouseEvent#mouseup
-				 * @fires MatchCtrl#hidePanelsOnClickHandler
-				 * @param handler
-				 * @private
-				 */
-				_addBlurHandler: function (handler) {
-					var self = this;
-					if (MatchCtrl.blurHandlersAttached.length > 0) {
-						self._removeAllBlurHandler();
-					}
-					steal.dev.warn("adding BlurHandler ", handler);
-
-					overwolf.games.inputTracking.onMouseUp.addListener(handler);
-					MatchCtrl.blurHandlersAttached.push(handler);
-				},
-				/**
-				 * removes the given handler (all of them if more then once added)
-				 * @listens MouseEvent#mouseup
-				 * @fires MatchCtrl#hidePanelsOnClickHandler
-				 * @param handler
-				 * @private
-				 */
-				_removeAllBlurHandler: function () {
-					while (MatchCtrl.blurHandlersAttached.length > 0) {
-						var handler = MatchCtrl.blurHandlersAttached.pop();
-						steal.dev.warn("removing BlurHandler ", handler);
-						overwolf.games.inputTracking.onMouseUp.removeListener(handler);
-					}
+					var model = self.options.model;
+					model.summonerId = this.options.settings.summonerId();
+					model.server = this.options.settings.server();
+					self.options.matchPromise = self.options.dao.loadMatchModel(model);
+					$.when(self.loadMatch()).always($.proxy(this.expandPanels, this))
 				},
 				/**
 				 * collapses or expands the champion-panels
@@ -218,8 +194,6 @@ steal('can.js'
 				 */
 				togglePanels: function (appBar) {
 					if ($(appBar).hasClass('collapsed')) {
-						$(this.options.handle).removeClass(this.options.handleAnimationClass);
-						$(appBar).removeClass(this.options.animatedHandleClass);
 						this.expandPanels();
 					} else {
 						this.hidePanels();
@@ -229,6 +203,9 @@ steal('can.js'
 				 * @fires MatchCtrl#expanded
 				 */
 				expandPanels: function () {
+					$(this.options.appBar).removeClass(this.options.animatedHandleClass);
+					$(this.options.handle).removeClass(this.options.handleAnimationClass);
+
 					var $panelContainer = this.options.$panelContainer;
 					$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						$(MatchCtrl).trigger('expanded');
@@ -245,17 +222,12 @@ steal('can.js'
 					});
 				},
 // Eventhandler
-				'mousedown': function (appBar, ev) {
-					var self = this;
-					self._removeAllBlurHandler();
-				},
 				'mouseenter': function (element, ev) {
 					var self = this;
-					self._removeAllBlurHandler();
 					self.expandPanels();
 				},
 				'{appBar} mousedown': function (appBar, ev) {
-					if (ev.which == 1) this.togglePanels(appBar);
+					if (ev.which == 1) { this.togglePanels(appBar); }
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
@@ -277,8 +249,11 @@ steal('can.js'
 					//steal.dev.log('refresh Route triggered in OverviewCtrl');
 					//this.options.match = routeData.match;
 					//this.renderView(this.options.match.blue,this.options.match.purple);
-					location.reload();
+					this.options.settings.startMatchCollapsed(false);
+					this.reloadMatch();
+					//location.reload();
 					can.route.attr({}, true);
+					$(MatchCtrl).trigger('restored');
 				},
 				/** Does prevent Event propagation
 				 *
@@ -309,7 +284,6 @@ steal('can.js'
 								}
 							})
 						}, 100);
-
 						ev.stopPropagation();
 					}
 				}

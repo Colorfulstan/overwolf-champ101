@@ -29,9 +29,10 @@ steal(
 
 					$(MainCtrl).on('fpsStable', function () {
 						self.removeMatchStartOnStableFpsListener();
+						settings.mostRecentFPS('stable');
+
 						settings.startMatchCollapsed(true);
 						settings.cachedGameAvailable(true);
-						self.openMatch();
 						//overwolf.benchmarking.stopRequesting(); // MPTE: stopping requesting makes it impossible to start it again until app restarts!?
 					});
 
@@ -70,6 +71,8 @@ steal(
 					}
 				},
 				addMatchStartOnStableFpsListener: function(){
+					self.constructor.openMatch();
+					self.constructor.minimize('Match');
 					overwolf.benchmarking.onFpsInfoReady.addListener(MainCtrl._startMatchWhenFPSStable);
 				},
 				removeMatchStartOnStableFpsListener: function(){
