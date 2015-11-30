@@ -113,10 +113,10 @@
 
 // class for elements that show pin icons on hover / when having .active class
 .playable {
-  [class^="pin-"]{ display: none; }
+  [class^="video-"]{ display: none; }
   &:hover { .video-on { display: none; } .video-off { display: block; } }
   &.active:hover { .video-on { display: block; } .video-off { display: none; } }
-  &.passive { [class^="pin-"]{ position: absolute; bottom: -10px; } }
+  &.passive { [class^="video-"]{ position: absolute; bottom: -10px; } }
 }
 
 // class for elements that can be added as panel and show plus sign on hover

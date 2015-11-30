@@ -111,9 +111,16 @@
   //  width: 348px;
   //  height: 196px;
 
+  .user-info {
+    opacity: 0;
+  }
+
   #videoPlayer {
     //    not shown until certain there is no error
     //    display: none;
+    &.vjs-paused + .user-info {
+     opacity: 1;
+    }
   }
 }
 
