@@ -250,8 +250,8 @@ steal('can.js'
 					//this.options.match = routeData.match;
 					//this.renderView(this.options.match.blue,this.options.match.purple);
 					this.options.settings.startMatchCollapsed(false);
-					this.reloadMatch();
-					//location.reload();
+					//this.reloadMatch();
+					location.reload();
 					can.route.attr({}, true);
 					$(MatchCtrl).trigger('restored');
 				},

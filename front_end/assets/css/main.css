@@ -247,17 +247,17 @@
   right: 5px;
   opacity: 0; }
 
-.pinnable [class^="pin-"] {
+.playable [class^="video-"] {
   display: none; }
-.pinnable:hover .pin-on {
+.playable:hover .video-on {
   display: none; }
-.pinnable:hover .pin-off {
+.playable:hover .video-off {
   display: block; }
-.pinnable.active:hover .pin-on {
+.playable.active:hover .video-on {
   display: block; }
-.pinnable.active:hover .pin-off {
+.playable.active:hover .video-off {
   display: none; }
-.pinnable.passive [class^="pin-"] {
+.playable.passive [class^="video-"] {
   position: absolute;
   bottom: -10px; }
 

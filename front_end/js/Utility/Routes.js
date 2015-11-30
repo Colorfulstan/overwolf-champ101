@@ -36,6 +36,8 @@ steal(
 			refreshWindow: 'refresh/:window',
 			toggleWindow: 'toggle/:window',
 
+			hasBeenReadied: false,
+
 			/** initializes all available routes and calls can.route.ready() */
 			ready: function () {
 

@@ -149,8 +149,8 @@ steal(
 				this.closeAllPanels();
 			},
 			'{hideTooltipRoute} route': function (routeData) {
-				$('.sticky-tooltip').removeClass('sticky-tooltip'); // TODO: centralize this somewhere (in tooltip or somewhere)
-				$('.pinnable').removeClass('active'); // TODO: centralize this somewhere (in tooltip or somewhere)
+				//$('.sticky-tooltip').removeClass('sticky-tooltip'); // TODO: centralize this somewhere (in tooltip or somewhere)
+				$('.playable').removeClass('active'); // TODO: centralize this somewhere (in tooltip or somewhere)
 			},
 			'{closeSinglePanelsRoute} route': function (routeData) {
 				steal.dev.log('close Panel route', routeData);
@@ -177,7 +177,7 @@ steal(
 				var $panel = $el.closest('.panel');
 
 				if (!$el.hasClass('active')) {
-					$panel.removeClass('sticky-tooltip');
+					//$panel.removeClass('sticky-tooltip');
 					$('#champion-container .active').removeClass('active');
 				}
 				return $panel;
@@ -197,10 +197,17 @@ steal(
 				//steal.dev.log('clicked on .spell');
 				var $panel = $el.closest('.panel');
 				//if (!$el.hasClass('active')){
-				$panel.toggleClass('sticky-tooltip');
+				//$panel.toggleClass('sticky-tooltip');
 				$el.toggleClass('active');
 				$el.siblings().removeClass('active');
 				//}
+				if (can.route.attr('video') == 1){
+					steal.dev.log('setting video:0');
+					can.route.attr('video',0);
+				} else {
+					steal.dev.log('setting video:1');
+					can.route.attr('video',1);
+				}
 			},
 			'.portrait mouseenter': function ($el, ev) {
 				var $panel = this.mouseenterHandler($el);
@@ -213,9 +220,9 @@ steal(
 			},
 			'.img mouseout': function ($el, ev) {
 				var $panel = $el.closest('.panel');
-				if (!$panel.hasClass('sticky-tooltip')) {
+				//if (!$panel.hasClass('sticky-tooltip')) {
 					can.route.attr({route: Routes.tooltipHide}, true);
-				}
+				//}
 			}
 		});
 		return ChampionCtrl;
