@@ -67,9 +67,9 @@ steal(
 				if (this.element.find('[title="' + champName + '"]').length) {
 					return;
 				}
-				if (this.options.panels.length >= 5) {
-					this.options.panels.pop();
-				}
+				//if (this.options.panels.length >= 5) {
+				//	this.options.panels.pop();
+				//}
 				var panel = this.options.match.participantsByChamp[champName];
 				panel.index = this.options.panels.length;
 				this.options.panels.push(panel);

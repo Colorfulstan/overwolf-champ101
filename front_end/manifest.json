@@ -59,11 +59,11 @@
 	  }
 	},
 	"hotkeys": {
-		"toggle_match": {"title":"Hide/Show Match Window", "action-type": "custom", "default": "Ctrl+Shift+Space"},
-		"toggle_panels": { "title": "Hide/Show Champion Panels", "action-type": "custom", "default": "Ctrl+Space"},
+		"toggle_match": {"title":"Minimise/Restore Match Dock", "action-type": "custom", "default": "Ctrl+Shift+Space"},
+		"toggle_panels": { "title": "Collapse/Expand Match Dock", "action-type": "custom", "default": "Ctrl+Space"},
 		"open_panels_team_blue": { "title": "Open Champions Team Blue", "action-type": "custom", "default": "Num 1"},
 		"open_panels_team_red": { "title": "Open Champions Team Red", "action-type": "custom", "default": "Num 2"},
-		"close_panels": { "title": "Remove Champion Panels", "action-type": "custom", "default": "Ctrl+Num 1"}
+		"close_panels": { "title": "Close all Champions", "action-type": "custom", "default": "Ctrl+Num 1"}
 	}
   },
   "permissions": [
