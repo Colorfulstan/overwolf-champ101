@@ -24,5 +24,6 @@ steal(
 		var settings = new SettingsModel();
 
 		new MatchCtrl('html', {dao: dao, model: model, settings: settings});
+
 	});
 

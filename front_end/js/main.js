@@ -41,7 +41,7 @@ steal(
 			if (!SettingsModel.isSummonerSet()) {
 				main.start(false);
 			} else {
-				settings.startMatchCollapsed(true);
+				settings.startMatchCollapsed(false);
 				//main.constructor.openMatch();
 				main.constructor.addMatchStartOnStableFpsListener();
 				var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined

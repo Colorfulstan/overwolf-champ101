@@ -57,9 +57,7 @@ steal(
 				},
 				/** @static*/
 				minimize: function (/** ODKWindow.name */ name) {
-					$(WindowCtrl).trigger('pre-minimizing');
 					overwolf.windows.minimize(name);
-					$(WindowCtrl).trigger('minimized');
 				},
 				/** opens the {@link ODKWindow} with the given {@link ODKWindow.name}
 				 * @static
@@ -254,7 +252,7 @@ steal(
 					if (ev.which == 1) {
 						steal.dev.log('WindowCtrl: open settings');
 						this.constructor.openSettings();
-						ev.stopPropagation();
+						//ev.stopPropagation();
 					}
 				}
 				,
@@ -266,7 +264,7 @@ steal(
 				'{homeBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
 						this.constructor.openMain();
-						ev.stopPropagation();
+						//ev.stopPropagation();
 					}
 				}
 				,
