@@ -112,10 +112,10 @@
 }
 
 // class for elements that show pin icons on hover / when having .active class
-.pinnable {
+.playable {
   [class^="pin-"]{ display: none; }
-  &:hover { .pin-on { display: none; } .pin-off { display: block; } }
-  &.active:hover { .pin-on { display: block; } .pin-off { display: none; } }
+  &:hover { .video-on { display: none; } .video-off { display: block; } }
+  &.active:hover { .video-on { display: block; } .video-off { display: none; } }
   &.passive { [class^="pin-"]{ position: absolute; bottom: -10px; } }
 }
 

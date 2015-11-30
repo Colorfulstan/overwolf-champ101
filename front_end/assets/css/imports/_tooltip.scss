@@ -117,6 +117,15 @@
   }
 }
 
+//.vjs-fluid {
+//  position: relative;
+//  right: 0;
+//  bottom: 0;
+//  width: 500px !important;
+//  height: 200px !important;
+//  z-index: 999999;
+//}
+
 .append-spell-key {
   &[data-index-1="1"]::after {
     content: ' (Passive)';
