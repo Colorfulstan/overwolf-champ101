@@ -114,7 +114,6 @@ steal(
 					//$.when(this.open(name, 500, 500)).then(function ( /**ODKWindow*/ odkWindow) {
 					//	steal.dev.log("WindowCtrl.openFeedback: ", odkWindow);
 					//	//	// TODO: should this window open centered even after relocating it? => not position it at all
-					//	debugger;
 					//	var x = self.getCenteredX(odkWindow.width);
 					//	var y = self.getCenteredY(odkWindow.height);
 					//	overwolf.windows.changePosition(odkWindow.id, x, y);
