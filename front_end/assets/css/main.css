@@ -152,6 +152,16 @@
 .vertical-center {
   transform: translateY(45%); }
 
+.center-vertical {
+  display: flex;
+  justify-content: center;
+  /* align horizontal */
+  align-items: center;
+  /* align vertical */ }
+
+.muted {
+  opacity: 0.5; }
+
 .padded {
   padding: 15px; }
   .padded-left {
@@ -193,6 +203,9 @@
   .padded-2 {
     padding: 30px; }
 
+.margin-0 {
+  margin: 0 0 0 0 !important; }
+
 .line-right {
   border-right: 1px solid #eee; }
   .line-right-muted {
@@ -204,10 +217,15 @@
 
 .text-center {
   text-align: center !important; }
+.text-right {
+  text-align: right !important; }
 .text-body {
   line-height: 1.3em !important; }
 .text-vertical-center {
   vertical-align: middle !important; }
+.text-muted {
+  font-weight: 100;
+  opacity: 0.5; }
 
 .height-100 {
   height: 100%; }
@@ -225,8 +243,19 @@
   .window-border-radius {
     border-radius: 20px; }
 
+.tooltip-container__content.window-border {
+  border-width: 2px !important; }
+
 .no-border {
   border: none !important; }
+  .no-border-top {
+    border-top: none !important; }
+  .no-border-right {
+    border-right: none !important; }
+  .no-border-bottom {
+    border-bottom: none !important; }
+  .no-border-left {
+    border-left: none !important; }
 
 .table {
   display: table !important; }
@@ -10050,10 +10079,7 @@ i.fa {
   line-height: 1em; }
 
 #tooltip-container {
-  background-color: rgba(6, 16, 19, 0.9);
-  color: #fff;
   display: none;
-  padding: 30px;
   position: absolute;
   width: 700px;
   z-index: 9999; }
@@ -10095,11 +10121,26 @@ i.fa {
         color: #e4e35f; }
     #tooltip-container .spell-values-table tr {
       border-bottom: 1px solid rgba(238, 238, 238, 0.05); }
+  #tooltip-container .tooltip-container__content {
+    background-color: rgba(6, 16, 19, 0.9);
+    color: #fff; }
+    #tooltip-container .tooltip-container__content__header {
+      background: rgba(3, 155, 229, 0.2); }
 
-#spell-video-container .user-info {
-  opacity: 0; }
-#spell-video-container #videoPlayer.vjs-paused + .user-info {
-  opacity: 1; }
+#spell-video-container {
+  position: relative; }
+  #spell-video-container .video__user-info {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    background: rgba(3, 155, 229, 0.2); }
+  #spell-video-container #videoPlayer.vjs-paused + .video__user-info {
+    opacity: 1; }
+
+.video--not-available {
+  display: none; }
 
 .append-spell-key[data-index-1="1"]::after {
   content: ' (Passive)'; }
@@ -10112,6 +10153,9 @@ i.fa {
 .append-spell-key[data-index-1="5"]::after {
   content: ' (R)'; }
 
+.spell-name {
+  position: relative; }
+
 .spell-key-icon {
   text-align: center !important; }
   .spell-key-icon[data-index-1]::after {
@@ -10120,12 +10164,12 @@ i.fa {
     -moz-border-radius: 100%;
     -webkit-border-radius: 100%;
     display: inline-block;
-    font-size: 25px;
+    font-size: inherit;
     font-weight: 800;
-    height: 40px;
+    height: 1.6em;
+    width: 1.6em;
     margin: 0 auto;
-    padding-top: 5px;
-    width: 40px; }
+    padding-top: 0.2em; }
   .spell-key-icon[data-index-1="2"]::after {
     content: 'Q'; }
   .spell-key-icon[data-index-1="3"]::after {
@@ -10312,6 +10356,9 @@ select {
   select option {
     color: inherit; }
 
+#settings table tbody#hotkeys-rows {
+  display: block; }
+
 #btn-save-close {
   text-align: center;
   height: 30px;
@@ -10422,7 +10469,8 @@ select {
         position: relative;
         right: 7px; }
     #match-overview-container #vs .blue {
-      left: -17px; }
+      left: -17px;
+      width: 37px; }
       #match-overview-container #vs .blue .add {
         position: relative;
         left: 7px; }
@@ -10449,12 +10497,10 @@ select {
 
 html {
   font-size: 14px;
-  width: 100%;
-  height: 100%; }
+  width: 100%; }
 
 body {
-  width: 100%;
-  height: 100%; }
+  width: 100%; }
 
 h1, h2, h3, h4, h5, h6 {
   padding-bottom: 0.5em; }
@@ -10482,14 +10528,15 @@ h6 {
 
 hr {
   width: 80%;
-  border-color: #eee; }
+  border-color: #039be5;
+  border-bottom: none; }
 
 p {
   padding: 0 0 0 0;
   font-weight: 300;
   cursor: default; }
 
-body#settings, body#main, body#feedback {
+body#settings #content-wrapper, body#main #content-wrapper, body#feedback #content-wrapper {
   background-color: rgba(6, 16, 19, 0.9); }
 
 ul li {
@@ -10516,8 +10563,6 @@ font {
 
 footer#disclaimer {
   font-size: 0.7rem;
-  position: absolute;
-  bottom: 0;
   text-align: justify;
   letter-spacing: 0.4px;
   font-weight: 100; }

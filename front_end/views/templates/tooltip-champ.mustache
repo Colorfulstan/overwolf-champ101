@@ -1,31 +1,24 @@
-<div class="row">
-	{{ #videoAvailable }} <div class="col-xs-6"> {{ /videoAvailable }}
-		{{ ^videoAvailable }} <div class="col-xs-12"> {{ /videoAvailable }}
-			<h2 class="champ-name padded-bot-0 text-center">{{name}}</h2>
-			<h6 class="champ-title padded-bot text-center">{{title}}</h6>
-			{{ #videoAvailable }}
-			<div id="champion-video-container" class="col-xs-6 pull-right">
-			</div>
-			{{ /videoAvailable }}
+<div class="tooltip-container__content window-border no-border-top col-xs-6">
+	<div class="row padded-top tooltip-container__content__header">
+		<div class="col-xs-12">
+			<h2 class="champ-name padded-bot-0 text-center text-muted">{{name}}</h2>
+			<h6 class="champ-title padded-bot text-center text-muted">{{title}}</h6>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-xs-6 padded-left padded-right line-right">
-			<h4 class="text-center">Playing with {{name}}</h4>
-			<hr />
-			<ul class="champ-ally-tips padded-top padded-right">
-				{{#allytips}}
-					<li class="padded-bot text-body"><p>{{{.}}}</p></li>
-				{{/allytips}}
-			</ul>
-		</div>
-		<div class="col-xs-6 padded-left padded-right line-left collapse-border-left">
-			<h4 class="text-center">Playing against {{name}}</h4>
-			<hr />
-			<ul class="champ-enemy-tips padded-top padded-left">
-				{{#enemytips}}
-					<li class="padded-bot text-body"><p>{{{.}}}</p></li>
-				{{/enemytips}}
-			</ul>
-		</div>
+	<div class="row padded-top padded-left-2 padded-right-2">
+		<h5 class="text-muted">Playing with {{name}}</h5>
+		<ul class="champ-ally-tips">
+			{{#allytips}}
+				<li class="padded-bot text-body"><p class="text-justify">{{{.}}}</p></li>
+			{{/allytips}}
+		</ul>
+		<hr class="width-100 margin-0">
+		<h5 class="padded-top text-muted">Playing against {{name}}</h5>
+		<ul class="champ-enemy-tips">
+			{{#enemytips}}
+				<li class="padded-bot text-body"><p class="text-justify">{{{.}}}</p></li>
+			{{/enemytips}}
+		</ul>
 	</div>
+	<!-- conditionally opened div on top! Error "no closing tag found" can be ignored for 1 div -->
+</div>

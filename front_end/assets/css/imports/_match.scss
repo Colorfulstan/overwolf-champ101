@@ -139,6 +139,7 @@ $app-bar-height: 30px;
     }
     .blue {
       left: -17px;
+      width: 37px; // NOTE: fixed width to prevent widht-jumping when adding .addable
       .add {
         position: relative;
         left: 7px;

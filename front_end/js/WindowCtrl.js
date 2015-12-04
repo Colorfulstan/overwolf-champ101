@@ -24,7 +24,7 @@ steal(
 					/** CSSSelectorString */ resizeBtn: '.btn-resize'
 					, /** CSSSelectorString */ minimizeBtn: '.btn-minimize'
 					, /** CSSSelectorString */ settingsBtn: '.btn-settings'
-					, /** CSSSelectorString */ homeBtn: '.btn-home'
+					, /** CSSSelectorString */ infoBtn: '.btn-info'
 					, /** CSSSelectorString */ helpBtn: '.btn-help'
 					, /** CSSSelectorString */ feedbackBtn: '.btn-feedback'
 					, /** CSSSelectorString */ closeBtn: '.btn-close',
@@ -252,7 +252,7 @@ steal(
 					if (ev.which == 1) {
 						steal.dev.log('WindowCtrl: open settings');
 						this.constructor.openSettings();
-						//ev.stopPropagation();
+						ev.stopPropagation();
 					}
 				}
 				,
@@ -260,11 +260,11 @@ steal(
 				 * @listens MouseEvent#mousedown for the left MouseButton
 				 * @param $el
 				 * @param ev
-				 * @see WindowCtrl.defaults.homeBtn*/
-				'{homeBtn} mousedown': function ($el, ev) {
+				 * @see WindowCtrl.defaults.infoBtn*/
+				'{infoBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
 						this.constructor.openMain();
-						//ev.stopPropagation();
+						ev.stopPropagation();
 					}
 				}
 				,
@@ -293,20 +293,6 @@ steal(
 					}
 					can.route.attr({'route': ''});
 				}
-				//,
-				//'{helpBtn} mousedown': function ($el, ev) {
-				// if (event.which == 1) {
-				//	this.constructor.openHelp();
-				//	ev.stopPropagation();
-				// }
-				//}
-				//,
-				//'{feedbackBtn} mousedown': function ($el, ev) {
-				// if (event.which == 1) {
-				//	this.constructor.openFeedback();
-				//	ev.stopPropagation();
-				// }
-				//}
 			});
 		return WindowCtrl;
 	});

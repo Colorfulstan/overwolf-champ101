@@ -2,7 +2,7 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-	"name": "LoL Champion Info",
+	"name": "LoL Champion Info3",
 	"version": "0.10.3",
 	"minimum-overwolf-version": "0.87.00",
 	"author": "Colorfulstan",
@@ -15,6 +15,7 @@
 		{
 		  "event": "GameLaunch",
 		  "event_data": {
+		  	"wait_for_stable_framerate": 30,
 			"game_ids": [5426, 54261]
 		  },
 		  "start_minimized": true
@@ -25,18 +26,18 @@
 	  "Main": {
 		"file": "views/main.html",
 		"transparent": true,
-		"resizable": true,
-		"size": {"width": 400, "height": 570},
-		"min_size": {"width": 400, "height": 570},
-		"max_size": {"width": 400, "height": 570}
+		"resizable": false,
+		"size": {"width": 400,"height": 1200},
+		"min_size": {"width": 400},
+		"max_size": {"width": 400}
 	  },
 	  "Settings": {
 		"file": "views/settings.html",
 		"transparent": true,
-		"resizable": true,
-		"size": {"width": 800, "height": 700},
-		"min_size": {"width": 400, "height": 700},
-		"max_size": {"width": 400, "height": 700}
+		"resizable": false,
+		  "size": {"width": 400,"height": 1200},
+	  	"min_size": {"width": 400},
+		"max_size": {"width": 400}
 
 	  },
 	  "Feedback": {
@@ -44,7 +45,7 @@
 		"transparent": true,
 		"resizable": false,
 		"show_in_taskbar": true,
-		"size": {"width": 400, "height": 400},
+		"size": {"width": 400,"height": 1200},
 		"min_size": {"width": 400, "height": 400},
 		"max_size": {"width": 800, "height": 800}
 	  },
@@ -53,9 +54,9 @@
 		"transparent": true,
 		"resizable": false,
 		"show_in_taskbar": false,
-		"size": {"width": 800, "height": 1000},
-		"min_size": {"width": 800, "height": 1000},
-		"max_size": {"width": 800, "height": 1000}
+		"size": {"width": 800, "height": 1200},
+		"min_size": {"width": 800, "height": 1200},
+		"max_size": {"width": 800, "height": 1200}
 	  }
 	},
 	"hotkeys": {

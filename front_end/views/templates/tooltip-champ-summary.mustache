@@ -1,18 +1,26 @@
-<div class="row">
-	<h2 class="champ-name padded-bot-0 text-center">{{name}}</h2>
-	<h6 class="champ-title padded-bot text-center">{{title}}</h6>
-</div>
-<hr class="width-100" />
-<div class="row padded-top padded-left padded-right">
-	{{>templates/parts/champ-spells-overview-table.mustache}}
-</div>
-<hr class="width-100" />
-<div class="row padded-left padded-right padded-top">
-	{{#passive}}
-		<h4 class="append-spell-key" data-index-1="{{number}}">{{name}}</h4>
-		<p class="spell-description text-body">
-			{{#tooltip}}{{{.}}}{{/tooltip}}
-			{{^tooltip}}{{{description}}}{{/tooltip}}
-		</p>
-	{{/passive}}
+<div class="tooltip-container__content window-border no-border-top">
+	<div class="tooltip-container__content__header col-xs-12">
+		<h2 class="champ-name padded-bot-0 padded-top text-center text-muted">{{name}}</h2>
+		<h6 class="champ-title padded-bot text-center text-muted">{{title}}</h6>
+	</div>
+	<div class="row padded padded-bot-0">
+		{{>templates/parts/champ-spells-overview-table.mustache}}
+	</div>
+	<hr class="width-100 margin-0" />
+	<div class="row center-vertical padded padded-left-2">
+		<div class="col-xs-9">
+			{{#passive}}
+				<!--<h4 class="append-spell-key" data-index-1="{{number}}">{{name}}</h4>-->
+				<h4 class="text-muted" data-index-1="{{number}}">{{name}}</h4>
+
+				<p class="spell-description text-body">
+					{{#tooltip}}{{{.}}}{{/tooltip}}
+					{{^tooltip}}{{{description}}}{{/tooltip}}
+				</p>
+			{{/passive}}
+		</div>
+		<div class="col-xs-3 text-center">
+			<img src="../assets/img/logo.png" class="muted" width="75">
+		</div>
+	</div>
 </div>
