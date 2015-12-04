@@ -141,9 +141,16 @@ steal('can.js'
 					self.options.$overviewContainer.html(can.view(this.options.loadingTmpl, {summonerName: name}));
 					self.options.$overviewContainer.removeClass('failed').addClass('loading');
 
-					delete self.options.overview;
-					delete self.options.champions;
-					delete self.options.tooltip;
+					// clean up old controllers
+					if (self.options.overview){
+						self.options.overview.destroy()
+					}
+					if (self.options.champions){
+						self.options.champions.destroy()
+					}
+					if (self.options.tooltip){
+						self.options.tooltip.destroy()
+					}
 
 					$.when(self.options.matchPromise)
 						.then(function (matchModel) {

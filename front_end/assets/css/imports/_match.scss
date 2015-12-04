@@ -114,9 +114,16 @@ $app-bar-height: 30px;
   height: 60px;
 
   .portrait {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
 
+    transform: scale(1.1); // NOTE: correction for size since the images from ddragon have black "borders".
+    //Since here sprites are used, the scaling of the background is not a solution (unless sprites are exchanged for the single images – which are 150*150 px in dimensions)
+    float: left;
+    cursor: url('../img/cursor/hand-pointer-o_000000_20.png'), auto !important;
+    /* border-right: ridge 3px white; */
+    border-radius: 100%;
+    margin: 7px;
   }
   #vs {
     background-color: $color-bg;
@@ -154,15 +161,6 @@ $app-bar-height: 30px;
 
   & * {
     height: 100%;
-  }
-
-  & .portrait {
-    float: left;
-    height: 48px;
-    cursor: url('../img/cursor/hand-pointer-o_000000_20.png'), auto !important;
-    /* border-right: ridge 3px white; */
-    border-radius: 100%;
-    margin: 5px;
   }
 }
 
