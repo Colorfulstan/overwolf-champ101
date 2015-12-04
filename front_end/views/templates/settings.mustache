@@ -50,14 +50,14 @@
 	<table class="hoverable">
 		<thead class="no-border">
 		<tr>
-			<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle(); $(this).toggleClass('collapsed')">In-Game-Hotkeys (click to show)</th>
+			<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle()" class="btn">In-Game-Hotkeys (click to show)</th>
 		</tr>
 		</thead>
-		<tbody id="hotkeys-rows" style="display: none;" onshow="$(this).slideUp()">
+		<tbody id="hotkeys-rows" style="display: none;">
 		{{#hotkeys}}
 			<tr onclick="location.href='overwolf://settings/hotkeys#{{id}}';" class="btn hotkey-btn">
 				<td class="padded-top-half padded-bot-half"><a href="#">{{ title }}</a></td>
-				<td class="padded-top-half padded-bot-half"><a href="">{{ string }}</a></td>
+				<td class="padded-top-half padded-bot-half"><a href="#">{{ string }}</a></td>
 			</tr>
 		{{/hotkeys}}
 		</tbody>

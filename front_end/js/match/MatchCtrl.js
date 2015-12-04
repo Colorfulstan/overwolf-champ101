@@ -62,8 +62,8 @@ steal('can.js'
 					self.countDocumentBlurHandlers = 0;
 					WindowCtrl.prototype.init.apply(self, arguments);
 
-					var mouseUpCb = function(info){
-						if (info.onGame === true){
+					var mouseUpCb = function (info) {
+						if (info.onGame === true) {
 							self.hidePanels();
 						}
 					};
@@ -142,13 +142,13 @@ steal('can.js'
 					self.options.$overviewContainer.removeClass('failed').addClass('loading');
 
 					// clean up old controllers
-					if (self.options.overview){
+					if (self.options.overview) {
 						self.options.overview.destroy()
 					}
-					if (self.options.champions){
+					if (self.options.champions) {
 						self.options.champions.destroy()
 					}
-					if (self.options.tooltip){
+					if (self.options.tooltip) {
 						self.options.tooltip.destroy()
 					}
 
@@ -163,20 +163,22 @@ steal('can.js'
 							// Controller for Tooltip
 							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
 
-							var pollForStableFPS = function(){
-								var interval = window.setInterval(function(){
-									if (self.options.settings.mostRecentFPS() === 'stable'){
-										// FPS is stable - if data loading finishes after FPS-stable, match-opoening will be delayed until settings.mostRecentFPS('stable') got called
+							var pollForStableFPS = function () {
+								var interval = window.setInterval(function () {
+									if (self.options.settings.isFpsStable()) {
+										// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
+
 										self.constructor.openMatch();
+
 										window.clearInterval(interval);
 									}
 								}, 100);
 							};
 							pollForStableFPS();
-
-
 						})
 						.fail(function (data, status, jqXHR) {
+							self.constructor.openMatch();
+
 							steal.dev.warn("Loading Match failed!", data, status, jqXHR);
 							self.options.$overviewContainer.removeClass('loading').addClass('failed');
 							if (data.status == 503) {
@@ -193,7 +195,9 @@ steal('can.js'
 					model.summonerId = this.options.settings.summonerId();
 					model.server = this.options.settings.server();
 					self.options.matchPromise = self.options.dao.loadMatchModel(model);
-					$.when(self.loadMatch()).always($.proxy(this.expandPanels, this))
+					$.when(self.loadMatch()).always(function () {
+						$.proxy(this.expandPanels, this);
+					})
 				},
 				/**
 				 * collapses or expands the champion-panels
