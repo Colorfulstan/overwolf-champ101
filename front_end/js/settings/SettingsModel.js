@@ -148,9 +148,9 @@ steal(
 			}),
 			/** @type {boolean}
 			 * @propterty */
-			mostRecentFPS: can.compute(function (newVal) {
+			isFpsStable: can.compute(function (newVal) {
 				if (newVal == undefined) {
-					return localStorage.getItem(SettingsModel.STORAGE_KEY_FRAME_RATE);
+					return localStorage.getItem(SettingsModel.STORAGE_KEY_FRAME_RATE) === 'true';
 				} else { // setter
 					localStorage.setItem(SettingsModel.STORAGE_KEY_FRAME_RATE, newVal);
 				}
