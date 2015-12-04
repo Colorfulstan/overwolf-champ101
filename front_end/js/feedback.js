@@ -10,6 +10,5 @@ steal(
 
 		Routes.ready();
 
-		debugger;
 		var feedback = new FeedbackCtrl('#content');
 	});

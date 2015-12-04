@@ -213,10 +213,13 @@ steal(
 								champTooltipView = can.view(this.options.championTmpl, champ);
 							}
 							this.element.html(champTooltipView);
-
 							break;
 					}
 					this.element.css('top', routeData.y + 'px');
+					if (typeof routeData.x !== 'undefined'){
+						this.element.css('left', routeData.x + 'px');
+					}
+
 					// set the colors given through classes like 'colorFFFFFF' and remove the class (within spans)
 					this.element.find('span').each(function (index, item) {
 						var cssClass = this.className;

@@ -190,7 +190,8 @@ steal(
 					champ: $panel.attr('data-name'),
 					index: $el.attr('data-index-1') - 1,
 					type: $el.attr('data-type'),
-					y: $panel.offset().top + $panel.height()
+					y: $panel.offset().top + $panel.height(),
+					x: $panel.offset().left
 				});
 			},
 			'.spell click': function ($el, ev) {
@@ -215,7 +216,8 @@ steal(
 				can.route.attr({
 					route: Routes.tooltipChampion,
 					champ: $panel.attr('data-name'),
-					y: $panel.offset().top + $panel.height()
+					y: $panel.offset().top + $panel.height(),
+					x: $panel.offset().left
 				});
 			},
 			'.img mouseout': function ($el, ev) {

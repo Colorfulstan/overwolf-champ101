@@ -59,7 +59,6 @@ steal(
 
 				$.when(self._loadDataFromServer(transfer))
 					.then(function (dataArray) {
-						debugger;
 						settings.cachedGameId(dataArray['gameId']);
 						settings.cachedGameAvailable(true);
 
