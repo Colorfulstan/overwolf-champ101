@@ -1,18 +1,18 @@
 {{#summonerId}}
 	<div class="app-buttons padded-top padded-right">
-		<div class="btn btn-home icon"><i class="fa fa-home fa-lg"></i></div>
+		<div class="btn btn-info icon"><i class="fa fa-info-circle fa-lg"></i></div>
 		<div class="btn btn-cancel icon"><i class="fa fa-times fa-lg"></i></div>
 	</div>
 {{/summonerId}}
 <div class="row padded-0">
 	<div class="logo text-center padded padded-top-0"><img src="../assets/img/logo.png"
-														   alt="Champ 101 - Basic Champion Knowledge" width="75" />
+														   alt="Champ 101 - Basic Champion Knowledge" width="100" />
 	</div>
 </div>
 <div class="row padded-0">
 	<form onsubmit="return false" id="summoner-form">
 		<div>
-			<label for="summoner-name-input">Summonername
+			<label for="summoner-name-input">Summoner name
 				{{#summonerId }}(<strong>{{ summonerName }} | {{ server }}</strong>){{/summonerId }}
 			</label>
 			<br>
@@ -21,7 +21,7 @@
 
 		<div><label for="server-region-select">Region</label>
 			<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
-				<option hidden>No Region set!</option>
+				<option hidden>No region set!</option>
 				<option style="display: block; padding: 10px;" value="BR">Brazil (BR)</option>
 				<option style="display: block; padding: 10px;" value="EUNE">EU Nordic & East (EUNE)</option>
 				<option style="display: block; padding: 10px;" value="EUW">EU West (EUW)</option>
@@ -41,26 +41,23 @@
 	</form>
 
 	<ul class="padded-bot">
-		<li><i class="fa fa-info-circle pull-left padded-right-2"></i>
-
-			<p>To receive data for your game you need to set your summoner (ingame) name and the region-server you play
-			   on.
+		<li><p>To receive data for your game you need to set your summoner (in-game) name and region.
 			</p>
 		</li>
 	</ul>
+
+	<hr class="width-100">
 	<table class="hoverable">
 		<thead class="no-border">
 		<tr>
-			<th>In-Game-Hotkeys</th>
+			<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle(); $(this).toggleClass('collapsed')">In-Game-Hotkeys (click to show)</th>
 		</tr>
 		</thead>
-		<tbody id="hotkeys-rows">
+		<tbody id="hotkeys-rows" style="display: none;" onshow="$(this).slideUp()">
 		{{#hotkeys}}
-			<tr>
-				<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-					   class="padded-top padded-bot hotkey-btn">{{ title }}</a></td>
-				<td><a href="overwolf://settings/hotkeys#{{id}}" title="Change hotkey"
-					   class="padded-top padded-bot hotkey-btn">{{ string }}</a></td>
+			<tr onclick="location.href='overwolf://settings/hotkeys#{{id}}';" class="btn hotkey-btn">
+				<td class="padded-top-half padded-bot-half"><a href="#">{{ title }}</a></td>
+				<td class="padded-top-half padded-bot-half"><a href="">{{ string }}</a></td>
 			</tr>
 		{{/hotkeys}}
 		</tbody>

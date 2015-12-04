@@ -2,11 +2,7 @@
 @import "../helper/colors";
 
 #tooltip-container {
-  background-color: $color-bg;
-  color: $color-font-bright;
   display: none;
-
-  padding: 30px;
 
   position: absolute;
   width: $match-window-width;
@@ -73,28 +69,6 @@
       &[class*="Heat"] {
         color: $color-ressource-heat;
       }
-      // TODO: use "ressource" string provided instead!?
-//      &[class*="perSecond"] {
-//        &::after {
-//          content: ' per second';
-//          display: inline;
-//        }
-//      }
-//      &[class*="10pMaxHealth"] {
-//        &::after {
-//          color: $color-ressource-health;
-//          content: ', 10% max health';
-//          display: inline;
-//        }
-//      }
-//      &[class*="pofcurrentHealth"] {
-//        &::after {
-//          color: $color-ressource-health;
-//          content: '% current health';
-//          display: inline;
-//        }
-//      }
-
     }
     // td
     tr {
@@ -103,25 +77,43 @@
     // tr
   }
   // .spell-values-table
-}
 
+  .tooltip-container__content {
+    background-color: $color-bg;
+    color: $color-font-bright;
+    &__header {
+      background: $color-bg-tooltip-header;
+    }
+  }
+}
 // #tooltip-container
 
+
 #spell-video-container {
+  position: relative;
   //  width: 348px;
   //  height: 196px;
 
-  .user-info {
+  .video__user-info {
     opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+
+    background: $color-bg-tooltip-header;
   }
 
   #videoPlayer {
     //    not shown until certain there is no error
     //    display: none;
-    &.vjs-paused + .user-info {
-     opacity: 1;
+    &.vjs-paused + .video__user-info {
+      opacity: 1;
     }
   }
+}
+.video--not-available {
+  display: none;
 }
 
 //.vjs-fluid {
@@ -151,21 +143,25 @@
   }
 }
 
+.spell-name {
+  position: relative;
+}
+
 .spell-key-icon {
   text-align: center !important;
+  //position: absolute;
   &[data-index-1]::after {
     border: 2px solid $color-lines;
     border-radius: 100%;
     -moz-border-radius: 100%;
     -webkit-border-radius: 100%;
     display: inline-block;
-    font-size: 25px;
+    font-size: inherit;
     font-weight: 800;
-    height: 40px;
+    height: 1.6em;
+    width: 1.6em;
     margin: 0 auto;
-
-    padding-top: 5px;
-    width: 40px;
+    padding-top: 0.2em;
   }
   &[data-index-1="2"]::after {
     content: 'Q';

@@ -17,7 +17,7 @@ describe("WindowCtrlSpec - ", function () {
 			'<div class="btn btn-resize icon"></div>' +
 			'<div class="btn btn-minimize icon"></div>' +
 			'<div class="btn btn-settings icon"></div>' +
-			'<div class="btn btn-home icon"></div>' +
+			'<div class="btn btn-info icon"></div>' +
 				//'<div class="btn btn-help icon"></div>' +
 				//'<div class="btn btn-feedback icon"></div>' +
 			'<div class="btn btn-close icon"></div>' +
@@ -100,7 +100,7 @@ describe("WindowCtrlSpec - ", function () {
 			expect($('.btn-resize')).toBeInDOM();
 			expect($('.btn-minimize')).toBeInDOM();
 			expect($('.btn-settings')).toBeInDOM();
-			expect($('.btn-home')).toBeInDOM();
+			expect($('.btn-info')).toBeInDOM();
 			//expect($('.btn-help')).toBeInDOM();
 			//expect($('.btn-feedback')).toBeInDOM();
 			expect($('.btn-close')).toBeInDOM();
@@ -111,7 +111,7 @@ describe("WindowCtrlSpec - ", function () {
 			mouseDown(true, '.btn-resize');
 			mouseDown(true, '.btn-minimize');
 			mouseDown(true, '.btn-settings');
-			mouseDown(true, '.btn-home');
+			mouseDown(true, '.btn-info');
 			//mouseDown(true, '.btn-help');
 			//mouseDown(true, '.btn-feedback');
 			mouseDown(true, '.btn-close');
@@ -144,10 +144,10 @@ describe("WindowCtrlSpec - ", function () {
 				expect(WindowCtrl[methodName]).toHaveBeenCalled();
 
 			});
-			it(".btn-home - WindowCtrl.openMain", function () {
+			it(".btn-info - WindowCtrl.openMain", function () {
 				var methodName = 'openMain';
 				setupBtnMethodSpies(methodName);
-				mouseDown(true, '.btn-home');
+				mouseDown(true, '.btn-info');
 				expect(WindowCtrl[methodName]).toHaveBeenCalled();
 			});
 			it(".btn-close - WindowCtrl.close", function () {
@@ -172,10 +172,10 @@ describe("WindowCtrlSpec - ", function () {
 				expect(WindowCtrl[methodName]).not.toHaveBeenCalled();
 
 			});
-			it(".btn-home", function () {
+			it(".btn-info", function () {
 				var methodName = 'openMain';
 				setupBtnMethodSpies(methodName);
-				mouseDown(false, '.btn-home');
+				mouseDown(false, '.btn-info');
 				expect(WindowCtrl[methodName]).not.toHaveBeenCalled();
 			});
 			it(".btn-close", function () {

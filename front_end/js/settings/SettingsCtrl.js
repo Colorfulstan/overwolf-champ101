@@ -114,6 +114,7 @@ steal(
 					 $.when(self.options.settings.loadHotKeys()).then(function (noValueGiven) {
 						 steal.dev.log('hotkeys reloaded');
 						self.renderView();
+						 self.element.find('#hotkeys-rows').show();
 					 });
 				}
 			},

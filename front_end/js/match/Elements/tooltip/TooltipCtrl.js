@@ -170,6 +170,7 @@ steal(
 
 
 				hideTooltip: function () {
+
 					this.element.children().remove();
 
 					if (this.options.videoPlayer) {
@@ -231,7 +232,7 @@ steal(
 					var self = this;
 					if (spell.videoAvailable()) {
 
-						$('#spell-video-container').html(
+						$('#spell-video-container').prepend(
 							can.view(this.options.videoTmpl, spell)
 						);
 
@@ -249,6 +250,7 @@ steal(
 								// TODO: maybe better error handling!?
 								steal.dev.log('Video got an Error', event, 'networkstate:', player.networkState);
 								$('#videoPlayer').remove();
+								$('.video--not-available').css('display', 'block')
 							});
 						});
 					}

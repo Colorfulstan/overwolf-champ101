@@ -63,7 +63,7 @@ steal(
 				_startMatchWhenFPSStable : function(/** FPSInfo */ result) {
 					var settings = new SettingsModel();
 					console.log(result.Fps);
-					if (result.Fps > 30 && settings.mostRecentFPS() > 30) {
+					if (result.Fps > 30 && settings.mostRecentFPS() == result.Fps) {
 						steal.dev.log('FPS Info request ends, framerate stable with ' + result.Fps);
 						$(MainCtrl).trigger('fpsStable');
 					} else {
@@ -71,8 +71,9 @@ steal(
 					}
 				},
 				addMatchStartOnStableFpsListener: function(){
-					self.constructor.openMatch();
-					self.constructor.minimize('Match');
+					var self = this;
+					self.openMatch();
+					self.minimize('Match');
 					overwolf.benchmarking.onFpsInfoReady.addListener(MainCtrl._startMatchWhenFPSStable);
 				},
 				removeMatchStartOnStableFpsListener: function(){

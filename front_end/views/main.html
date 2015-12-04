@@ -2,7 +2,7 @@
 <html lang="en" class="window-border-radius">
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-	<title>Champ 101 |  Basic League of Legends Champion Knowledge</title>
+	<title>Champ 101 | Basic League of Legends Champion Knowledge</title>
 	<!--TODO: Metas (title + ? )-->
 	<link rel="stylesheet" href="../assets/css/main.css" type="text/css" />
 
@@ -14,36 +14,46 @@
 
 </head>
 
-<body id="main" class="padded-2 drag-window-handle window-border-radius window-border">
+<body id="main" class="drag-window-handle window-border-radius window-border">
+<div id="content-wrapper" class="padded-2">
+	<div class="app-buttons padded-top padded-right">
+		<div class="btn btn-match icon"><i class="fa fa-search"></i></div>
+		<div class="btn btn-settings icon"><i class="fa fa-cog fa-lg"></i></div>
+		<!--<div class="btn btn-minimize icon"><i class="fa fa-minus"></i></div>-->
+		<div class="btn btn-minimize icon"><i class="fa fa-times fa-lg"></i></div>
+	</div>
 
-<div class="app-buttons padded-top padded-right">
-	<div class="btn btn-match icon"><i class="fa fa-search"></i></div>
-	<div class="btn btn-settings icon"><i class="fa fa-cog fa-lg"></i></div>
-	<!--<div class="btn btn-minimize icon"><i class="fa fa-minus"></i></div>-->
-	<div class="btn btn-minimize icon"><i class="fa fa-times fa-lg"></i></div>
-</div>
-
-<div id="content" class="padded-top">
-	<div class="logo text-center padded"><img src="../assets/img/logo.png" alt="Champ 101 - Basic Champion Knowledge"/></div>
-	<ul>
-		<li><i class="fa fa-info-circle pull-left padded-right"></i>
-
-			<p>When you start a new Game you can access the app over the handle on top of your screen. It will close
-			   again after you left the game.</p></li>
-		<li><i class="fa fa-info-circle pull-left padded-right"></i>
-
-			<p>You can open the match window outside of games through clicking &nbsp;<i
+	<div id="content">
+		<div class="logo text-center padded"><img src="../assets/img/logo.png"
+												  alt="Champ 101 - Basic Champion Knowledge" width="100px" /></div>
+		<ul>
+			<li class="padded-bot-half"><p>When you start a new game you can access the app over the handle on top of
+										   your screen. It will close
+										   again after you left the game</p></li>
+			<hr>
+			<li class="padded-bot-half"><p>You can open the match window outside of games through clicking &nbsp;<i
 					class="btn fa fa-search btn-match"></i></p></li>
-		<li><i class="fa fa-info-circle pull-left padded-right"></i>
-
-			<p>Games with spectators disabled will not offer the neccessary data for this app</p></li>
-		<li><i class="fa fa-exclamation-triangle pull-left padded-right"></i>
-			<p>For feedback, bugreports or suggestions please send a message to <a href="mailto:champinfo@krispin.it">champinfo@krispin.it</a>.</p>
-		</li>
-	</ul>
+			<hr>
+			<li class="padded-bot-half"><p>No data will be available for games with spectators disabled or for bots</p>
+			</li>
+			<hr>
+			<li class="padded-bot-half"><p>Champion data is gathered through riot's API. <br>
+										   Since there are some incosistencies within those data-sets, some values might not be correct or
+										   display their placeholder, but we did our best to work around those cases. <br>
+										   If you encounters errors of that type, feel free to send
+										   them as email so we can target those issues in future versions</p></li>
+			<hr>
+			<li>
+				<p>Feel free to give feedback at the overwolf-store or send a message to <a
+						href="mailto:champinfo@krispin.it">champinfo@krispin.it</a></p>
+			</li>
+		</ul>
+	</div>
+	<footer id="disclaimer" class="padded-top-2">
+		<p>Champ 101 – Basic Champion Knowledge isn't endorsed by Riot Games and doesn't reflect the views or opinions
+		   of Riot Games or anyone
+		   officially involved in producing or managing League of Legends. League of Legends and Riot Games are
+		   trademarks
+		   or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
+	</footer>
 </div>
-<footer id="disclaimer" class="padded-right-2 padded-bot-2">
-	<p>Champ 101 – Basic Champion Knowledge isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone
-	   officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks
-	   or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
-</footer>
