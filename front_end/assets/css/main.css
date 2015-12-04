@@ -10206,10 +10206,10 @@ i.fa {
   .champion-panel .portrait {
     height: 75px;
     width: 75px;
-    background-size: 75px 75px !important;
+    background-size: 82px 82px !important;
+    background-position: center !important;
     float: left;
     border-radius: 100%;
-    /* border: 3px ridge white; */
     -moz-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
@@ -10452,8 +10452,14 @@ select {
 #match-overview-container {
   height: 60px; }
   #match-overview-container .portrait {
-    width: 48px;
-    height: 48px; }
+    width: 44px;
+    height: 44px;
+    transform: scale(1.1);
+    float: left;
+    cursor: url("../img/cursor/hand-pointer-o_000000_20.png"), auto !important;
+    /* border-right: ridge 3px white; */
+    border-radius: 100%;
+    margin: 7px; }
   #match-overview-container #vs {
     background-color: rgba(6, 16, 19, 0.9);
     overflow: hidden; }
@@ -10480,13 +10486,6 @@ select {
   width: 100%; }
   #match-participants * {
     height: 100%; }
-  #match-participants .portrait {
-    float: left;
-    height: 48px;
-    cursor: url("../img/cursor/hand-pointer-o_000000_20.png"), auto !important;
-    /* border-right: ridge 3px white; */
-    border-radius: 100%;
-    margin: 5px; }
 
 * {
   overflow: hidden;

@@ -20,6 +20,7 @@ steal(
 				this.attr('passive', new SpellModel(options.passive));
 				this.image = new ImageModel(options.image);
 				options.image = this.image;
+				//debugger;
 
 				var spells = [];
 				options.spells.map(function (el, index) {

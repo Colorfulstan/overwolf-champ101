@@ -15,7 +15,6 @@
 		{
 		  "event": "GameLaunch",
 		  "event_data": {
-		  	"wait_for_stable_framerate": 30,
 			"game_ids": [5426, 54261]
 		  },
 		  "start_minimized": true

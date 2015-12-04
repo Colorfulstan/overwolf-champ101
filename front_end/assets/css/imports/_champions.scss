@@ -56,11 +56,10 @@ $portrait-width-height: 75px;
   .portrait {
     height: $portrait-width-height;
     width: $portrait-width-height;
-    background-size: $portrait-width-height $portrait-width-height !important;;
+    background-size: ($portrait-width-height + 7px) ($portrait-width-height + 7px) !important;
+    background-position: center !important;
     float: left;
     border-radius: 100%;
-    //margin: 10px;
-    /* border: 3px ridge white; */
     // TODO: as class or variable
     -moz-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
     -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
