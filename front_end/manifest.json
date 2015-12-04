@@ -2,9 +2,9 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-	"name": "LoL Champion Info3",
-	"version": "0.10.3",
-	"minimum-overwolf-version": "0.87.00",
+	"name": "LoL Champion Info",
+	"version": "0.11.0",
+	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
 	"icon": "assets/img/icon.png",
 	"icon_gray": "assets/img/icon_gray.png",
@@ -26,6 +26,7 @@
 		"file": "views/main.html",
 		"transparent": true,
 		"resizable": false,
+		  "disable_restore_animation": true,
 		"size": {"width": 400,"height": 1200},
 		"min_size": {"width": 400},
 		"max_size": {"width": 400}
@@ -34,6 +35,7 @@
 		"file": "views/settings.html",
 		"transparent": true,
 		"resizable": false,
+		  "disable_restore_animation": true,
 		  "size": {"width": 400,"height": 1200},
 	  	"min_size": {"width": 400},
 		"max_size": {"width": 400}
@@ -44,6 +46,7 @@
 		"transparent": true,
 		"resizable": false,
 		"show_in_taskbar": true,
+		  "disable_restore_animation": true,
 		"size": {"width": 400,"height": 1200},
 		"min_size": {"width": 400, "height": 400},
 		"max_size": {"width": 800, "height": 800}
@@ -53,6 +56,7 @@
 		"transparent": true,
 		"resizable": false,
 		"show_in_taskbar": false,
+		  "disable_restore_animation": true,
 		"size": {"width": 800, "height": 1200},
 		"min_size": {"width": 800, "height": 1200},
 		"max_size": {"width": 800, "height": 1200}
@@ -66,11 +70,7 @@
 		"close_panels": { "title": "Close all Champions", "action-type": "custom", "default": "Ctrl+Num 1"}
 	}
   },
-  "permissions": [
-	"Hotkeys",
-	"GameInfo",
-	"Extensions"
-  ],
+  "permissions": [ "Hotkeys", "GameInfo", "Extensions"],
   "externally_connectable": {
 	"matches": [
 	  "http://*.krispin.it/*"

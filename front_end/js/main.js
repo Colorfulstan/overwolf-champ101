@@ -22,30 +22,30 @@ steal(
 
 		overwolf.games.getRunningGameInfo(function (/** GameInfo */ data) {
 			if (data == undefined || data == null) { // manual start since no game is running
-				manualAppStart();
+				outOfGameStart();
 			} else { // automatic start since a game is running and the app will start with league
-				automaticAppStart();
+				inGameStart();
 			}
 		});
 
 		/** App got started manually by the user */
-		function manualAppStart() {
+		function outOfGameStart() {
 			settings.startMatchCollapsed(false);
 			main.start(SettingsModel.isSummonerSet());
 			var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
-			overwolf.benchmarking.requestFpsInfo(1000, func);
+			overwolf.benchmarking.requestFpsInfo(250, func);
 		}
 
 		/** App got started through overwolf */
-		function automaticAppStart() {
+		function inGameStart() {
+			steal.dev.warn('App started through overwolf');
 			if (!SettingsModel.isSummonerSet()) {
 				main.start(false);
 			} else {
 				settings.startMatchCollapsed(false);
-				//main.constructor.openMatch();
 				main.constructor.addMatchStartOnStableFpsListener();
 				var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
-				overwolf.benchmarking.requestFpsInfo(1000, func);
+				overwolf.benchmarking.requestFpsInfo(250, func);
 			}
 		}
 	});
