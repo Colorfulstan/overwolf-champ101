@@ -2,7 +2,7 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-	"name": "LoL Champion Info",
+	"name": "LoL Champion InfoV0.11",
 	"version": "0.11.0",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
