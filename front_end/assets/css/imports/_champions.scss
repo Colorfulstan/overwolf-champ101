@@ -208,17 +208,18 @@ $portrait-width-height: 75px;
       &[data-index-1="7"],
       &[data-index-1="8"] {
         position: relative;
-        top: -73px;
+        top: -68px;
         -webkit-clip-path: inset(0 0 0 25px);
         clip-path: inset(0 0 0 25px);
         overflow: hidden;
+        -webkit-filter: grayscale(1);
 
         &:hover, &.active {
           -webkit-clip-path: initial;
           clip-path: initial;
           overflow: visible;
         }
-        &:after {
+        &::after { // qwer attachments
           display:none;
         }
       }

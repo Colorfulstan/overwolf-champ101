@@ -10339,15 +10339,16 @@ i.fa {
         clear: left; }
       .champion-panel .champ-spells .champion-spell[data-index-1="5"], .champion-panel .champ-spells .champion-spell[data-index-1="6"], .champion-panel .champ-spells .champion-spell[data-index-1="7"], .champion-panel .champ-spells .champion-spell[data-index-1="8"] {
         position: relative;
-        top: -73px;
+        top: -68px;
         -webkit-clip-path: inset(0 0 0 25px);
         clip-path: inset(0 0 0 25px);
-        overflow: hidden; }
+        overflow: hidden;
+        -webkit-filter: grayscale(1); }
         .champion-panel .champ-spells .champion-spell[data-index-1="5"]:hover, .champion-panel .champ-spells .champion-spell[data-index-1="5"].active, .champion-panel .champ-spells .champion-spell[data-index-1="6"]:hover, .champion-panel .champ-spells .champion-spell[data-index-1="6"].active, .champion-panel .champ-spells .champion-spell[data-index-1="7"]:hover, .champion-panel .champ-spells .champion-spell[data-index-1="7"].active, .champion-panel .champ-spells .champion-spell[data-index-1="8"]:hover, .champion-panel .champ-spells .champion-spell[data-index-1="8"].active {
           -webkit-clip-path: initial;
           clip-path: initial;
           overflow: visible; }
-        .champion-panel .champ-spells .champion-spell[data-index-1="5"]:after, .champion-panel .champ-spells .champion-spell[data-index-1="6"]:after, .champion-panel .champ-spells .champion-spell[data-index-1="7"]:after, .champion-panel .champ-spells .champion-spell[data-index-1="8"]:after {
+        .champion-panel .champ-spells .champion-spell[data-index-1="5"]::after, .champion-panel .champ-spells .champion-spell[data-index-1="6"]::after, .champion-panel .champ-spells .champion-spell[data-index-1="7"]::after, .champion-panel .champ-spells .champion-spell[data-index-1="8"]::after {
           display: none; }
   .champion-panel .panel-control {
     height: 100%;
