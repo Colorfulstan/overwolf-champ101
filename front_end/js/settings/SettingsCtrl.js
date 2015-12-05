@@ -36,6 +36,7 @@ steal(
 				this.element.find('#content').html(
 					can.view(this.options.settingsTmpl, this.options.settings)
 				);
+				this.element.removeClass('hidden');
 			},
 
 			noRequestNeccessary: function () {
