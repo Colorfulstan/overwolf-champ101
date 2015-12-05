@@ -85,8 +85,8 @@ steal(
 					var self = this;
 					var deferred = $.Deferred();
 					overwolf.windows.obtainDeclaredWindow(name, function (result) {
-						if (result.status == "success") {
-							if (result.window.isVisible) {
+								if (result.status == "success") {
+									if (result.window.isVisible) {
 								self.minimize(name);
 								if (name == 'Match') {
 									SettingsModel.isMatchMinimized(true);
@@ -161,6 +161,23 @@ steal(
 						var y = self.getCenteredY(odkWindow.height);
 						overwolf.windows.changePosition(odkWindow.id, x, y);
 					});
+				},
+				/**
+				 * @param name of the WIndow to check as defined within manifest.json
+				 * @returns {Promise | boolean} Promise that resolves into boolean wether Window is visible or not
+				 */
+				isWindowVisible: function (name) {
+					var def = $.Deferred();
+					overwolf.windows.obtainDeclaredWindow(name, function (result) {
+						if (result.status == "success") {
+							if (result.window.isVisible) {
+								def.resolve(true);
+							} else {
+								def.resolve(false);
+							}
+						}
+					});
+					return def.promise();
 				}
 			},
 			{ // Instance

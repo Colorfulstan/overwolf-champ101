@@ -13,7 +13,14 @@
 		</div>
 	</div>
 </header>
-<div class="row padded-2">
+<div class="row padded-left-2 padded-right-2 padded-top padded-bot-2">
+	<div class="row padded-bot-2">
+		<div class="padded-top">
+			<input type="checkbox" name="startWithGame" id="startWithGame" can-value="startWithGame" />
+			<label for="startWithGame">Start app when entering a game
+				<a class="whats-this" title="{{startWithGameInfo}}" href="#">(What's this?)</a></label>
+		</div>
+	</div>
 	<form onsubmit="return false" id="summoner-form">
 		<div>
 			<label for="summoner-name-input">Summoner name
