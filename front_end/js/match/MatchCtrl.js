@@ -118,8 +118,8 @@ steal('can.js'
 
 						}
 
-						localStorage.setItem('lock_getCachedGame', '0');
-						localStorage.removeItem('temp_gameId');
+						//options.settings.cachedGameAvailable(false);
+						//localStorage.removeItem('temp_gameId');
 
 						// After successfully loading the Match-Data
 						self.loadMatch(options.model);

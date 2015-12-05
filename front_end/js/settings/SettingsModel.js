@@ -91,10 +91,8 @@ steal(
 				this.changedProps = {};
 
 				// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
-				//this.bind('hotkeys', SettingsModel.getHotKeys()); // TODO: Hotkey Änderung binden??
 			},
 
-			// TODO: save oldValues ( the first time they get changed) within JSON objs and implement "reset" to restore those values instead of cloning
 			/** @type {string}
 			 * @property */
 			summonerName: can.compute(function (newVal) {
@@ -104,7 +102,7 @@ steal(
 					localStorage.setItem(SettingsModel.STORAGE_KEY_NAME, newVal);
 					this.valueChanged('summonerName', oldVal);
 
-					this.cachedGameAvailable(false); // TODO: TEST
+					//this.cachedGameAvailable(false); // TODO: TEST
 				}
 			}, this),
 			/** @type {string}
@@ -117,7 +115,7 @@ steal(
 					localStorage.setItem(SettingsModel.STORAGE_KEY_ID, newVal);
 					this.valueChanged('summonerId', oldVal);
 
-					this.cachedGameAvailable(false); // TODO: TEST
+					//this.cachedGameAvailable(false); // TODO: TEST
 				}
 			}, false),
 			/** @type {string}
@@ -129,7 +127,7 @@ steal(
 					localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
 					this.valueChanged('server', oldVal);
 
-					this.cachedGameAvailable(false); // TODO: TEST
+					//this.cachedGameAvailable(false); // TODO: TEST
 				}
 			}),
 			/** @type {boolean}
@@ -202,25 +200,25 @@ steal(
 				});
 				return deferred.promise();
 			},
-			/**
-			 * rturns a new instance with all the .attr() copied into it
-			 * @return {SettingsModel}
-			 */
-			clone: function () {
-				var data = this.attr();
-				delete data[this.constructor.id];
-				return new this.constructor(data);
-				// TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
-			},
-			/**
-			 * sets all attr() from the given Model in this instance
-			 * @param settingsModel
-			 */
-			copyFrom: function (settingsModel) {
-				for (var attrKey in settingsModel.attr()) {
-					this.attr(attrKey, settingsModel.attr(attrKey));
-				} // TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
-			},
+			///**
+			// * rturns a new instance with all the .attr() copied into it
+			// * @return {SettingsModel}
+			// */
+			//clone: function () {
+			//	var data = this.attr();
+			//	delete data[this.constructor.id];
+			//	return new this.constructor(data);
+			//	// TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
+			//},
+			///**
+			// * sets all attr() from the given Model in this instance
+			// * @param settingsModel
+			// */
+			//copyFrom: function (settingsModel) {
+			//	for (var attrKey in settingsModel.attr()) {
+			//		this.attr(attrKey, settingsModel.attr(attrKey));
+			//	} // TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
+			//},
 			/**
 			 * restores the original-values for this settingsModel Object
 			 * by calling the setters with the original values
