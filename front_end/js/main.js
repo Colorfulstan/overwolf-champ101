@@ -1,5 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Entry point for main.html
+// Only gets executed with the first start after overwolf restart
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 "use strict";
 steal(
@@ -15,7 +16,9 @@ steal(
 		var main = new MainCtrl('html');
 		var settings = new SettingsModel();
 
-		main.constructor.registerOverwolfHandlers();
+		if (SettingsModel.startWithGame()) {
+			main.constructor.registerOverwolfHandlers();
+		}
 
 		//settings.cachedGameAvailable(false);
 		//settings.cachedGameId(null);
@@ -31,6 +34,9 @@ steal(
 		/** App got started manually by the user */
 		function outOfGameStart() {
 			settings.startMatchCollapsed(false);
+			if (!SettingsModel.isSummonerSet()) {
+				settings.startWithGame(true);
+			}
 			main.start(SettingsModel.isSummonerSet());
 			var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
 			overwolf.benchmarking.requestFpsInfo(250, func);
@@ -38,15 +44,37 @@ steal(
 
 		/** App got started through overwolf */
 		function inGameStart() {
-			steal.dev.warn('App started through overwolf');
-			if (!SettingsModel.isSummonerSet()) {
-				main.start(false);
-			} else {
-				settings.startMatchCollapsed(false);
-				main.constructor.addMatchStartOnStableFpsListener();
-				var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
-				overwolf.benchmarking.requestFpsInfo(250, func);
-			}
+			// NOTE: only case in which inGameStart won't be automatic through overwolf is, if overwolf gets started after the match already started!
+			isStartedThroughGameLaunch().then(function (wasAutoLaunched) {
+				if (wasAutoLaunched && !SettingsModel.startWithGame()) {
+					return false;
+				}
+				if (!SettingsModel.isSummonerSet()) {
+					settings.startWithGame(true);
+					main.start(false);
+				} else {
+					settings.startMatchCollapsed(false);
+					main.constructor.addMatchStartOnStableFpsListener();
+					var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
+					overwolf.benchmarking.requestFpsInfo(250, func);
+				}
+			});
+		}
+
+		/**
+		 * @returns {Promise | boolean}
+		 */
+		function isStartedThroughGameLaunch() { // TODO: not sure if this works as intended
+			// if app is started manually, the main-window will open anyways.
+			// So if that window is not present, the game got started through auto-launch
+			// TODO: change main-window to some kind of indicator-window so that main-window don't have to open when app gets started manually
+
+			var def = $.Deferred();
+			WindowCtrl.isWindowVisible('Main').then(function (isVisible) {
+				if (!isVisible) steal.dev.warn('App started through overwolf');
+				def.resolve(!isVisible);
+			});
+			return def.promise();
 		}
 	});
 

@@ -12,6 +12,7 @@ steal(
 			STORAGE_KEY_REGION: 'region-code',
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
+			STORAGE_KEY_START_WITH_GAME: 'setting-start-with-game',
 			STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 			STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
 			STORAGE_KEY_FRAME_RATE: 'setting-framerate',
@@ -79,6 +80,10 @@ steal(
 					if (newVal == false) localStorage.removeItem('lock_matchMinimized');
 					else if (newVal == true) localStorage.setItem('lock_matchMinimized', 'true');
 				}
+			},
+			/** @static */
+			startWithGame: function () {
+				return localStorage.getItem(SettingsModel.STORAGE_KEY_START_WITH_GAME) == 'true'
 			}
 		}, {
 			/**
@@ -153,10 +158,19 @@ steal(
 					localStorage.setItem(SettingsModel.STORAGE_KEY_FRAME_RATE, newVal);
 				}
 			}),
-			/** @type {string}
-			 * @propterty
-			 * @readonly */
-			hideHomeAtStartInfo: "This will prevent the Start Window to show up when you enter a Game",
+			/** @type {boolean}
+			 * @propterty */
+			startWithGame: can.compute(function (newVal) {
+				if (newVal == undefined) {
+					return this.constructor.startWithGame();
+				} else { // setter
+					var oldVal = this.constructor.startWithGame();
+					this.valueChanged('startWithGame', oldVal);
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_WITH_GAME);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_WITH_GAME, newVal);
+				}
+			}),
+			startWithGameInfo : 'Disabling this option will prevent the app from opening with your league game. <span style="text-decoration: underline">This will be affective after overwolf restart.</span>',
 			/**
 			 * @property
 			 * @type {string}
