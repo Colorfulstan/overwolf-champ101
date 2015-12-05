@@ -85,6 +85,92 @@
       background: $color-bg-tooltip-header;
     }
   }
+
+  .champ-spells {
+    height: 30px;
+    width: 100%;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+    margin-bottom: 10px;
+    transform: scale(0.8);
+
+    & + .spell-key-icon {
+      position: relative;
+      left: 20px;
+      padding: 0;
+      margin: 0;
+    }
+
+    .img {
+      height: 48px;
+      width: 48px;
+      float: left;
+      margin-top: 20px;
+      border-radius: 100%;
+      box-sizing: content-box;
+      overflow: visible;
+    }
+    .champ-spell-border {
+      border-radius: 100%;
+      border: solid 5px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3);
+      width: 48px;
+      height: 48px;
+      margin: -5px 0 0 -5px;
+      pointer-events: none;
+    }
+
+    .champion-spell {
+      position: relative;
+      &:after {
+        display: block;
+        content: '';
+        pointer-events: none;
+        position: absolute;
+        z-index: 9999;
+        width: 25px;
+        height: 20px;
+        bottom: -20px;
+        right: -20px;
+        padding-top: 5px;
+        border-radius: 100%;
+        font-size: 18px;
+        font-weight: 800;
+        text-align: center;
+        text-shadow: -1px -1px 1px rgba(0, 0, 0, 1);
+      }
+
+      &[data-index-1="5"] {
+        clear: left;
+      }
+
+      &[data-index-1="5"],
+      &[data-index-1="6"],
+      &[data-index-1="7"],
+      &[data-index-1="8"] {
+        position: relative;
+        top: -68px;
+        -webkit-clip-path: inset(0 0 0 25px);
+        clip-path: inset(0 0 0 25px);
+        overflow: hidden;
+        -webkit-filter: grayscale(1);
+
+        &:hover, &.active {
+          -webkit-clip-path: initial;
+          clip-path: initial;
+          overflow: visible;
+        }
+        &::after { // qwer attachments
+          display:none;
+        }
+      }
+    }  // .champion-spell
+  }// .champ-spells
+
+
 }
 // #tooltip-container
 
