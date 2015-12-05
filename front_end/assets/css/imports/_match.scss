@@ -4,30 +4,16 @@
 #panel-container {
   height: auto;
   width: $match-window-width;
-  margin: 1px auto 0;
+  margin: 1px 0 0;
   margin-bottom: -2px; // visual compensation for 1px at app-bar
-
-  &:hover {
-    + #match-app-bar {
-      // showing the app-buttons when hovering over the match overview
-      // will break if html structure is changed so fallback within #match-ap-bar
-
-      .app-buttons {
-        display: block;
-      }
-      #handle {
-        opacity: 0.9;
-      }
-    } // #match-app-bar
-  } // hover
 }
 
 $app-bar-height: 30px;
 #match-app-bar {
   display: none;
   position: relative;
-  left: 32%;
-  width: 36%;
+  left: 26%;
+  width: 35%;
   height: $app-bar-height;
 
   background-color: rgba(0, 0, 0, 0.01);
@@ -35,12 +21,6 @@ $app-bar-height: 30px;
   overflow: hidden;
 
   &:hover {
-      // fallback for rule in #panel-container:hover
-      //if html is changed that app-buttons still will show up
-      // at least when hovering over the handle
-      .app-buttons {
-        display: block;
-      }
       #handle {
         opacity: 0.9;
       }
@@ -66,12 +46,23 @@ $app-bar-height: 30px;
     }
 
   }
+}
+
+#match {
   .app-buttons {
-    display: none;
-    width: 120px;
-    margin-top: 5px;
+    position: absolute;
+    right: 0;
+    top: 8px;
+    padding-left: 5px;
+    width: 100px;
+
+    .icon {
+      padding: 0 5px !important;
+    }
+    i {
+      background: rgba(0,0,0,0.01) !important;
+    }
   }
-  // .app-buttons
 }
 
 @-webkit-keyframes colorchange {
