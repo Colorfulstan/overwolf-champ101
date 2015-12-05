@@ -162,6 +162,9 @@
 .muted {
   opacity: 0.5; }
 
+.fa-xlg {
+  font-size: 1.5em !important; }
+
 .padded {
   padding: 15px; }
   .padded-left {
@@ -10393,24 +10396,18 @@ select {
 #panel-container {
   height: auto;
   width: 700px;
-  margin: 1px auto 0;
+  margin: 1px 0 0;
   margin-bottom: -2px; }
-  #panel-container:hover + #match-app-bar .app-buttons {
-    display: block; }
-  #panel-container:hover + #match-app-bar #handle {
-    opacity: 0.9; }
 
 #match-app-bar {
   display: none;
   position: relative;
-  left: 32%;
-  width: 36%;
+  left: 26%;
+  width: 35%;
   height: 30px;
   background-color: rgba(0, 0, 0, 0.01);
   margin-top: 1px;
   overflow: hidden; }
-  #match-app-bar:hover .app-buttons {
-    display: block; }
   #match-app-bar:hover #handle {
     opacity: 0.9; }
   #match-app-bar.animated-handle {
@@ -10428,10 +10425,17 @@ select {
       -webkit-animation: colorchange 2s linear infinite;
       animation: colorchange 2s linear infinite;
       opacity: 1 !important; }
-  #match-app-bar .app-buttons {
-    display: none;
-    width: 120px;
-    margin-top: 5px; }
+
+#match .app-buttons {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  padding-left: 5px;
+  width: 100px; }
+  #match .app-buttons .icon {
+    padding: 0 5px !important; }
+  #match .app-buttons i {
+    background: rgba(0, 0, 0, 0.01) !important; }
 
 @-webkit-keyframes colorchange {
   0% {
