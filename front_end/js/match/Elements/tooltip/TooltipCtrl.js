@@ -189,6 +189,7 @@ steal(
 				 * @param routeData.y {number} - The y position from top of the screen for the tooltip
 				 */
 				showTooltip: function (type, routeData) {
+
 					switch (type) {
 						case 'spell':
 							var spell;
@@ -205,9 +206,17 @@ steal(
 							this.initVideo(spell);
 							break;
 						case 'champ':
+							var removedSpells = [];
 							var champ = this.options.match.participantsByChamp[routeData.champ].champ;
 							var champTooltipView;
 							if (routeData.overview) {
+								// NOTE: since elise and nidalee have 7 skills and they are not combined to 4 data-objects
+								// a workaround has to do that (for now just dismiss the skills after the fourth (ult)
+								// to not break the summary table
+								if (champ.name === 'Elise' || champ.name === 'Nidalee') { // TODO: look for better solution (in Backend)
+									removedSpells = champ.spells.splice(4); // passive + qwer = 5 skills
+									// TODO: for now spells after ult just disappear
+								}
 								champTooltipView = can.view(this.options.championSummaryTmpl, champ);
 							} else {
 								champTooltipView = can.view(this.options.championTmpl, champ);
@@ -216,7 +225,7 @@ steal(
 							break;
 					}
 					this.element.css('top', routeData.y + 'px');
-					if (typeof routeData.x !== 'undefined'){
+					if (typeof routeData.x !== 'undefined') {
 						this.element.css('left', routeData.x + 'px');
 					}
 
@@ -242,11 +251,11 @@ steal(
 						var videoTag = $('video').get(0);
 
 						//$(videoTag).on('ready', function () {
-						videojs(videoTag, {controls: false, controlBar: {fullscreenToggle: false, }}, function () {
+						videojs(videoTag, {controls: false, controlBar: {fullscreenToggle: false,}}, function () {
 							// sets up the videojs Player to work after it got inserted into the page by templatingFullscreenToggle
 							var player = this;
 							self.options.videoPlayer = this;
-							player.on('ended', function() {
+							player.on('ended', function () {
 								player.play();
 							});
 							player.on('error', function (event) {

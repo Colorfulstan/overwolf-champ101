@@ -1,15 +1,19 @@
-{{#summonerId}}
-	<div class="app-buttons padded-top padded-right">
-		<div class="btn btn-info icon"><i class="fa fa-info-circle fa-lg"></i></div>
-		<div class="btn btn-cancel icon"><i class="fa fa-times fa-lg"></i></div>
+<header class="padded-top-2 padded-left-2 padded-right-2 padded-bot-half">
+	{{#summonerId}}
+		<div class="app-buttons padded-top padded-right">
+			<div class="btn btn-info icon"><i class="fa fa-info-circle fa-lg"></i></div>
+			<div class="btn btn-cancel icon"><i class="fa fa-times fa-lg"></i></div>
+		</div>
+	{{/summonerId}}
+	<div class="row">
+		<div class="logo text-center padded"><img class="pull-left" src="../assets/img/logo.png"
+												  alt="Champ 101 - Basic Champion Knowledge" width="100px" />
+
+			<h2 class="padded-top col-xs-8">App<br>Settings</h2>
+		</div>
 	</div>
-{{/summonerId}}
-<div class="row padded-0">
-	<div class="logo text-center padded padded-top-0"><img src="../assets/img/logo.png"
-														   alt="Champ 101 - Basic Champion Knowledge" width="100" />
-	</div>
-</div>
-<div class="row padded-0">
+</header>
+<div class="row padded-2">
 	<form onsubmit="return false" id="summoner-form">
 		<div>
 			<label for="summoner-name-input">Summoner name
@@ -42,15 +46,17 @@
 
 	<ul class="padded-bot">
 		<li><p>To receive data for your game you need to set your summoner (in-game) name and region.
-			</p>
+		</p>
 		</li>
 	</ul>
 
-	<hr class="width-100">
+	<hr class="">
 	<table class="hoverable">
 		<thead class="no-border">
 		<tr>
-			<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle()" class="btn">In-Game-Hotkeys (click to show)</th>
+			<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle()" class="btn">In-Game-Hotkeys (click to
+																							 show)
+			</th>
 		</tr>
 		</thead>
 		<tbody id="hotkeys-rows" style="display: none;">
