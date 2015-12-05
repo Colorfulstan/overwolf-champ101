@@ -17,8 +17,8 @@ steal(
 
 		main.constructor.registerOverwolfHandlers();
 
-		settings.cachedGameAvailable(false);
-		settings.cachedGameId(null);
+		//settings.cachedGameAvailable(false);
+		//settings.cachedGameId(null);
 
 		overwolf.games.getRunningGameInfo(function (/** GameInfo */ data) {
 			if (data == undefined || data == null) { // manual start since no game is running

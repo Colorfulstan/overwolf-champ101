@@ -27,7 +27,7 @@ steal(
 					MainCtrl.mostRecentFPS = [];
 
 					settings.startMatchCollapsed(true);
-					settings.cachedGameAvailable(true);
+					//settings.cachedGameAvailable(true);
 					MainCtrl.openMatch();
 					//overwolf.benchmarking.stopRequesting(); // MPTE: stopping requesting makes it impossible to start it again until app restarts!?
 				});
@@ -49,7 +49,7 @@ steal(
 					if (self.gameFinished(result)) {
 						steal.dev.log('stopping possible fps requests');
 						self.removeMatchStartOnStableFpsListener();
-						settings.cachedGameAvailable(false);
+						//settings.cachedGameAvailable(false);
 						steal.dev.warn('League of Legends game finished', new Date());
 						self.closeMatch()
 					}

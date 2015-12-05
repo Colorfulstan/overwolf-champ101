@@ -28,9 +28,9 @@ steal(
 				var settings = new SettingsModel();
 
 				var params = {summonerId: transfer.summonerId, server: transfer.server};
-				if (settings.cachedGameAvailable()){
-					params['gameId'] = settings.cachedGameId();
-				}
+				//if (settings.cachedGameAvailable()){
+				//	params['gameId'] = settings.cachedGameId();
+				//}
 				steal.dev.log('request for gamedata with params:', params);
 				jQuery.get(RIOT_ADAPTER_URL
 					, params
@@ -59,8 +59,8 @@ steal(
 
 				$.when(self._loadDataFromServer(transfer))
 					.then(function (dataArray) {
-						settings.cachedGameId(dataArray['gameId']);
-						settings.cachedGameAvailable(true);
+						//settings.cachedGameId(dataArray['gameId']);
+						//settings.cachedGameAvailable(true);
 
 						self._extractParticipants(transfer, dataArray, 'blue');
 						self._extractParticipants(transfer, dataArray, 'purple');
@@ -71,7 +71,7 @@ steal(
 						dataArray = null;
 					}).fail(function (data, status, jqXHR) {
 
-						settings.cachedGameAvailable(false);
+						//settings.cachedGameAvailable(false);
 						steal.dev.warn("Loading MatchModel failed!", data, status, jqXHR);
 
 						deferred.reject(data, status, jqXHR);
