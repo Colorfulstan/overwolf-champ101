@@ -48,6 +48,13 @@ $app-bar-height: 30px;
   }
 }
 
+#handle {
+  display: none;
+}
+.collapsed #handle {
+  display: block;
+}
+
 #match {
   .app-buttons {
     position: absolute;
