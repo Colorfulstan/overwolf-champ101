@@ -170,7 +170,7 @@ steal(
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_WITH_GAME, newVal);
 				}
 			}),
-			startWithGameInfo : 'Disabling this option will prevent the app from opening with your league game. <span style="text-decoration: underline">This will be affective after overwolf restart.</span>',
+			startWithGameInfo : 'Disabling this option will prevent the app from opening with your league game.<br><span style="text-decoration: underline">Needs overwolf restart!</span>',
 			/**
 			 * @property
 			 * @type {string}

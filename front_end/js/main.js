@@ -16,9 +16,18 @@ steal(
 		var main = new MainCtrl('html');
 		var settings = new SettingsModel();
 
+		var isInGame = false;
+
 		if (SettingsModel.startWithGame()) {
 			main.constructor.registerOverwolfHandlers();
 		}
+
+			// in case app started previous and gets reopened by user
+		overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) {
+			if (isInGame){
+				WindowCtrl.openMatch();
+			}
+		});
 
 		//settings.cachedGameAvailable(false);
 		//settings.cachedGameId(null);
@@ -44,6 +53,7 @@ steal(
 
 		/** App got started through overwolf */
 		function inGameStart() {
+			isInGame = true;
 			// NOTE: only case in which inGameStart won't be automatic through overwolf is, if overwolf gets started after the match already started!
 			isStartedThroughGameLaunch().then(function (wasAutoLaunched) {
 				if (wasAutoLaunched && !SettingsModel.startWithGame()) {

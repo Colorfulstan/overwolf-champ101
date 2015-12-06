@@ -1,9 +1,9 @@
-$color-bg : rgba(6,16,19,0.9);
+$color-bg : rgba(6,16,19,1);
 $color-bg-op03 : rgba(6,16,19,0.3);
 $color-bg-tooltip-header : rgba( 3,155, 229, 0.2);
 
 $color-blue: #0372a5;
-$color-purple: #a02a1f;
+$color-red: #a02a1f;
 $color-lines: #eee;
 $color-lines-muted: rgba(238,238,238,0.05);
 
@@ -18,14 +18,14 @@ $style-border-line: $style-border-line-width solid $color-lines;
 $style-border-line-muted: $style-border-line-width solid $color-lines-muted;
 $color-icons: #fff;
 
-$color-success: rgba(0,255,0,0.5);
-$color-loading: orange;
-$color-failed: rgba(255,0,0,0.5);
+$color-success: $color-accent-2;
+$color-loading: $color-bg-tooltip-header;
+$color-failed: $color-red;
 
 // costType colors
 $color-ressource-mana: rgb(68, 221, 255);
 $color-ressource-energy: #e4e35f;
-$color-ressource-health: #ac2e1a;
-$color-ressource-fury: #ac2e1a;
-$color-ressource-ferocity: #ac2e1a;
+$color-ressource-health: #c22a17;
+$color-ressource-fury: #c22a17;
+$color-ressource-ferocity: #c22a17;
 $color-ressource-heat: #e4e35f;

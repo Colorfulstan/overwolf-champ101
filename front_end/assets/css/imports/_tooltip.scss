@@ -52,6 +52,7 @@
       }
 
       &[class*="Health"] {
+        font-weight: 400;
         color: $color-ressource-health;
       }
       &[class*="Mana"] {

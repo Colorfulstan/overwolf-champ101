@@ -70,6 +70,16 @@ p {
   cursor: default;
 }
 
+select {
+  height: 2rem !important;
+  padding: 4px !important;
+  border-radius: 0;
+}
+//select:focus {
+//  outline-color: $color-accent-2;
+//  border-color: $color-accent-2;
+//}
+
 body {
   &#settings, &#main, &#feedback {
     & #content-wrapper {
@@ -88,9 +98,6 @@ ul {
   }
 }
 
-a, label {
-  cursor: url('../img/cursor/hand-pointer-o_000000_20.png'),auto !important;
-}
 a:hover {
   text-decoration: underline;
   table & {
@@ -118,50 +125,4 @@ footer#disclaimer {
   text-align: justify;
   letter-spacing: 0.4px;
   font-weight: 100;
-}
-
-.btn {
-  cursor: url('../img/cursor/hand-pointer-o_000000_20.png'),auto;
-  opacity: 0.8;
-
-  &:hover, &.active{
-    opacity: 1;
-  }
-}
-
-.loading {
-  //  background-color: $color-loading !important;
-
-  .loading-state {
-    display: block;
-  }
-  .failed-state{
-    display: none;
-  }
-}
-
-.failed {
-  background-color: $color-failed !important;
-
-  .loading-state {
-    display: none;
-  }
-  .failed-state{
-    display: block;
-  }
-}
-
-.success {
-  background-color: $color-success !important;
-}
-
-.whats-this {
-  text-decoration: none;
-}
-
-.drag-window-handle {
-  cursor: url('../img/cursor/hand-paper-o_000000_20.png'), auto;
-}
-.drag-window-handle:active {
-  cursor: url('../img/cursor/hand-grab-o_000000_20.png'), auto;
 }

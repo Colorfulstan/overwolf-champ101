@@ -236,8 +236,11 @@ steal('can.js'
 				},
 // Eventhandler
 				'mouseenter': function (element, ev) {
-					var self = this;
-					self.expandPanels();
+					// so that we don't open it by accident (too often)
+					this.options.expansionTimeout = window.setTimeout($.proxy(this.expandPanels, this), 100);
+				},
+				'mouseleave': function (element, ev) {
+					window.clearTimeout(this.options.expansionTimeout);
 				},
 				'{appBar} mousedown': function (appBar, ev) {
 					if (ev.which == 1) { this.togglePanels(appBar); }

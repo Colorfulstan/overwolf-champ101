@@ -6,7 +6,7 @@
 }
 
 .purple {
-  background: $color-purple;
+  background: $color-red;
 }
 
 .vertical-center {
@@ -156,6 +156,45 @@
   opacity: 0;
 }
 
+.btn {
+  opacity: 0.8;
+  cursor: pointer;
+
+  &:hover, &.active{
+    opacity: 1;
+  }
+}
+
+.loading {
+    background-color: $color-loading !important;
+
+  .loading-state {
+    display: block;
+  }
+  .failed-state{
+    display: none;
+  }
+}
+
+.failed {
+  background-color: $color-failed !important;
+
+  .loading-state {
+    display: none;
+  }
+  .failed-state{
+    display: block;
+  }
+}
+
+.success {
+  background-color: $color-success !important;
+}
+
+.whats-this {
+  text-decoration: none;
+}
+
 // class for elements that show pin icons on hover / when having .active class
 .playable {
   [class^="video-"] {
@@ -202,4 +241,9 @@
       vertical-align: middle;
     }
   }
+}
+
+.whats-this-display {
+  font-weight: 200;
+  text-align: justify;
 }
