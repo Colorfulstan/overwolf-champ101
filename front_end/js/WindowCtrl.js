@@ -205,7 +205,7 @@ steal(
 				 * @listens MouseEvent#click */
 				'.whats-this click': function ($el, ev) {
 					var $OpenWhats = $('.whats-this-display');
-					var newNodeString = '<div class="whats-this-display text-body">' + $el.attr('title') + '</div>';
+					var newNodeString = '<div class="whats-this-display text-body"><p>' + $el.attr('title') + '</p></div>';
 					if ($el.parent().next('div').hasClass('whats-this-display')) { // close it again
 						$OpenWhats.remove();
 					} else if ($OpenWhats.length) { // another one is open - close that and open targeted

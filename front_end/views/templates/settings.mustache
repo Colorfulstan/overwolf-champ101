@@ -8,41 +8,42 @@
 	<div class="row">
 		<div class="logo text-center padded"><img class="pull-left" src="../assets/img/logo.png"
 												  alt="Champ 101 - Basic Champion Knowledge" width="100px" />
-
 			<h2 class="padded-top col-xs-8">App<br>Settings</h2>
 		</div>
 	</div>
 </header>
-<div class="row padded-left-2 padded-right-2 padded-top padded-bot-2">
-	<div class="row padded-bot-2">
+
+<div class="row padded-left-2 padded-right-2 padded-top padded-bot">
+	<div class="row padded-bot">
 		<div class="padded-top">
 			<input type="checkbox" name="startWithGame" id="startWithGame" can-value="startWithGame" />
 			<label for="startWithGame">Start app when entering a game
 				<a class="whats-this" title="{{startWithGameInfo}}" href="#">(What's this?)</a></label>
 		</div>
 	</div>
-	<form onsubmit="return false" id="summoner-form">
+	<hr>
+	<form onsubmit="return false" id="summoner-form" class="padded-top">
 		<div>
-			<label for="summoner-name-input">Summoner name
-				{{#summonerId }}(<strong>{{ summonerName }} | {{ server }}</strong>){{/summonerId }}
+			<label for="summoner-name-input" class="pull-right">{{#summonerId }}<strong>{{ summonerName }} | {{ server }}</strong>{{/summonerId }}
 			</label>
 			<br>
-			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="your summoner name"
-				   can-value='summonerName' autofocus /></div>
+			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="summoner name"
+				   can-value='summonerName' autofocus class="muted"/></div>
 
-		<div><label for="server-region-select">Region</label>
+		<div>
+			<!--<label for="server-region-select">Region</label>-->
 			<select name="server-region-select" id="server-region-select" can-value='server' class="browser-default">
 				<option hidden>No region set!</option>
-				<option style="display: block; padding: 10px;" value="BR">Brazil (BR)</option>
-				<option style="display: block; padding: 10px;" value="EUNE">EU Nordic & East (EUNE)</option>
-				<option style="display: block; padding: 10px;" value="EUW">EU West (EUW)</option>
-				<option style="display: block; padding: 10px;" value="KR">KR</option>
-				<option style="display: block; padding: 10px;" value="LAN">Latin American North (LAN)</option>
-				<option style="display: block; padding: 10px;" value="LAS">Latin American South (LAS)</option>
-				<option style="display: block; padding: 10px;" value="NA">North America (NA)</option>
-				<option style="display: block; padding: 10px;" value="OCE">Oceania (OCE)</option>
-				<option style="display: block; padding: 10px;" value="RU">Russia (RU)</option>
-				<option style="display: block; padding: 10px;" value="TR">Turkey (TR)</option>
+				<option value="BR">Brazil (BR)</option>
+				<option value="EUNE">EU Nordic & East (EUNE)</option>
+				<option value="EUW">EU West (EUW)</option>
+				<option value="KR">KR</option>
+				<option value="LAN">Latin American North (LAN)</option>
+				<option value="LAS">Latin American South (LAS)</option>
+				<option value="NA">North America (NA)</option>
+				<option value="OCE">Oceania (OCE)</option>
+				<option value="RU">Russia (RU)</option>
+				<option value="TR">Turkey (TR)</option>
 				<!--<option value="PBE">Public Beta Environment (PBE)</option>-->
 			</select></div>
 		<div class="padded-top-2 padded-bot">
@@ -52,7 +53,7 @@
 	</form>
 
 	<ul class="padded-bot">
-		<li><p>To receive data for your game you need to set your summoner (in-game) name and region.
+		<li><p class="muted">To receive data for your game you need to set your summoner (in-game) name and region.
 		</p>
 		</li>
 	</ul>

@@ -85,8 +85,9 @@ $portrait-width-height: 75px;
   }
 
   &.purple {
-    background-color: $color-purple;
-    .champion-spell:after { color: $color-purple}
+    background-color: $color-red;
+    .champion-spell:after { color: $color-red
+    }
   }
 
   .passive {
