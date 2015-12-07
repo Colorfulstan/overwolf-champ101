@@ -71,10 +71,18 @@ steal(
 			}
 
 		};
+
 		Routes.setRouteData = function (routeData, replace) {
-			if (typeof routeData !== 'object') {
-				throw new Error('routeData is not an object!')
+			if (typeof routeData !== 'object' || routeData.constructor === Array) {
+				throw new Error('routeData: ' + routeData +' is not an object!');
 			}
+			var hasProperties = false;
+			for(var prop in routeData) {
+				if (routeData.hasOwnProperty(prop)) { hasProperties = true; }
+			}
+			if (!hasProperties){ throw new Error('routeData has no Properties!'); }
+
+
 			var repl = replace || false;
 			var def = $.Deferred();
 			var promise = def.promise();
