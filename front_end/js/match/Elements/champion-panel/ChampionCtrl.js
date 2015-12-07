@@ -131,13 +131,13 @@ steal(
 
 			'{showTeamRoute} route': function (data) {
 				steal.dev.log(':team route triggered - adding Panels for Team:', data.team);
-				can.route.attr({route: Routes.tooltipHide}, true);
+				Routes.setRoute(Routes.tooltipHide, true)
 				this.showTeam(data.team);
 				this.addCloseAllBtn();
 			},
 			'{addChampRoute} route': function (data) {
 				steal.dev.log(':champ route triggered - adding champ', data.champ);
-				can.route.attr({route: Routes.tooltipHide}, true);
+				Routes.setRoute(Routes.tooltipHide, true)
 				this.addPanel(data.champ);
 				if (this.options.panels.length >= 2) {
 					this.addCloseAllBtn();
@@ -145,7 +145,7 @@ steal(
 			},
 			'{closeAllPanelsRoute} route': function (routeData) {
 				steal.dev.log('close/panel/all');
-				can.route.attr({'route': ''});
+				Routes.resetRoute();
 				this.closeAllPanels();
 			},
 			'{hideTooltipRoute} route': function (routeData) {
@@ -154,12 +154,12 @@ steal(
 			},
 			'{closeSinglePanelsRoute} route': function (routeData) {
 				steal.dev.log('close Panel route', routeData);
-				can.route.attr({'route': ''});
+				Routes.resetRoute();
 				this.removePanelById(routeData.id);
 			},
 			'.close click': function ($el, ev) {
 				var self = this;
-				can.route.attr({route: Routes.tooltipHide}, true);
+				Routes.setRoute(Routes.tooltipHide, true)
 				var $panel = $el.closest('.panel');
 				var champName = $el.closest('.panel').attr('data-name');
 				$panel.slideUp(function () {
@@ -168,7 +168,7 @@ steal(
 			},
 			'#close-all-btn click': function () {
 				var self = this;
-				can.route.attr({route: Routes.tooltipHide}, true);
+				Routes.setRoute(Routes.tooltipHide, true)
 				$('.champion-panel').slideUp(function () {
 					self.closeAllPanels();
 				});
@@ -185,14 +185,14 @@ steal(
 
 			'.spell mouseenter': function ($el, ev) {
 				var $panel = this.mouseenterHandler($el);
-				can.route.attr({
+				Routes.setRouteData({
 					route: Routes.tooltipSpell,
 					champ: $panel.attr('data-name'),
 					index: $el.attr('data-index-1') - 1,
 					type: $el.attr('data-type'),
 					y: $panel.offset().top + $panel.height(),
 					x: $panel.offset().left
-				});
+				}, true);
 			},
 			'.spell click': function ($el, ev) {
 				//steal.dev.log('clicked on .spell');
@@ -202,28 +202,28 @@ steal(
 				$el.toggleClass('active');
 				$el.siblings().removeClass('active');
 				//}
-				if (can.route.attr('video') == 1){
+				if (Routes.attr('video') == 1){
 					steal.dev.log('setting video:0');
-					can.route.attr('video',0);
+					Routes.setRouteData({'video': 0}, false);
 				} else {
 					steal.dev.log('setting video:1');
-					can.route.attr('video',1);
+					Routes.setRouteData({'video': 1}, false);
 				}
 			},
 			'.portrait mouseenter': function ($el, ev) {
 				var $panel = this.mouseenterHandler($el);
 
-				can.route.attr({
+				Routes.setRouteData({
 					route: Routes.tooltipChampion,
 					champ: $panel.attr('data-name'),
 					y: $panel.offset().top + $panel.height(),
 					x: $panel.offset().left
-				});
+				},true)
 			},
 			'.img mouseout': function ($el, ev) {
 				var $panel = $el.closest('.panel');
 				//if (!$panel.hasClass('sticky-tooltip')) {
-					can.route.attr({route: Routes.tooltipHide}, true);
+					Routes.setRoute(Routes.tooltipHide, true)
 				//}
 			}
 		});

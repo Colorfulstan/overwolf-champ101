@@ -51,7 +51,6 @@ steal(
 				can.route('#!' + Routes.closeAllPanels);
 				can.route('#!' + Routes.expandPanels);
 
-
 				// ChampionCtrl
 				can.route('#!' + Routes.togglePanels);
 				can.route('#!' + Routes.panelChampion);
@@ -71,6 +70,28 @@ steal(
 				can.route.ready();
 			}
 
+		};
+		Routes.setRouteData = function (routeData, replace) {
+			var repl = replace || false;
+			var def = $.Deferred();
+			var promise = def.promise();
+			window.setTimeout(function () {
+				can.route.attr(routeData, repl);
+				def.resolve();
+			}, 1);
+			return promise;
+		};
+		Routes.setRoute = function (route, replace) {
+			return Routes.setRouteData({'route': route}, replace);
+		};
+		Routes.resetRoute = function () {
+			return Routes.setRouteData('', true);
+		};
+		Routes.attr = function(attr) {
+			if (!attr){
+				return can.route.attr();
+			}
+			return can.route.attr(attr);
 		};
 		return Routes;
 	});

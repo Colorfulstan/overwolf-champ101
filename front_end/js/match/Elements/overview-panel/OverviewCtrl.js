@@ -50,33 +50,31 @@ steal(
 			'.portrait mouseenter': function ($el, ev) {
 				//steal.dev.log('.portrait mouseenter');
 				var $panel = $el.closest('.panel');
-				can.route.attr({
+				Routes.setRouteData({
 					route: Routes.tooltipChampion,
 					champ: $el.attr('title'),
 					overview: true,
 					y: $panel.offset().top + $panel.height()
-				});
+				}, true);
 			},
 			'.portrait mouseout': function ($el, ev) {
 				//steal.dev.log('.portrait mouseout');
-				can.route.attr({
-					route: Routes.tooltipHide
-				});
+				Routes.setRoute(Routes.tooltipHide);
 			},
 			'.portrait click': function ($el, ev) {
 				//steal.dev.log('.portrait click');
-				can.route.attr({route: Routes.panelChampion, champ: $el.attr('title')});
+				Routes.setRouteData({route: Routes.panelChampion, champ: $el.attr('title')});
 				$el.removeClass('addable');
 			},
 			'.show-team.blue click': function ($el, ev) {
-				can.route.attr({team: 'blue', route: Routes.panelTeam});
+				Routes.setRouteData({team: 'blue', route: Routes.panelTeam});
 				ev.stopPropagation();
 				$('.team.blue').find('.portrait').removeClass('addable');
 				$('.show-team.blue').removeClass('addable');
 
 			},
 			'.show-team.purple click': function ($el, ev) {
-				can.route.attr({team: 'purple', route: Routes.panelTeam});
+				Routes.setRouteData({team: 'purple', route: Routes.panelTeam});
 				ev.stopPropagation();
 				$('.show-team.purple').removeClass('addable');
 				$('.team.purple').find('.portrait').removeClass('addable');

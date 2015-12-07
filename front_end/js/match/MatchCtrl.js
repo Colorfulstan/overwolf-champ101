@@ -229,7 +229,7 @@ steal('can.js'
 				 * */
 				hidePanels: function () {
 					var $panelContainer = this.options.$panelContainer;
-					can.route.attr({route: Routes.tooltipHide}, true);
+					Routes.setRoute(Routes.tooltipHide, true);
 					$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						$(MatchCtrl).trigger('collapsed');
 					});
@@ -247,19 +247,19 @@ steal('can.js'
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						can.route.attr({route: Routes.reloadMatch});
+						Routes.setRoute(Routes.reloadMatch, true);
 						ev.stopPropagation();
 					}
 				},
 				'{togglePanelsRoute} route': function (routeData) {
 					steal.dev.log('toggle/all route');
-					can.route.attr({'route': ''});
+					Routes.resetRoute();
 					this.togglePanels($(this.options.appBar));
 				},
 				'{expandPanelsRoute} route': function (routeData) {
 					steal.dev.log('show/all - routeData:', routeData);
 					this.expandPanels();
-					can.route.attr({'route': ""});
+					Routes.resetRoute();
 				},
 				'{reloadMatchRoute} route': function (routeData) {
 					//steal.dev.log('refresh Route triggered in OverviewCtrl');
@@ -268,7 +268,7 @@ steal('can.js'
 					this.options.settings.startMatchCollapsed(false);
 					//this.reloadMatch();
 					location.reload();
-					can.route.attr({}, true);
+					Routes.resetRoute()
 					$(MatchCtrl).trigger('restored');
 				},
 				/** Does prevent Event propagation
@@ -294,7 +294,7 @@ steal('can.js'
 							overwolf.windows.getWindowState('Settings', function (/** WindowStateData */ result) {
 								if (result.status == "success" && result.window_state == 'closed') {
 									if (summonerId != settings.summonerId()) {
-										can.route.attr({route: Routes.reloadMatch});
+										Routes.setRoute(Routes.reloadMatch);
 									}
 									window.clearInterval(interval);
 								}

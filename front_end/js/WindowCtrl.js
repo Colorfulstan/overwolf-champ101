@@ -293,7 +293,8 @@ steal(
 				'{toggleWindowRoute} route': function (routeData) {
 					steal.dev.log('toggle/:window - routeData:', routeData);
 					WindowCtrl.toggle(routeData.window);
-					can.route.attr({'route': ''});
+					Routes.setRoute('', true);
+
 				}
 				,
 				/**
@@ -307,7 +308,7 @@ steal(
 					if (routeData.window == 'Match') {
 						SettingsModel.isMatchMinimized(false);
 					}
-					can.route.attr({'route': ''});
+					Routes.setRoute('', true);
 				}
 			});
 		return WindowCtrl;

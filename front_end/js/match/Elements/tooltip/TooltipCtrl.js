@@ -179,6 +179,23 @@ steal(
 					}
 					this.element.hide();
 				},
+				///**
+				// * Renders the given template within this.element.
+				// * If the given Model contains a viewFragment, that will be used.
+				// * Otherwise the rendered view will be stored as viewFragment
+				// * @param template
+				// * @param data
+				// * @param [data.viewFragment] the prerendered DocumentFragment for this tooltip
+				// */
+				//renderAndStoreView: function (template, model) {
+				//	var view = model.attr('viewFragment');
+				//	if (!view) {
+				//		view = can.view(template, model);
+				//		model.attr('viewFragment', view);
+				//	}
+				//	debugger;
+				//	this.element.html(view);
+				//},
 				/**
 				 * shows a Tooltip
 				 * @param type {String} - 'spell' || 'champ'
@@ -202,6 +219,7 @@ steal(
 							if (routeData.type == 'summoner') {
 								spell = this.options.match.participantsByChamp[routeData.champ].summonerSpells[routeData.index];
 							}
+								debugger;
 							this.element.html(can.view(this.options.spellTmpl, spell));
 							this.initVideo(spell);
 							break;
@@ -221,6 +239,8 @@ steal(
 							} else {
 								champTooltipView = can.view(this.options.championTmpl, champ);
 							}
+							debugger;
+
 							this.element.html(champTooltipView);
 							break;
 					}
