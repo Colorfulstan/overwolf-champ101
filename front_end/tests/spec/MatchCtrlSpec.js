@@ -7,5 +7,4 @@ describe("MatchCtrlSpec - ", function () {
 		settings = new SettingsModel();
 		matchCtrl = new MatchCtrl('html', {settings: settings});
 	});
-
 });

@@ -22,6 +22,7 @@ steal('can.js'
 		 * @class MatchCtrl
 		 * @extends WindowCtrl
 		 * @constructor {@link MatchCtrl.init}
+		 * @member {object} options.events an object to set and trigger events on reachable over self.options.events
 		 */
 		var MatchCtrl = WindowCtrl.extend(
 			{
@@ -43,8 +44,7 @@ steal('can.js'
 					togglePanelsRoute: Routes.togglePanels,
 					expandPanelsRoute: Routes.expandPanels,
 					reloadMatchRoute: Routes.reloadMatch
-				},
-				blurHandlersAttached: []
+				}
 			}, {
 
 				/**
@@ -56,12 +56,10 @@ steal('can.js'
 				 * @constructs
 				 */
 				init: function (element, options) {
-
+					WindowCtrl.prototype.init.apply(this, arguments);
 					var self = this;
 
 					self.countDocumentBlurHandlers = 0;
-					WindowCtrl.prototype.init.apply(self, arguments);
-
 					var mouseUpCb = function (info) {
 						if (info.onGame === true) {
 							self.hidePanels();
@@ -78,26 +76,26 @@ steal('can.js'
 					/**
 					 * @event MatchCtrl#minimized
 					 */
-					$(MatchCtrl).on('minimized', function () {
+					$(WindowCtrl.events).on('minimized', function () {
 
 					});
 					/**
 					 * @event MatchCtrl#restored
 					 */
-					$(MatchCtrl).on('restored', function () {
+					$(WindowCtrl.events).on('restored', function () {
 
 					});
 					/**
 					 * @event MatchCtrl#collapsed
 					 */
-					$(MatchCtrl).on('collapsed', function () {
+					$(WindowCtrl.events).on('collapsed', function () {
 						var $appBar = $(self.options.appBar);
 						$appBar.addClass('collapsed');
 					});
 					/**
 					 * @event MatchCtrl#expanded
 					 */
-					$(MatchCtrl).on('expanded', function () {
+					$(WindowCtrl.events).on('expanded', function () {
 						var $appBar = $(self.options.appBar);
 						$appBar.removeClass('collapsed');
 					});
@@ -216,22 +214,24 @@ steal('can.js'
 				 * @fires MatchCtrl#expanded
 				 */
 				expandPanels: function () {
-					$(this.options.appBar).removeClass(this.options.animatedHandleClass);
-					$(this.options.handle).removeClass(this.options.handleAnimationClass);
+					var self = this;
+					$(self.options.appBar).removeClass(self.options.animatedHandleClass);
+					$(self.options.handle).removeClass(self.options.handleAnimationClass);
 
-					var $panelContainer = this.options.$panelContainer;
+					var $panelContainer = self.options.$panelContainer;
 					$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
-						$(MatchCtrl).trigger('expanded');
+						$(WindowCtrl.events).trigger('expanded');
 					});
 				},
 				/** Collapse the champion panels
 				 * @fires MatchCtrl#collapsed
 				 * */
 				hidePanels: function () {
-					var $panelContainer = this.options.$panelContainer;
+					var self = this;
+					var $panelContainer = self.options.$panelContainer;
 					Routes.setRoute(Routes.tooltipHide, true);
 					$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
-						$(MatchCtrl).trigger('collapsed');
+						$(WindowCtrl.events).trigger('collapsed');
 					});
 				},
 // Eventhandler
@@ -262,14 +262,15 @@ steal('can.js'
 					Routes.resetRoute();
 				},
 				'{reloadMatchRoute} route': function (routeData) {
+					var self = this;
 					//steal.dev.log('refresh Route triggered in OverviewCtrl');
 					//this.options.match = routeData.match;
 					//this.renderView(this.options.match.blue,this.options.match.purple);
 					this.options.settings.startMatchCollapsed(false);
 					//this.reloadMatch();
 					location.reload();
-					Routes.resetRoute()
-					$(MatchCtrl).trigger('restored');
+					Routes.resetRoute();
+					$(WindowCtrl.events).trigger('restored');
 				},
 				/** Does prevent Event propagation
 				 *

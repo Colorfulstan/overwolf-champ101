@@ -21,7 +21,8 @@ steal(
 				var self = this;
 				var settings = new SettingsModel();
 
-				$(MainCtrl).on('fpsStable', function () {
+				$(WindowCtrl.events).on('fpsStable', function () {
+					steal.dev.log('fpsStable event');
 					self.removeMatchStartOnStableFpsListener();
 					settings.isFpsStable('true');
 					MainCtrl.mostRecentFPS = [];
@@ -60,8 +61,8 @@ steal(
 				steal.dev.log(MainCtrl.mostRecentFPS);
 
 				if (isFpsNumberStable(MainCtrl.mostRecentFPS, 30, 4)) {
-					steal.dev.log('FPS Info request ends, framerate stable with ' + result.Fps);
-					$(MainCtrl).trigger('fpsStable');
+					steal.dev.log('FPS stable with ' + result.Fps + ' triggering fpsStable');
+					$(WindowCtrl.events).trigger('fpsStable');
 				}
 
 				/**
