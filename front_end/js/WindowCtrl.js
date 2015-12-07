@@ -38,6 +38,13 @@ steal(
 				SCREEN_WIDTH: window.screen.availWidth,
 				/**@static*/
 				SCREEN_HEIGHT: window.screen.availHeight,
+				/**
+				 * Object for attaching and triggering Events for this Controller.
+				 * Usage:
+				 * $(WindowCtrl.events).on(...)
+				 * $(WindowCtrl.events).trigger(...)
+				 */
+				events: {},
 
 				/**@static*/
 				getCenteredX: function (winWidth) {
@@ -69,7 +76,7 @@ steal(
 						if (result.status == "success") {
 							var odkWindow = result.window;
 							overwolf.windows.restore(odkWindow.id, function (result) {
-								$(WindowCtrl).trigger('restored');
+								$(WindowCtrl.events).trigger('restored');
 								deferred.resolve(odkWindow);
 							});
 						}
@@ -103,21 +110,6 @@ steal(
 						}
 					});
 					return deferred.promise();
-				},
-				/**@static*/
-				openHelp: function () {
-					// TODO: implement
-				},
-				openFeedback: function () {
-					//var name = 'Feedback';
-					//var self = this;
-					//$.when(this.open(name, 500, 500)).then(function ( /**ODKWindow*/ odkWindow) {
-					//	steal.dev.log("WindowCtrl.openFeedback: ", odkWindow);
-					//	//	// TODO: should this window open centered even after relocating it? => not position it at all
-					//	var x = self.getCenteredX(odkWindow.width);
-					//	var y = self.getCenteredY(odkWindow.height);
-					//	overwolf.windows.changePosition(odkWindow.id, x, y);
-					//});
 				},
 
 				/**
@@ -156,10 +148,13 @@ steal(
 					var self = this;
 					$.when(this.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openSettings: ", odkWindow);
-						//	// TODO: should this window open centered even after relocating it? => not position it at all
-						var x = self.getCenteredX(odkWindow.width);
-						var y = self.getCenteredY(odkWindow.height);
-						overwolf.windows.changePosition(odkWindow.id, x, y);
+						if (!localStorage.getItem('settings-got-opened-once')){
+							// Only center settings-window the first time it opens
+							var x = self.getCenteredX(odkWindow.width);
+							var y = self.getCenteredY(500);
+							overwolf.windows.changePosition(odkWindow.id, x, y);
+							localStorage.setItem('settings-got-opened-once', '1');
+						}
 					});
 				},
 				/**
