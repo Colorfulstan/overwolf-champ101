@@ -72,6 +72,9 @@ steal(
 
 		};
 		Routes.setRouteData = function (routeData, replace) {
+			if (typeof routeData !== 'object') {
+				throw new Error('routeData is not an object!')
+			}
 			var repl = replace || false;
 			var def = $.Deferred();
 			var promise = def.promise();
@@ -85,7 +88,7 @@ steal(
 			return Routes.setRouteData({'route': route}, replace);
 		};
 		Routes.resetRoute = function () {
-			return Routes.setRouteData('', true);
+			return Routes.setRouteData({route: ''}, true);
 		};
 		Routes.attr = function(attr) {
 			if (!attr){
