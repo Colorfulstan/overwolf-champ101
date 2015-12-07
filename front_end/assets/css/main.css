@@ -236,6 +236,11 @@
 .width-100 {
   width: 100%; }
 
+.padded-sides-neg-2 {
+  margin-left: -30px;
+  margin-right: -30px;
+  width: 200%; }
+
 .collapse-border-left {
   margin-left: -1px !important; }
 .collapse-border-right {

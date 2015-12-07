@@ -21,10 +21,10 @@
 				<a class="whats-this" title="{{startWithGameInfo}}" href="#">(What's this?)</a></label>
 		</div>
 	</div>
-	<hr>
+	<hr class="padded-sides-neg-2">
 	<form onsubmit="return false" id="summoner-form" class="padded-top">
-		<div>
-			<label for="summoner-name-input" class="pull-right">{{#summonerId }}<strong>{{ summonerName }} | {{ server }}</strong>{{/summonerId }}
+		<div class="text-center">
+			<label for="summoner-name-input" class="btn">{{#summonerId }}<strong>{{ summonerName }} | {{ server }}</strong>{{/summonerId }}
 			</label>
 			<br>
 			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="summoner name"
@@ -46,10 +46,6 @@
 				<option value="TR">Turkey (TR)</option>
 				<!--<option value="PBE">Public Beta Environment (PBE)</option>-->
 			</select></div>
-		<div class="padded-top-2 padded-bot">
-			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
-			<div id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></div>
-		</div>
 	</form>
 
 	<ul class="padded-bot">
@@ -58,7 +54,7 @@
 		</li>
 	</ul>
 
-	<hr class="">
+	<hr class="padded-sides-neg-2">
 	<table class="hoverable">
 		<thead class="no-border">
 		<tr>
@@ -76,4 +72,9 @@
 		{{/hotkeys}}
 		</tbody>
 	</table>
+
+	<div class="padded-top-2 padded-bot">
+		<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
+		<div id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></div>
+	</div>
 </div>
