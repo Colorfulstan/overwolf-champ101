@@ -99,6 +99,12 @@
   width: 100%;
 }
 
+.padded-sides-neg-2 {
+  margin-left: -$spacer*2;
+  margin-right: -$spacer*2;
+  width: 200%;
+}
+
 .collapse-border {
   &-left {
     margin-left: -$style-border-line-width !important;
