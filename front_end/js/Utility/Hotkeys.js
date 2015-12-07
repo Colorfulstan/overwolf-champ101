@@ -6,26 +6,26 @@ steal('can', 'Routes.js', 'SettingsModel.js', function (can, Routes, SettingsMod
 		overwolf.settings.registerHotKey("toggle_match", function (result) {
 			steal.dev.log('Hotkey toggle_match triggered', result);
 			if (result.status == "success") {
-				can.route.attr({'route': Routes.toggleWindow, 'window': 'Match'});
-				steal.dev.log('can route after hitting toggle_match', can.route.attr());
+				Routes.setRouteData({'route': Routes.toggleWindow, 'window': 'Match'});
+				steal.dev.log('can route after hitting toggle_match', Routes.attr());
 			}
 		});
 		overwolf.settings.registerHotKey("toggle_panels", function (result) {
 			steal.dev.log('Hotkey toggle_panels triggered', result);
 			if (result.status == "success") {
 				if (!SettingsModel.isMatchMinimized()){
-					can.route.attr({'route': Routes.togglePanels}, true);
+					Routes.setRoute(Routes.togglePanels, true);
 				} else {
-					can.route.attr({'route': Routes.restoreWindow, 'window': 'Match'});
-					can.route.attr({'route': Routes.expandPanels}, true);
+					Routes.setRouteData({'route': Routes.restoreWindow, 'window': 'Match'}, true);
+					Routes.setRoute(Routes.expandPanels, true);
 				}
-				steal.dev.log('can route after hitting toggle_panels', can.route.attr());
+				steal.dev.log('can route after hitting toggle_panels', Routes.attr());
 			}
 		});
 		var team_handler = function (result, team) {
 			steal.dev.log('Hotkey open_panel_team_' + team + ' triggered', result);
 			if (result.status == "success") {
-				can.route.attr({'route': Routes.panelTeam, 'team': team});
+				Routes.setRouteData({'route': Routes.panelTeam, 'team': team});
 			}
 		};
 		overwolf.settings.registerHotKey("open_panels_team_blue", function (result) {
@@ -37,8 +37,8 @@ steal('can', 'Routes.js', 'SettingsModel.js', function (can, Routes, SettingsMod
 		overwolf.settings.registerHotKey("close_panels", function (result) {
 			steal.dev.log('Hotkey close_panels triggered', result);
 			if (result.status == "success") {
-				can.route.attr({'route': Routes.closeAllPanels});
-				steal.dev.log('can route after hitting close_panels', can.route.attr());
+				Routes.setRoute(Routes.closeAllPanels);
+				steal.dev.log('can route after hitting close_panels', Routes.attr());
 			}
 		});
 	};

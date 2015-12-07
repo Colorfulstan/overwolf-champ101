@@ -16,6 +16,7 @@ import './MainCtrlSpec';
 import './WindowCtrlSpec';
 import './SettingsCtrlSpec';
 import './MatchCtrlSpec';
+import './Routes.spec';
 
 
 beforeEach(function () {
