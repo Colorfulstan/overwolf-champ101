@@ -29,7 +29,13 @@ steal(
 
 					settings.startMatchCollapsed(true);
 					//settings.cachedGameAvailable(true);
-					MainCtrl.openMatch();
+
+					if (!SettingsModel.closeMatchWithGame()){
+						MainCtrl.closeMatch();
+					}
+					window.setTimeout(function () {
+						MainCtrl.openMatch(); // prevents openMatch to be executed before closeMatch()!
+					},10);
 					//overwolf.benchmarking.stopRequesting(); // MPTE: stopping requesting makes it impossible to start it again until app restarts!?
 				});
 
@@ -52,7 +58,9 @@ steal(
 						self.removeMatchStartOnStableFpsListener();
 						//settings.cachedGameAvailable(false);
 						steal.dev.warn('League of Legends game finished', new Date());
-						self.closeMatch()
+						if (SettingsModel.closeMatchWithGame()){
+							self.closeMatch()
+						}
 					}
 				});
 			},

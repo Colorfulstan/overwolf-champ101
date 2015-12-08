@@ -61,6 +61,7 @@ steal(
 				}
 				if (!SettingsModel.isSummonerSet()) {
 					settings.startWithGame(true);
+					settings.closeMatchWithGame(true);
 					main.start(false);
 				} else {
 					settings.startMatchCollapsed(false);
