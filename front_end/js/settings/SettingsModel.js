@@ -13,6 +13,7 @@ steal(
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
 			STORAGE_KEY_START_WITH_GAME: 'setting-start-with-game',
+			STORAGE_KEY_CLOSE_MATCH_WITH_GAME: 'setting-close-match-with-game',
 			STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 			STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
 			STORAGE_KEY_FRAME_RATE: 'setting-framerate',
@@ -84,6 +85,10 @@ steal(
 			/** @static */
 			startWithGame: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_START_WITH_GAME) == 'true'
+			},
+			/** @static */
+			closeMatchWithGame: function () {
+				return localStorage.getItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME) == 'true'
 			}
 		}, {
 			/**
@@ -170,7 +175,22 @@ steal(
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_WITH_GAME, newVal);
 				}
 			}),
-			startWithGameInfo : 'Disabling this option will prevent the app from opening with your league game.<br><span style="text-decoration: underline">Needs overwolf restart!</span>',
+			startWithGameInfo: 'Disabling this option will prevent the app from opening with your league game.<br><span style="text-decoration: underline">Needs overwolf restart!</span>',
+
+			/** @type {boolean}
+			 * @propterty */
+			closeMatchWithGame: can.compute(function (newVal) {
+				if (newVal == undefined) {
+					return this.constructor.closeMatchWithGame();
+				} else { // setter
+					var oldVal = this.constructor.closeMatchWithGame();
+					this.valueChanged('closeMatchWithGame', oldVal);
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME, newVal);
+				}
+			}),
+			closeMatchWithGameInfo: 'Enabling this option will prevent the match window from closing after your game ends.',
+
 			/**
 			 * @property
 			 * @type {string}
@@ -244,7 +264,7 @@ steal(
 			},
 			/** If the given propName wasn't changed already, oldVal gets stored under the propName as key */
 			valueChanged: function (propName, oldVal) {
-				if (this.changedProps[propName] == undefined){
+				if (this.changedProps[propName] == undefined) {
 					this.changedProps[propName] = oldVal;
 				}
 			}
