@@ -2,6 +2,7 @@
 @import "../helper/colors";
 
 #panel-container {
+  display: none;
   height: auto;
   width: $match-window-width;
   margin: 1px auto 0;

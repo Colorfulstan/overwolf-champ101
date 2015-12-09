@@ -29,6 +29,7 @@ steal('can.js'
 				defaults: {
 					name: 'Match',
 					$panelContainer: $('#panel-container'),
+					$appButtons: $('.app-buttons'),
 					$overviewContainer: $('#match-overview-container'),
 
 					reloadBtn: '.btn-reload',
@@ -112,10 +113,12 @@ steal('can.js'
 						options.model.attr('summonerId', options.settings.summonerId()); // TODO: model refactoring for computes
 						options.model.attr('server', options.settings.server()); // TODO: model refactoring for computes
 						if (options.settings.startMatchCollapsed()) {
-							self.hidePanels();
+							$(WindowCtrl.events).trigger('collapsed');
 							$(self.options.handle).addClass(self.options.handleAnimationClass);
 							$(self.options.appBar).addClass(self.options.animatedHandleClass);
-
+						} else {
+							self.expandPanels();
+							$(WindowCtrl.events).trigger('expanded');
 						}
 
 						//options.settings.cachedGameAvailable(false);
@@ -218,8 +221,8 @@ steal('can.js'
 					$(self.options.appBar).removeClass(self.options.animatedHandleClass);
 					$(self.options.handle).removeClass(self.options.handleAnimationClass);
 
-					var $panelContainer = self.options.$panelContainer;
-					$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
+					self.options.$appButtons.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
+					self.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						$(WindowCtrl.events).trigger('expanded');
 					});
 				},
@@ -228,11 +231,13 @@ steal('can.js'
 				 * */
 				hidePanels: function () {
 					var self = this;
-					var $panelContainer = self.options.$panelContainer;
 					Routes.setRoute(Routes.tooltipHide, true);
-					$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
+
+					self.options.$appButtons.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
+					self.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						$(WindowCtrl.events).trigger('collapsed');
 					});
+
 				},
 // Eventhandler
 				'mouseenter': function (element, ev) {
