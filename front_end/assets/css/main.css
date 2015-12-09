@@ -10508,7 +10508,7 @@ select {
 #match-app-bar {
   display: none;
   position: relative;
-  left: 26%;
+  left: 32%;
   width: 35%;
   height: 30px;
   background-color: rgba(0, 0, 0, 0.01);
