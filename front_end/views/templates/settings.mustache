@@ -8,6 +8,7 @@
 	<div class="row">
 		<div class="logo text-center padded"><img class="pull-left" src="../assets/img/logo.png"
 												  alt="Champ 101 - Basic Champion Knowledge" width="100px" />
+
 			<h2 class="padded-top-2 page-heading">Settings</h2>
 		</div>
 	</div>
@@ -24,11 +25,12 @@
 	<hr class="padded-sides-neg-2">
 	<form onsubmit="return false" id="summoner-form" class="padded-top">
 		<div class="text-center">
-			<label for="summoner-name-input" class="btn">{{#summonerId }}<strong>{{ summonerName }} | {{ server }}</strong>{{/summonerId }}
-			</label>
+		<label for="summoner-name-input" class="btn">{{#summonerId }}<strong>{{ summonerName }}</strong></label>
+			|
+			<label for="server-region-select" class="btn"><strong>{{ server }}</strong></label>{{/summonerId }}
 			<br>
 			<input type="text" name="summoner-name-input" id="summoner-name-input" placeholder="summoner name"
-				   can-value='summonerName' autofocus class="muted"/></div>
+				   can-value='summonerName' autofocus class="muted" /></div>
 
 		<div>
 			<!--<label for="server-region-select">Region</label>-->
@@ -47,34 +49,35 @@
 				<!--<option value="PBE">Public Beta Environment (PBE)</option>-->
 			</select></div>
 
-	<ul class="padded-bot">
-		<li><p class="muted">To receive data for your game you need to set your summoner (in-game) name and region.
-		</p>
-		</li>
-	</ul>
+		<ul class="padded-bot">
+			<li><p class="muted">To receive data for your game you need to set your summoner (in-game) name and region.
+			</p>
+			</li>
+		</ul>
 
-	<hr class="padded-sides-neg-2">
-	<table class="hoverable">
-		<thead class="no-border">
-		<tr>
-			<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle()" class="btn">In-Game-Hotkeys (click to
-																							 show)
-			</th>
-		</tr>
-		</thead>
-		<tbody id="hotkeys-rows" style="display: none;">
-		{{#hotkeys}}
-			<tr onclick="location.href='overwolf://settings/hotkeys#{{id}}';" class="btn hotkey-btn">
-				<td class="padded-top-half padded-bot-half"><a href="#">{{ title }}</a></td>
-				<td class="padded-top-half padded-bot-half"><a href="#">{{ string }}</a></td>
+		<hr class="padded-sides-neg-2">
+		<table class="hoverable">
+			<thead class="no-border">
+			<tr>
+				<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle()" class="btn">In-Game-Hotkeys (click
+																								 to
+																								 show)
+				</th>
 			</tr>
-		{{/hotkeys}}
-		</tbody>
-	</table>
+			</thead>
+			<tbody id="hotkeys-rows" style="display: none;">
+			{{#hotkeys}}
+				<tr role="link" onclick="location.href='overwolf://settings/hotkeys#{{id}}';" class="btn hotkey-btn">
+					<td class="padded-top-half padded-bot-half"><a href="#">{{ title }}</a></td>
+					<td class="padded-top-half padded-bot-half"><a href="#">{{ string }}</a></td>
+				</tr>
+			{{/hotkeys}}
+			</tbody>
+		</table>
 
-	<div class="padded-top-2 padded-bot">
-		<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
-		<div id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></div>
-	</div>
+		<div class="padded-top-2 padded-bot">
+			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
+			<button id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></button>
+		</div>
 	</form>
 </div>

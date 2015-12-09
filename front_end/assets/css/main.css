@@ -10475,7 +10475,8 @@ select {
 #btn-cancel {
   text-align: center;
   height: 30px;
-  padding-top: 8px; }
+  padding-top: 8px;
+  border: none; }
 
 .hotkeys__container--loading {
   display: none;
@@ -10655,10 +10656,23 @@ p {
   font-weight: 300;
   cursor: default; }
 
+form {
+  overflow: visible; }
+
+label {
+  font-size: 1rem !important; }
+
 select {
   height: 2rem !important;
   padding: 4px !important;
   border-radius: 0; }
+
+select:focus {
+  outline-color: #26a69a;
+  border-color: #26a69a; }
+
+.btn:focus {
+  opacity: 1; }
 
 body#settings #content-wrapper, body#main #content-wrapper, body#feedback #content-wrapper {
   background-color: #061013; }
