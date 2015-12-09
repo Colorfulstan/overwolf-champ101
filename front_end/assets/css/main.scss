@@ -70,15 +70,27 @@ p {
   cursor: default;
 }
 
+form {
+  overflow: visible;
+}
+
+label {
+  font-size: 1rem !important;
+}
+
 select {
   height: 2rem !important;
   padding: 4px !important;
   border-radius: 0;
 }
-//select:focus {
-//  outline-color: $color-accent-2;
-//  border-color: $color-accent-2;
-//}
+select:focus {
+  outline-color: $color-accent-2;
+  border-color: $color-accent-2;
+}
+
+.btn:focus {
+  opacity: 1;
+}
 
 body {
   &#settings, &#main, &#feedback {
