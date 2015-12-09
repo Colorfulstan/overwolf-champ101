@@ -146,6 +146,7 @@ $portrait-width-height: 75px;
     .champion-spell {
       position: relative;
       transform: scale(0.7);
+      margin-left: 4px;
       &:after { // circle for the key
 //        display: block;
 //        content: '';
@@ -230,7 +231,7 @@ $portrait-width-height: 75px;
 
   .panel-control {
     height: 100%;
-    width: 45px;
-    float: left;
+    width: 30px;
+    float: right;
   }
 }// .champion-panel
