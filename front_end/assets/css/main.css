@@ -10329,7 +10329,8 @@ i.fa {
       height: 0;
       border-left: 16px solid transparent;
       border-right: 16px solid transparent;
-      border-bottom: 20px solid #061013;
+      border-bottom: 20px solid;
+      border-bottom-color: #042b3d;
       position: absolute;
       bottom: -14px;
       left: 24px; }
@@ -10340,7 +10341,8 @@ i.fa {
       height: 0;
       border-left: 16px solid transparent;
       border-right: 16px solid transparent;
-      border-bottom: 20px solid #061013;
+      border-bottom: 20px solid;
+      border-bottom-color: #042b3d;
       position: absolute;
       bottom: -14px;
       left: 24px; }
@@ -10371,7 +10373,8 @@ i.fa {
       height: 0;
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
-      border-bottom: 14px solid #061013;
+      border-bottom: 14px solid;
+      border-bottom-color: #042b3d;
       position: absolute;
       bottom: -12px;
       left: 15px; }
@@ -10382,7 +10385,8 @@ i.fa {
       height: 0;
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
-      border-bottom: 14px solid #061013;
+      border-bottom: 14px solid;
+      border-bottom-color: #042b3d;
       position: absolute;
       bottom: -12px;
       left: 15px; }
@@ -10434,7 +10438,8 @@ i.fa {
           height: 0;
           border-left: 20px solid transparent;
           border-right: 20px solid transparent;
-          border-bottom: 25px solid #061013;
+          border-bottom: 25px solid;
+          border-bottom-color: #061013;
           position: absolute;
           bottom: -31px;
           left: 5px; }
