@@ -10411,7 +10411,8 @@ i.fa {
       pointer-events: none; }
     .champion-panel .champ-spells .champion-spell {
       position: relative;
-      transform: scale(0.7); }
+      transform: scale(0.7);
+      margin-left: 4px; }
       .champion-panel .champ-spells .champion-spell:after {
         display: block;
         content: '';
@@ -10459,8 +10460,8 @@ i.fa {
           display: none; }
   .champion-panel .panel-control {
     height: 100%;
-    width: 45px;
-    float: left; }
+    width: 30px;
+    float: right; }
 
 select {
   color: #000; }
