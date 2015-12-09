@@ -54,7 +54,8 @@ steal(
 					route: Routes.tooltipChampion,
 					champ: $el.attr('title'),
 					overview: true,
-					y: $panel.offset().top + $panel.height()
+					y: $panel.offset().top + $panel.height(),
+					x: $panel.offset().left
 				}, true);
 			},
 			'.portrait mouseout': function ($el, ev) {
