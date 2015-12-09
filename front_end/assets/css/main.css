@@ -143,6 +143,9 @@
   100% {
     -moz-transform: scale(0.3);
     background-color: #26a69a; } }
+.page-heading {
+  font-size: 2.5rem; }
+
 .blue {
   background: #0372a5; }
 
