@@ -1,22 +1,18 @@
+// imported as .css
 @import "reset.css";
 @import "grid_12.css";
-
+// imported into main.css
 @import "imports/fountain-spinner";
-
 @import "helper/colors";
 @import "helper/variables";
 @import "helper/classes";
-
-@import "materialize/materialize";
-
-@import "fa/font-awesome";
+@import "vendor/materialize/materialize";
+@import "vendor/fa/font-awesome";
 @import "imports/icons";
 @import "imports/tooltip";
 @import "imports/champions";
-
 @import "imports/settings";
 @import "imports/hotkeys-spinner";
-
 @import "imports/match";
 
 * {
@@ -39,7 +35,7 @@ body {
   //height: 100%;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
   padding-bottom: 0.5em;
 
   &.headline-muted {
@@ -48,13 +44,29 @@ h1,h2,h3,h4,h5,h6 {
   }
 }
 
-h1 { font-size: 3rem; }
-h2{ font-size: 2rem; }
-h3{ font-size: 1.5rem; }
+h1 {
+  font-size: 3rem;
+}
 
-h4{ font-size: 1.3rem; }
-h5 { font-size: 1.2rem; }
-h6 { font-size: 1rem; }
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.3rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
 
 hr {
   width: 100%;
@@ -63,7 +75,7 @@ hr {
 }
 
 p {
-//  text-align: center;
+  //  text-align: center;
   padding: 0 0 0 0;
   font-weight: 300;
 
@@ -83,6 +95,7 @@ select {
   padding: 4px !important;
   border-radius: 0;
 }
+
 select:focus {
   outline-color: $color-accent-2;
   border-color: $color-accent-2;
@@ -125,10 +138,10 @@ font {
   header {
     background: $color-bg-tooltip-header;
   }
-  .app-buttons{
+  .app-buttons {
     position: absolute;
-    top:0;
-    right:0;
+    top: 0;
+    right: 0;
   }
 }
 
