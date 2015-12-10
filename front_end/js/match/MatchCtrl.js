@@ -5,7 +5,6 @@ steal('can.js'
 	, 'OverviewCtrl.js'
 	, 'ChampionCtrl.js'
 	, 'TooltipCtrl.js'
-	, 'FeedbackCtrl.js'
 	, 'Routes.js'
 	, 'global.js'
 	, function (can
@@ -14,7 +13,6 @@ steal('can.js'
 		, /**OverviewCtrl*/ OverviewCtrl
 		, /**ChampionCtrl*/ ChampionCtrl
 		, /**TooltipCtrl*/ TooltipCtrl
-		, /**FeedbackCtrl*/ FeedbackCtrl
 		, /**Routes*/ Routes) {
 
 		/**

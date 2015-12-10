@@ -40,10 +40,10 @@ steal(
 			 */
 			{
 				defaults: {
-					spellTmpl: 'templates/tooltip-spell.mustache',
-					championTmpl: 'templates/tooltip-champ.mustache',
-					championSummaryTmpl: 'templates/tooltip-champ-summary.mustache',
-					videoTmpl: 'templates/video.mustache',
+					spellTmpl: 'templates/tooltip/spell.mustache',
+					championTmpl: 'templates/tooltip/champ.mustache',
+					championSummaryTmpl: 'templates/tooltip/champ-summary.mustache',
+					videoTmpl: 'templates/parts/video.mustache',
 
 					// handled Routes
 					tooltipChampionRoute: Routes.tooltipChampion,
