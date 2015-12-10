@@ -9,7 +9,7 @@ module.exports = function (grunt) {
 					system: {
 						config: __dirname + "/stealconfig.js",
 						main: ['js/boot', 'js/settings', 'js/match'],
-						bundlesPath: 'dist/bundles/'
+						bundlesPath: 'script-bundles' // only responsible for creation, not where steal looks for the files
 					},
 					buildOptions: {
 						bundleSteal: false, // doesn't work? propably needs steel-tools also then
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
 				]
 			},
 			postBuild: {
-				src: ["bundles", 'out', 'dist']
+				src: ['script-bundles', 'out', 'dist']
 			}
 		},
 		copy: {
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 			}
 			, js: {expand: true,
 				//cwd: 'dist/',
-				src: 'dist/bundles/**', dest: 'out/'}
+				src: 'script-bundles/**', dest: 'out/'}
 			, css: {expand: true, src: ['assets/css/*.css'], dest: 'out/'}
 			, fonts: {expand: true, src: ['assets/font/**/*'], dest: 'out/'}
 			, img: {expand: true, src: 'assets/img/**/*', dest: 'out/'}
