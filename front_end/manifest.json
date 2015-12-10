@@ -4,7 +4,7 @@
   "meta": {
   	"name": "League of Legends Champ 101",
   	"access-name": "it.krispin.champ101",
-  	"version": "0.13.0",
+  	"version": "0.13.1",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
   	"description": "Basic league of legends champion information relevant for your current game",
