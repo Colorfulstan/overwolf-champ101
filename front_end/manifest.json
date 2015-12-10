@@ -2,13 +2,15 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-	  "name": "LoL Champion InfoV0.13",
-	  "version": "0.13.0",
+  	"name": "League of Legends Champ 101",
+  	"access-name": "it.krispin.champ101",
+  	"version": "0.13.0",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
+  	"description": "Basic league of legends champion information relevant for your current game",
+  	"dock_button_title": "LoL Champ 101",
 	"icon": "assets/img/icon.png",
-	"icon_gray": "assets/img/icon_gray.png",
-	"description": "Get infos about the champs in your League of Legends match. Forgot what skills that rare picked champion has? Want some pointers for how to play with or against that champion? This app gives you a quick lookup for all neccessary champion information right in your game. Fast and simple!"
+	"icon_gray": "assets/img/icon_gray.png"
   },
   "data": {
 	  "launch_events": [
@@ -61,8 +63,7 @@
 		  "disable_restore_animation": true,
 		"size": {"width": 800, "height": 1200},
 		"min_size": {"width": 800, "height": 1200},
-		"max_size": {"width": 800, "height": 1200},
-	  	"topmost": true
+		"max_size": {"width": 800, "height": 1200}
 	  }
 	},
 	"hotkeys": {

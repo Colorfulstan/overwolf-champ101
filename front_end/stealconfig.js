@@ -28,10 +28,11 @@ System.config({
 		'MainCtrl': './js/MainCtrl.js',
 
 		'steal-jasmine': './node_modules/steal-jasmine/steal-jasmine.js',
+		//'steal-jasmine': './tests/lib/steal-jasmine-mod.js',
 
-		'jasmine-core/lib/jasmine-core/jasmine': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
-		'jasmine-core/lib/jasmine-core/jasmine-html': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
-		'jasmine-core/lib/jasmine-core/boot': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/boot.js',
-		'jasmine-core/lib/jasmine-core/jasmine.css': './node_modules/steal-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
+		'jasmine-core/lib/jasmine-core/jasmine': './node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
+		'jasmine-core/lib/jasmine-core/jasmine-html': './node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
+		'jasmine-core/lib/jasmine-core/boot': './node_modules/jasmine-core/lib/jasmine-core/boot.js',
+		'jasmine-core/lib/jasmine-core/jasmine.css': './node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
 	}
 });
