@@ -10541,7 +10541,7 @@ select {
   display: none; }
 
 .collapsed #handle {
-  display: block; }
+  display: block !important; }
 
 #match .app-buttons {
   width: 50px;

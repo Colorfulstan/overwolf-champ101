@@ -9,8 +9,10 @@ steal(
 		 * @class
 		 * @constructor
 		 */
-		var MatchModel = can.Model.extend('MatchModel', {}, {
-			init: function () {
+		var MatchModel = can.Model.extend('MatchModel', {}, { // TODO: refactor to not being a can.Model but a Map??
+			init: function (summonerId, server) {
+				this.attr('summonerId', summonerId); // TODO: model refactoring for computes
+				this.attr('server', server); // TODO: model refactoring for computes
 			},
 
 			/** The region-Code of a server

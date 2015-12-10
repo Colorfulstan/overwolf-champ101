@@ -17,7 +17,7 @@ import './WindowCtrlSpec';
 import './SettingsCtrlSpec';
 import './MatchCtrlSpec';
 import './Routes.spec';
-
+import './match/MatchModel.spec'
 
 beforeEach(function () {
 	localStorage.clear();
