@@ -13,7 +13,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			var settings = settingsCtrl.options.settings;
 
 			settings.summonerName('Not ---');
-			delete settings.changedProps.summonerName;
+			delete settings.changedPropsOriginalValues.summonerName;
 		}
 
 		beforeEach(function () {

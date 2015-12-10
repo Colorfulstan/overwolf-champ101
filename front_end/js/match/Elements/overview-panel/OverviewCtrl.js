@@ -27,7 +27,6 @@ steal(
 				teamBlue = correctSpritePosition(teamBlue);
 				teamPurple = correctSpritePosition(teamPurple);
 
-				debugger;
 				this.element.html(
 					can.view(this.options.overviewTmpl, {
 						blue: teamBlue,
@@ -36,7 +35,6 @@ steal(
 				);
 
 
-				//debugger;
 				// NOTE: correction for black "border" when using sprite in match overview
 				function correctSpritePosition(teamArray){
 					for (var i = 0; i < teamArray.length; i++) {

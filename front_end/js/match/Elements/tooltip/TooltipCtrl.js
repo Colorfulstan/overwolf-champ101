@@ -193,7 +193,6 @@ steal(
 				//		view = can.view(template, model);
 				//		model.attr('viewFragment', view);
 				//	}
-				//	debugger;
 				//	this.element.html(view);
 				//},
 				/**
@@ -219,7 +218,6 @@ steal(
 							if (routeData.type == 'summoner') {
 								spell = this.options.match.participantsByChamp[routeData.champ].summonerSpells[routeData.index];
 							}
-								debugger;
 							this.element.html(can.view(this.options.spellTmpl, spell));
 							this.initVideo(spell);
 							break;
@@ -239,7 +237,6 @@ steal(
 							} else {
 								champTooltipView = can.view(this.options.championTmpl, champ);
 							}
-							debugger;
 
 							this.element.html(champTooltipView);
 							break;

@@ -20,7 +20,6 @@
 			<input type="checkbox" name="startWithGame" id="startWithGame" can-value="startWithGame" />
 			<label for="startWithGame">Start app when entering a game
 				<a class="whats-this" title="{{startWithGameInfo}}" href="#">(?)</a></label>
-
 			<input type="checkbox" name="closeMatchWithGame" id="closeMatchWithGame" can-value="closeMatchWithGame" />
 			<label for="closeMatchWithGame">Close match Window after game ends
 				<a class="whats-this" title="{{closeMatchWithGameInfo}}" href="#">(?)</a></label>
@@ -80,6 +79,9 @@
 		</table>
 
 		<div class="padded-top-2 padded-bot">
+			{{#startWithGameMessage}}
+				<p class="padded-bot text-danger">{{.}}</p>
+			{{/startWithGameMessage}}
 			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
 			<button id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></button>
 		</div>
