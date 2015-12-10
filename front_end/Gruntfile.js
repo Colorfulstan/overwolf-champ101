@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
 
 	var appV = grunt.file.readJSON('manifest.json').meta.version;
+	var appName = 'champ101';
 
 	grunt.initConfig({
 		"steal-build": {
@@ -35,8 +36,8 @@ module.exports = function (grunt) {
 			preBuild: {
 				options: {force: true},
 				src: ['out'
-					, '../champ101_latest/app' // removing old release from submission folder
-					, '../releases/champinfo_v' + appV + '/' // removing possible previous build from releases folder
+					, '../'+ appName +'_latest/app' // removing old release from submission folder
+					, '../releases/'+ appName +'_v' + appV + '/' // removing possible previous build from releases folder
 				]
 			},
 			postBuild: {
@@ -74,10 +75,8 @@ module.exports = function (grunt) {
 				src: ['video.js', 'video-js.min.css'],
 				dest: 'out/vendor/videojs'
 			}
-			,
-			postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../releases/champinfo_v' + appV + '/'}
-			,
-			postBuildSubmission: {expand: true, cwd: 'out', src: '**/*', dest: '../champ101_latest/app/'}
+			, postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../releases/'+ appName +'_v' + appV + '/'}
+			, postBuildSubmission: {expand: true, cwd: 'out', src: '**/*', dest: '../'+ appName +'_latest/app/'}
 		},
 		"steal-export": {
 			dist: {

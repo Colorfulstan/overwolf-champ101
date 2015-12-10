@@ -4,20 +4,27 @@
  * include Source-files within the spec-files
  */
 import jasmineRequire from 'steal-jasmine';
+
+// for console-reporting uncomment
 //import '../lib/jasmine-chrome-console-reporter';
 //import '../lib/jasmine-boot-console';
 
+// jasmine add-ons
 import '../lib/jasmine-ajax';
 //import '../lib/jasmine-fixture/jasmine-fixture';
 import '../lib/jasmine-jquery';
+
+// utility files and mocks
 import '../helper/overwolfMock';
-import './DocumentationSpec';
-import './MainCtrlSpec';
-import './WindowCtrlSpec';
-import './SettingsCtrlSpec';
-import './MatchCtrlSpec';
-import './Routes.spec';
+import './documentation.spec';
+
+// main-files
+import './MainCtrl.spec';
+import './WindowCtrl.spec';
+import './SettingsCtrl.spec';
+import './match/MatchCtrl.spec';
 import './match/MatchModel.spec'
+import './Routes.spec';
 
 beforeEach(function () {
 	localStorage.clear();
