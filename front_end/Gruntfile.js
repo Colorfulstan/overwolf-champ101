@@ -67,7 +67,13 @@ module.exports = function (grunt) {
 			, img: {expand: true, src: 'assets/img/**/*', dest: 'out/'}
 			, cfg: {expand: true, src: 'manifest.json', dest: 'out/'}
 			, steal: {expand: true, cwd: 'node_modules/steal', src: ['steal.production.js'], dest: 'out/'}
-			, videojs: {expand: true, cwd: 'node_modules/video.js/dist/video-js', src: ['**'], dest: 'out/vendor/videojs'}
+			,
+			videojs: {
+				expand: true,
+				cwd: 'node_modules/video.js/dist/video-js',
+				src: ['video.js', 'video-js.min.css'],
+				dest: 'out/vendor/videojs'
+			}
 			,
 			postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../releases/champinfo_v' + appV + '/'}
 			,
