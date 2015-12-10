@@ -55,8 +55,6 @@ steal(
 				var deferred = $.Deferred();
 				var self = this;
 
-				var settings = new SettingsModel();
-
 				$.when(self._loadDataFromServer(transfer))
 					.then(function (dataArray) {
 						//settings.cachedGameId(dataArray['gameId']);

@@ -59,8 +59,17 @@ steal('can.js'
 				init: function (element, options) {
 					WindowCtrl.prototype.init.apply(this, arguments);
 					var self = this;
+					registerEventHandlers();
 
-					self.countDocumentBlurHandlers = 0;
+					if (options.settings.startMatchCollapsed()) {
+						options.$panelContainer.css({display: 'none'});
+						$(WindowCtrl.events).trigger('collapsed');
+					} else {
+						options.$panelContainer.css({display: 'block'});
+						$(WindowCtrl.events).trigger('expanded');
+					}
+					self.countDocumentBlurHandlers = 0; // TODO: remove, nut used
+
 					var mouseUpCb = function (info) {
 						if (info.onGame === true) {
 							self.hidePanels();
@@ -68,38 +77,9 @@ steal('can.js'
 					};
 					overwolf.games.inputTracking.onMouseUp.addListener(mouseUpCb);
 
-					self.options.$document = $(document);
+					self.options.$document = $(document); // TODO: remove, not used anymore
+					self.options.matchPromise = options.model;
 
-					options.model.attr('summonerId', options.settings.summonerId()); // TODO: model refactoring for computes
-					options.model.attr('server', options.settings.server()); // TODO: model refactoring for computes
-					self.options.matchPromise = options.dao.loadMatchModel(options.model);
-
-					/**
-					 * @event MatchCtrl#minimized
-					 */
-					$(WindowCtrl.events).on('minimized', function () {
-
-					});
-					/**
-					 * @event MatchCtrl#restored
-					 */
-					$(WindowCtrl.events).on('restored', function () {
-
-					});
-					/**
-					 * @event MatchCtrl#collapsed
-					 */
-					$(WindowCtrl.events).on('collapsed', function () {
-						var $appBar = $(self.options.appBar);
-						$appBar.addClass('collapsed');
-					});
-					/**
-					 * @event MatchCtrl#expanded
-					 */
-					$(WindowCtrl.events).on('expanded', function () {
-						var $appBar = $(self.options.appBar);
-						$appBar.removeClass('collapsed');
-					});
 
 					overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
 						self.options.odkWindow = result.window;
@@ -110,23 +90,57 @@ steal('can.js'
 
 						self.initAppBar();
 
-						options.model.attr('summonerId', options.settings.summonerId()); // TODO: model refactoring for computes
-						options.model.attr('server', options.settings.server()); // TODO: model refactoring for computes
-						if (options.settings.startMatchCollapsed()) {
-							$(WindowCtrl.events).trigger('collapsed');
-							$(self.options.handle).addClass(self.options.handleAnimationClass);
-							$(self.options.appBar).addClass(self.options.animatedHandleClass);
-						} else {
-							self.expandPanels();
-							$(WindowCtrl.events).trigger('expanded');
-						}
-
 						//options.settings.cachedGameAvailable(false);
 						//localStorage.removeItem('temp_gameId');
 
-						// After successfully loading the Match-Data
-						self.loadMatch(options.model);
+						self.loadMatch(self.options.matchPromise);
 					});
+
+					function registerEventHandlers() {
+						// TODO: are these events cleaned up after Match window closes?
+						/**
+						 * @event MatchCtrl#minimized
+						 */
+						$(WindowCtrl.events).on('minimized', function () {
+
+						});
+						/**
+						 * @event MatchCtrl#restored
+						 */
+						$(WindowCtrl.events).on('restored', function () {
+
+						});
+						/**
+						 * @event MatchCtrl#collapsed
+						 */
+						$(WindowCtrl.events).on('collapsed', function () {
+							var $appBar = $(self.options.appBar);
+							$appBar.addClass('collapsed');
+						});
+						/**
+						 * @event MatchCtrl#expanded
+						 */
+						$(WindowCtrl.events).on('expanded', function () {
+							var $appBar = $(self.options.appBar);
+							$appBar.removeClass('collapsed');
+						});
+
+						$(WindowCtrl.events).on('matchReady', function () {
+							steal.dev.log('matchReady triggered');
+							self.constructor.openMatch();
+
+							if (options.settings.startMatchCollapsed()) {
+								$(WindowCtrl.events).trigger('collapsed');
+								$(self.options.handle).addClass(self.options.handleAnimationClass);
+								$(self.options.appBar).addClass(self.options.animatedHandleClass);
+							} else {
+								var $appBar = $(self.options.appBar);
+								if ($appBar.hasClass('collapsed')) {
+									self.expandPanels();
+								}
+							}
+						});
+					}
 				},
 				/**
 				 * Initializes the HTML element depending on if it is shown on the side or top of the screen.
@@ -135,7 +149,7 @@ steal('can.js'
 				initAppBar: function () {
 					$(this.options.appBar).show();
 				},
-				loadMatch: function () {
+				loadMatch: function (matchPromise) {
 					var deferred = $.Deferred();
 
 					var self = this;
@@ -155,43 +169,53 @@ steal('can.js'
 						self.options.tooltip.destroy()
 					}
 
-					$.when(self.options.matchPromise)
-						.then(function (matchModel) {
-							deferred.resolve(matchModel);
-							self.options.$overviewContainer.removeClass('loading');
-							// Controller for Overview-Panel
-							self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
-							// Controller for Champion-Panels
-							self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
-							// Controller for Tooltip
-							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+					var failCb = function (data, status, jqXHR) {
+						$(WindowCtrl.events).trigger('matchReady');
 
+						steal.dev.warn("Loading Match failed!", data, status, jqXHR);
+						self.options.$overviewContainer.removeClass('loading').addClass('failed');
+						if (data.status == 503) {
+							self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
+						}
+						deferred.reject(data, status, jqXHR);
+					};
+
+					$.when(matchPromise)
+						.then(function (matchModel) {
 							var pollForStableFPS = function () {
+								function handleStableFPS(matchModel) {
+									if (typeof matchModel[1] === 'string' && matchModel[1] === 'error') {
+										var args = matchModel;
+										return failCb(args[0], args[1], args[2]); // delegating to .fail() callback
+									}
+									// TODO: find a cleaner solution for this (side-effects)
+									self.options.$overviewContainer.removeClass('loading');
+									// Controller for Overview-Panel
+									self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
+									// Controller for Champion-Panels
+									self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
+									// Controller for Tooltip
+									self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+
+									$(WindowCtrl.events).trigger('matchReady');
+									deferred.resolve(matchModel);
+								}
+
 								var interval = window.setInterval(function () {
 									if (self.options.settings.isFpsStable()) {
 										// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
-
-										self.constructor.openMatch();
-
+										handleStableFPS(matchModel);
 										window.clearInterval(interval);
 									}
 								}, 100);
 							};
 							pollForStableFPS();
 						})
-						.fail(function (data, status, jqXHR) {
-							self.constructor.openMatch();
-
-							steal.dev.warn("Loading Match failed!", data, status, jqXHR);
-							self.options.$overviewContainer.removeClass('loading').addClass('failed');
-							if (data.status == 503) {
-								self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
-							}
-							deferred.reject(data, status, jqXHR);
-						});
+						.fail(failCb);
 					return deferred.promise();
 				},
 				reloadMatch: function () {
+					// TODO: currently not used due to memory leak - reloading window as whole when reloading for now
 					var self = this;
 
 					var model = self.options.model;
@@ -272,8 +296,13 @@ steal('can.js'
 					//this.options.match = routeData.match;
 					//this.renderView(this.options.match.blue,this.options.match.purple);
 					this.options.settings.startMatchCollapsed(false);
+					this.options.settings.isReloading(true);
+
 					//this.reloadMatch();
+
 					location.reload();
+					// NOTE: this is executed BEFORE window gets reloaded
+					// TODO: move elsewhere if makes sense
 					Routes.resetRoute();
 					$(WindowCtrl.events).trigger('restored');
 				},

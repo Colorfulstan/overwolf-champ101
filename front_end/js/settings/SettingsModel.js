@@ -12,6 +12,8 @@ steal(
 			STORAGE_KEY_REGION: 'region-code',
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
+			STORAGE_KEY_RELOADING: 'setting-reloading',
+			STORAGE_KEY_IN_GAME: 'setting-in-game',
 			STORAGE_KEY_START_WITH_GAME: 'setting-start-with-game',
 			STORAGE_KEY_CLOSE_MATCH_WITH_GAME: 'setting-close-match-with-game',
 			STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
@@ -85,6 +87,14 @@ steal(
 			/** @static */
 			startWithGame: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_START_WITH_GAME) == 'true'
+			},
+			/** @static */
+			isInGame: function () {
+				return localStorage.getItem(SettingsModel.STORAGE_KEY_IN_GAME) == 'true'
+			},
+			/** @static */
+			isReloading: function () {
+				return localStorage.getItem(SettingsModel.STORAGE_KEY_RELOADING) == 'true'
 			},
 			/** @static */
 			closeMatchWithGame: function () {
@@ -161,6 +171,30 @@ steal(
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_FRAME_RATE) === 'true';
 				} else { // setter
 					localStorage.setItem(SettingsModel.STORAGE_KEY_FRAME_RATE, newVal);
+				}
+			}),
+			/** @type {boolean}
+			 * @propterty */
+			isInGame: can.compute(function (newVal) {
+				if (newVal == undefined) {
+					return this.constructor.isInGame();
+				} else { // setter
+					var oldVal = this.constructor.isInGame();
+					this.valueChanged('isInGame', oldVal);
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_IN_GAME);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_IN_GAME, newVal);
+				}
+			}),
+			/** @type {boolean}
+			 * @propterty */
+			isReloading: can.compute(function (newVal) {
+				if (newVal == undefined) {
+					return this.constructor.isReloading();
+				} else { // setter
+					var oldVal = this.constructor.isReloading();
+					this.valueChanged('isReloading', oldVal);
+					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_RELOADING);
+					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_RELOADING, newVal);
 				}
 			}),
 			/** @type {boolean}

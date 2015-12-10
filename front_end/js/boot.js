@@ -16,15 +16,13 @@ steal(
 		var main = new MainCtrl('html');
 		var settings = new SettingsModel();
 
-		var isInGame = false;
-
 		if (SettingsModel.startWithGame()) {
 			main.constructor.registerOverwolfHandlers();
 		}
 
-			// in case app started previous and gets reopened by user
+		// in case app started previous and gets reopened by user
 		overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) {
-			if (isInGame){
+			if (settings.isInGame()) {
 				WindowCtrl.openMatch();
 			}
 		});
@@ -32,10 +30,14 @@ steal(
 		//settings.cachedGameAvailable(false);
 		//settings.cachedGameId(null);
 
+		// NOTE: first of two points where app determines if player is within a game
+		// other point is through listener
 		overwolf.games.getRunningGameInfo(function (/** GameInfo */ data) {
 			if (data == undefined || data == null) { // manual start since no game is running
+				settings.isInGame(false);
 				outOfGameStart();
 			} else { // automatic start since a game is running and the app will start with league
+				settings.isInGame(true);
 				inGameStart();
 			}
 		});
@@ -53,7 +55,6 @@ steal(
 
 		/** App got started through overwolf */
 		function inGameStart() {
-			isInGame = true;
 			// NOTE: only case in which inGameStart won't be automatic through overwolf is, if overwolf gets started after the match already started!
 			isStartedThroughGameLaunch().then(function (wasAutoLaunched) {
 				if (wasAutoLaunched && !SettingsModel.startWithGame()) {
@@ -64,8 +65,10 @@ steal(
 					settings.closeMatchWithGame(true);
 					main.start(false);
 				} else {
-					settings.startMatchCollapsed(false);
-					main.constructor.addMatchStartOnStableFpsListener();
+					WindowCtrl.openMatch();
+					settings.startMatchCollapsed(true);
+					main.constructor.removeStableFpsListener(); // to prevent unwanted listener-stacking
+					main.constructor.addStableFpsListener();
 					var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
 					overwolf.benchmarking.requestFpsInfo(250, func);
 				}

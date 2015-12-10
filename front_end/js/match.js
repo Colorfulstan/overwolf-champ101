@@ -20,10 +20,18 @@ steal(
 		Hotkeys.registerHotkeys();
 
 		var dao = new MatchDAO();
-		var model = new MatchModel();
 		var settings = new SettingsModel();
 
-		new MatchCtrl('html', {dao: dao, model: model, settings: settings});
+		var model = new MatchModel(settings.summonerId(), settings.server());
 
+		if (settings.isInGame() && !settings.isReloading()) { // ingame == preload data
+			dao.loadMatchModel(model).always(function (match) { // TODO: currently not accounting for manual starts!?
+				new MatchCtrl('html', {dao: dao, model: match, settings: settings});
+			});
+		} else { // else == show match with promise (handled within MatchCtrl)
+			var match = dao.loadMatchModel(model);
+			new MatchCtrl('html', {dao: dao, model: match, settings: settings});
+			settings.isReloading(false);
+		}
 	});
 
