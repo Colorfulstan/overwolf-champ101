@@ -45,16 +45,6 @@
 		"max_size": {"width": 400}
 
 	  },
-	  "Feedback": {
-		"file": "views/feedback.html",
-		"transparent": true,
-		"resizable": false,
-		"show_in_taskbar": true,
-		  "disable_restore_animation": true,
-		"size": {"width": 400,"height": 1200},
-		"min_size": {"width": 400, "height": 400},
-		"max_size": {"width": 800, "height": 800}
-	  },
 	  "Match": {
 		"file": "views/match.html",
 		"transparent": true,
