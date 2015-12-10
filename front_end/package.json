@@ -1,5 +1,5 @@
 {
-  "main": "js/main.js",
+  "main": "js/boot.js",
   "dependencies": {
     "can": "^2.2.7",
     "jquery": "^2.1.4",
