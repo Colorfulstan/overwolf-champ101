@@ -43,8 +43,8 @@ steal(
 				var settings = this.options.settings;
 				// testing string;
 				return SettingsModel.isSummonerSet()
-					&& typeof settings.changedProps.server === "undefined"
-					&& typeof settings.changedProps.summonerName === "undefined"
+						&& typeof settings.changedPropsOriginalValues.server === "undefined"
+						&& typeof settings.changedPropsOriginalValues.summonerName === "undefined"
 					&& settings.summonerName() != "---";
 			},
 			saveAndCloseHandler: function (self, $btn) {

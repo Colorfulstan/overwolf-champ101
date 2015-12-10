@@ -108,7 +108,7 @@ steal(
 
 				/** Holds the original values of the settings if they where changed.
 				 * @typer {string: propName, *: originialValue } */
-				this.changedProps = {};
+				this.changedPropsOriginalValues = {};
 
 				// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
 			},
@@ -206,10 +206,19 @@ steal(
 					var oldVal = this.constructor.startWithGame();
 					this.valueChanged('startWithGame', oldVal);
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_WITH_GAME);
-					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_WITH_GAME, newVal);
+					else if (newVal !== oldVal) {
+						localStorage.setItem(SettingsModel.STORAGE_KEY_START_WITH_GAME, newVal);
+					}
+
+					if (this.changedPropsOriginalValues['startWithGame'] === newVal) { // to remove the message again if changed back
+						this.attr('startWithGameMessage', null);
+					} else {
+						this.attr('startWithGameMessage', 'Changed autostart setting will take effect after overwolf restart.'); // TODO: enable this for multiple messages if neccessary (message-bag)
+					}
 				}
 			}),
-			startWithGameInfo: 'Disabling this option will prevent the app from opening with your league game.<br><span style="text-decoration: underline">Needs overwolf restart!</span>',
+			startWithGameInfo: 'Use this if you want to disable this apps autostart.<br><br><span style="text-decoration: underline">Requires overwolf restart!</span>',
+			startWithGameMessage: null,
 
 			/** @type {boolean}
 			 * @propterty */
@@ -223,7 +232,7 @@ steal(
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME, newVal);
 				}
 			}),
-			closeMatchWithGameInfo: 'Enabling this option will prevent the match window from closing after your game ends.',
+			closeMatchWithGameInfo: 'Use this if you want to finish reading about the champions after the game has ended.',
 
 			/**
 			 * @property
@@ -292,14 +301,14 @@ steal(
 			 * by calling the setters with the original values
 			 */
 			reset: function () {
-				for (var prop in this.changedProps) {
-					this[prop](this.changedProps[prop]);
+				for (var prop in this.changedPropsOriginalValues) {
+					this[prop](this.changedPropsOriginalValues[prop]);
 				}
 			},
 			/** If the given propName wasn't changed already, oldVal gets stored under the propName as key */
 			valueChanged: function (propName, oldVal) {
-				if (this.changedProps[propName] == undefined) {
-					this.changedProps[propName] = oldVal;
+				if (this.changedPropsOriginalValues[propName] == undefined) {
+					this.changedPropsOriginalValues[propName] = oldVal;
 				}
 			}
 		});

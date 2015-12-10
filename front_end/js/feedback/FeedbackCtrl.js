@@ -29,7 +29,6 @@ steal(
 			},
 			'{formSubmit} click': function ($el, ev) {
 				var self = this;
-				debugger;
 				$.post(FEEDBACK_URL, {
 					'mail': $(self.options.formMail).val(),
 					'message': $(self.options.formMessage).get(0).value
