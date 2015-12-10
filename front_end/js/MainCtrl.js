@@ -23,11 +23,11 @@ steal(
 
 				$(WindowCtrl.events).on('fpsStable', function () {
 					steal.dev.log('fpsStable event');
-					self.removeMatchStartOnStableFpsListener();
+					MainCtrl.removeStableFpsListener();
+
 					settings.isFpsStable('true');
 					MainCtrl.mostRecentFPS = [];
 
-					settings.startMatchCollapsed(true);
 					//settings.cachedGameAvailable(true);
 
 					if (!SettingsModel.closeMatchWithGame()){
@@ -45,26 +45,29 @@ steal(
 				overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) {
 					steal.dev.log('debug', "MainCtrl - overwolf.windows.onMainWindowRestored:", result);
 				});
+				// NOTE: second point where App determines if player is within a game or not. Other point is in boot.js (at app boot)
 				overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
 					steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 					if (self.gameStarted(result)) {
 						steal.dev.warn('League of Legends game started', new Date());
-						// removing it in case game did not finish cleanly
-						self.removeMatchStartOnStableFpsListener();
-						self.addMatchStartOnStableFpsListener();
+						MainCtrl.removeStableFpsListener(); // to prevent unwanted listener-stacking
+						MainCtrl.addStableFpsListener();
+						settings.isInGame(true);
+						self.openMatch();
 					}
 					if (self.gameFinished(result)) {
 						steal.dev.log('stopping possible fps requests');
-						self.removeMatchStartOnStableFpsListener();
+						MainCtrl.removeStableFpsListener();
 						//settings.cachedGameAvailable(false);
 						steal.dev.warn('League of Legends game finished', new Date());
 						if (SettingsModel.closeMatchWithGame()){
-							self.closeMatch()
+							self.closeMatch();
+							settings.isInGame(false);
 						}
 					}
 				});
 			},
-			_startMatchWhenFPSStable: function (/** FPSInfo */ result) {
+			_notifyWhenFPSStable: function (/** FPSInfo */ result) {
 				MainCtrl.mostRecentFPS.push(result.Fps);
 				steal.dev.log(MainCtrl.mostRecentFPS);
 
@@ -96,16 +99,16 @@ steal(
 					return stable;
 				}
 			},
-			addMatchStartOnStableFpsListener: function () {
+			addStableFpsListener: function () {
 				var settings = new SettingsModel();
 				settings.isFpsStable('false');
 				MainCtrl.mostRecentFPS = [];
-				overwolf.benchmarking.onFpsInfoReady.addListener(MainCtrl._startMatchWhenFPSStable);
+				overwolf.benchmarking.onFpsInfoReady.addListener(MainCtrl._notifyWhenFPSStable);
 			}
 
 			,
-			removeMatchStartOnStableFpsListener: function () {
-				overwolf.benchmarking.onFpsInfoReady.removeListener(MainCtrl._startMatchWhenFPSStable);
+			removeStableFpsListener: function () {
+				overwolf.benchmarking.onFpsInfoReady.removeListener(MainCtrl._notifyWhenFPSStable);
 			}
 			,
 
