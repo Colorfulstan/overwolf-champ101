@@ -156,6 +156,9 @@ steal(
 				});
 
 				if (!isSummonerSet) {
+					var settings = new SettingsModel();
+					settings.startWithGame(true);
+					settings.closeMatchWithGame(true);
 					this.constructor.openSettings();
 				}
 			},

@@ -45,9 +45,6 @@ steal(
 		/** App got started manually by the user */
 		function outOfGameStart() {
 			settings.startMatchCollapsed(false);
-			if (!SettingsModel.isSummonerSet()) {
-				settings.startWithGame(true);
-			}
 			main.start(SettingsModel.isSummonerSet());
 			var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
 			overwolf.benchmarking.requestFpsInfo(250, func);
@@ -61,8 +58,6 @@ steal(
 					return false;
 				}
 				if (!SettingsModel.isSummonerSet()) {
-					settings.startWithGame(true);
-					settings.closeMatchWithGame(true);
 					main.start(false);
 				} else {
 					WindowCtrl.openMatch();
