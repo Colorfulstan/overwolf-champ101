@@ -217,7 +217,7 @@ steal(
 					}
 				}
 			}),
-			startWithGameInfo: 'Use this if you want to disable this apps autostart.<br><br><span style="text-decoration: underline">Requires overwolf restart!</span>',
+			startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to disable this app to start automatically.<br><span style="text-decoration: underline">Requires overwolf restart!</span></p>',
 			startWithGameMessage: null,
 
 			/** @type {boolean}
@@ -232,7 +232,7 @@ steal(
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME, newVal);
 				}
 			}),
-			closeMatchWithGameInfo: 'Use this if you want to finish reading about the champions after the game has ended.',
+			closeMatchWithGameInfo: '<p>Uncheck if you want to finish reading about the champions after you left the game.</p>',
 
 			/**
 			 * @property

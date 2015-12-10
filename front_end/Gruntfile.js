@@ -77,7 +77,7 @@ module.exports = function (grunt) {
 			,
 			postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../releases/champinfo_v' + appV + '/'}
 			,
-			postBuildSubmission: {expand: true, cwd: 'out', src: '**/*', dest: '../champ101_latest/app/V' + appV + '/'}
+			postBuildSubmission: {expand: true, cwd: 'out', src: '**/*', dest: '../champ101_latest/app/'}
 		},
 		"steal-export": {
 			dist: {

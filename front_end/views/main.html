@@ -31,7 +31,10 @@
 	</header>
 
 	<div id="content" class="padded-top-half">
-		<ul>
+		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
+			onclick="$('#general-info').slideToggle()">General Information <i
+				class="fa fa-angle-down fa-lg padded-left"></i></h3>
+		<ul id="general-info" style="display: none">
 			<li class="padded-bot-half padded-left-2 padded-right-2"><p>When you start a new game you can access the app
 																		over the handle on top of
 																		your screen. It will close
@@ -42,7 +45,12 @@
 			<li class="padded-bot-half padded-left-2 padded-right-2"><p>You can open the match window outside of games
 																		through clicking &nbsp;<i
 						class="btn fa fa-search btn-match"></i></p></li>
-			<hr>
+		</ul>
+		<hr>
+		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
+			onclick="$('#known-issues').slideToggle()">Known Issues <i class="fa fa-angle-down fa-lg padded-left"></i>
+		</h3>
+		<ul id="known-issues" style="display: none">
 			<li class="padded-bot-half padded-left-2 padded-right-2"><p>No data will be available for games with
 																		spectators disabled or for bots</p>
 			</li>
@@ -54,13 +62,12 @@
 				   display their placeholder instead of a value. We did our best to work around those cases, but if you
 				   encounters errors of that type, feel free to send them as email so we can target those issues in
 				   future versions</p></li>
-			<hr>
-			<li class="padded-bot-half padded-left-2 padded-right-2">
-				<p>Feel free to give feedback at the overwolf-store
-				   or send a message to <a href="mailto:champinfo@krispin.it">champinfo@krispin.it</a></p>
-			</li>
-			<hr>
 		</ul>
+		<hr>
+		<p class="padded-top padded-bot-half padded-left-2 padded-right-2">Feel free to give feedback at the
+																		   overwolf-store
+																		   or send a message to <a
+					href="mailto:champinfo@krispin.it">champ101@krispin.it</a></p>
 	</div>
 	<footer id="disclaimer" class="padded-2 padded-top-0">
 		<p>Champ 101 – Basic Champion Knowledge isn't endorsed by Riot Games and doesn't reflect the views or opinions
