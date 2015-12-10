@@ -8,7 +8,7 @@ module.exports = function (grunt) {
 				options: {
 					system: {
 						config: __dirname + "/stealconfig.js",
-						main: ['js/main', 'js/settings', 'js/match'],
+						main: ['js/boot', 'js/settings', 'js/match'],
 						bundlesPath: 'dist/bundles/'
 					},
 					buildOptions: {
@@ -31,9 +31,17 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		clean: {
-			preBuild: ['out'],
-			postBuild: ["bundles", 'out', 'dist']
+		clean: { // working dir is "front_end/"
+			preBuild: {
+				options: {force: true},
+				src: ['out'
+					, '../champ101_latest/app' // removing old release from submission folder
+					, '../releases/champinfo_v' + appV + '/' // removing possible previous build from releases folder
+				]
+			},
+			postBuild: {
+				src: ["bundles", 'out', 'dist']
+			}
 		},
 		copy: {
 			views: {
@@ -60,7 +68,10 @@ module.exports = function (grunt) {
 			, cfg: {expand: true, src: 'manifest.json', dest: 'out/'}
 			, steal: {expand: true, cwd: 'node_modules/steal', src: ['steal.production.js'], dest: 'out/'}
 			, videojs: {expand: true, cwd: 'node_modules/video.js/dist/video-js', src: ['**'], dest: 'out/vendor/videojs'}
-			, postBuild: {expand: true, cwd: 'out', src: '**/*', dest: '../champinfo_v' + appV +'/'}
+			,
+			postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../releases/champinfo_v' + appV + '/'}
+			,
+			postBuildSubmission: {expand: true, cwd: 'out', src: '**/*', dest: '../champ101_latest/app/V' + appV + '/'}
 		},
 		"steal-export": {
 			dist: {
