@@ -167,7 +167,7 @@ steal(
 		};
 
 		/**
-		 * The WindowController for the main window ( main.js / main.html )
+		 * The WindowController for the main window ( boot.js / main.html )
 		 * @class {MainCtrl}
 		 * @extends WindowCtrl
 		 * @constructor {@link MainCtrl.init}
