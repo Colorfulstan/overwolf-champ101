@@ -81,7 +81,7 @@ steal('can.js'
 
 					overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
 						self.options.odkWindow = result.window;
-						var x = self.constructor.getCenteredX(self.options.odkWindow.width), y = 0;
+						var x = WindowCtrl.getCenteredX(self.options.odkWindow.width), y = 0;
 						x += 100; // accounting for App-Buttons on the right
 						x -= 14; // accounting for unknown positioning flaw
 						overwolf.windows.changePosition(self.options.odkWindow.id, x, y);
@@ -125,7 +125,7 @@ steal('can.js'
 
 						$(WindowCtrl.events).on('matchReady', function () {
 							steal.dev.log('matchReady triggered');
-							self.constructor.openMatch();
+							WindowCtrl.openMatch();
 
 							if (options.settings.startMatchCollapsed()) {
 								$(WindowCtrl.events).trigger('collapsed');
@@ -167,50 +167,51 @@ steal('can.js'
 						self.options.tooltip.destroy()
 					}
 
-					var failCb = function (data, status, jqXHR) {
-						$(WindowCtrl.events).trigger('matchReady');
-
+					var rejectCb = function (data, status, jqXHR) {
 						steal.dev.warn("Loading Match failed!", data, status, jqXHR);
 						self.options.$overviewContainer.removeClass('loading').addClass('failed');
 						if (data.status == 503) {
 							self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
 						}
+						$(WindowCtrl.events).trigger('matchReady');
 						deferred.reject(data, status, jqXHR);
 					};
 
 					$.when(matchPromise)
 						.then(function (matchModel) {
-							var pollForStableFPS = function () {
-								function handleStableFPS(matchModel) {
-									if (typeof matchModel[1] === 'string' && matchModel[1] === 'error') {
-										var args = matchModel;
-										return failCb(args[0], args[1], args[2]); // delegating to .fail() callback
-									}
-									// TODO: find a cleaner solution for this (side-effects)
-									self.options.$overviewContainer.removeClass('loading');
-									// Controller for Overview-Panel
-									self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
-									// Controller for Champion-Panels
-									self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
-									// Controller for Tooltip
-									self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+								var pollForStableFPS = function () {
+									function handleStableFPS(matchModel) {
+										if (typeof matchModel[1] === 'string' && matchModel[1] === 'error') {
+											var args = matchModel;
+											rejectCb(args[0], args[1], args[2]); // delegating to .fail() callback
+										} else {
+											// TODO: find a cleaner solution for this (side-effects)
+											self.options.$overviewContainer.removeClass('loading');
+											// Controller for Overview-Panel
+											self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
+											// Controller for Champion-Panels
+											self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
+											// Controller for Tooltip
+											self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
 
-									$(WindowCtrl.events).trigger('matchReady');
-									deferred.resolve(matchModel);
-								}
-
-								var interval = window.setInterval(function () {
-									if (self.options.settings.isFpsStable()) {
-										// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
-										handleStableFPS(matchModel);
-										window.clearInterval(interval);
+											$(WindowCtrl.events).trigger('matchReady');
+											deferred.resolve(matchModel);
+										}
 									}
-								}, 100);
-							};
-							pollForStableFPS();
-						})
-						.fail(failCb);
+
+									var interval = window.setInterval(function () {
+										if (!self.options.waitForStableFps || self.options.settings.isFpsStable()) {
+											// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
+											handleStableFPS(matchModel);
+											window.clearInterval(interval);
+										}
+									}, 100);
+								};
+								pollForStableFPS();
+							}
+							, rejectCb);
 					return deferred.promise();
+
 				},
 				reloadMatch: function () {
 					// TODO: currently not used due to memory leak - reloading window as whole when reloading for now
@@ -318,7 +319,7 @@ steal('can.js'
 				'{settingsBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
 						steal.dev.log('MatchCtrl: open settings');
-						this.constructor.openSettings();
+						WindowCtrl.openSettings();
 
 						var settings = new SettingsModel();
 						var summonerId = settings.summonerId();

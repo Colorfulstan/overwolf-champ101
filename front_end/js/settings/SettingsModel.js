@@ -77,7 +77,7 @@ steal(
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
 			},
 			isMatchMinimized: function (newVal) {
-				if (newVal == undefined) { // getter
+				if (typeof newVal === 'undefined') { // getter
 					return localStorage.getItem('lock_matchMinimized') == 'true';
 				} else { // setter
 					if (newVal == false) localStorage.removeItem('lock_matchMinimized');
@@ -116,24 +116,25 @@ steal(
 			/** @type {string}
 			 * @property */
 			summonerName: can.compute(function (newVal) {
-				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_NAME); // getter
+				if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_NAME); // getter
+				else if (newVal === null){localStorage.removeItem(SettingsModel.STORAGE_KEY_REGION)} // reset
 				else { // setter
 					var oldVal = this.summonerName();
-					localStorage.setItem(SettingsModel.STORAGE_KEY_NAME, newVal);
 					this.valueChanged('summonerName', oldVal);
 
+					localStorage.setItem(SettingsModel.STORAGE_KEY_NAME, newVal);
 					//this.cachedGameAvailable(false); // TODO: TEST
 				}
 			}, this),
 			/** @type {string}
 			 * @propterty */
 			summonerId: can.compute(function (newVal) {
-				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_ID); // getter
+				if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_ID); // getter
 				else { // setter
 					var oldVal = this.summonerId();
 
-					localStorage.setItem(SettingsModel.STORAGE_KEY_ID, newVal);
 					this.valueChanged('summonerId', oldVal);
+					localStorage.setItem(SettingsModel.STORAGE_KEY_ID, newVal);
 
 					//this.cachedGameAvailable(false); // TODO: TEST
 				}
@@ -141,7 +142,8 @@ steal(
 			/** @type {string}
 			 * @propterty */
 			server: can.compute(function (newVal) {
-				if (newVal == undefined) return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION); // getter
+				if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION); // getter
+				else if (newVal === null){localStorage.removeItem(SettingsModel.STORAGE_KEY_REGION)} // reset
 				else { // setter
 					var oldVal = this.server();
 					localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
@@ -153,7 +155,7 @@ steal(
 			/** @type {boolean}
 			 * @propterty */
 			startMatchCollapsed: can.compute(function (newVal) {
-				if (newVal == undefined) {
+				if (typeof newVal === 'undefined') {
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED) == 'true';
 				} else { // setter
 					var oldVal = this.startMatchCollapsed();
@@ -167,7 +169,7 @@ steal(
 			/** @type {boolean}
 			 * @propterty */
 			isFpsStable: can.compute(function (newVal) {
-				if (newVal == undefined) {
+				if (typeof newVal === 'undefined') {
 					return localStorage.getItem(SettingsModel.STORAGE_KEY_FRAME_RATE) === 'true';
 				} else { // setter
 					localStorage.setItem(SettingsModel.STORAGE_KEY_FRAME_RATE, newVal);
@@ -176,10 +178,10 @@ steal(
 			/** @type {boolean}
 			 * @propterty */
 			isInGame: can.compute(function (newVal) {
-				if (newVal == undefined) {
-					return this.constructor.isInGame();
+				if (typeof newVal === 'undefined') {
+					return SettingsModel.isInGame();
 				} else { // setter
-					var oldVal = this.constructor.isInGame();
+					var oldVal = SettingsModel.isInGame();
 					this.valueChanged('isInGame', oldVal);
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_IN_GAME);
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_IN_GAME, newVal);
@@ -188,10 +190,10 @@ steal(
 			/** @type {boolean}
 			 * @propterty */
 			isReloading: can.compute(function (newVal) {
-				if (newVal == undefined) {
-					return this.constructor.isReloading();
+				if (typeof newVal === 'undefined') {
+					return SettingsModel.isReloading();
 				} else { // setter
-					var oldVal = this.constructor.isReloading();
+					var oldVal = SettingsModel.isReloading();
 					this.valueChanged('isReloading', oldVal);
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_RELOADING);
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_RELOADING, newVal);
@@ -200,10 +202,10 @@ steal(
 			/** @type {boolean}
 			 * @propterty */
 			startWithGame: can.compute(function (newVal) {
-				if (newVal == undefined) {
-					return this.constructor.startWithGame();
+				if (typeof newVal === 'undefined') {
+					return SettingsModel.startWithGame();
 				} else { // setter
-					var oldVal = this.constructor.startWithGame();
+					var oldVal = SettingsModel.startWithGame();
 					this.valueChanged('startWithGame', oldVal);
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_WITH_GAME);
 					else if (newVal !== oldVal) {
@@ -217,16 +219,16 @@ steal(
 					}
 				}
 			}),
-			startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to disable this app to start automatically.<br><span style="text-decoration: underline">Requires overwolf restart!</span></p>',
+			startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to prevent this app from starting automatically.<span style="text-decoration: underline">Requires overwolf restart!</span></p>',
 			startWithGameMessage: null,
 
 			/** @type {boolean}
 			 * @propterty */
 			closeMatchWithGame: can.compute(function (newVal) {
-				if (newVal == undefined) {
-					return this.constructor.closeMatchWithGame();
+				if (typeof newVal === 'undefined') {
+					return SettingsModel.closeMatchWithGame();
 				} else { // setter
-					var oldVal = this.constructor.closeMatchWithGame();
+					var oldVal = SettingsModel.closeMatchWithGame();
 					this.valueChanged('closeMatchWithGame', oldVal);
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME);
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME, newVal);
@@ -239,7 +241,7 @@ steal(
 			 * @type {string}
 			 */
 			cachedGameId: can.compute(function (newVal) {
-				if (newVal == undefined) { // getter
+				if (typeof newVal === 'undefined') { // getter
 					return localStorage.getItem('temp_gameId');
 				} else { // setter
 					var oldVal = this.cachedGameId();
@@ -253,7 +255,7 @@ steal(
 			 * @type {boolean}
 			 */
 			cachedGameAvailable: can.compute(function (newVal) {
-				if (newVal == undefined) { // getter
+				if (typeof newVal === 'undefined') { // getter
 					return localStorage.getItem('lock_getCachedGame') == 'true';
 				} else { // setter
 					var oldVal = this.cachedGameAvailable();

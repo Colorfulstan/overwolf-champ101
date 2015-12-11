@@ -40,7 +40,7 @@ steal(
 						deferred.resolve(data);
 
 					}).fail(function (data, status, jqXHR) {
-						deferred.reject([data, status, jqXHR]);
+						deferred.reject(data, status, jqXHR);
 					});
 				return deferred.promise();
 			},

@@ -25,7 +25,7 @@ steal(
 
 				WindowCtrl.prototype.init.apply(self, arguments);
 
-				$.when(self.constructor.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
+				$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 					self.odkWindow = odkWindow;
 				});
 				self.renderView();
@@ -79,7 +79,7 @@ steal(
 			},
 			closeSettings: function () {
 				var self = this;
-				self.constructor.close(self.odkWindow.name);
+				WindowCtrl.close(self.odkWindow.name);
 			},
 			'#btn-save-close click': function ($btn, ev) {
 				$btn.text('checking'); // TODO: replace with class
@@ -95,7 +95,7 @@ steal(
 				// restore the old settings-values
 				this.options.settings.reset();
 				// close window
-				this.constructor.close(this.odkWindow.name);
+				WindowCtrl.close(this.odkWindow.name);
 			},
 			'#server-region-select change': function ($el, ev) {
 				this.options.settings.server($el.val());

@@ -7,6 +7,11 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		settingsModel = new SettingsModel();
 		settingsCtrl = new SettingsCtrl('html', {settings: settingsModel});
 	});
+	afterEach(function () {
+		if (settingsCtrl.destroy !== 'undefined') {
+			settingsCtrl.destroy();
+		}
+	});
 	describe("noRequestNeccessary ", function () {
 		function createTrueCondition(settingsCtrl) {
 			spyOn(SettingsModel, 'isSummonerSet').and.returnValue(true);

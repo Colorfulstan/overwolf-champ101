@@ -23,6 +23,7 @@ steal(
 
 				$(WindowCtrl.events).on('fpsStable', function () {
 					steal.dev.log('fpsStable event');
+					console.log('fpsStable event');
 					MainCtrl.removeStableFpsListener();
 
 					settings.isFpsStable('true');
@@ -64,8 +65,8 @@ steal(
 						steal.dev.warn('League of Legends game finished', new Date());
 						if (SettingsModel.closeMatchWithGame()) {
 							self.closeMatch();
-							settings.isInGame(false);
 						}
+						settings.isInGame(false);
 					}
 				});
 			},
@@ -144,24 +145,6 @@ steal(
 				steal.dev.log('MainCtrl initialized :', this);
 			}
 			,
-
-			/**
-			 * Opens the Main Window and if Summoner is not set also the SettingsWindow
-			 * @param isSummonerSet
-			 */
-			start: function (isSummonerSet) {
-				var self = this;
-				$.when(this.constructor.open('Main')).then(function (/**ODKWindow*/ odkWindow) {
-					self.odkWindow = odkWindow;
-				});
-
-				if (!isSummonerSet) {
-					var settings = new SettingsModel();
-					settings.startWithGame(true);
-					settings.closeMatchWithGame(true);
-					this.constructor.openSettings();
-				}
-			},
 			/**
 			 *
 			 * calls {@link WindowCtrl.openMatch}
@@ -170,7 +153,10 @@ steal(
 			 */
 			'{matchBtn} mousedown': function (el, ev) {
 				steal.dev.log('WindowCtrl: open match');
-				this.constructor.openMatch();
+				var settings = new SettingsModel;
+				settings.startMatchCollapsed(false);
+				WindowCtrl.openMatch();
+				settings.destroy();
 			}
 		};
 
