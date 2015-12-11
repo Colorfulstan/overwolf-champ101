@@ -1,0 +1,21 @@
+<h3>Kickstart your learning process of League Knowledge</h3>
+
+<p>Champ 101 gives you a quick lookup for all the basic champion information you need if you<br>
+<ul>
+<li>are new to League or playing casually</li>
+<li>are wondering what abilities of that rare picked champion actually do</li>
+<li>are interested in your opponents cooldowns and ressource costs during your game</li>
+</ul>
+Fast, simple and relevant to your current game!</p>
+
+<p>For a more detailed explanation of the app and its features visit <a href="http://champ101.krispin.it">the app's web-page</a></p>
+
+<p>Feel free to give feedback here or <a href="mailto:champinfo@krispin.it" target="_blank">send a message</a>
+<br><br>
+If you're using Github, consider opening an
+<a href="https://github.com/Colorfulstan/champ101/issues" target="_blank">issue</a>
+for bugs and suggestions instead.</p>
+
+<p><strong>Note:</strong> Despite our effort to work around cases of incosistency within the public datasets
+used for the displayed information there might still be a few missing or wrong values.<br>
+Feel free to report those by <a href="mailto:champinfo@krispin.it" target="_blank">email</a> or open a <a href="https://github.com/Colorfulstan/champ101/issues">github-issue</a> including the champion and ability for reference.</p>
