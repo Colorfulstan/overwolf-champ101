@@ -2,12 +2,12 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-  	"name": "Legue of Legends Champ 101",
+  	"name": "League of Legends Champ 101",
   	"access-name": "it.krispin.champ101",
   	"version": "1.0.0",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
-  	"description": "Basic league of legends champion information relevant for your current game",
+  	"description": "Basic League of Legends champion information relevant for your current game",
   	"dock_button_title": "LoL Champ 101",
 	"icon": "assets/img/icon.png",
 	"icon_gray": "assets/img/icon_gray.png"

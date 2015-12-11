@@ -82,7 +82,7 @@ steal('can.js'
 					overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
 						self.options.odkWindow = result.window;
 						var x = WindowCtrl.getCenteredX(self.options.odkWindow.width), y = 0;
-						x += 100; // accounting for App-Buttons on the right
+						//x += 100; // accounting for App-Buttons on the right
 						x -= 14; // accounting for unknown positioning flaw
 						overwolf.windows.changePosition(self.options.odkWindow.id, x, y);
 
