@@ -78,11 +78,16 @@
 		</table>
 
 		<div class="padded-top-2 padded-bot">
+			{{^summonerId}}
+				<span class="padded-bot text-danger">You need to set a summoner-name and region</span><br>
+			{{/summonerId}}
 			{{#startWithGameMessage}}
-				<p class="padded-bot text-danger">{{.}}</p>
+				<span class="padded-bot text-danger">{{.}}</span><br>
 			{{/startWithGameMessage}}
-			<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i></button>
-			<button id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></button>
+			<div class="padded-top">
+				<button type="submit" id="btn-save-close" class="btn col-xs-6 success"><i class="fa fa-check"></i> </button>
+				<button id="btn-cancel" class="btn btn-cancel col-xs-6 failed"><i class="fa fa-times"></i></button>
+			</div>
 		</div>
 	</form>
 </div>

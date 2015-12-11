@@ -21,6 +21,7 @@
 
   font-family: 'Roboto';
   letter-spacing: 0.02em;
+  line-height: 1.3rem;
   -webkit-user-select: none !important; // disables text-selection everywhere;
 }
 
@@ -148,6 +149,7 @@ font {
 footer#disclaimer {
   font-size: 0.7rem;
   text-align: justify;
+  line-height: 0.8rem;
   letter-spacing: 0.4px;
   font-weight: 100;
 }

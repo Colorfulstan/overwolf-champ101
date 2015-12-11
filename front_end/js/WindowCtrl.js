@@ -131,29 +131,35 @@ steal(
 				},
 				/** Opens the Match Window */
 				openMatch: function () {
-					$.when(this.open('Match')).then(function (/**ODKWindow*/ odkWindow) {
+					var def = $.Deferred();
+					$.when(WindowCtrl.open('Match')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openMatch: ", odkWindow);
+						def.resolve();
 					});
+					return def.promise();
 				},
 				/** Opens the Home / Main Window */
 				openMain: function () {
-					$.when(this.open('Main')).then(function (/**ODKWindow*/ odkWindow) {
+					var def = $.Deferred();
+					$.when(WindowCtrl.open('Main')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openMain: ", odkWindow);
+						def.resolve();
 					});
+					return def.promise();
 				},
 				/** closes the Match-Window */
-				closeMatch: function () { this.close('Match'); },
+				closeMatch: function () { WindowCtrl.close('Match'); },
 				/** Opens the Settings-Window and positions it centered on the screen */
 				openSettings: function () {
 					var self = this;
-					$.when(this.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
+					$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openSettings: ", odkWindow);
-						if (!localStorage.getItem('settings-got-opened-once')){
+						if (!localStorage.getItem('settings-opened-before')){
 							// Only center settings-window the first time it opens
 							var x = self.getCenteredX(odkWindow.width);
 							var y = self.getCenteredY(500);
 							overwolf.windows.changePosition(odkWindow.id, x, y);
-							localStorage.setItem('settings-got-opened-once', '1');
+							localStorage.setItem('settings-opened-before', 'true');
 						}
 					});
 				},
@@ -213,7 +219,7 @@ steal(
 
 				'.drag-window-handle mousedown': function ($el, ev) {
 					steal.dev.log('dragging');
-					this.constructor.dragMove(this.options.name);
+					WindowCtrl.dragMove(this.options.name);
 				}
 				,
 
@@ -226,7 +232,7 @@ steal(
 				 */
 				'{closeBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						this.constructor.close(this.options.name);
+						WindowCtrl.close(this.options.name);
 						ev.stopPropagation();
 					}
 				}
@@ -237,7 +243,7 @@ steal(
 				 * @param ev
 				 * @see WindowCtrl.defaults.resizeBtn*/
 				'{resizeBtn} mousedown': function ($el, ev) {
-					this.constructor.dragResize(this.options.name, 'BottomRight');
+					WindowCtrl.dragResize(this.options.name, 'BottomRight');
 					ev.stopPropagation();
 				}
 				,
@@ -249,7 +255,7 @@ steal(
 				'{minimizeBtn} mousedown': function ($el, ev) {
 					steal.dev.log('WindowCtrl: minimize window');
 					if (ev.which == 1) {
-						this.constructor.minimize(this.options.name);
+						WindowCtrl.minimize(this.options.name);
 						ev.stopPropagation();
 					}
 				}
@@ -262,7 +268,7 @@ steal(
 				'{settingsBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
 						steal.dev.log('WindowCtrl: open settings');
-						this.constructor.openSettings();
+						WindowCtrl.openSettings();
 						ev.stopPropagation();
 					}
 				}
@@ -274,7 +280,7 @@ steal(
 				 * @see WindowCtrl.defaults.infoBtn*/
 				'{infoBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						this.constructor.openMain();
+						WindowCtrl.openMain();
 						ev.stopPropagation();
 					}
 				}

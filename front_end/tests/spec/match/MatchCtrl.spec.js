@@ -7,4 +7,9 @@ describe("MatchCtrlSpec - ", function () {
 		settings = new SettingsModel();
 		matchCtrl = new MatchCtrl('html', {settings: settings});
 	});
+	afterEach(function () {
+		if (matchCtrl.destroy !== 'undefined') {
+			matchCtrl.destroy();
+		}
+	});
 });

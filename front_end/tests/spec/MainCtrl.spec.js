@@ -20,6 +20,11 @@ describe("MainCtrlSpec - testing the Main-Window", function () {
 		mainCtrl = new MainCtrl('html');
 		settingsModel = new SettingsModel();
 	});
+	afterEach(function () {
+		if (mainCtrl.destroy !== 'undefined') {
+			mainCtrl.destroy();
+		}
+	});
 
 	describe(".app-buttons", function () {
 		beforeEach(function () {
@@ -47,4 +52,20 @@ describe("MainCtrlSpec - testing the Main-Window", function () {
 			expect(mainCtrl.openMatch).not.toHaveBeenCalled();
 		});
 	});
+	//xdescribe(".start() || ", function () {
+	//	describe("if started with false (no summoner set)", function () {
+	//		it("should open settings window", function () {
+	//			// TODO
+	//			fail();
+	//		});
+	//		it("should set startWithGame(true)", function () {
+	//			// TODO
+	//			fail();
+	//		});
+	//		it("should set closeMatchWithGame(true)", function () {
+	//			// TODO
+	//			fail();
+	//		});
+	//	});
+	//})
 });

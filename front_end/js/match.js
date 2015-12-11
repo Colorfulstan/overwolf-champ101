@@ -26,11 +26,11 @@ steal(
 
 		if (settings.isInGame() && !settings.isReloading()) { // ingame == preload data
 			dao.loadMatchModel(model).always(function (match) { // TODO: currently not accounting for manual starts!?
-				new MatchCtrl('html', {dao: dao, model: match, settings: settings});
+				new MatchCtrl('html', {dao: dao, model: match, settings: settings, waitForStableFps: true});
 			});
 		} else { // else == show match with promise (handled within MatchCtrl)
 			var match = dao.loadMatchModel(model);
-			new MatchCtrl('html', {dao: dao, model: match, settings: settings});
+			new MatchCtrl('html', {dao: dao, model: match, settings: settings, waitForStableFps: false});
 			settings.isReloading(false);
 		}
 	});

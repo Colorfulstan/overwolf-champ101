@@ -20,11 +20,12 @@ import './documentation.spec';
 
 // main-files
 import './MainCtrl.spec';
-import './WindowCtrl.spec';
 import './SettingsCtrl.spec';
 import './match/MatchCtrl.spec';
 import './match/MatchModel.spec'
 import './Routes.spec';
+import './boot.spec';
+import './WindowCtrl.spec';
 
 beforeEach(function () {
 	localStorage.clear();
