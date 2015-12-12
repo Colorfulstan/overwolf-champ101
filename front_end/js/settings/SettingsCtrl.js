@@ -3,8 +3,7 @@ steal(
 	'can'
 	, 'WindowCtrl.js'
 	, function (can
-		, /**WindowCtrl*/ WindowCtrl
-	) {
+		, /**WindowCtrl*/ WindowCtrl) {
 
 		/**
 		 * Controller for the "Settings" view (settings.html / settings.js)
@@ -32,7 +31,7 @@ steal(
 
 				//this.element.find('#summoner-name-input').focus();
 			},
-			renderView: function(){
+			renderView: function () {
 				this.element.find('#content').html(
 					can.view(this.options.settingsTmpl, this.options.settings)
 				);
@@ -43,8 +42,8 @@ steal(
 				var settings = this.options.settings;
 				// testing string;
 				return SettingsModel.isSummonerSet()
-						&& typeof settings.changedPropsOriginalValues.server === "undefined"
-						&& typeof settings.changedPropsOriginalValues.summonerName === "undefined"
+					&& typeof settings.changedPropsOriginalValues.server === "undefined"
+					&& typeof settings.changedPropsOriginalValues.summonerName === "undefined"
 					&& settings.summonerName() != "---";
 			},
 			saveAndCloseHandler: function (self, $btn) {
@@ -55,17 +54,24 @@ steal(
 				) {	// no change - spare the request
 					self.closeSettings();
 				} else {
-					this.requestSummonerId(settings, self, $btn);
+					this.requestSummonerId(settings, self, $btn)
+						.then(function () {
+							WindowCtrl.events.trigger('summonerChangedEv');
+							window.setTimeout(function () {
+								self.closeSettings();
+							});
+						});
 				}
 			},
 			requestSummonerId: function (settings, self, $btn) {
+				var def = $.Deferred();
 				$.get(
-					RIOT_ADAPTER_URL + '/getSummonerId.php'
+						RIOT_ADAPTER_URL + '/getSummonerId.php'
 					, {'server': settings.server(), 'summoner': settings.summonerName()}
 					, function (summonerId, status, jqXHR) {
 						steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
 						settings.summonerId(summonerId);
-						self.closeSettings();
+						def.resolve(summonerId, status, jqXHR);
 					})
 					.fail(function (data, status, jqXHR) {
 						steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
@@ -75,7 +81,9 @@ steal(
 						// 404 not found
 						// statusText 'error' == kein Internet??
 						$btn.text(data.statusText);
+						def.reject(data, status, jqXHR);
 					});
+				return def.promise();
 			},
 			closeSettings: function () {
 				var self = this;
@@ -110,13 +118,13 @@ steal(
 				$(document).off('focus');
 				$(document).on('focus', focusHandler);
 				steal.dev.warn('document events:', $._data(document, 'events'));
-				function focusHandler(){
+				function focusHandler() {
 					steal.dev.log('focusHandler after hotkey-btn click called');
-					 $.when(self.options.settings.loadHotKeys()).then(function (noValueGiven) {
-						 steal.dev.log('hotkeys reloaded');
+					$.when(self.options.settings.loadHotKeys()).then(function (noValueGiven) {
+						steal.dev.log('hotkeys reloaded');
 						self.renderView();
-						 self.element.find('#hotkeys-rows').show();
-					 });
+						self.element.find('#hotkeys-rows').show();
+					});
 				}
 			},
 			'#summoner-name-input focus': function ($el, ev) {
