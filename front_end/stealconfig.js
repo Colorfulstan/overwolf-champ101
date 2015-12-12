@@ -8,6 +8,8 @@ System.config({
 
 		'Hotkeys': './js/Utility/Hotkeys.js',
 		'Routes': './js/Utility/Routes.js',
+		'Boot': './js/Utility/Boot.js',
+		'Boot.spec': './js/Utility/Boot.spec.js',
 
 		'SettingsModel': './js/settings/SettingsModel.js',
 		'SettingsCtrl': './js/settings/SettingsCtrl.js',

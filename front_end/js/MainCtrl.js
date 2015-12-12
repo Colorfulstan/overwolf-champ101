@@ -127,7 +127,7 @@ steal(
 				settings.isInGame(false);
 			},
 			registerGameStartEndListener: function (settings) {// TODO: move all this eventstuff into own service!
-				// NOTE: second point where App determines if player is within a game or not. Other point is in boot.js (at app boot)
+				// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
 				overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
 					steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
 					if (MainCtrl.gameStarted(result)) { MainCtrl._handleGameStart(settings); }
@@ -174,7 +174,7 @@ steal(
 		};
 
 		/**
-		 * The WindowController for the main window ( boot.js / main.html )
+		 * The WindowController for the main window ( main.js / main.html )
 		 * @class {MainCtrl}
 		 * @extends WindowCtrl
 		 * @constructor {@link MainCtrl.init}

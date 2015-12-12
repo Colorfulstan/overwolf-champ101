@@ -161,8 +161,6 @@ steal('can.js'
 						}
 						$(WindowCtrl.events).trigger('matchReady');
 						deferred.reject(data, status, jqXHR);
-
-						window.clearInterval(interval);
 					};
 					var resolveCB = function (matchModel) {
 						if (typeof matchModel[1] === 'string' && matchModel[1] === 'error') {
@@ -177,7 +175,6 @@ steal('can.js'
 							self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
 							// Controller for Tooltip
 							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
-							debugger;
 							$(WindowCtrl.events).trigger('matchReady');
 							deferred.resolve(matchModel);
 						}
