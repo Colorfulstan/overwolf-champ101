@@ -18,28 +18,56 @@ steal(
 
 		var firstStart = !SettingsModel.isSummonerSet();  // localStorage has no items on first start
 
-		checkIfIngame().then(function (isInGame) {
-			settings.isInGame(isInGame);
+		// TODO: all that follows belongs in an object / controller / whatever to be able to test it
+		checkIfIngame(settings)
+			.then(launchApp.bind(null, firstStart, settings))
+			.fail(console.error);
 
-			if (firstStart) {
-				firstAppStart(settings);
+		function launchApp(isFirstStart, settings, data) {
+			if (isFirstStart) {
+				return firstAppLaunch(settings).always(registerAppListeners.bind(null, settings));
 			} else {
-				regularStart(settings);
+				regularLaunch(settings);
 			}
-		});
+		}
 
-		function firstAppStart(settings) {
-			setDefaultSettings(settings)
+		function firstAppLaunch(settings) {
+			return setDefaultSettings(settings)
 				.then(askForSummoner)
+				.then(showMatchLoading.bind(null, settings))
 				.then(openMatchIfIngame)
-				.always(openMainWindow)
-				.always(setupListener);
+				.always(openMainWindow);
 
 			function setDefaultSettings(settings) {
 				settings.startWithGame(true);
 				settings.closeMatchWithGame(true);
+				settings.isFpsStable('true');
 				return $.Deferred().resolve().promise();
 			}
+		}
+
+		function showMatchLoading(settings, data) {
+			settings.isManualReloading(true);
+			settings.startMatchCollapsed(false);
+			return $.Deferred().resolve().promise();
+		}
+		function hideMatchLoading(settings, data) {
+			settings.isManualReloading(false);
+			settings.startMatchCollapsed(true);
+			return $.Deferred().resolve().promise();
+		}
+
+
+		function checkIfIngame(settings) {
+			var def = $.Deferred();
+			// NOTE: first of two points where app determines if player is within a game
+			// other point is through listener (registerOverwolfListener)
+			overwolf.games.getRunningGameInfo(function (/** GameInfo */ gameData) {
+				var isInGame = !(gameData == undefined || gameData == null);
+				settings.isInGame(isInGame);
+				def.resolve(isInGame);
+			});
+			return def.promise();
 		}
 
 		function askForSummoner() {
@@ -60,41 +88,11 @@ steal(
 			return def.promise();
 		}
 
-		function setupListener() {
-			if (SettingsModel.startWithGame()) {
-				MainCtrl.registerOverwolfHandlers();
-			}
-
-			// in case app started previous and gets reopened by user
-			overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) {
-				if (!SettingsModel.isSummonerSet()) {
-					WindowCtrl.openSettings();
-				} else {
-					openMatchIfIngame();
-				}
-			});
-			return $.Deferred().resolve().promise();
-		}
-
-		function checkIfIngame() {
-			var def = $.Deferred();
-			// NOTE: first of two points where app determines if player is within a game
-			// other point is through listener
-			overwolf.games.getRunningGameInfo(function (/** GameInfo */ data) {
-				if (data == undefined || data == null) { // manual start since no game is running
-					def.resolve(false);
-				} else { // automatic start since a game is running and the app will start with league
-					def.resolve(true);
-				}
-
-			});
-			return def.promise();
-		}
-
 		function openMatchIfIngame() {
 			if (SettingsModel.isInGame()) {
-				var settings = new SettingsModel();
-				settings.isReloading(true);
+				MainCtrl.removeStableFpsListener(); // to prevent unwanted listener-stacking
+				MainCtrl.addStableFpsListener();
+				overwolf.benchmarking.requestFpsInfo(250, function () {});
 				return WindowCtrl.openMatch();
 			}
 			return $.Deferred().reject().promise();
@@ -104,15 +102,35 @@ steal(
 			return WindowCtrl.openMain();
 		}
 
-		function regularStart(settings) {
-			setupListener();
+		function registerAppListeners(settings, data) {
+			if (SettingsModel.startWithGame()) {
+				MainCtrl.registerGameStartListeners(settings);
+			}
+
+			// in case app started previous and gets reopened by user
+			overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) { // each time Main-Window gets opened (app manually started)
+				checkIfIngame(settings)
+					.then(function () {
+						var def = $.Deferred();
+						SettingsModel.isSummonerSet() ? def.resolve() : def.reject();
+						return def.promise();
+					}).then(showMatchLoading.bind(null, settings))
+					.then(openMatchIfIngame, firstAppLaunch.bind(null, settings))
+					.fail(console.error);
+			});
+			return $.Deferred().resolve().promise();
+		}
+
+
+		function regularLaunch(settings) {
+			registerAppListeners(settings);
 
 			//settings.cachedGameAvailable(false);
 			//settings.cachedGameId(null);
 			if (settings.isInGame()) {
 				inGameStart(settings);
 			} else {
-				outOfGameStart(settings);
+				outOfGameStart(settings); // TODO: make asynch
 			}
 		}
 
@@ -127,17 +145,18 @@ steal(
 		/** App got started through overwolf */
 		function inGameStart(settings) {
 			// NOTE: only case in which inGameStart won't be automatic through overwolf is, if overwolf gets started after the match already started!
-			checkIfAutoLaunched().then(function (wasAutoLaunched) {
-				if (wasAutoLaunched && !settings.startWithGame()) {
-					return false; // App should not start automatically
-				}
-				settings.startMatchCollapsed(true);
-				MainCtrl.removeStableFpsListener(); // to prevent unwanted listener-stacking
-				MainCtrl.addStableFpsListener();
-				WindowCtrl.openMatch();
-				var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
-				overwolf.benchmarking.requestFpsInfo(250, func);
-			});
+			checkIfAutoLaunched()
+				.then(function (wasAutoLaunched) {
+					if (wasAutoLaunched && !SettingsModel.startWithGame()) {
+						return false; // App should not start automatically
+					}
+					wasAutoLaunched ? hideMatchLoading(settings) : showMatchLoading(settings);
+					MainCtrl.removeStableFpsListener(); // to prevent unwanted listener-stacking
+					MainCtrl.addStableFpsListener();
+					var func = function () { steal.dev.log('FPS Info request starts') }; // build bugs if this is inlined
+					overwolf.benchmarking.requestFpsInfo(250, func);
+					WindowCtrl.openMatch();
+				});
 		}
 
 		/**
@@ -145,7 +164,7 @@ steal(
 		 */
 		function checkIfAutoLaunched() { // TODO: not sure if this works as intended
 			// if app is started manually, the main-window will open anyways.
-			// So if that window is not present, the game got started through auto-launch
+			// So if that window is not present, the game was started through auto-launch
 			// TODO: change main-window to some kind of indicator-window so that main-window don't have to open when app gets started manually
 
 			var def = $.Deferred();
@@ -155,6 +174,10 @@ steal(
 			});
 			return def.promise();
 		}
+
+		// public API for testing purposes // TODO: work this out
+		//return {
+		//}
 	});
 
 
