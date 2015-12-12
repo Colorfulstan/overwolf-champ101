@@ -12,13 +12,13 @@ steal(
 			STORAGE_KEY_REGION: 'region-code',
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
-			STORAGE_KEY_RELOADING: 'setting-reloading',
+			STORAGE_KEY_RELOADING: 'setting-manual-reload',
 			STORAGE_KEY_IN_GAME: 'setting-in-game',
 			STORAGE_KEY_START_WITH_GAME: 'setting-start-with-game',
 			STORAGE_KEY_CLOSE_MATCH_WITH_GAME: 'setting-close-match-with-game',
 			STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 			STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
-			STORAGE_KEY_FRAME_RATE: 'setting-framerate',
+			STORAGE_FPS_STABLE: 'setting-fps-stable',
 			//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
 
 			/** @static */
@@ -93,7 +93,7 @@ steal(
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_IN_GAME) == 'true'
 			},
 			/** @static */
-			isReloading: function () {
+			isManualReloading: function () {
 				return localStorage.getItem(SettingsModel.STORAGE_KEY_RELOADING) == 'true'
 			},
 			/** @static */
@@ -170,9 +170,9 @@ steal(
 			 * @propterty */
 			isFpsStable: can.compute(function (newVal) {
 				if (typeof newVal === 'undefined') {
-					return localStorage.getItem(SettingsModel.STORAGE_KEY_FRAME_RATE) === 'true';
+					return localStorage.getItem(SettingsModel.STORAGE_FPS_STABLE) === 'true';
 				} else { // setter
-					localStorage.setItem(SettingsModel.STORAGE_KEY_FRAME_RATE, newVal);
+					localStorage.setItem(SettingsModel.STORAGE_FPS_STABLE, newVal);
 				}
 			}),
 			/** @type {boolean}
@@ -189,12 +189,12 @@ steal(
 			}),
 			/** @type {boolean}
 			 * @propterty */
-			isReloading: can.compute(function (newVal) {
+			isManualReloading: can.compute(function (newVal) {
 				if (typeof newVal === 'undefined') {
-					return SettingsModel.isReloading();
+					return SettingsModel.isManualReloading();
 				} else { // setter
-					var oldVal = SettingsModel.isReloading();
-					this.valueChanged('isReloading', oldVal);
+					var oldVal = SettingsModel.isManualReloading();
+					this.valueChanged('isManualReloading', oldVal);
 					if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_RELOADING);
 					else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_RELOADING, newVal);
 				}

@@ -61,9 +61,11 @@ steal('can.js'
 
 					if (options.settings.startMatchCollapsed()) {
 						options.$panelContainer.css({display: 'none'});
+						options.$appButtons.css({display: 'none'});
 						$(WindowCtrl.events).trigger('collapsed');
 					} else {
 						options.$panelContainer.css({display: 'block'});
+						options.$appButtons.css({display: 'block'});
 						$(WindowCtrl.events).trigger('expanded');
 					}
 					self.countDocumentBlurHandlers = 0; // TODO: remove, nut used
@@ -149,23 +151,7 @@ steal('can.js'
 				},
 				loadMatch: function (matchPromise) {
 					var deferred = $.Deferred();
-
 					var self = this;
-
-					var name = this.options.settings.summonerName();
-					self.options.$overviewContainer.html(can.view(this.options.loadingTmpl, {summonerName: name}));
-					self.options.$overviewContainer.removeClass('failed').addClass('loading');
-
-					// clean up old controllers
-					if (self.options.overview) {
-						self.options.overview.destroy()
-					}
-					if (self.options.champions) {
-						self.options.champions.destroy()
-					}
-					if (self.options.tooltip) {
-						self.options.tooltip.destroy()
-					}
 
 					var rejectCb = function (data, status, jqXHR) {
 						steal.dev.warn("Loading Match failed!", data, status, jqXHR);
@@ -175,54 +161,64 @@ steal('can.js'
 						}
 						$(WindowCtrl.events).trigger('matchReady');
 						deferred.reject(data, status, jqXHR);
+
+						window.clearInterval(interval);
+					};
+					var resolveCB = function (matchModel) {
+						if (typeof matchModel[1] === 'string' && matchModel[1] === 'error') {
+							var args = matchModel;
+							rejectCb(args[0], args[1], args[2]); // delegating to .fail() callback
+						} else {
+							// TODO: find a cleaner solution for this (side-effects)
+							self.options.$overviewContainer.removeClass('loading');
+							// Controller for Overview-Panel
+							self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
+							// Controller for Champion-Panels
+							self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
+							// Controller for Tooltip
+							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+							debugger;
+							$(WindowCtrl.events).trigger('matchReady');
+							deferred.resolve(matchModel);
+						}
 					};
 
-					$.when(matchPromise)
-						.then(function (matchModel) {
-								var pollForStableFPS = function () {
-									function handleStableFPS(matchModel) {
-										if (typeof matchModel[1] === 'string' && matchModel[1] === 'error') {
-											var args = matchModel;
-											rejectCb(args[0], args[1], args[2]); // delegating to .fail() callback
-										} else {
-											// TODO: find a cleaner solution for this (side-effects)
-											self.options.$overviewContainer.removeClass('loading');
-											// Controller for Overview-Panel
-											self.options.overview = new OverviewCtrl('#match-overview-container', {match: matchModel});
-											// Controller for Champion-Panels
-											self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
-											// Controller for Tooltip
-											self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+					var waitForStableFps = window.setInterval(function () {
+						if (self.options.settings.isFpsStable()) {
+							//console.log('fps stable', localStorage.getItem(SettingsModel.STORAGE_FPS_STABLE));
+							// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
+							window.clearInterval(waitForStableFps);
 
-											$(WindowCtrl.events).trigger('matchReady');
-											deferred.resolve(matchModel);
-										}
-									}
+							var name = self.options.settings.summonerName();
+							self.options.$overviewContainer.html(can.view(self.options.loadingTmpl, {summonerName: name}));
+							self.options.$overviewContainer.removeClass('failed').addClass('loading');
 
-									var interval = window.setInterval(function () {
-										if (!self.options.waitForStableFps || self.options.settings.isFpsStable()) {
-											// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
-											handleStableFPS(matchModel);
-											window.clearInterval(interval);
-										}
-									}, 100);
-								};
-								pollForStableFPS();
+							// clean up old controllers
+							if (self.options.overview) {
+								self.options.overview.destroy()
 							}
-							, rejectCb);
-					return deferred.promise();
+							if (self.options.champions) {
+								self.options.champions.destroy()
+							}
+							if (self.options.tooltip) {
+								self.options.tooltip.destroy()
+							}
 
+							$.when(matchPromise).then(resolveCB, rejectCb);
+						}
+					}, 100);
+					return deferred.promise();
 				},
 				reloadMatch: function () {
 					// TODO: currently not used due to memory leak - reloading window as whole when reloading for now
 					var self = this;
 
 					var model = self.options.model;
-					model.summonerId = this.options.settings.summonerId();
-					model.server = this.options.settings.server();
+					model.summonerId = self.options.settings.summonerId();
+					model.server = self.options.settings.server();
 					self.options.matchPromise = self.options.dao.loadMatchModel(model);
 					$.when(self.loadMatch()).always(function () {
-						$.proxy(this.expandPanels, this);
+						$.proxy(self.expandPanels, self);
 					})
 				},
 				/**
@@ -295,7 +291,7 @@ steal('can.js'
 					//this.options.match = routeData.match;
 					//this.renderView(this.options.match.blue,this.options.match.purple);
 					this.options.settings.startMatchCollapsed(false);
-					this.options.settings.isReloading(true);
+					this.options.settings.isManualReloading(true);
 
 					//this.reloadMatch();
 

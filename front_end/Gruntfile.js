@@ -51,7 +51,8 @@ module.exports = function (grunt) {
 					timestamp: true,
 					process: function (content, srcpath) {
 						// set steal's data-env to production
-						var temp = content.replace(/data-env="development"/g, 'data-env="production"');
+						var temp;
+						temp = content.replace(/data-env="development"/g, 'data-env="production"');
 						// fix src-path (needs to match the path where the steal.js file gets located through grunt-copy)
 						temp = temp.replace(/src='\.\.\/node_modules\/steal\/steal\.js'/g, 'src="../steal.production.js"');
 						// change videojs paths
