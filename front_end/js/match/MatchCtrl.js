@@ -59,16 +59,9 @@ steal('can.js'
 					var self = this;
 					registerEventHandlers();
 
-					if (options.settings.startMatchCollapsed()) {
-						options.$panelContainer.css({display: 'none'});
-						options.$appButtons.css({display: 'none'});
-						$(WindowCtrl.events).trigger('collapsed');
-					} else {
-						options.$panelContainer.css({display: 'block'});
-						options.$appButtons.css({display: 'block'});
-						$(WindowCtrl.events).trigger('expanded');
-					}
 					self.countDocumentBlurHandlers = 0; // TODO: remove, nut used
+					options.$panelContainer.css({display: 'none'});
+					options.$appButtons.css({display: 'none'});
 
 					var mouseUpCb = function (info) {
 						if (info.onGame === true) {
@@ -101,36 +94,45 @@ steal('can.js'
 						/**
 						 * @event MatchCtrl#minimized
 						 */
-						$(WindowCtrl.events).on('minimized', function () {
+						WindowCtrl.events.on('minimized', function () {
 
 						});
 						/**
 						 * @event MatchCtrl#restored
 						 */
-						$(WindowCtrl.events).on('restored', function () {
+						WindowCtrl.events.on('restored', function () {
 
+						});
+
+						WindowCtrl.events.on('gameEnded', function () {
+							console.log('should expand now!');
+							self.expandPanels();
 						});
 						/**
 						 * @event MatchCtrl#collapsed
 						 */
-						$(WindowCtrl.events).on('collapsed', function () {
+						WindowCtrl.events.on('collapsed', function () {
 							var $appBar = $(self.options.appBar);
 							$appBar.addClass('collapsed');
+							options.$panelContainer.css({display: 'none'});
+							options.$appButtons.css({display: 'none'});
 						});
 						/**
 						 * @event MatchCtrl#expanded
 						 */
-						$(WindowCtrl.events).on('expanded', function () {
+						WindowCtrl.events.on('expanded', function () {
 							var $appBar = $(self.options.appBar);
 							$appBar.removeClass('collapsed');
+							options.$panelContainer.css({display: 'block'});
+							options.$appButtons.css({display: 'block'});
 						});
 
-						$(WindowCtrl.events).on('matchReady', function () {
+						WindowCtrl.events.on('matchReady', function () {
 							steal.dev.log('matchReady triggered');
 							WindowCtrl.openMatch();
 
 							if (options.settings.startMatchCollapsed()) {
-								$(WindowCtrl.events).trigger('collapsed');
+								WindowCtrl.events.trigger('collapsed');
 								$(self.options.handle).addClass(self.options.handleAnimationClass);
 								$(self.options.appBar).addClass(self.options.animatedHandleClass);
 							} else {
@@ -140,6 +142,10 @@ steal('can.js'
 								}
 							}
 						});
+
+						WindowCtrl.events.on('summonerChangedEv', function () {
+							Routes.setRoute(Routes.reloadMatch);
+						})
 					}
 				},
 				/**
@@ -159,7 +165,7 @@ steal('can.js'
 						if (data.status == 503) {
 							self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
 						}
-						$(WindowCtrl.events).trigger('matchReady');
+						WindowCtrl.events.trigger('matchReady');
 						deferred.reject(data, status, jqXHR);
 					};
 					var resolveCB = function (matchModel) {
@@ -175,7 +181,8 @@ steal('can.js'
 							self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
 							// Controller for Tooltip
 							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
-							$(WindowCtrl.events).trigger('matchReady');
+							debugger;
+							WindowCtrl.events.trigger('matchReady');
 							deferred.resolve(matchModel);
 						}
 					};
@@ -185,6 +192,12 @@ steal('can.js'
 							//console.log('fps stable', localStorage.getItem(SettingsModel.STORAGE_FPS_STABLE));
 							// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
 							window.clearInterval(waitForStableFps);
+
+							if (self.options.settings.startMatchCollapsed()) {
+								WindowCtrl.events.trigger('collapsed');
+							} else {
+								WindowCtrl.events.trigger('expanded');
+							}
 
 							var name = self.options.settings.summonerName();
 							self.options.$overviewContainer.html(can.view(self.options.loadingTmpl, {summonerName: name}));
@@ -210,13 +223,27 @@ steal('can.js'
 					// TODO: currently not used due to memory leak - reloading window as whole when reloading for now
 					var self = this;
 
-					var model = self.options.model;
-					model.summonerId = self.options.settings.summonerId();
-					model.server = self.options.settings.server();
-					self.options.matchPromise = self.options.dao.loadMatchModel(model);
-					$.when(self.loadMatch()).always(function () {
-						$.proxy(self.expandPanels, self);
-					})
+					//this.options.match = routeData.match;
+					//this.renderView(this.options.match.blue,this.options.match.purple);
+					this.options.settings.startMatchCollapsed(false);
+					this.options.settings.isManualReloading(true);
+
+					location.reload();
+					// NOTE: this is executed BEFORE window gets reloaded
+					// TODO: move elsewhere if makes sense
+					Routes.resetRoute();
+					WindowCtrl.events.trigger('restored');
+
+					//// TODO: currently not used due to memory leak - reloading window as whole when reloading for now
+					//var self = this;
+					//
+					//var model = self.options.model;
+					//model.summonerId = self.options.settings.summonerId();
+					//model.server = self.options.settings.server();
+					//self.options.matchPromise = self.options.dao.loadMatchModel(model);
+					//$.when(self.loadMatch()).always(function () {
+					//	$.proxy(self.expandPanels, self);
+					//})
 				},
 				/**
 				 * collapses or expands the champion-panels
@@ -239,7 +266,7 @@ steal('can.js'
 
 					self.options.$appButtons.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL);
 					self.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
-						$(WindowCtrl.events).trigger('expanded');
+						WindowCtrl.events.trigger('expanded');
 					});
 				},
 				/** Collapse the champion panels
@@ -251,7 +278,7 @@ steal('can.js'
 
 					self.options.$appButtons.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL);
 					self.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
-						$(WindowCtrl.events).trigger('collapsed');
+						WindowCtrl.events.trigger('collapsed');
 					});
 
 				},

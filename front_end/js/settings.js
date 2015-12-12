@@ -3,12 +3,16 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 "use strict";
 steal(
-	'SettingsCtrl.js'
+	'WindowCtrl.js'
+	, 'SettingsCtrl.js'
 	, 'SettingsModel.js'
 	, 'Routes.js'
-	, function (/**SettingsCtrl*/ SettingsCtrl
+	, function (/**WindowCtrl*/ WindowCtrl
+		, /**SettingsCtrl*/ SettingsCtrl
 		, /**SettingsModel*/ SettingsModel
 		, /**Routes*/ Routes) {
+
+		WindowCtrl.enableStorageEvents();
 		Routes.ready();
 
 		var settings = new SettingsModel();

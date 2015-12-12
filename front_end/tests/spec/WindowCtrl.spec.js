@@ -6,7 +6,7 @@ describe("WindowCtrlSpec - ", function () {
 	var winCtrl;
 
 	afterEach(function () {
-		if (winCtrl.destroy !== 'undefined') {
+		if (winCtrl && winCtrl.destroy !== 'undefined') {
 			winCtrl.destroy();
 		}
 	});
@@ -221,7 +221,7 @@ describe("WindowCtrlSpec - ", function () {
 	//
 	//});
 
-	describe("WindowCtrl.events | ", function () {
+	fdescribe("WindowCtrl.events | ", function () {
 		var handlerMock;
 
 		var registerAndCallHandlerAndRemoveAgain = function (_handler) {
@@ -231,12 +231,15 @@ describe("WindowCtrlSpec - ", function () {
 		};
 		beforeEach(function () {
 			handlerMock = jasmine.createSpy('eventHandler');
-			WindowCtrl.events = {};
+			//winCtrl = new WindowCtrl();
+			//WindowCtrl.events = {};
 		});
 
 		it("should exist", function () {
 			var actual = WindowCtrl.events;
 			expect(actual).toBeDefined();
+			expect(WindowCtrl.events.on).toBeDefined();
+			expect(WindowCtrl.events.trigger).toBeDefined();
 		});
 		it("should make it possible to register and trigger events", function () {
 			$(WindowCtrl.events).on('someEvent', handlerMock);
@@ -246,6 +249,38 @@ describe("WindowCtrlSpec - ", function () {
 
 			expect(handlerMock).toHaveBeenCalled();
 			expect(handlerMock.calls.count()).toBe(2);
+		});
+		it("should make it possible to register and trigger events through method", function () {
+			WindowCtrl.events.on('someEvent', handlerMock);
+
+			WindowCtrl.events.trigger('someEvent');
+			WindowCtrl.events.trigger('someEvent');
+
+			expect(handlerMock).toHaveBeenCalled();
+			expect(handlerMock.calls.count()).toBe(2);
+		});
+		it("triggering an Event should set a localStorage value acchordingly", function () {
+			var expected = 'storageEvent';
+			WindowCtrl.events.on(expected, handlerMock);
+
+			WindowCtrl.events.trigger(expected);
+			expect(handlerMock).toHaveBeenCalled();
+
+			var actual = localStorage.getItem('eventFired');
+			expect(actual).toContain(expected);
+		});
+		it("should listen to storageEvent and trigger event acchordingly", function () {
+			WindowCtrl.enableStorageEvents();
+			WindowCtrl.events.on('thisEvent', handlerMock);
+
+			var key = 'eventFired',
+					newValue= 'thisEvent||dshdshsjheswhateverDate';
+
+			var se = document.createEvent('StorageEvent');
+			se.initStorageEvent('storage', false, false, key, null, newValue, '/', null);
+			window.dispatchEvent(se);
+
+			expect(handlerMock).toHaveBeenCalled();
 		});
 
 		it("should enable subControllers to register and trigger events from instance", function () {

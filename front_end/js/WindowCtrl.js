@@ -41,11 +41,53 @@ steal(
 				/**
 				 * Object for attaching and triggering Events for this Controller.
 				 * Usage:
-				 * $(WindowCtrl.events).on(...)
-				 * $(WindowCtrl.events).trigger(...)
+				 * WindowCtrl.events.on(...)
+				 * WindowCtrl.events.trigger(...)
+				 *
+				 * Possible Events (bound somewhere):
+				 *
+				 * collapsed after Match-panels got collapsed
+				 * expanded after Match-panels got expanded
+				 * minimized after a window got minimized
+				 * restored after a window got restored
+				 *
+				 * fpsStable - when fps has been stabilized at the start of a game
+				 * summonerChangedEv - triggered when summonerId has changed
+				 *
+				 * matchReady - when match-data is loaded
+				 * gameStarted - when league-game has started
+				 * gameEnded - when league game has ended
 				 */
-				events: {},
+				events: {
+					on: function (type, cb) {
+						$(WindowCtrl.events).on(type, cb);
+					},
+					trigger: function (type) {
+						var storageEventKey = 'eventFired';
+						var valueDivider = '||';
 
+						$(WindowCtrl.events).trigger(type);
+						localStorage.setItem(storageEventKey, type + valueDivider + new Date());
+					}
+				},
+				enableStorageEvents: function () {
+					var storageEventKey = 'eventFired';
+					var valueDivider = '||';
+					$(window).off('storage');
+					$(window).on('storage', function () { // does not trigger for the window that made the storage-changes
+						if (event.key === storageEventKey){
+							var evType = extractEvent(event.newValue);
+							WindowCtrl.events.trigger(evType);
+							console.log(event);
+						}
+
+
+					});
+
+					function extractEvent(value){
+						return value.substr(0, value.indexOf(valueDivider));
+					}
+				},
 				/**@static*/
 				getCenteredX: function (winWidth) {
 					return parseInt(this.SCREEN_WIDTH / 2 - winWidth / 2);
@@ -76,7 +118,7 @@ steal(
 						if (result.status == "success") {
 							var odkWindow = result.window;
 							overwolf.windows.restore(odkWindow.id, function (result) {
-								$(WindowCtrl.events).trigger('restored');
+								WindowCtrl.events.trigger('restored');
 								deferred.resolve(odkWindow);
 							});
 						}
@@ -92,8 +134,8 @@ steal(
 					var self = this;
 					var deferred = $.Deferred();
 					overwolf.windows.obtainDeclaredWindow(name, function (result) {
-								if (result.status == "success") {
-									if (result.window.isVisible) {
+						if (result.status == "success") {
+							if (result.window.isVisible) {
 								self.minimize(name);
 								if (name == 'Match') {
 									SettingsModel.isMatchMinimized(true);
@@ -154,7 +196,7 @@ steal(
 					var self = this;
 					$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openSettings: ", odkWindow);
-						if (!localStorage.getItem('settings-opened-before')){
+						if (!localStorage.getItem('settings-opened-before')) {
 							// Only center settings-window the first time it opens
 							var x = self.getCenteredX(odkWindow.width);
 							var y = self.getCenteredY(500);

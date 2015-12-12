@@ -7,15 +7,18 @@ steal(
 	, 'MatchDAO.js'
 	, 'MatchModel.js'
 	, 'SettingsModel.js'
+	, 'WindowCtrl.js'
 	, 'MatchCtrl.js'
 	, 'Routes.js'
 	, function (Hotkeys
 		, /**MatchDAO*/ MatchDAO
 		, /**MatchModel*/ MatchModel
 		, /**SettingsModel*/ SettingsModel
+		, /** WindowCtrl */ WindowCtrl
 		, /** MatchCtrl */ MatchCtrl
 		, /** Routes */ Routes) {
 
+		WindowCtrl.enableStorageEvents();
 		Routes.ready();
 		Hotkeys.registerHotkeys();
 

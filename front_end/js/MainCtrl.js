@@ -22,8 +22,8 @@ steal(
 			 * */
 			gameStarted: function (changeData) { // TODO: move all this eventstuff into own service!
 				return changeData.gameInfo !== null &&
-						changeData.gameInfo.title == "League of Legends" &&
-						changeData.gameChanged; // gamechanged indicates that Game just started
+					changeData.gameInfo.title == "League of Legends" &&
+					changeData.gameChanged; // gamechanged indicates that Game just started
 			}
 			,
 			/**
@@ -33,8 +33,8 @@ steal(
 			 * */
 			gameFinished: function (changeData) { // TODO: move all this eventstuff into own service!
 				return changeData.gameInfo !== null &&
-						changeData.gameInfo.title == "League of Legends" &&
-						changeData.runningChanged; // runningchanged indicates that Game just finished
+					changeData.gameInfo.title == "League of Legends" &&
+					changeData.runningChanged; // runningchanged indicates that Game just finished
 			},
 			_notifyWhenFPSStable: function (/** FPSInfo */ result) { // TODO: move all this eventstuff into own service!
 				MainCtrl.mostRecentFPS.push(result.Fps);
@@ -44,7 +44,7 @@ steal(
 				if (isFpsNumberStable(MainCtrl.mostRecentFPS, 30, 4)) {
 					steal.dev.log('FPS stable with ' + result.Fps + ' triggering fpsStable');
 					console.log('FPS stable with ' + result.Fps + ' triggering fpsStable');
-					$(WindowCtrl.events).trigger('fpsStable');
+					WindowCtrl.events.trigger('fpsStable');
 				}
 
 				/**
@@ -85,7 +85,7 @@ steal(
 			}
 			,
 			registerFpsStableListener: function () {// TODO: move all this eventstuff into own service!
-				$(WindowCtrl.events).on('fpsStable', function () {
+				WindowCtrl.events.on('fpsStable', function () {
 					steal.dev.log('fpsStable event');
 					console.log('fpsStable event');
 					MainCtrl.removeStableFpsListener();
@@ -93,21 +93,17 @@ steal(
 
 					//settings.cachedGameAvailable(true);
 
-					if (!SettingsModel.closeMatchWithGame()) {
-						MainCtrl.closeMatch();
-						window.setTimeout(function () {
-							MainCtrl.openMatch(); // prevents openMatch to be executed before closeMatch()!
-						}, 10);
-					} else {
-						MainCtrl.openMatch();
-					}
+					MainCtrl.openMatch();
 					//overwolf.benchmarking.stopRequesting(); // MPTE: stopping requesting makes it impossible to start it again until app restarts!?
 				});
 			},
 			_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
 				steal.dev.warn('League of Legends game started', new Date());
 				console.log('League of Legends game started', new Date());
-				if (SettingsModel.isSummonerSet()){
+				if (!SettingsModel.closeMatchWithGame()) {
+					MainCtrl.closeMatch();
+				}
+				if (SettingsModel.isSummonerSet()) {
 					MainCtrl.removeStableFpsListener(); // to prevent unwanted listener-stacking
 					MainCtrl.addStableFpsListener();
 					settings.isInGame(true);
@@ -116,7 +112,7 @@ steal(
 					WindowCtrl.openMain(); // rest is handled from there for first start
 				}
 			},
-			_handleGameEnd: function(settings) {// TODO: move all this eventstuff into own service!
+			_handleGameEnd: function (settings) {// TODO: move all this eventstuff into own service!
 				steal.dev.log('stopping possible fps requests');
 				MainCtrl.removeStableFpsListener();
 				//settings.cachedGameAvailable(false);
@@ -125,6 +121,7 @@ steal(
 					WindowCtrl.closeMatch();
 				}
 				settings.isInGame(false);
+				WindowCtrl.events.trigger('gameEnded');
 			},
 			registerGameStartEndListener: function (settings) {// TODO: move all this eventstuff into own service!
 				// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
