@@ -24,7 +24,7 @@ import './SettingsCtrl.spec';
 import './match/MatchCtrl.spec';
 import './match/MatchModel.spec'
 import './Routes.spec';
-import './boot.spec';
+import 'Boot.spec';
 import './WindowCtrl.spec';
 
 beforeEach(function () {
