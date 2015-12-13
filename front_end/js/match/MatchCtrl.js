@@ -193,12 +193,6 @@ steal('can.js'
 							// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
 							window.clearInterval(waitForStableFps);
 
-							if (self.options.settings.startMatchCollapsed()) {
-								WindowCtrl.events.trigger('collapsed');
-							} else {
-								WindowCtrl.events.trigger('expanded');
-							}
-
 							var name = self.options.settings.summonerName();
 							self.options.$overviewContainer.html(can.view(self.options.loadingTmpl, {summonerName: name}));
 							self.options.$overviewContainer.removeClass('failed').addClass('loading');

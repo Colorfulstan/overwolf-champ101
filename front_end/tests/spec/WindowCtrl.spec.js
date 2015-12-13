@@ -221,7 +221,7 @@ describe("WindowCtrlSpec - ", function () {
 	//
 	//});
 
-	fdescribe("WindowCtrl.events | ", function () {
+	describe("WindowCtrl.events | ", function () {
 		var handlerMock;
 
 		var registerAndCallHandlerAndRemoveAgain = function (_handler) {
