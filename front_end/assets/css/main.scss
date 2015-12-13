@@ -1,0 +1,155 @@
+// imported as .css
+@import "reset.css";
+@import "grid_12.css";
+// imported into main.css
+@import "imports/fountain-spinner";
+@import "helper/colors";
+@import "helper/variables";
+@import "helper/classes";
+@import "vendor/materialize/materialize";
+@import "vendor/fa/font-awesome";
+@import "imports/icons";
+@import "imports/tooltip";
+@import "imports/champions";
+@import "imports/settings";
+@import "imports/hotkeys-spinner";
+@import "imports/match";
+
+* {
+  overflow: hidden;
+  color: $color-font-bright;
+
+  font-family: 'Roboto';
+  letter-spacing: 0.02em;
+  line-height: 1.3rem;
+  -webkit-user-select: none !important; // disables text-selection everywhere;
+}
+
+html {
+  font-size: $font-size-base;
+  width: 100%;
+  //height: 100%;
+}
+
+body {
+  width: 100%;
+  //height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  padding-bottom: 0.5em;
+
+  &.headline-muted {
+    font-weight: 100;
+    opacity: 0.5;
+  }
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.3rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+hr {
+  width: 100%;
+  border-color: $color-accent-1;
+  border-bottom: none;
+}
+
+p {
+  //  text-align: center;
+  padding: 0 0 0 0;
+  font-weight: 300;
+
+  cursor: default;
+}
+
+form {
+  overflow: visible;
+}
+
+label {
+  font-size: 1rem !important;
+}
+
+select {
+  height: 2rem !important;
+  padding: 4px !important;
+  border-radius: 0;
+}
+
+select:focus {
+  outline-color: $color-accent-2;
+  border-color: $color-accent-2;
+}
+
+.btn:focus {
+  opacity: 1;
+}
+
+body {
+  &#settings, &#main, &#feedback {
+    & #content-wrapper {
+      background-color: $color-bg;
+    }
+  }
+}
+
+ul {
+  li {
+    padding-top: $spacer/2;
+    line-height: 1.3rem;
+    .fa {
+      padding-top: 2px;
+    }
+  }
+}
+
+a:hover {
+  text-decoration: underline;
+  table & {
+    text-decoration: none;
+  }
+}
+
+font {
+  font-size: inherit !important;
+}
+
+#main, #settings {
+  header {
+    background: $color-bg-tooltip-header;
+  }
+  .app-buttons {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+footer#disclaimer {
+  font-size: 0.7rem;
+  text-align: justify;
+  line-height: 0.8rem;
+  letter-spacing: 0.4px;
+  font-weight: 100;
+}

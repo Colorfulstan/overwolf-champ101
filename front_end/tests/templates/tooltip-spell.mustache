@@ -1,0 +1,23 @@
+<div class="table">
+	<div class="col-xs-6 padded-right line-right">
+		<div class="padded-right">
+			<h2 class="spell-name">{{name}}</h2>
+
+			<p class="spell-description text-body">
+				{{#tooltip}}{{{.}}}{{/tooltip}}
+				{{^tooltip}}{{{description}}}{{/tooltip}}
+			</p>
+		</div>
+	</div>
+	<div class="col-xs-6 padded-left line-left collapse-border-left">
+		<div class="padded-left">
+			<div class="spell-values row">
+			{{>templates/parts/spell-values-table.mustache}}
+		</div>
+		{{ #videoAvailable }}
+		<div id="spell-video-container" class="row">
+		</div>
+		{{ /videoAvailable }}
+		</div>
+	</div>
+</div>

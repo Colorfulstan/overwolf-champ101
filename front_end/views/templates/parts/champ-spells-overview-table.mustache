@@ -1,0 +1,51 @@
+<table class="spell-values-table">
+	<thead>
+	<tr>
+		<td width="100px"></td>
+		{{#spells}}
+			<td width="21%">
+				<div class="champ-spells">
+					<div class="champion-spell spell img"
+						 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"
+						 title="{{name}}" data-type="ability">
+						<div class="champ-spell-border"></div>
+					</div>
+				</div>
+				<p class="spell-key-icon text-center padded-bot-half text-muted" data-index-1="{{ number }}"></p>
+				<!--<h5 class="headline-muted text-center">{{name}}</h5>-->
+				</td>
+		{{/spells }}
+	</tr>
+	</thead>
+	<tbody>
+	<tr class="spells-overview-table__cooldown">
+		<td class="text-right text-muted">Cooldown</td>
+		{{#spells}}
+			<td class="text-center">
+				{{#cooldownBurn}}{{.}}{{/cooldownBurn}}
+				{{^cooldownBurn}}&nbsp;–&nbsp;{{/cooldownBurn}}
+			</td>
+		{{/spells }}
+	</tr>
+	<tr class="spells-overview-table__cost">
+		<td class="text-right text-muted">Cost</td>
+		{{#spells}}
+			<td class="text-center {{costType}}">
+					<span>
+						{{#resource}} {{.}} {{/resource}}
+						{{^resource}} &nbsp;–&nbsp; {{/resource}}
+					</span>
+			</td>
+		{{/spells }}
+	</tr>
+	<tr class="spells-overview-table__range">
+		<td class="text-right text-muted">Range</td>
+		{{#spells}}
+			<td class="text-center">
+				{{#rangeBurn}} {{.}} {{/rangeBurn}}
+				{{^rangeBurn}} &nbsp;–&nbsp; {{/rangeBurn}}
+			</td>
+		{{/spells }}
+	</tr>
+	</tbody>
+</table>

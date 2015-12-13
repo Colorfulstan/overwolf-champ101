@@ -1,0 +1,32 @@
+<div id="match-participants">
+	<div class="col-xs-5 team blue">
+		<div class="pull-right">
+	{{#blue}}
+		{{#champ}}
+			<div title="{{name}}" class="portrait img addable"
+				 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;">
+				<i class="add fa fa-plus fa-lg"></i>
+			</div>
+		{{/champ}}
+		{{ /blue }}</div>
+	</div>
+	<div id="vs" class="col-xs-2">
+		<div class="col-xs-4 btn show-team blue addable">
+			<i class="add fa fa-plus fa"></i>
+		</div>
+		<p class="col-xs-4 padded-top">VS</p>
+		<div class="col-xs-4 btn show-team purple addable">
+			<i class="add fa fa-plus fa"></i>
+		</div>
+	</div>
+	<div class="col-xs-5 team purple"><div class="pull-left">
+		{{ #purple }}
+				{{#champ}}
+					<div title="{{name}}" class="portrait img addable"
+						 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;">
+						<i class="add fa fa-plus fa-lg"></i>
+					</div>
+				{{/champ}}
+		{{ /purple }}
+	</div></div>
+</div>

@@ -1,0 +1,14 @@
+<video controls="" class="video-js vjs-sublime-skin"
+	   poster="{{videoPosterSrc}}" preload="metadata" width="346"
+	   height="196" id="videoPlayer">
+	{{!--spell-{{ videoId}}--}}
+	{{#videoSrcMp4}}
+		<source src="{{.}}" type="video/mp4">
+	{{/videoSrcMp4}}
+	{{#videoSrcOgg}}
+		<source src="{{.}}" type="video/ogg">
+	{{/videoSrcOgg}}
+	{{#videoSrcWebm}}
+		<source src="{{.}}" type="video/webm">
+	{{/videoSrcWebm}}
+</video>

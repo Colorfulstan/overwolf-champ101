@@ -1,0 +1,30 @@
+select {
+  color: #000;
+  option {
+    color: inherit;
+  }
+}
+
+#settings {
+
+  table {
+    tbody#hotkeys-rows{
+      display: block;
+    }
+  }
+
+}
+
+#btn-save-close {
+  text-align: center;
+  height: 30px;
+  padding: 5px 0 0 0;
+  border: none;
+}
+
+#btn-cancel {
+  text-align: center;
+  height: 30px;
+  padding-top: 8px;
+  border: none;
+}

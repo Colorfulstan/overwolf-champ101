@@ -1,0 +1,35 @@
+<div class="tooltip-container__content  window-border no-border-top table col-xs-6">
+	{{#cooldownBurn}}{{! rendered, if the spell is not the passive and has values }}
+		<div class="spell-values row padded-top">
+			{{>templates/parts/spell-values-table.mustache}}
+		</div>
+		<hr class=" margin-0" />
+	{{/cooldownBurn}}
+	<div class="">
+		{{#videoAvailable }}
+			<div id="spell-video-container" class="row video--available">
+				<div class="tooltip-container__content__header video__user-info row text-center padded-top padded-bot">
+					<h2 class="spell-name headline-muted">
+						<!--<span class="spell-key-icon" data-index-1="{{ number }}"></span> -->
+						{{name}}</h2>
+
+					<p>To Play the video, click on the ability.</p>
+				</div>
+			</div>
+		{{/videoAvailable }}
+		<div class="tooltip-container__content__header video--not-available row text-center padded-top padded-bot-2">
+			<h2 class="spell-name headline-muted">
+				<!--<span class="spell-key-icon" data-index-1="{{ number }}"></span>-->
+				{{name}}</h2>
+
+			<p>No video available</p>
+		</div>
+	</div>
+	<hr class=" margin-0" />
+	<div class="">
+		<p class="spell-description text-body text-justify padded padded-left-2 padded-right-2">
+			{{#tooltip}}{{{.}}}{{/tooltip}}
+			{{^tooltip}}{{{description}}}{{/tooltip}}
+		</p>
+	</div>
+</div>

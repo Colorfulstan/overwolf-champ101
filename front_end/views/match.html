@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<title>Champ 101 | Basic League of Legends Champion Knowledge</title>
+
+	<!--suppress HtmlUnknownAttribute -->
+	<script type='text/javascript' src='../node_modules/steal/steal.js'
+			data-env="development"
+			data-main="js/match"
+			config-path="../stealconfig.js"
+			bundles-path="script-bundles"></script>
+
+	<link href="../node_modules/video.js/dist/video-js/video-js.min.css" rel="stylesheet">
+	<link href="../assets/css/videojs-sublime-skin.min.css" rel="stylesheet">
+	<script src="../node_modules/video.js/dist/video-js/video.js"></script>
+
+	<link rel="stylesheet" href="../assets/css/main.css" type="text/css" />
+</head>
+<body id="match">
+<div id="content">
+	<div id="panel-container">
+		<div id="match-overview-container" class="panel row">
+			<!-- contains all the champs within the game as Thumbnails -->
+			<!-- match-overview.mustache -->
+		</div>
+
+		<div class="app-buttons app-buttons--left" style="display: none">
+			<div class="btn btn-info icon icon-home"><i class="fa fa-info-circle fa-xlg"></i></div>
+			<div class="btn btn-settings icon icon-settings"><i class="fa fa-cog fa-xlg"></i></div>
+		</div>
+		<!--<div class="btn-feedback icon icon-feedback"><i class="fa fa-commenting fa-xlg"></i></div>-->
+		<!--<div class="btn-help icon icon-help"><i class="fa fa-question-circle fa-xlg"></i></div>-->
+		<div class="app-buttons app-buttons--right" style="display: none">
+			<div class="btn btn-minimize icon icon-close"><i class="fa fa-times fa-xlg"></i></div>
+			<div class="btn btn-reload icon icon-reload"><i class="fa fa-refresh fa-xlg"></i></div>
+		</div>
+
+		<div class="row">
+			<div id="champion-container" class="col-xs-12 table">
+				<div id="close-all-btn" class="btn close table hidden"><span class="table-cell middle">close all</span>
+				</div>
+
+				<!-- container to contain all the champion-panels with their spell informations -->
+				<!-- champion-panel.mustache -->
+			</div>
+		</div>
+
+		<div id="tooltip-container">
+			<!-- for the tooltip to be shown -->
+			<!-- tooltip/XXXX.mustache -->
+		</div>
+	</div>
+	<div id="match-app-bar" class="btn collapsed"> 
+		<div id="handle" class="window-border"></div>
+	</div>
+</div>
+</body

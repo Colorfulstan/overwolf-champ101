@@ -1,0 +1,265 @@
+@import "variables";
+@import "colors";
+
+.page-heading {
+  font-size: 2.5rem;
+}
+
+.blue {
+  background: $color-blue;
+}
+
+.purple {
+  background: $color-red;
+}
+
+.vertical-center {
+  transform: translateY(45%);
+}
+
+.text-danger {
+  color: $color-accent-2;
+  font-weight: 400;
+  line-height: 1.3rem !important;
+}
+
+.center-vertical {
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+
+.muted {
+  opacity: 0.5;
+}
+.fa-xlg {
+  font-size: 1.5em !important;
+}
+.padded {
+  padding: $spacer !important;
+  &-left { padding-left: $spacer !important;
+    &-0 { padding-left: 0 !important; }
+    &-half { padding-left: $spacer/2 !important; }
+    &-2 { padding-left: $spacer*2 !important; }
+  }
+  &-right { padding-right: $spacer !important; &-0 {
+      padding-right: 0 !important;
+    }
+    &-half { padding-right: $spacer/2 !important; }
+    &-2 { padding-right: $spacer*2 !important; }
+  }
+  &-top { padding-top: $spacer !important;
+    &-0 { padding-top: 0 !important; }
+    &-half { padding-top: $spacer/2 !important; }
+    &-2 { padding-top: $spacer*2 !important; }
+  }
+  &-bot { padding-bottom: $spacer !important;
+    &-0 { padding-bottom: 0 !important; }
+    &-half { padding-bottom: $spacer/2 !important; }
+    &-2 { padding-bottom: $spacer*2 !important; }
+  }
+  &-0 { padding: 0 !important; }
+  &-half { padding: $spacer/2 !important; }
+  &-2 { padding: $spacer*2 !important}
+}
+
+.margin-0 {
+  margin: 0 0 0 0 !important;
+}
+
+.line {
+  &-right {
+    border-right: $style-border-line;
+    &-muted {
+      border-right: $style-border-line-muted
+    }
+  }
+  &-left {
+    border-left: $style-border-line;
+    &-muted {
+      border-left: $style-border-line-muted
+    }
+  }
+}
+
+.text {
+  &-center {
+    text-align: center !important;
+  }
+  &-right {
+    text-align: right !important;
+  }
+  &-body {
+    line-height: 1.3em !important;
+  }
+  &-vertical-center {
+    vertical-align: middle !important;
+  }
+  &-muted {
+    font-weight: 100;
+    opacity: 0.5;
+  }
+}
+
+.height-100 {
+  height: 100%;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.padded-sides-neg-2 {
+  margin-left: -$spacer*2;
+  margin-right: -$spacer*2;
+  width: 200%;
+}
+
+.collapse-border {
+  &-left {
+    margin-left: -$style-border-line-width !important;
+  }
+  &-right {
+    margin-right: -$style-border-line-width !important;
+  }
+}
+
+.window-border {
+  border: 3px ridge $color-accent-1;
+
+  &-radius {
+    border-radius: 20px;
+  }
+}
+.tooltip-container__content.window-border {
+  border-width: 2px !important;
+}
+
+.no-border {
+  border: none !important;
+  &-top {
+    border-top: none !important;
+  }&-right {
+    border-right: none !important;
+  }&-bottom {
+    border-bottom: none !important;
+  }&-left {
+    border-left: none !important;
+  }
+}
+
+.table {
+  display: table !important;
+  &-cell {
+    display: table-cell !important;
+    height: 100% !important;
+    &.middle {
+      vertical-align: middle !important;;
+      text-align: center !important;;
+    }
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.btn-resize {
+  position: absolute;
+  cursor: se-resize;
+  bottom: 5px;
+  right: 5px;
+  opacity: 0;
+}
+
+.btn {
+  opacity: 0.8;
+  cursor: pointer;
+
+  &:hover, &.active{
+    opacity: 1;
+  }
+}
+
+.loading {
+    background-color: $color-loading !important;
+
+  .loading-state {
+    display: block;
+  }
+  .failed-state{
+    display: none;
+  }
+}
+
+.failed {
+  background-color: $color-failed !important;
+
+  .loading-state {
+    display: none;
+  }
+  .failed-state{
+    display: block;
+  }
+}
+
+.success {
+  background-color: $color-success !important;
+}
+
+.whats-this {
+  text-decoration: none;
+}
+
+// class for elements that show pin icons on hover / when having .active class
+.playable {
+  [class^="video-"] {
+    display: none;
+  }
+  &:hover {
+    .video-on {
+      display: none;
+    }
+    .video-off {
+      display: block;
+    }
+  }
+  &.active:hover {
+    .video-on {
+      display: block;
+    }
+    .video-off {
+      display: none;
+    }
+  }
+  &.passive {
+    [class^="video-"] {
+      position: absolute;
+      bottom: -10px;
+    }
+  }
+}
+
+// class for elements that can be added as panel and show plus sign on hover
+.add {
+  display: none !important;
+}
+
+.addable {
+  display: table;
+  &:hover {
+    .add {
+      display: table-cell !important;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
+}
+
+.whats-this-display {
+  font-weight: 200;
+  text-align: justify;
+}

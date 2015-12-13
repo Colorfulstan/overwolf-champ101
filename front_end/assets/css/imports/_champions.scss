@@ -1,0 +1,237 @@
+@import "../helper/colors.scss";
+@import "../helper/variables.scss";
+
+@mixin tooltip-arrow($width, $height, $bottom, $left, $color){
+  display: block;
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: $width solid transparent;
+  border-right: $width solid transparent;
+  border-bottom: $height solid;
+  border-bottom-color: $color;
+  position: absolute;
+  bottom: $bottom;
+  left: $left;
+}
+
+#champion-container {
+  height: auto;
+  position: relative;
+}
+#close-all-btn {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  background-color: $color-failed;
+  right: 0;
+  top: 0;
+  z-index: 99;
+
+  &:hover {
+    span{
+      font-weight: 600;
+    }
+  }
+
+}
+
+$portrait-width-height: 75px;
+.champion-panel {
+  height: 80px;
+  border-top: 1px dashed #ccc;
+  padding-right: 15px;
+  padding-left: 15px;
+  position: relative;
+  opacity: 0.8;
+  &:hover, &.sticky-tooltip {
+    opacity: 1;
+  }
+
+  //&:last-child {
+  //  border-bottom-left-radius: 40px;
+  //  border-bottom-right-radius: 40px;
+  //  height: 80px;
+  //}
+
+  .portrait {
+    height: $portrait-width-height;
+    width: $portrait-width-height;
+    background-size: ($portrait-width-height + 7px) ($portrait-width-height + 7px) !important;
+    background-position: center !important;
+    float: left;
+    border-radius: 100%;
+    // TODO: as class or variable
+    -moz-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
+    -webkit-box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.3);
+    overflow: visible;
+    opacity: 1 !important;
+    transform: scale(0.8);
+
+    &:hover {
+      &:before {
+        @include tooltip-arrow(16px, 20px, -14px, 24px, $color-tooltip-arrow-2);
+      }
+    }
+    &:active { // not used currently
+      &:before {
+        @include tooltip-arrow(16px, 20px, -14px, 24px, $color-tooltip-arrow-2);
+      }
+    }
+  }
+  &.blue {
+    background-color: $color-blue;
+    .champion-spell:after { color: $color-blue}
+  }
+
+  &.purple {
+    background-color: $color-red;
+    .champion-spell:after { color: $color-red
+    }
+  }
+
+  .passive {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    left: 50px;
+    top: 35px;
+
+    border-radius: 100%;
+    transform: scale(0.6);
+    -moz-box-shadow: -2px -2px 12px 0px;
+    -webkit-box-shadow: -2px -2px 12px 0px;
+    box-shadow: -2px -2px 12px 0px;
+    overflow: visible;
+
+    &:hover {
+      &:before {
+        @include tooltip-arrow(10px, 14px, -12px, 15px, $color-tooltip-arrow-2);
+      }
+    }
+    &.active { // not used currently
+      &:before {
+        @include tooltip-arrow(10px, 14px, -12px, 15px, $color-tooltip-arrow-2);
+      }
+    }
+  }
+
+  .champ-spells {
+    height: 100%;
+    float: left;
+    position: relative;
+    //left: -65px;
+    //top: -10px;
+    .img {
+      height: 48px;
+      width: 48px;
+      float: left;
+      margin-top: 20px;
+      //margin-left: 25px;
+      border-radius: 100%;
+      box-sizing: content-box;
+      overflow: visible;
+    }
+    .champ-spell-border {
+      border-radius: 100%;
+      border: solid 5px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3);
+      width: 48px;
+      height: 48px;
+      margin: -5px 0 0 -5px;
+      pointer-events: none;
+    }
+
+    .champion-spell {
+      position: relative;
+      transform: scale(0.7);
+      margin-left: 4px;
+      &:after { // circle for the key
+//        display: block;
+//        content: '';
+//        pointer-events: none;
+//        position: absolute;
+//        z-index: 9999;
+//
+//        width: 25px;
+//        height: 20px;
+//        bottom: -10px;
+//        right: -7px;
+//        padding-top: 5px;
+//
+//        border-radius: 100%;
+//        background-color: rgba(255,255,255,0.5);
+//        color: #000;
+//        font-weight: bold;
+//        text-align: center;
+
+        display: block;
+        content: '';
+        pointer-events: none;
+        position: absolute;
+        z-index: 9999;
+        width: 25px;
+        height: 20px;
+        bottom: -20px;
+        right: -20px;
+        padding-top: 5px;
+        border-radius: 100%;
+        font-size: 18px;
+        font-weight: 800;
+        text-align: center;
+        text-shadow: -1px -1px 1px rgba(0, 0, 0, 1);
+      }
+      &:hover, &.active {
+        z-index: 999;
+        &:before {
+          @include tooltip-arrow(20px, 25px, -31px, 5px, $color-bg);
+        }
+      }
+
+      //&[data-index-1="1"]{
+      //  &:after { content: 'Q'; }
+      //}
+      //&[data-index-1="2"]{
+      //  &:after { content: 'W'; }
+      //}
+      //&[data-index-1="3"]{
+      //  &:after { content: 'E'; }
+      //}
+      //&[data-index-1="4"]{
+      //  &:after { content: 'R'; }
+      //}
+
+      &[data-index-1="5"] {
+        clear: left;
+      }
+
+      &[data-index-1="5"],
+      &[data-index-1="6"],
+      &[data-index-1="7"],
+      &[data-index-1="8"] {
+        position: relative;
+        top: -68px;
+        -webkit-clip-path: inset(0 0 0 25px);
+        clip-path: inset(0 0 0 25px);
+        overflow: hidden;
+        -webkit-filter: grayscale(1);
+
+        &:hover, &.active {
+          -webkit-clip-path: initial;
+          clip-path: initial;
+          overflow: visible;
+        }
+        &::after { // qwer attachments
+          display:none;
+        }
+      }
+    }  // .champion-spell
+  }// .champ-spells
+
+  .panel-control {
+    height: 100%;
+    width: 30px;
+    float: right;
+  }
+}// .champion-panel

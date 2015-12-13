@@ -1,0 +1,35 @@
+{{#. }}
+<div class="champion-panel panel {{ team }} col-xs-6" data-name="{{ champ.name }}">
+	{{#champ}}
+
+	<div class="portrait btn img" style="background: url('{{ imgSrc }}')" title="{{ name }}" ></div>
+
+		{{#passive}}
+		<div class="spell passive btn img playable"
+			 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"
+					 title="{{ name }}" data-type="passive">
+			<i class="video-on fa fa-pause"></i>
+			<i class="video-off fa fa-play"></i>
+		</div>
+		{{/passive}}
+	{{/champ}}
+	{{ resetIndex }}
+	<div class="champ-spells">
+		{{#champ.spells }}
+		<div class="champion-spell spell btn img playable"
+			 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;"
+			 title="{{name}}" data-index-1="{{ index }}" data-type="ability">
+		<div class="champ-spell-border"></div>
+		<i class="video-on fa fa-pause"></i>
+		<i class="video-off fa fa-play"></i>
+	</div>
+		{{/champ.spells }}
+		{{ resetIndex }}
+	</div>
+
+	{{!--(champSelect)--}}
+
+	<div class="panel-control btn close table"><i class="fa fa-times fa-2x table-cell middle"></i></div>
+
+</div>
+{{/. }}
