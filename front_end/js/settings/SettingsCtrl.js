@@ -87,7 +87,11 @@ steal(
 			},
 			closeSettings: function () {
 				var self = this;
-				WindowCtrl.close(self.odkWindow.name);
+				WindowCtrl.events.trigger('settingsClosed');
+				window.setTimeout(function () {
+					WindowCtrl.close(self.odkWindow.name);
+				});
+
 			},
 			'#btn-save-close click': function ($btn, ev) {
 				$btn.text('checking'); // TODO: replace with class
@@ -95,15 +99,13 @@ steal(
 			},
 			'.btn-close click': function ($el, ev) {
 				var self = this;
-				window.setTimeout(function () {
-					self.closeSettings();
-				}, 100);
+				self.closeSettings();
 			},
 			'.btn-cancel click': function ($el, ev) {
+				var self = this;
 				// restore the old settings-values
 				this.options.settings.reset();
-				// close window
-				WindowCtrl.close(this.odkWindow.name);
+				self.closeSettings();
 			},
 			'#server-region-select change': function ($el, ev) {
 				this.options.settings.server($el.val());

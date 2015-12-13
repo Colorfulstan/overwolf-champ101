@@ -57,10 +57,15 @@ steal(
 				 * matchReady - when match-data is loaded
 				 * gameStarted - when league-game has started
 				 * gameEnded - when league game has ended
+				 *
+				 * settingsClosed - called right before Settingswindow closes
 				 */
 				events: {
 					on: function (type, cb) {
 						$(WindowCtrl.events).on(type, cb);
+					},
+					one: function (type, cb) {
+						$(WindowCtrl.events).one(type,cb);
 					},
 					trigger: function (type) {
 						var storageEventKey = 'eventFired';
@@ -68,6 +73,9 @@ steal(
 
 						$(WindowCtrl.events).trigger(type);
 						localStorage.setItem(storageEventKey, type + valueDivider + new Date());
+					},
+					off: function (type) {
+						$(WindowCtrl.events).off(type);
 					}
 				},
 				enableStorageEvents: function () {
@@ -80,8 +88,6 @@ steal(
 							WindowCtrl.events.trigger(evType);
 							console.log(event);
 						}
-
-
 					});
 
 					function extractEvent(value){
@@ -173,24 +179,14 @@ steal(
 				},
 				/** Opens the Match Window */
 				openMatch: function () {
-					var def = $.Deferred();
-					$.when(WindowCtrl.open('Match')).then(function (/**ODKWindow*/ odkWindow) {
-						steal.dev.log("WindowCtrl.openMatch: ", odkWindow);
-						def.resolve();
-					});
-					return def.promise();
+					return WindowCtrl.open('Match');
 				},
 				/** Opens the Home / Main Window */
 				openMain: function () {
-					var def = $.Deferred();
-					$.when(WindowCtrl.open('Main')).then(function (/**ODKWindow*/ odkWindow) {
-						steal.dev.log("WindowCtrl.openMain: ", odkWindow);
-						def.resolve();
-					});
-					return def.promise();
+					return WindowCtrl.open('Main');
 				},
 				/** closes the Match-Window */
-				closeMatch: function () { WindowCtrl.close('Match'); },
+				closeMatch: function () { return WindowCtrl.close('Match'); },
 				/** Opens the Settings-Window and positions it centered on the screen */
 				openSettings: function () {
 					var self = this;

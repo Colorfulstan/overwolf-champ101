@@ -37,13 +37,18 @@ steal(
 					changeData.runningChanged; // runningchanged indicates that Game just finished
 			},
 			_notifyWhenFPSStable: function (/** FPSInfo */ result) { // TODO: move all this eventstuff into own service!
-				MainCtrl.mostRecentFPS.push(result.Fps);
-				steal.dev.log(MainCtrl.mostRecentFPS);
-				console.log(MainCtrl.mostRecentFPS);
+				var threshold = 30
+					, count = 4
+					, recentFps = MainCtrl.mostRecentFPS;
 
-				if (isFpsNumberStable(MainCtrl.mostRecentFPS, 30, 4)) {
+				recentFps.push(result.Fps);
+				while (recentFps.length > count) {
+					recentFps.shift();
+				}
+				steal.dev.log(recentFps);
+
+				if (isFpsNumberStable(recentFps, threshold, count)) {
 					steal.dev.log('FPS stable with ' + result.Fps + ' triggering fpsStable');
-					console.log('FPS stable with ' + result.Fps + ' triggering fpsStable');
 					WindowCtrl.events.trigger('fpsStable');
 				}
 
@@ -99,10 +104,7 @@ steal(
 			},
 			_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
 				steal.dev.warn('League of Legends game started', new Date());
-				console.log('League of Legends game started', new Date());
-				if (!SettingsModel.closeMatchWithGame()) {
-					MainCtrl.closeMatch();
-				}
+				MainCtrl.closeMatch(); // to get the match reloading
 				if (SettingsModel.isSummonerSet()) {
 					MainCtrl.removeStableFpsListener(); // to prevent unwanted listener-stacking
 					MainCtrl.addStableFpsListener();

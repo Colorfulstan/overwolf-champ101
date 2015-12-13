@@ -60,15 +60,7 @@ steal('can.js'
 					registerEventHandlers();
 
 					self.countDocumentBlurHandlers = 0; // TODO: remove, nut used
-					options.$panelContainer.css({display: 'none'});
-					options.$appButtons.css({display: 'none'});
 
-					var mouseUpCb = function (info) {
-						if (info.onGame === true) {
-							self.hidePanels();
-						}
-					};
-					overwolf.games.inputTracking.onMouseUp.addListener(mouseUpCb);
 
 					self.options.$document = $(document); // TODO: remove, not used anymore
 					self.options.matchPromise = options.model;
@@ -81,8 +73,6 @@ steal('can.js'
 						x -= 14; // accounting for unknown positioning flaw
 						overwolf.windows.changePosition(self.options.odkWindow.id, x, y);
 
-						self.initAppBar();
-
 						//options.settings.cachedGameAvailable(false);
 						//localStorage.removeItem('temp_gameId');
 
@@ -91,6 +81,13 @@ steal('can.js'
 
 					function registerEventHandlers() {
 						// TODO: are these events cleaned up after Match window closes?
+						overwolf.games.inputTracking
+							.onMouseUp
+							.addListener(function (info) {
+								if (info.onGame === true) {
+									self.hidePanels();
+								}
+							});
 						/**
 						 * @event MatchCtrl#minimized
 						 */
@@ -148,16 +145,25 @@ steal('can.js'
 						})
 					}
 				},
-				/**
-				 * Initializes the HTML element depending on if it is shown on the side or top of the screen.
-				 * makes the App bar visible
-				 */
-				initAppBar: function () {
-					$(this.options.appBar).show();
+				initVisibility: function (self) {
+					$(self.options.appBar).show();
+					if (self.options.settings.startMatchCollapsed()) {
+						self.options.$panelContainer.css({display: 'none'});
+						self.options.$appButtons.css({display: 'none'});
+						WindowCtrl.events.trigger('collapsed');
+
+					} else {
+						self.options.$panelContainer.css({display: 'block'});
+						self.options.$appButtons.css({display: 'block'});
+						WindowCtrl.events.trigger('expanded');
+					}
 				},
+
 				loadMatch: function (matchPromise) {
-					var deferred = $.Deferred();
+					/** @this self*/
 					var self = this;
+
+					var deferred = $.Deferred();
 
 					var rejectCb = function (data, status, jqXHR) {
 						steal.dev.warn("Loading Match failed!", data, status, jqXHR);
@@ -192,23 +198,18 @@ steal('can.js'
 							//console.log('fps stable', localStorage.getItem(SettingsModel.STORAGE_FPS_STABLE));
 							// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
 							window.clearInterval(waitForStableFps);
+							self.initVisibility(self);
 
 							var name = self.options.settings.summonerName();
 							self.options.$overviewContainer.html(can.view(self.options.loadingTmpl, {summonerName: name}));
 							self.options.$overviewContainer.removeClass('failed').addClass('loading');
 
-							// clean up old controllers
-							if (self.options.overview) {
-								self.options.overview.destroy()
-							}
-							if (self.options.champions) {
-								self.options.champions.destroy()
-							}
-							if (self.options.tooltip) {
-								self.options.tooltip.destroy()
-							}
+							// clean up old controllers // TODO: does this make sense?
+							if (self.options.overview) { self.options.overview.destroy() }
+							if (self.options.champions) { self.options.champions.destroy() }
+							if (self.options.tooltip) { self.options.tooltip.destroy() }
 
-							$.when(matchPromise).then(resolveCB, rejectCb);
+							$.when(matchPromise).done(resolveCB).fail(rejectCb);
 						}
 					}, 100);
 					return deferred.promise();

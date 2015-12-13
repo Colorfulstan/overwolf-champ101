@@ -18,7 +18,7 @@ steal(
 			strap: function (isFirstAppStart, /** SettingsModel */ settings) {
 				Boot.checkIfIngame(overwolf.games.getRunningGameInfo, settings.isInGame)
 					.then(Boot.launchApp.bind(null, settings, isFirstAppStart))
-					.fail(window.console.error);
+					.fail(console.error);
 			},
 			setDefaultSettings: function (settings) {
 				settings.startWithGame(true);
@@ -32,29 +32,26 @@ steal(
 			askForSummoner: function () {
 				var def = $.Deferred();
 				WindowCtrl.openSettings();
-				var interval = window.setInterval(function () {
-					$.when(WindowCtrl.isWindowVisible('Settings')).then(function (settingsOpen) {
-						if (!settingsOpen) {
-							if (SettingsModel.isSummonerSet()) {
-								def.resolve();
-							} else {
-								def.reject();
-							}
-							window.clearInterval(interval);
-						}
-					});
-				}, 100);
+				WindowCtrl.events.one('settingsClosed', function () {
+					if (SettingsModel.isSummonerSet()) {
+						def.resolve();
+					} else {
+						def.reject();
+					}
+				});
 				return def.promise();
 			},
 			checkIfIngame: function (ow_GetRunningGameInfoFn, isInGameSetterFn) {
 				var def = $.Deferred();
 				// NOTE: first of two points where app determines if player is within a game
 				// other point is through listener (registerOverwolfListener)
-				ow_GetRunningGameInfoFn(function (/** GameInfo */ gameData) {
-					var isInGame = !(gameData == undefined || gameData == null);
+				var isInGame;
+				ow_GetRunningGameInfoFn(function (deferred, /** GameInfo */ gameData) {
+					isInGame = !(gameData == undefined || gameData == null);
 					isInGameSetterFn(isInGame);
 					def.resolve(isInGame);
 				});
+
 				return def.promise();
 			},
 			openMatchIfIngame: function () {
@@ -116,7 +113,7 @@ steal(
 						WindowCtrl.openMatch();
 					});
 			},
-			_checkIfAutoLaunched:function() { // TODO: not sure if this works as intended // and only usable if checked for ingame before
+			_checkIfAutoLaunched: function () { // TODO: not sure if this works as intended // and only usable if checked for ingame before
 				// if app is started manually, the main-window will open anyways.
 				// So if that window is not present, the game was started through auto-launch
 				// TODO: change main-window to some kind of indicator-window so that main-window don't have to open when app gets started manually
@@ -153,8 +150,9 @@ steal(
 							SettingsModel.isSummonerSet() ? def.resolve() : def.reject();
 							return def.promise();
 						}).then(Boot._showMatchLoading.bind(null, settings))
-						.then(Boot.openMatchIfIngame, Boot._firstAppLaunch.bind(null, settings))
-						.fail(window.console.error);
+						.done(Boot.openMatchIfIngame)
+						.fail(Boot._firstAppLaunch.bind(null, settings))
+						.fail(console.error);
 				});
 				return $.Deferred().resolve().promise();
 			}
