@@ -4,7 +4,7 @@
   "meta": {
   	"name": "League of Legends Champ 101",
   	"access-name": "it.krispin.champ101",
-  	"version": "1.0.1",
+  	"version": "1.0.2",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
   	"description": "Basic League of Legends champion information relevant for your current game",
@@ -36,11 +36,13 @@
 	  },
 	  "Settings": {
 		"file": "views/settings.html",
+		  "topmost":true,
 		"transparent": true,
 		"resizable": false,
-		  "show_in_taskbar": true,
-		  "disable_restore_animation": true,
-		  "size": {"width": 400,"height": 1200},
+		"show_in_taskbar": true,
+		"disable_restore_animation": true,
+		"size": {"width": 400,"height": 1200},
+		"grab_keyboard_focus" : true,
 	  	"min_size": {"width": 400},
 		"max_size": {"width": 400}
 
@@ -50,7 +52,7 @@
 		"transparent": true,
 		"resizable": false,
 		"show_in_taskbar": false,
-		  "disable_restore_animation": true,
+		"disable_restore_animation": true,
 		"size": {"width": 800, "height": 1200},
 		"min_size": {"width": 800, "height": 1200},
 		"max_size": {"width": 800, "height": 1200}

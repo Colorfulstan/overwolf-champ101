@@ -59,23 +59,25 @@ steal(
 				 * gameEnded - when league game has ended
 				 *
 				 * settingsClosed - called right before Settingswindow closes
+				 * reloadMatchEv - when the match should get reloaded through external sources
 				 */
 				events: {
-					on: function (type, cb) {
-						$(WindowCtrl.events).on(type, cb);
+					"on": function (type, cb) {
+						$(this).on(type, cb);
 					},
-					one: function (type, cb) {
-						$(WindowCtrl.events).one(type,cb);
+					"one": function (type, cb) {
+						$(this).one(type,cb);
 					},
-					trigger: function (type) {
+					"trigger": function (type) {
+						steal.dev.log('triggering event', type);
 						var storageEventKey = 'eventFired';
 						var valueDivider = '||';
 
-						$(WindowCtrl.events).trigger(type);
+						$(this).trigger(type);
 						localStorage.setItem(storageEventKey, type + valueDivider + new Date());
 					},
-					off: function (type) {
-						$(WindowCtrl.events).off(type);
+					"off": function (type) {
+						$(this).off(type);
 					}
 				},
 				enableStorageEvents: function () {
@@ -86,7 +88,7 @@ steal(
 						if (event.key === storageEventKey){
 							var evType = extractEvent(event.newValue);
 							WindowCtrl.events.trigger(evType);
-							console.log(event);
+							steal.dev.log(event);
 						}
 					});
 
@@ -178,8 +180,10 @@ steal(
 					return deferred.promise();
 				},
 				/** Opens the Match Window */
-				openMatch: function () {
-					return WindowCtrl.open('Match');
+				openMatch: function (needsReload) {
+					var p = WindowCtrl.open('Match');
+					if (needsReload) { WindowCtrl.events.trigger('reloadMatchEv');}
+					return p;
 				},
 				/** Opens the Home / Main Window */
 				openMain: function () {
@@ -192,6 +196,13 @@ steal(
 					var self = this;
 					$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 						steal.dev.log("WindowCtrl.openSettings: ", odkWindow);
+
+
+						if (!SettingsModel.isSummonerSet()) {
+							overwolf.windows.setTopmost(odkWindow.id, true, function(){
+								steal.dev.log('Settingswindow set to topmost', arguments)
+							});
+						}
 						if (!localStorage.getItem('settings-opened-before')) {
 							// Only center settings-window the first time it opens
 							var x = self.getCenteredX(odkWindow.width);
@@ -230,6 +241,7 @@ steal(
 					// enables using and testing document.focus() since $(window).focus() does nothing
 					$(window).on('focus', function () {$(document).focus()});
 					$(window).on('blur', function () {$(document).blur()});
+					//WindowCtrl.enableStorageEvents();
 				}
 				,
 				/** @type {ODKWindow} */

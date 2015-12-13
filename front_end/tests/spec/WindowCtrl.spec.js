@@ -35,11 +35,11 @@ describe("WindowCtrlSpec - ", function () {
 	function setupHTMLWhatsThisFixture() {
 		jasmine.getFixtures().set('' +
 			'<div id="buttons">' +
-				'<div><a title="whatsThis0" class="whats-this" href="#"></a></div>"' +
-				'<div><a title="whatsThis1" class="whats-this" href="#"></a></div>"' +
-				'<div><a title="whatsThis2" class="whats-this" href="#"></a></div>"' +
-				'<div><a title="whatsThis3" class="whats-this" href="#"></a></div>"' +
-				'<div><a title="whatsThis4" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis0" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis1" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis2" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis3" class="whats-this" href="#"></a></div>"' +
+			'<div><a title="whatsThis4" class="whats-this" href="#"></a></div>"' +
 			'</div>'
 		)
 	}
@@ -274,7 +274,7 @@ describe("WindowCtrlSpec - ", function () {
 			WindowCtrl.events.on('thisEvent', handlerMock);
 
 			var key = 'eventFired',
-					newValue= 'thisEvent||dshdshsjheswhateverDate';
+				newValue = 'thisEvent||dshdshsjheswhateverDate';
 
 			var se = document.createEvent('StorageEvent');
 			se.initStorageEvent('storage', false, false, key, null, newValue, '/', null);

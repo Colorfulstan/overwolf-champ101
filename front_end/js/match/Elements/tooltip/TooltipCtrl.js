@@ -268,7 +268,7 @@ steal(
 						var videoTag = $('video').get(0);
 
 						//$(videoTag).on('ready', function () {
-						videojs(videoTag, {controls: false, controlBar: {fullscreenToggle: false,}}, function () {
+						videojs(videoTag, {controls: false, controlBar: {fullscreenToggle: false}}, function () {
 							// sets up the videojs Player to work after it got inserted into the page by templatingFullscreenToggle
 							var player = this;
 							self.options.videoPlayer = this;

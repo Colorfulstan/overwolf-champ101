@@ -130,6 +130,7 @@ steal(
 			 * @propterty */
 			summonerId: can.compute(function (newVal) {
 				if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_ID); // getter
+				if (newVal === null) localStorage.removeItem(SettingsModel.STORAGE_KEY_ID);
 				else { // setter
 					var oldVal = this.summonerId();
 

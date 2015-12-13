@@ -3,9 +3,11 @@ steal(
 	'can'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
+	, 'Boot.js'
 	, function (can
 		, /** WindowCtrl */ WindowCtrl
-		, /**SettingsModel*/ SettingsModel) {
+		, /**SettingsModel*/ SettingsModel
+		, /** Boot */ Boot) {
 
 		var Static = {
 			defaults: {
@@ -18,7 +20,7 @@ steal(
 			/**
 			 * @param {GameInfoChangeData} changeData
 			 * @returns {bool} true if a game has been started, according to the given data
-			 * @see MainCtrl.registerGameStartListeners method gets called there through overwolf-handlers
+			 * @see MainCtrl.registerGameListeners method gets called there through overwolf-handlers
 			 * */
 			gameStarted: function (changeData) { // TODO: move all this eventstuff into own service!
 				return changeData.gameInfo !== null &&
@@ -29,7 +31,7 @@ steal(
 			/**
 			 * @param {GameInfoChangeData} changeData
 			 * @returns {bool} true if a game has been finished, according to the given data
-			 * @see MainCtrl.registerGameStartListeners method gets called there through overwolf-handlers
+			 * @see MainCtrl.registerGameListeners method gets called there through overwolf-handlers
 			 * */
 			gameFinished: function (changeData) { // TODO: move all this eventstuff into own service!
 				return changeData.gameInfo !== null &&
@@ -75,30 +77,34 @@ steal(
 					return stable;
 				}
 			},
-			addStableFpsListener: function () { // TODO: move all this eventstuff into own service!
-				var settings = new SettingsModel();
-				settings.isFpsStable('false');
+			addStableFpsListenerAndHandler: function (isFpsStableSetter) { // TODO: move all this eventstuff into own service!
+				MainCtrl.removeStableFpsListener(isFpsStableSetter); // to prevent unnoticed listener-stacking
+				isFpsStableSetter('false');
+				MainCtrl.registerFpsStableHandler();
+
 				MainCtrl.mostRecentFPS = [];
 				overwolf.benchmarking.onFpsInfoReady.addListener(MainCtrl._notifyWhenFPSStable);
+				steal.dev.log('stableFPSListener added: ', MainCtrl._notifyWhenFPSStable);
 			}
 
 			,
-			removeStableFpsListener: function () {// TODO: move all this eventstuff into own service!
-				var settings = new SettingsModel();
-				settings.isFpsStable('true');
+			removeStableFpsListener: function (isFpsStableSetter) {// TODO: move all this eventstuff into own service!
+				isFpsStableSetter('true');
 				overwolf.benchmarking.onFpsInfoReady.removeListener(MainCtrl._notifyWhenFPSStable);
+				steal.dev.log('stableFPSListener removed: ', MainCtrl._notifyWhenFPSStable);
 			}
 			,
-			registerFpsStableListener: function () {// TODO: move all this eventstuff into own service!
-				WindowCtrl.events.on('fpsStable', function () {
+			registerFpsStableHandler: function () {// TODO: move all this eventstuff into own service!
+				steal.dev.log('stableFPSHandler added');
+				WindowCtrl.events.one('fpsStable', function () {
 					steal.dev.log('fpsStable event');
-					console.log('fpsStable event');
-					MainCtrl.removeStableFpsListener();
+					var settings = new SettingsModel();
+					MainCtrl.removeStableFpsListener(settings.isFpsStable);
 					MainCtrl.mostRecentFPS = [];
 
 					//settings.cachedGameAvailable(true);
 
-					MainCtrl.openMatch();
+					//MainCtrl.openMatch(); // TODO: could be moved elsewhere or removed from elsewhere
 					//overwolf.benchmarking.stopRequesting(); // MPTE: stopping requesting makes it impossible to start it again until app restarts!?
 				});
 			},
@@ -106,17 +112,18 @@ steal(
 				steal.dev.warn('League of Legends game started', new Date());
 				MainCtrl.closeMatch(); // to get the match reloading
 				if (SettingsModel.isSummonerSet()) {
-					MainCtrl.removeStableFpsListener(); // to prevent unwanted listener-stacking
-					MainCtrl.addStableFpsListener();
+					MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
 					settings.isInGame(true);
 					WindowCtrl.openMatch();
 				} else {
+					steal.dev.log('_handleGameStart relaunches App');
+					// TODO: circular dependency! rework this
 					WindowCtrl.openMain(); // rest is handled from there for first start
 				}
 			},
 			_handleGameEnd: function (settings) {// TODO: move all this eventstuff into own service!
 				steal.dev.log('stopping possible fps requests');
-				MainCtrl.removeStableFpsListener();
+				MainCtrl.removeStableFpsListener(settings.isFpsStable);
 				//settings.cachedGameAvailable(false);
 				steal.dev.warn('League of Legends game finished', new Date());
 				if (SettingsModel.closeMatchWithGame()) {
@@ -126,20 +133,29 @@ steal(
 				WindowCtrl.events.trigger('gameEnded');
 			},
 			registerGameStartEndListener: function (settings) {// TODO: move all this eventstuff into own service!
+				MainCtrl.registerGameStartListenerAndHandler(settings);
+				MainCtrl.registerGameEndListenerAndHandler(settings);
+			},
+			registerGameStartListenerAndHandler:function (settings) {// TODO: move all this eventstuff into own service!
 				// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
 				overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
-					steal.dev.log('debug', 'MainCtrl - overwolf.games.onGameInfoUpdated:', result);
+					steal.dev.log('debug', 'MainCtrl - registerGameStartListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
 					if (MainCtrl.gameStarted(result)) { MainCtrl._handleGameStart(settings); }
-					if (MainCtrl.gameFinished(result)) { MainCtrl._handleGameEnd(settings); }
 				});
 			},
+			registerGameEndListenerAndHandler:function (settings) {// TODO: move all this eventstuff into own service!
+				// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
+				overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
+					steal.dev.log('debug', 'MainCtrl - registerGameEndListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
+					if (MainCtrl.gameFinished(result)) { MainCtrl._handleGameEnd(settings); }
+				});
+			}
+			,
 			/** Register handlers for window-events here
 			 * @memberOf {MainCtrl}
 			 * @static*/
-			registerGameStartListeners: function (settings) { // TODO: move all this eventstuff into own service!
-				var self = this;
-				self.registerFpsStableListener();
-				self.registerGameStartEndListener(settings);
+			registerGameListeners: function (settings) { // TODO: move all this eventstuff into own service!
+				MainCtrl.registerGameStartEndListener(settings);
 
 				overwolf.windows.onStateChanged.addListener(function (/** WindowStateChangeData */ result) {
 					steal.dev.log('debug', "MainCtrl - overwolf.windows.onStateChanged:", result);
@@ -164,11 +180,21 @@ steal(
 			 * @param ev
 			 */
 			'{matchBtn} mousedown': function (el, ev) {
+				var self = this;
 				steal.dev.log('WindowCtrl: open match');
 				var settings = new SettingsModel;
 				settings.startMatchCollapsed(false);
-				WindowCtrl.openMatch();
-				settings.destroy();
+				WindowCtrl.openMatch(true);
+				if (!SettingsModel.startWithGame()) {
+					debugger;
+					Boot._showMatchLoading(settings)
+						.then(function () { Boot.openMatchIfIngame(self, true); })
+							.fail(function () { // === not in a game and matchwindow waits for stable fps
+								WindowCtrl.event.trigger('fpsStable');
+						});
+				} else { // just open the damn thing
+					settings.destroy();
+				}
 			}
 		};
 

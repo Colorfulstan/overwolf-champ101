@@ -23,6 +23,7 @@ steal(
 				var self = this;
 
 				WindowCtrl.prototype.init.apply(self, arguments);
+				//WindowCtrl.enableStorageEvents();
 
 				$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 					self.odkWindow = odkWindow;
@@ -59,7 +60,7 @@ steal(
 							WindowCtrl.events.trigger('summonerChangedEv');
 							window.setTimeout(function () {
 								self.closeSettings();
-							});
+							},100);
 						});
 				}
 			},
@@ -90,7 +91,7 @@ steal(
 				WindowCtrl.events.trigger('settingsClosed');
 				window.setTimeout(function () {
 					WindowCtrl.close(self.odkWindow.name);
-				});
+				},100);
 
 			},
 			'#btn-save-close click': function ($btn, ev) {

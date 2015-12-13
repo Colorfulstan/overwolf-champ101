@@ -26,19 +26,19 @@ steal(
 		var settings = new SettingsModel();
 
 		var model = new MatchModel(settings.summonerId(), settings.server());
-
+		debugger;
 		if (!SettingsModel.isSummonerSet()) {
 			WindowCtrl.closeMatch();
 			return false;
 		}
 		var preloadMatchBeforeShowing = settings.isInGame() && !settings.isManualReloading();
 		if (preloadMatchBeforeShowing) { // ingame == preload data
-			console.log('preloading data');
+			steal.dev.log('preloading data');
 			dao.loadMatchModel(model).always(function (match) { // TODO: currently not accounting for manual starts!?
 				new MatchCtrl('html', {dao: dao, model: match, settings: settings});
 			});
 		} else { // else == show match with promise (handled within MatchCtrl)
-			console.log('not preloading data');
+			steal.dev.log('not preloading data');
 			var match = dao.loadMatchModel(model);
 			new MatchCtrl('html', {dao: dao, model: match, settings: settings}); // window will open while Data is still loading
 			settings.isManualReloading(false);
