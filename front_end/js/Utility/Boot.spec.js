@@ -1,6 +1,6 @@
 import Boot from 'Boot'
 
-fdescribe("Boot.js || ", function () {
+describe("Boot.js || ", function () {
 	describe("strap() || ", function () {
 		beforeEach(function () {
 			spyOn(Boot, 'checkIfIngame');
