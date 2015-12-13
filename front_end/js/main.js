@@ -10,15 +10,14 @@ steal(
 	, function (/** MainCtrl */ MainCtrl
 		, /** SettingsModel*/ SettingsModel
 		, /** Boot */ Boot) {
+		WindowCtrl.enableStorageEvents();
 
 		var main = new MainCtrl('html');
 		var settings = new SettingsModel();
 
 		var firstStart = !SettingsModel.isSummonerSet();  // localStorage has no items on first start
 
-		Boot.strap(firstStart, settings);
-
-		// TODO: all that follows belongs in an object / controller / whatever to be able to test it
+		Boot.strap(main, firstStart, settings);
 
 	});
 

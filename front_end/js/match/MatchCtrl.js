@@ -14,7 +14,7 @@ steal('can.js'
 		, /**ChampionCtrl*/ ChampionCtrl
 		, /**TooltipCtrl*/ TooltipCtrl
 		, /**Routes*/ Routes) {
-
+// TODO: replace with events for application-wide communication
 		/**
 		 *  Controller for the "Match" view (match.html / match.js)
 		 * @class MatchCtrl
@@ -102,7 +102,7 @@ steal('can.js'
 						});
 
 						WindowCtrl.events.on('gameEnded', function () {
-							console.log('should expand now!');
+							steal.dev.log('should expand now!');
 							self.expandPanels();
 						});
 						/**
@@ -125,7 +125,7 @@ steal('can.js'
 						});
 
 						WindowCtrl.events.on('matchReady', function () {
-							steal.dev.log('matchReady triggered');
+							steal.dev.log(new Date(), 'matchReady triggered');
 							WindowCtrl.openMatch();
 
 							if (options.settings.startMatchCollapsed()) {
@@ -142,7 +142,10 @@ steal('can.js'
 
 						WindowCtrl.events.on('summonerChangedEv', function () {
 							Routes.setRoute(Routes.reloadMatch);
-						})
+						});
+						WindowCtrl.events.on('reloadMatchEv', function () {
+							Routes.setRoute(Routes.reloadMatch);
+						});
 					}
 				},
 				initVisibility: function (self) {
@@ -195,6 +198,7 @@ steal('can.js'
 
 					var waitForStableFps = window.setInterval(function () {
 						if (self.options.settings.isFpsStable()) {
+							steal.dev.log(new Date(), 'fps are stable, beginning to show Match-Window');
 							//console.log('fps stable', localStorage.getItem(SettingsModel.STORAGE_FPS_STABLE));
 							// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
 							window.clearInterval(waitForStableFps);
@@ -306,19 +310,7 @@ steal('can.js'
 				},
 				'{reloadMatchRoute} route': function (routeData) {
 					var self = this;
-					//steal.dev.log('refresh Route triggered in OverviewCtrl');
-					//this.options.match = routeData.match;
-					//this.renderView(this.options.match.blue,this.options.match.purple);
-					this.options.settings.startMatchCollapsed(false);
-					this.options.settings.isManualReloading(true);
-
-					//this.reloadMatch();
-
-					location.reload();
-					// NOTE: this is executed BEFORE window gets reloaded
-					// TODO: move elsewhere if makes sense
-					Routes.resetRoute();
-					$(WindowCtrl.events).trigger('restored');
+					self.reloadMatch();
 				},
 				/** Does prevent Event propagation
 				 *
