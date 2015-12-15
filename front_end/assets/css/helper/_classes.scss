@@ -30,7 +30,7 @@
   font-size: 1.5em !important;
 }
 .padded {
-  padding: $spacer !important;
+  padding: $spacer;
   &-left { padding-left: $spacer !important;
     &-0 { padding-left: 0 !important; }
     &-half { padding-left: $spacer/2 !important; }
@@ -52,9 +52,9 @@
     &-half { padding-bottom: $spacer/2 !important; }
     &-2 { padding-bottom: $spacer*2 !important; }
   }
-  &-0 { padding: 0 !important; }
-  &-half { padding: $spacer/2 !important; }
-  &-2 { padding: $spacer*2 !important}
+  &-0 { padding: 0 }
+  &-half { padding: $spacer/2 }
+  &-2 { padding: $spacer*2 }
 }
 
 .margin-0 {
