@@ -60,6 +60,7 @@ steal(
 				 *
 				 * settingsClosed - called right before Settingswindow closes
 				 * reloadMatchEv - when the match should get reloaded through external sources
+				 * restartAppEv - when the App will be restarted
 				 */
 				events: {
 					"on": function (type, cb) {
@@ -181,8 +182,9 @@ steal(
 				},
 				/** Opens the Match Window */
 				openMatch: function (needsReload) {
-					var p = WindowCtrl.open('Match');
-					if (needsReload) { WindowCtrl.events.trigger('reloadMatchEv');}
+					var p = WindowCtrl.open('Match').then(function () {
+						if (needsReload) { WindowCtrl.events.trigger('reloadMatchEv');}
+					});
 					return p;
 				},
 				/** Opens the Home / Main Window */

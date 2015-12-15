@@ -39,7 +39,7 @@ steal(
 				this.element.removeClass('hidden');
 			},
 
-			noRequestNeccessary: function () {
+			summonerUnchanged: function () {
 				var settings = this.options.settings;
 				// testing string;
 				return SettingsModel.isSummonerSet()
@@ -50,14 +50,16 @@ steal(
 			saveAndCloseHandler: function (self, $btn) {
 				/**@type {SettingsModel} */
 				var settings = self.options.settings;
-				if (
-					self.noRequestNeccessary()
-				) {	// no change - spare the request
-					self.closeSettings();
+				if (self.summonerUnchanged()) {	// no change - spare the request
+					self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
+					window.setTimeout(function () {
+						self.closeSettings();
+					},100);
 				} else {
 					this.requestSummonerId(settings, self, $btn)
 						.then(function () {
 							WindowCtrl.events.trigger('summonerChangedEv');
+							self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
 							window.setTimeout(function () {
 								self.closeSettings();
 							},100);
@@ -85,6 +87,11 @@ steal(
 						def.reject(data, status, jqXHR);
 					});
 				return def.promise();
+			},
+			triggerRestartIfNeccessary: function (startWithGameOrig, startWithGameCurrent) {
+					if (typeof startWithGameOrig !== 'undefined' && startWithGameOrig !== startWithGameCurrent){
+						WindowCtrl.events.trigger('restartAppEv');
+					}
 			},
 			closeSettings: function () {
 				var self = this;
