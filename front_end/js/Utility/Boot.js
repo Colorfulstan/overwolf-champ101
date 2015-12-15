@@ -72,13 +72,9 @@ steal(
 				if (settings.isInGame()) {
 					Boot._inGameStart(main, settings);
 				} else {
-					Boot._outOfGameStart(settings, overwolf.benchmarking.requestFpsInfo); // TODO: make asynch
+					WindowCtrl.openMain();
+					steal.dev.log('starting out of game');
 				}
-			},
-			_outOfGameStart: function (settings, /** function */ ow_requestFpsInfo) {
-				steal.dev.log('starting out of game');
-				settings.startMatchCollapsed(false);
-				WindowCtrl.openMain();
 			},
 			_inGameStart: function (main, settings) {
 				// NOTE: only case in which _inGameStart won't be automatic through overwolf is, if overwolf gets started after the match already started!
@@ -124,6 +120,7 @@ steal(
 				}
 
 				Boot._registerMainWindowRestoredListeners(main, settings);
+
 				return $.Deferred().resolve().promise();
 			},
 			_registerMainWindowRestoredListeners: function (main, settings) {
@@ -191,8 +188,6 @@ steal(
 					steal.dev.log('is in game, opening match');
 					var settings = new SettingsModel();
 					main.constructor.addStableFpsListenerAndHandler(settings.isFpsStable);
-					var func = function () {steal.dev.log('starting fpsRequest (openMatchIfIngame')};
-					overwolf.benchmarking.requestFpsInfo(250, func);
 					return WindowCtrl.openMatch(needsReload);
 				}
 				return $.Deferred().reject().promise();
@@ -211,7 +206,7 @@ steal(
 				return def.promise();
 			},
 			_showMatchLoading: function (settings, data) {
-				steal.dev.log('setting loading to be shown');
+				steal.dev.warn('setting loading to be shown');
 				settings.isManualReloading(true);
 				settings.startMatchCollapsed(false);
 				return $.Deferred().resolve().promise();

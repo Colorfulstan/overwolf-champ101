@@ -40,7 +40,7 @@ steal(
 			},
 			_notifyWhenFPSStable: function (/** FPSInfo */ result) { // TODO: move all this eventstuff into own service!
 				var threshold = 30
-					, count = 4
+					, count = 10
 					, recentFps = MainCtrl.mostRecentFPS;
 
 				recentFps.push(result.Fps);
@@ -85,6 +85,9 @@ steal(
 				MainCtrl.mostRecentFPS = [];
 				overwolf.benchmarking.onFpsInfoReady.addListener(MainCtrl._notifyWhenFPSStable);
 				steal.dev.log('stableFPSListener added: ', MainCtrl._notifyWhenFPSStable);
+
+				var func = function () {steal.dev.warn('starting fpsRequest (addStableFpsListenerAndHandler)', arguments)};
+				overwolf.benchmarking.requestFpsInfo(100, func);
 			}
 
 			,
@@ -92,6 +95,12 @@ steal(
 				isFpsStableSetter('true');
 				overwolf.benchmarking.onFpsInfoReady.removeListener(MainCtrl._notifyWhenFPSStable);
 				steal.dev.log('stableFPSListener removed: ', MainCtrl._notifyWhenFPSStable);
+
+				//steal.dev.warn('stopping possible fps requests (removeStableFpsListener)');
+				//overwolf.benchmarking.stopRequesting();
+				// NOTE: curently (overwolf 0.91) stops every possibility to start requesting again
+				// when adding onFpsInfoReady listener and benchmarking.requestFpsInfo() again,
+				// the listener will not get executed
 			}
 			,
 			registerFpsStableHandler: function () {// TODO: move all this eventstuff into own service!
@@ -113,16 +122,16 @@ steal(
 				if (SettingsModel.isSummonerSet()) {
 					MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
 					settings.isInGame(true);
+					settings.startMatchCollapsed(true);
 					WindowCtrl.openMatch();
 					steal.dev.warn('opened Match again, waiting for stable fps')
 				} else {
 					steal.dev.log('_handleGameStart relaunches App');
-					// TODO: circular dependency! rework this
+					// TODO: circular dependency (to onMainWindowRestored Listener)! rework this
 					WindowCtrl.openMain(); // rest is handled from there for first start
 				}
 			},
 			_handleGameEnd: function (settings) {// TODO: move all this eventstuff into own service!
-				steal.dev.log('stopping possible fps requests');
 				MainCtrl.removeStableFpsListener(settings.isFpsStable);
 				//settings.cachedGameAvailable(false);
 				steal.dev.warn('League of Legends game finished', new Date());
@@ -130,6 +139,7 @@ steal(
 					WindowCtrl.closeMatch();
 				}
 				settings.isInGame(false);
+				settings.startMatchCollapsed(false);
 				WindowCtrl.events.trigger('gameEnded');
 			},
 			registerGameStartEndListener: function (settings) {// TODO: move all this eventstuff into own service!
@@ -179,6 +189,10 @@ steal(
 			init: function () {
 				WindowCtrl.prototype.init.apply(this, arguments);
 				steal.dev.log('MainCtrl initialized :', this);
+				WindowCtrl.events.one('restartAppEv', function () {
+					steal.dev.warn('restarting App by reloading Main-Window');
+					location.reload();
+				});
 			}
 			,
 			/**
@@ -191,18 +205,20 @@ steal(
 				var self = this;
 				steal.dev.log('WindowCtrl: open match');
 				var settings = new SettingsModel;
-				settings.startMatchCollapsed(false);
-				WindowCtrl.openMatch(true);
-				if (!SettingsModel.startWithGame()) {
-					debugger;
-					Boot._showMatchLoading(settings)
-						.then(function () { Boot.openMatchIfIngame(self, true); })
-						.fail(function () { // === not in a game and matchwindow waits for stable fps
-							WindowCtrl.event.trigger('fpsStable');
-						});
-				} else { // just open the damn thing
-					settings.destroy();
-				}
+				Boot._showMatchLoading(settings).then(function () {
+					return WindowCtrl.openMatch(true);
+				}).then(function () {
+					//if (!SettingsModel.startWithGame()) {
+					//	Boot._showMatchLoading(settings)
+					//			.then(function () { Boot.openMatchIfIngame(self, true); })
+					//			.fail(function () { // === not in a game and matchwindow waits for stable fps
+									WindowCtrl.event.trigger('fpsStable');
+								//});
+					//} else { // just open the damn thing
+						settings.destroy();
+					//}
+				});
+
 			}
 		};
 
