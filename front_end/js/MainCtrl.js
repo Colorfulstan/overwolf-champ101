@@ -97,7 +97,7 @@ steal(
 			registerFpsStableHandler: function () {// TODO: move all this eventstuff into own service!
 				steal.dev.log('stableFPSHandler added');
 				WindowCtrl.events.one('fpsStable', function () {
-					steal.dev.log('fpsStable event');
+					steal.dev.warn('fps Stable, Match should now open');
 					var settings = new SettingsModel();
 					MainCtrl.removeStableFpsListener(settings.isFpsStable);
 					MainCtrl.mostRecentFPS = [];
@@ -109,12 +109,12 @@ steal(
 				});
 			},
 			_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
-				steal.dev.warn('League of Legends game started', new Date());
-				MainCtrl.closeMatch(); // to get the match reloading
+				steal.dev.warn('League of Legends game started', new Date() , 'closing Matchwindow for reopening');
 				if (SettingsModel.isSummonerSet()) {
 					MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
 					settings.isInGame(true);
 					WindowCtrl.openMatch();
+					steal.dev.warn('opened Match again, waiting for stable fps')
 				} else {
 					steal.dev.log('_handleGameStart relaunches App');
 					// TODO: circular dependency! rework this
@@ -136,14 +136,22 @@ steal(
 				MainCtrl.registerGameStartListenerAndHandler(settings);
 				MainCtrl.registerGameEndListenerAndHandler(settings);
 			},
-			registerGameStartListenerAndHandler:function (settings) {// TODO: move all this eventstuff into own service!
+			registerGameStartListenerAndHandler: function (settings) {// TODO: move all this eventstuff into own service!
+				steal.dev.log('registering GameStartListener');
 				// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
 				overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
 					steal.dev.log('debug', 'MainCtrl - registerGameStartListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
-					if (MainCtrl.gameStarted(result)) { MainCtrl._handleGameStart(settings); }
+					if (MainCtrl.gameStarted(result)) {
+						// to get the match reloading
+						MainCtrl.closeMatch().then(function () {
+							MainCtrl._handleGameStart(settings);
+						});
+					}
 				});
 			},
-			registerGameEndListenerAndHandler:function (settings) {// TODO: move all this eventstuff into own service!
+			registerGameEndListenerAndHandler: function (settings) {// TODO: move all this eventstuff into own service!
+				steal.dev.log('registering GameEndListener');
+
 				// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
 				overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
 					steal.dev.log('debug', 'MainCtrl - registerGameEndListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
@@ -189,8 +197,8 @@ steal(
 					debugger;
 					Boot._showMatchLoading(settings)
 						.then(function () { Boot.openMatchIfIngame(self, true); })
-							.fail(function () { // === not in a game and matchwindow waits for stable fps
-								WindowCtrl.event.trigger('fpsStable');
+						.fail(function () { // === not in a game and matchwindow waits for stable fps
+							WindowCtrl.event.trigger('fpsStable');
 						});
 				} else { // just open the damn thing
 					settings.destroy();

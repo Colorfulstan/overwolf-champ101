@@ -190,7 +190,7 @@ steal(
 					return WindowCtrl.open('Main');
 				},
 				/** closes the Match-Window */
-				closeMatch: function () { return WindowCtrl.close('Match'); },
+				closeMatch: function () { debugger; return WindowCtrl.close('Match'); },
 				/** Opens the Settings-Window and positions it centered on the screen */
 				openSettings: function () {
 					var self = this;
