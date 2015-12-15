@@ -36,16 +36,49 @@
 			onclick="$('#general-info').slideToggle()">General Information <i
 				class="fa fa-angle-down fa-lg padded-left"></i></h3>
 		<ul id="general-info" style="display: none">
-			<li class="padded-bot-half padded-left-2 padded-right-2"><p>When you start a new game you can access the app
-																		over the handle on top of
-																		your screen. It will close
-																		again after you left the game</p>
-
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<p>By Default the app will automatically start after the loading screen and close again when you leave
+				   the game</p>
 			</li>
 			<hr>
-			<li class="padded-bot-half padded-left-2 padded-right-2"><p>You can open the match window outside of games
-																		through clicking &nbsp;<i
-						class="btn fa fa-search btn-match"></i></p></li>
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<p>After you entered the game and the data is loaded, a small dock will show up on top of your screen.
+				   In the beginning, it has an attention pulse, so you don't miss it. Hover over it or use the
+				   ingame-hotkeys to make the pulse disappear</p>
+			</li>
+			<hr>
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<p><strong>The match-window will automatically collapse if you click on the game.
+				   This behaviour is neccessary for Riot Games to allow the app</strong></p>
+			</li>
+			<hr>
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<p>Closing a window will not end the app. If you closed the match window in game,
+				   you can bring it up again with the hotkey for minimizing/restoring</p>
+			</li>
+		</ul>
+		<hr>
+		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
+			onclick="$('#app-tutorial').slideToggle()">App Walkthrough <i
+				class="fa fa-angle-down fa-lg padded-left"></i></h3>
+		<ul id="app-tutorial" style="display: none">
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<p>Set the summoner name within the settings &nbsp;<i
+						class="btn fa fa-cog fa-lg btn-settings padded-top-half"></i>&nbsp; to a player who is in a game (or try three dashes)</p></li>
+			<hr>
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<p>Open the match window by clicking &nbsp;<i
+						class="btn fa fa-search padded-top-half btn-match"></i></p></li>
+			<hr>
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<!-- TODO: dynamic number if this gets changed -->
+				<p> Click a portrait in the match window to open a champions panel. You can open up to 6 champion panels for quick access</p>
+			</li>
+			<hr>
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<!-- TODO: dynamic number if this gets changed -->
+				<p>Within the champion panels, click on an ability to play its video (if available)</p>
+			</li>
 		</ul>
 		<hr>
 		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
@@ -54,6 +87,13 @@
 		<ul id="known-issues" style="display: none">
 			<li class="padded-bot-half padded-left-2 padded-right-2"><p>No data will be available for games with
 																		spectators disabled or for bots</p>
+			</li>
+			<hr>
+			<li class="padded-bot-half padded-left-2 padded-right-2"><p>Hotkeys will not work outside of the game</p>
+			</li>
+			<hr>
+			<li class="padded-bot-half padded-left-2 padded-right-2">
+				<p>Some videos are only available in unsupported format or the supported video might be out of date (for champion reworks)</p>
 			</li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
