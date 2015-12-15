@@ -2,7 +2,7 @@
 <html lang="en" class="window-border-radius">
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-	<title>Champ 101 | Basic League of Legends Champion Knowledge</title>
+	<title>Champ 101 | Information</title>
 	<!--TODO: Metas (title + ? )-->
 	<link rel="stylesheet" href="../assets/css/main.css" type="text/css" />
 
@@ -33,9 +33,9 @@
 
 	<div id="content" class="padded-top-half">
 		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
-			onclick="$('#general-info').slideToggle()">General Information <i
+			onclick="$(this).next('.c101-dropdown-list').siblings('.c101-dropdown-list').slideUp();$('#general-info').slideToggle()">General Information <i
 				class="fa fa-angle-down fa-lg padded-left"></i></h3>
-		<ul id="general-info" style="display: none">
+		<ul id="general-info" style="display: none" class="c101-dropdown-list">
 			<li class="padded-bot-half padded-left-2 padded-right-2">
 				<p>By Default the app will automatically start after the loading screen and close again when you leave
 				   the game</p>
@@ -49,7 +49,7 @@
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
 				<p><strong>The match-window will automatically collapse if you click on the game.
-				   This behaviour is neccessary for Riot Games to allow the app</strong></p>
+						   This behaviour is neccessary for Riot Games to allow the app</strong></p>
 			</li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
@@ -59,12 +59,13 @@
 		</ul>
 		<hr>
 		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
-			onclick="$('#app-tutorial').slideToggle()">App Walkthrough <i
+			onclick="$(this).next('.c101-dropdown-list').siblings('.c101-dropdown-list').slideUp();$('#app-tutorial').slideToggle()">App Walkthrough <i
 				class="fa fa-angle-down fa-lg padded-left"></i></h3>
-		<ul id="app-tutorial" style="display: none">
+		<ul id="app-tutorial" class="c101-dropdown-list" style="display: none">
 			<li class="padded-bot-half padded-left-2 padded-right-2">
 				<p>Set the summoner name within the settings &nbsp;<i
-						class="btn fa fa-cog fa-lg btn-settings padded-top-half"></i>&nbsp; to a player who is in a game (or try three dashes)</p></li>
+						class="btn fa fa-cog fa-lg btn-settings padded-top-half"></i>&nbsp; to a player who is in a game
+				   (or try three dashes)</p></li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
 				<p>Open the match window by clicking &nbsp;<i
@@ -72,7 +73,8 @@
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
 				<!-- TODO: dynamic number if this gets changed -->
-				<p> Click a portrait in the match window to open a champions panel. You can open up to 6 champion panels for quick access</p>
+				<p> Click a portrait in the match window to open a champions panel. You can open up to 6 champion panels
+					for quick access</p>
 			</li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
@@ -82,9 +84,9 @@
 		</ul>
 		<hr>
 		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
-			onclick="$('#known-issues').slideToggle()">Known Issues <i class="fa fa-angle-down fa-lg padded-left"></i>
+			onclick="$(this).next('.c101-dropdown-list').siblings('.c101-dropdown-list').slideUp();$('#known-issues').slideToggle()">Known Issues <i class="fa fa-angle-down fa-lg padded-left"></i>
 		</h3>
-		<ul id="known-issues" style="display: none">
+		<ul id="known-issues" class="c101-dropdown-list" style="display: none">
 			<li class="padded-bot-half padded-left-2 padded-right-2"><p>No data will be available for games with
 																		spectators disabled or for bots</p>
 			</li>
@@ -93,7 +95,8 @@
 			</li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
-				<p>Some videos are only available in unsupported format or the supported video might be out of date (for champion reworks)</p>
+				<p>Some videos are only available in unsupported format or the supported video might be out of date (for
+				   champion reworks)</p>
 			</li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
@@ -114,18 +117,19 @@
 				   for bugs and suggestions instead.
 				</p></li>
 		</ul>
-		<div class="rog-logo padded padded-left-2 padded-bot-0">
-			<p class="text-center muted text-small">presented by:</p>
-			<a href="http://rog.asus.com/" target="_blank">
-				<img src="../assets/img/rog_logo_wide.png" alt="ROG - Republic of gamers" height="50">
-			</a>
-		</div>
+
 	</div>
-	<footer id="disclaimer" class="padded-2">
+	<footer id="disclaimer" class="padded-2 padded-top">
 		<p>Champ 101 – Basic Champion Knowledge isn't endorsed by Riot Games and doesn't reflect the views or opinions
 		   of Riot Games or anyone
 		   officially involved in producing or managing League of Legends. League of Legends and Riot Games are
 		   trademarks
 		   or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
 	</footer>
+	<div class="rog-logo padded-bot-2 text-center">
+		<p class="muted text-small">presented by:</p>
+		<a href="http://rog.asus.com/" target="_blank">
+			<img src="../assets/img/rog_logo_wide.png" alt="ROG - Republic of gamers" height="40">
+		</a>
+	</div>
 </div>
