@@ -220,7 +220,7 @@ steal(
 					}
 				}
 			}),
-			startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to prevent this app from starting automatically.<span style="text-decoration: underline">Requires overwolf restart!</span></p>',
+			startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to prevent this app from starting automatically.</p>',
 			startWithGameMessage: null,
 
 			/** @type {boolean}

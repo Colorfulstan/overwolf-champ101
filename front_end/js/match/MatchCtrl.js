@@ -6,6 +6,7 @@ steal('can.js'
 	, 'ChampionCtrl.js'
 	, 'TooltipCtrl.js'
 	, 'Routes.js'
+	, 'Boot.js'
 	, 'global.js'
 	, function (can
 		, /**WindowCtrl*/ WindowCtrl
@@ -13,7 +14,8 @@ steal('can.js'
 		, /**OverviewCtrl*/ OverviewCtrl
 		, /**ChampionCtrl*/ ChampionCtrl
 		, /**TooltipCtrl*/ TooltipCtrl
-		, /**Routes*/ Routes) {
+		, /**Routes*/ Routes
+		, /**Boot*/ Boot) {
 // TODO: replace with events for application-wide communication
 		/**
 		 *  Controller for the "Match" view (match.html / match.js)
