@@ -6,6 +6,7 @@ steal('can.js'
 	, 'ChampionCtrl.js'
 	, 'TooltipCtrl.js'
 	, 'Routes.js'
+	, 'Boot.js'
 	, 'global.js'
 	, function (can
 		, /**WindowCtrl*/ WindowCtrl
@@ -13,7 +14,8 @@ steal('can.js'
 		, /**OverviewCtrl*/ OverviewCtrl
 		, /**ChampionCtrl*/ ChampionCtrl
 		, /**TooltipCtrl*/ TooltipCtrl
-		, /**Routes*/ Routes) {
+		, /**Routes*/ Routes
+		, /**Boot*/ Boot) {
 // TODO: replace with events for application-wide communication
 		/**
 		 *  Controller for the "Match" view (match.html / match.js)
@@ -126,18 +128,18 @@ steal('can.js'
 
 						WindowCtrl.events.on('matchReady', function () {
 							steal.dev.log(new Date(), 'matchReady triggered');
-							WindowCtrl.openMatch();
-
-							if (options.settings.startMatchCollapsed()) {
-								WindowCtrl.events.trigger('collapsed');
-								$(self.options.handle).addClass(self.options.handleAnimationClass);
-								$(self.options.appBar).addClass(self.options.animatedHandleClass);
-							} else {
-								var $appBar = $(self.options.appBar);
-								if ($appBar.hasClass('collapsed')) {
-									self.expandPanels();
+							WindowCtrl.openMatch().then(function () {
+								if (options.settings.startMatchCollapsed()) {
+									WindowCtrl.events.trigger('collapsed');
+									$(self.options.handle).addClass(self.options.handleAnimationClass);
+									$(self.options.appBar).addClass(self.options.animatedHandleClass);
+								} else {
+									var $appBar = $(self.options.appBar);
+									if ($appBar.hasClass('collapsed')) {
+										self.expandPanels();
+									}
 								}
-							}
+							});
 						});
 
 						WindowCtrl.events.on('summonerChangedEv', function () {
@@ -219,13 +221,11 @@ steal('can.js'
 					return deferred.promise();
 				},
 				reloadMatch: function () {
-					// TODO: currently not used due to memory leak - reloading window as whole when reloading for now
 					var self = this;
+					steal.dev.warn('calling reloadMatch()');
 
 					//this.options.match = routeData.match;
 					//this.renderView(this.options.match.blue,this.options.match.purple);
-					this.options.settings.startMatchCollapsed(false);
-					this.options.settings.isManualReloading(true);
 
 					location.reload();
 					// NOTE: this is executed BEFORE window gets reloaded
@@ -294,7 +294,9 @@ steal('can.js'
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						Routes.setRoute(Routes.reloadMatch, true);
+						Boot._showMatchLoading(new SettingsModel()).then(function () {
+							Routes.setRoute(Routes.reloadMatch, true);
+						});
 						ev.stopPropagation();
 					}
 				},

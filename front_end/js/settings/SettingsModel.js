@@ -216,11 +216,11 @@ steal(
 					if (this.changedPropsOriginalValues['startWithGame'] === newVal) { // to remove the message again if changed back
 						this.attr('startWithGameMessage', null);
 					} else {
-						this.attr('startWithGameMessage', 'Changed autostart setting will take effect after overwolf restart.'); // TODO: enable this for multiple messages if neccessary (message-bag)
+						this.attr('startWithGameMessage', 'Changed autostart setting will restart the App.'); // TODO: enable this for multiple messages if neccessary (message-bag)
 					}
 				}
 			}),
-			startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to prevent this app from starting automatically.<span style="text-decoration: underline">Requires overwolf restart!</span></p>',
+			startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to prevent this app from starting automatically.</p>',
 			startWithGameMessage: null,
 
 			/** @type {boolean}

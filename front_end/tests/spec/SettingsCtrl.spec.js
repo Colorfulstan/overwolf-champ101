@@ -12,7 +12,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			settingsCtrl.destroy();
 		}
 	});
-	describe("noRequestNeccessary ", function () {
+	describe("summonerUnchanged ", function () {
 		function createTrueCondition(settingsCtrl) {
 			spyOn(SettingsModel, 'isSummonerSet').and.returnValue(true);
 			var settings = settingsCtrl.options.settings;
@@ -25,19 +25,19 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			createTrueCondition(settingsCtrl);
 		});
 		it("should return true when using createTruCondition Test-Helper Method", function () {
-			expect(settingsCtrl.noRequestNeccessary()).toBe(true);
+			expect(settingsCtrl.summonerUnchanged()).toBe(true);
 		});
 		it("should return false when username is set to ---", function () {
 			settingsCtrl.options.settings.summonerName('---');
-			expect(settingsCtrl.noRequestNeccessary()).toBe(false);
+			expect(settingsCtrl.summonerUnchanged()).toBe(false);
 		});
 		it("should return false when server changed", function () {
 			settingsCtrl.options.settings.server('na');
-			expect(settingsCtrl.noRequestNeccessary()).toBe(false);
+			expect(settingsCtrl.summonerUnchanged()).toBe(false);
 		});
 		it("should return false when summonerName changed", function () {
 			settingsCtrl.options.settings.summonerName('123');
-			expect(settingsCtrl.noRequestNeccessary()).toBe(false);
+			expect(settingsCtrl.summonerUnchanged()).toBe(false);
 		});
 	});
 	describe("reset ", function () {
@@ -59,8 +59,8 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			return request;
 		}
 
-		it("should not make a request if noRequestNeccessary returns true", function () {
-			spyOn(settingsCtrl, ['noRequestNeccessary']).and.returnValue(true);
+		it("should not make a request if summonerUnchanged returns true", function () {
+			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(true);
 			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
 			settingsCtrl.odkWindow = {name: 'Settings'};
 
@@ -74,7 +74,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		});
 		it("should make a request to {BaseUrl}/getSummonerId.php?server={server}&summoner={summonerName}", function () {
 			var server = 'euw', name = 'Test';
-			spyOn(settingsCtrl, ['noRequestNeccessary']).and.returnValue(false);
+			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
 			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
 			settingsCtrl.odkWindow = {name: 'Settings'};
 
@@ -90,7 +90,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		});
 		it("should call close after successful request", function () {
 			var server = 'euw', name = 'Test';
-			spyOn(settingsCtrl, ['noRequestNeccessary']).and.returnValue(false);
+			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
 			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
 			settingsCtrl.odkWindow = {name: 'Settings'};
 
@@ -112,7 +112,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		});
 		it("should not call close after failed request", function () {
 			var server = 'euw', name = 'Test';
-			spyOn(settingsCtrl, ['noRequestNeccessary']).and.returnValue(false);
+			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
 			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
 			settingsCtrl.odkWindow = {name: 'Settings'};
 
