@@ -212,7 +212,7 @@ steal(
 					//	Boot._showMatchLoading(settings)
 					//			.then(function () { Boot.openMatchIfIngame(self, true); })
 					//			.fail(function () { // === not in a game and matchwindow waits for stable fps
-									WindowCtrl.event.trigger('fpsStable');
+									WindowCtrl.events.trigger('fpsStable');
 								//});
 					//} else { // just open the damn thing
 						settings.destroy();
