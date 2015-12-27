@@ -175,7 +175,7 @@ steal(
 
 					if (this.options.videoPlayer) {
 						this.options.videoPlayer.dispose();
-						delete this.options.videoPlayer;
+						this.options.videoPlayer = null;
 					}
 					this.element.hide();
 				},
@@ -237,7 +237,6 @@ steal(
 							} else {
 								champTooltipView = can.view(this.options.championTmpl, champ);
 							}
-
 							this.element.html(champTooltipView);
 							break;
 					}
