@@ -6,16 +6,18 @@ steal(
 	'WindowCtrl.js'
 	, 'SettingsCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, 'Routes.js'
 	, function (/**WindowCtrl*/ WindowCtrl
 		, /**SettingsCtrl*/ SettingsCtrl
 		, /**SettingsModel*/ SettingsModel
+		, /**SettingsProvider*/ Settings
 		, /**Routes*/ Routes) {
 
 		WindowCtrl.enableStorageEvents();
 		Routes.ready();
 
-		var settings = new SettingsModel();
+		var settings = Settings.getInstance();
 		steal.dev.log('Settings initialized:', settings);
 
 		$.when(settings.loadHotKeys()).then(function () {

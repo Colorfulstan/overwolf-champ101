@@ -6,14 +6,16 @@
 steal(
 	'MainCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, 'Boot.js'
 	, function (/** MainCtrl */ MainCtrl
 		, /** SettingsModel*/ SettingsModel
+		, /** SettingsProvider */ Settings
 		, /** Boot */ Boot) {
 		WindowCtrl.enableStorageEvents();
 
 		var main = new MainCtrl('html');
-		var settings = new SettingsModel();
+		var settings = Settings.getInstance();
 
 		var firstStart = !SettingsModel.isSummonerSet();  // localStorage has no items on first start
 

@@ -21,6 +21,7 @@ import './documentation.spec';
 // main-files
 import './MainCtrl.spec';
 import './SettingsCtrl.spec';
+import './SettingsProvider.spec';
 import './match/MatchCtrl.spec';
 import './match/MatchModel.spec'
 import './Routes.spec';

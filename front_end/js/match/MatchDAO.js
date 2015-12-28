@@ -1,9 +1,11 @@
 "use strict";
 steal(
-	'ChampionModel.js',
-	'SettingsModel.js'
-	, function (/**ChampionModel*/ ChampionModel,
-	/** SettingsModel */ SettingsModel) {
+	'ChampionModel.js'
+	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
+	, function (/**ChampionModel*/ ChampionModel
+		, /** SettingsModel */ SettingsModel
+		, /**SettingsProvider*/ Settings) {
 
 		/**
 		 * @class
@@ -25,7 +27,7 @@ steal(
 			_loadDataFromServer: function (transfer) {
 				var deferred = $.Deferred();
 
-				var settings = new SettingsModel();
+				var settings = Settings.getInstance();
 				var params = {summonerId: transfer.summonerId, server: transfer.server};
 				//if (settings.cachedGameAvailable()){ // if gameId is given, the game with that id will be load from DB instead of Riot-API
 				//	params['gameId'] = settings.cachedGameId();
@@ -39,8 +41,8 @@ steal(
 						deferred.resolve(data);
 
 					}).fail(function (data, status, jqXHR) {
-						deferred.reject(data, status, jqXHR);
-					});
+					deferred.reject(data, status, jqXHR);
+				});
 				return deferred.promise();
 			},
 			/**
@@ -58,22 +60,22 @@ steal(
 					.then(function (dataArray) {
 						//settings.cachedGameId(dataArray['gameId']);
 						//settings.cachedGameAvailable(true);
-						steal.dev.log(new Date(), 'GameData in loadMatchModel:',transfer );
+						steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
 
 						self._extractParticipants(transfer, dataArray, 'blue');
 						self._extractParticipants(transfer, dataArray, 'purple');
 						transfer.version = dataArray.version;
 
-						steal.dev.log(new Date(), 'GameData in loadMatchModel:',transfer );
+						steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
 						deferred.resolve(transfer);
 						dataArray = null;
 					}).fail(function (data, status, jqXHR) {
 
-						//settings.cachedGameAvailable(false);
-						steal.dev.warn(new Date(), "Loading MatchModel failed!", data, status, jqXHR);
+					//settings.cachedGameAvailable(false);
+					steal.dev.warn(new Date(), "Loading MatchModel failed!", data, status, jqXHR);
 
-						deferred.reject(data, status, jqXHR);
-					});
+					deferred.reject(data, status, jqXHR);
+				});
 				return deferred.promise();
 			},
 

@@ -88,10 +88,10 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			expect(request.url).toContain('/getSummonerId.php?server=' + server + '&summoner=' + name);
 			jasmine.Ajax.uninstall();
 		});
-		it("should call close after successful request", function () {
+		it("should call close after successful request", function () { // TODO: fails because closeSettings is called within setTimeout
 			var server = 'euw', name = 'Test';
 			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
-			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
+			settingsCtrl.closeSettings = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
 			settingsCtrl.odkWindow = {name: 'Settings'};
 
 			jasmine.Ajax.install();
@@ -107,7 +107,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 				"responseText": '123456'
 			});
 
-			expect(settingsCtrl.constructor.close).toHaveBeenCalled();
+			expect(settingsCtrl.closeSettings).toHaveBeenCalled();
 			jasmine.Ajax.uninstall();
 		});
 		it("should not call close after failed request", function () {
