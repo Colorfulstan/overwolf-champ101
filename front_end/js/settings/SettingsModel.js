@@ -4,11 +4,11 @@ steal(
 	, 'global.js'
 	, function (can) {
 		/**
-		 * @class {can.Model} SettingsModel
-		 * @extends {can.Model}
+		 * @class {can.Map} SettingsModel
+		 * @extends {can.Map}
 		 * @constructor {@link SettingsModel.init}
 		 */
-		var SettingsModel = can.Model.extend('SettingsModel', {
+		var SettingsModel = can.Map.extend('SettingsModel', {
 			STORAGE_KEY_REGION: 'region-code',
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
