@@ -31,7 +31,7 @@ steal(
 				//	params['gameId'] = settings.cachedGameId();
 				//}
 				steal.dev.log('request for gamedata with params:', params);
-				jQuery.get(RIOT_ADAPTER_URL
+				jQuery.get(RIOT_ADAPTER_URL // TODO: refactor to .ajax()
 					, params
 					, function (data) { // success
 						steal.dev.log("gameData from Server:", data);
