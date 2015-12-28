@@ -7,6 +7,7 @@ steal(
 	, 'MatchDAO.js'
 	, 'MatchModel.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, 'WindowCtrl.js'
 	, 'MatchCtrl.js'
 	, 'Routes.js'
@@ -14,6 +15,7 @@ steal(
 		, /**MatchDAO*/ MatchDAO
 		, /**MatchModel*/ MatchModel
 		, /**SettingsModel*/ SettingsModel
+		, /**SettingsProvider*/ Settings
 		, /** WindowCtrl */ WindowCtrl
 		, /** MatchCtrl */ MatchCtrl
 		, /** Routes */ Routes) {
@@ -23,7 +25,7 @@ steal(
 		Hotkeys.registerHotkeys();
 
 		var dao = new MatchDAO();
-		var settings = new SettingsModel();
+		var settings = Settings.getInstance();
 
 		var match = new MatchModel(settings.summonerId(), settings.server());
 		if (!SettingsModel.isSummonerSet()) {

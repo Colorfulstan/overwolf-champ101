@@ -2,6 +2,7 @@
 steal('can.js'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, 'OverviewCtrl.js'
 	, 'ChampionCtrl.js'
 	, 'TooltipCtrl.js'
@@ -11,6 +12,7 @@ steal('can.js'
 	, function (can
 		, /**WindowCtrl*/ WindowCtrl
 		, /**SettingsModel*/ SettingsModel
+		, /**SettingsProvider*/ Settings
 		, /**OverviewCtrl*/ OverviewCtrl
 		, /**ChampionCtrl*/ ChampionCtrl
 		, /**TooltipCtrl*/ TooltipCtrl
@@ -293,7 +295,7 @@ steal('can.js'
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						Boot._showMatchLoading(new SettingsModel()).then(function () {
+						Boot._showMatchLoading(Settings.getInstance()).then(function () {
 							Routes.setRoute(Routes.reloadMatch, true);
 						});
 						ev.stopPropagation();
@@ -329,7 +331,7 @@ steal('can.js'
 						steal.dev.log('MatchCtrl: open settings');
 						WindowCtrl.openSettings();
 
-						var settings = new SettingsModel();
+						var settings = Settings.getInstance();
 						var summonerId = settings.summonerId();
 						// Reload the Match-Window after Settings-Window gets closed
 						var interval = window.setInterval(function () {

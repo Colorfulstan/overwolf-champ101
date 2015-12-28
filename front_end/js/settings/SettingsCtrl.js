@@ -23,7 +23,6 @@ steal(
 				var self = this;
 
 				WindowCtrl.prototype.init.apply(self, arguments);
-				//WindowCtrl.enableStorageEvents();
 
 				$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 					self.odkWindow = odkWindow;
@@ -54,7 +53,7 @@ steal(
 					self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
 					window.setTimeout(function () {
 						self.closeSettings();
-					},100);
+					}, 100);
 				} else {
 					this.requestSummonerId(settings, self, $btn)
 						.then(function () {
@@ -62,7 +61,7 @@ steal(
 							self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
 							window.setTimeout(function () {
 								self.closeSettings();
-							},100);
+							}, 100);
 						});
 				}
 			},
@@ -89,16 +88,16 @@ steal(
 				return def.promise();
 			},
 			triggerRestartIfNeccessary: function (startWithGameOrig, startWithGameCurrent) {
-					if (typeof startWithGameOrig !== 'undefined' && startWithGameOrig !== startWithGameCurrent){
-						WindowCtrl.events.trigger('restartAppEv');
-					}
+				if (typeof startWithGameOrig !== 'undefined' && startWithGameOrig !== startWithGameCurrent) {
+					WindowCtrl.events.trigger('restartAppEv');
+				}
 			},
 			closeSettings: function () {
 				var self = this;
 				WindowCtrl.events.trigger('settingsClosed');
 				window.setTimeout(function () {
 					WindowCtrl.close(self.odkWindow.name);
-				},100);
+				}, 100);
 
 			},
 			'#btn-save-close click': function ($btn, ev) {
@@ -107,6 +106,7 @@ steal(
 			},
 			'.btn-close click': function ($el, ev) {
 				var self = this;
+				this.options.settings.reset();
 				self.closeSettings();
 			},
 			'.btn-cancel click': function ($el, ev) {

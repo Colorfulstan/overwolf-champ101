@@ -11,6 +11,7 @@ System.config({
 		'Boot': './js/Utility/Boot.js',
 		'Boot.spec': './js/Utility/Boot.spec.js',
 
+		'SettingsProvider': './js/settings/SettingsProvider.js',
 		'SettingsModel': './js/settings/SettingsModel.js',
 		'SettingsCtrl': './js/settings/SettingsCtrl.js',
 

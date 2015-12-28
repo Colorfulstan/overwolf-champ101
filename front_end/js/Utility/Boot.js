@@ -3,9 +3,11 @@ steal(
 	'can'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, function (/**can*/ can
 		, /** WindowCtrl */ WindowCtrl
-		, /** SettingsModel*/ SettingsModel) {
+		, /** SettingsModel*/ SettingsModel
+		, /**SettingsProvider*/ Settings) {
 		/**
 		 * @class {Boot} Boot
 		 * @static
@@ -13,7 +15,7 @@ steal(
 		 * @typedef {Object} Boot
 		 * */
 		var Boot = {
-			strap: function (main,  /** SettingsModel */ settings, isFirstAppStart) {
+			strap: function (main, /** SettingsModel */ settings, isFirstAppStart) {
 				steal.dev.log('starting bootstraping');
 				Boot.checkIfIngame(overwolf.games.getRunningGameInfo, settings.isInGame)
 					.then(function () {
@@ -186,7 +188,7 @@ steal(
 				steal.dev.log('openMatchIfIngame');
 				if (SettingsModel.isInGame()) {
 					steal.dev.log('is in game, opening match');
-					var settings = new SettingsModel();
+					var settings = Settings.getInstance();
 					main.constructor.addStableFpsListenerAndHandler(settings.isFpsStable);
 					return WindowCtrl.openMatch(needsReload);
 				}

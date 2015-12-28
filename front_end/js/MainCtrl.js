@@ -3,10 +3,12 @@ steal(
 	'can'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, 'Boot.js'
 	, function (can
 		, /** WindowCtrl */ WindowCtrl
 		, /**SettingsModel*/ SettingsModel
+		, /**SettingsProvider*/ Settings
 		, /** Boot */ Boot) {
 
 		var Static = {
@@ -107,7 +109,7 @@ steal(
 				steal.dev.log('stableFPSHandler added');
 				WindowCtrl.events.one('fpsStable', function () {
 					steal.dev.warn('fps Stable, Match should now open');
-					var settings = new SettingsModel();
+					var settings = Settings.getInstance();
 					MainCtrl.removeStableFpsListener(settings.isFpsStable);
 					MainCtrl.mostRecentFPS = [];
 
@@ -118,7 +120,7 @@ steal(
 				});
 			},
 			_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
-				steal.dev.warn('League of Legends game started', new Date() , 'closing Matchwindow for reopening');
+				steal.dev.warn('League of Legends game started', new Date(), 'closing Matchwindow for reopening');
 				if (SettingsModel.isSummonerSet()) {
 					MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
 					settings.isInGame(true);
@@ -204,7 +206,7 @@ steal(
 			'{matchBtn} mousedown': function (el, ev) {
 				var self = this;
 				steal.dev.log('WindowCtrl: open match');
-				var settings = new SettingsModel;
+				var settings = Settings.getInstance();
 				Boot._showMatchLoading(settings).then(function () {
 					return WindowCtrl.openMatch(true);
 				}).then(function () {
@@ -212,10 +214,9 @@ steal(
 					//	Boot._showMatchLoading(settings)
 					//			.then(function () { Boot.openMatchIfIngame(self, true); })
 					//			.fail(function () { // === not in a game and matchwindow waits for stable fps
-									WindowCtrl.events.trigger('fpsStable');
-								//});
+					WindowCtrl.events.trigger('fpsStable');
+					//});
 					//} else { // just open the damn thing
-						settings.destroy();
 					//}
 				});
 
