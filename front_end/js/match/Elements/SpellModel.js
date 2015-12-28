@@ -99,7 +99,7 @@ steal(
 				return this.image.spriteSrc;
 			},
 			videoAvailable: function () {
-				if (this.attr('enableVideo') != null) return this.attr('enableVideo');
+				if (this.enableVideo != null) return this.enableVideo;
 				else return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();
 			},
 			videoId: function () {

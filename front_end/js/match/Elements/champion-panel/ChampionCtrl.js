@@ -1,3 +1,12 @@
+/**
+ * Panel
+ * @typedef {Object} Panel
+ * @property {ChampionModel} champ
+ * @property {SpellModel[]} summonerSpells // TODO: not used anymore
+ * @property {String} team
+ * @property {number} index - 1-based
+ */
+
 "use strict";
 steal(
 	'can'
@@ -35,14 +44,6 @@ steal(
 			 * @param options.match {MatchModel}
 			 */
 			init: function (element, options) {
-				/**
-				 * Panel
-				 * @typedef {Object} Panel
-				 * @property {ChampionModel} champ
-				 * @property {SpellModel[]} summonerSpells // TODO: not used anymore
-				 * @property {String} team
-				 * @property {number} index - 1-based
-				 */
 				/**
 				 * Participant[]
 				 * @type {can.List}
@@ -100,7 +101,7 @@ steal(
 				$('.team').find('[title="' + champName + '"]').addClass('addable');
 				$('.show-team').addClass('addable');
 
-				this.options.panels.each(function (item, index) {
+				this.options.panels.each(function (/** Panel */ item, index) {
 					if (champName == item.champ.name) {
 						self.options.panels.splice(index, 1);
 						return false;

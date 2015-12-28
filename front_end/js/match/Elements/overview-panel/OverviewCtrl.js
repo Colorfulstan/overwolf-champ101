@@ -38,9 +38,9 @@ steal(
 				// NOTE: correction for black "border" when using sprite in match overview
 				function correctSpritePosition(teamArray){
 					for (var i = 0; i < teamArray.length; i++) {
-						var image = teamArray[i].champ.attr('image');
-						image.attr('x', image.x + 2);
-						image.attr('y', image.y + 2);
+						var image = teamArray[i].champ.image;
+						image.x += 2;
+						image.y += 2;
 					}
 					return teamArray;
 				}
