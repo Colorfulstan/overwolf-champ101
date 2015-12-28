@@ -42,10 +42,8 @@ steal(
 			 *
 			 */
 			init: function (options) {
-				//var imgData = options.image;
 				this.image = new ImageModel(options.image);
 				options.image = this.image;
-
 				this.attr('enableVideo', false);
 				if (options.type != undefined) {
 					this.attr('type', options.type);
