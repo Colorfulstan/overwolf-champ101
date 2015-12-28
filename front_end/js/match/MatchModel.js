@@ -9,7 +9,7 @@ steal(
 		 * @class
 		 * @constructor
 		 */
-		var MatchModel = function MatchModel(summonerId, server) { // TODO: refactor to not being a can.Model but a Map??
+		var MatchModel = function MatchModel(summonerId, server) {
 
 			/** The region-Code of a server
 			 * @type {String}*/
