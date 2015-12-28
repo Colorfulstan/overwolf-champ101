@@ -17,7 +17,7 @@ steal(
 
 		var firstStart = !SettingsModel.isSummonerSet();  // localStorage has no items on first start
 
-		Boot.strap(main, firstStart, settings);
+		Boot.strap(main, settings, firstStart);
 
 	});
 

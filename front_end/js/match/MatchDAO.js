@@ -26,7 +26,6 @@ steal(
 				var deferred = $.Deferred();
 
 				var settings = new SettingsModel();
-debugger;
 				var params = {summonerId: transfer.summonerId, server: transfer.server};
 				//if (settings.cachedGameAvailable()){ // if gameId is given, the game with that id will be load from DB instead of Riot-API
 				//	params['gameId'] = settings.cachedGameId();

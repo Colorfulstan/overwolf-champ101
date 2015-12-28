@@ -12,9 +12,10 @@ describe("Boot.js || ", function () {
 		it("should call checkIfIngame and launchApp", function () {
 			var isFirstAppStart = 'boolean';
 			var settings = {};
-			Boot.strap(isFirstAppStart, settings);
+			var main = {name: 'main'};
+			Boot.strap(main, settings, isFirstAppStart);
 			expect(Boot.checkIfIngame).toHaveBeenCalled();
-			expect(Boot.launchApp).toHaveBeenCalledWith(settings, isFirstAppStart);
+			expect(Boot.launchApp).toHaveBeenCalledWith(main, settings, isFirstAppStart);
 		});
 	});
 	describe("checkIfIngame() || ", function () {

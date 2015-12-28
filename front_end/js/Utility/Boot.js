@@ -13,7 +13,7 @@ steal(
 		 * @typedef {Object} Boot
 		 * */
 		var Boot = {
-			strap: function (main, isFirstAppStart, /** SettingsModel */ settings) {
+			strap: function (main,  /** SettingsModel */ settings, isFirstAppStart) {
 				steal.dev.log('starting bootstraping');
 				Boot.checkIfIngame(overwolf.games.getRunningGameInfo, settings.isInGame)
 					.then(function () {
