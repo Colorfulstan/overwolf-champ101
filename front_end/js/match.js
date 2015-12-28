@@ -25,8 +25,7 @@ steal(
 		var dao = new MatchDAO();
 		var settings = new SettingsModel();
 
-		var model = new MatchModel(settings.summonerId(), settings.server());
-		debugger;
+		var match = new MatchModel(settings.summonerId(), settings.server());
 		if (!SettingsModel.isSummonerSet()) {
 			WindowCtrl.closeMatch();
 			return false;
@@ -34,13 +33,13 @@ steal(
 		var preloadMatchBeforeShowing = settings.isInGame() && !settings.isManualReloading();
 		if (preloadMatchBeforeShowing) { // ingame == preload data
 			steal.dev.log('preloading data');
-			dao.loadMatchModel(model).always(function (match) { // TODO: currently not accounting for manual starts!?
-				new MatchCtrl('html', {dao: dao, model: match, settings: settings});
+			dao.loadMatchModel(match).always(function (matchPromise) { // TODO: currently not accounting for manual starts!?
+				new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings});
 			});
 		} else { // else == show match with promise (handled within MatchCtrl)
 			steal.dev.log('not preloading data');
-			var match = dao.loadMatchModel(model);
-			new MatchCtrl('html', {dao: dao, model: match, settings: settings}); // window will open while Data is still loading
+			var matchPromise = dao.loadMatchModel(match);
+			new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings}); // window will open while Data is still loading
 			settings.isManualReloading(false);
 		}
 	});
