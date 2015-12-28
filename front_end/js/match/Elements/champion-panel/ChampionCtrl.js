@@ -39,7 +39,7 @@ steal(
 				 * Panel
 				 * @typedef {Object} Panel
 				 * @property {ChampionModel} champ
-				 * @property {SpellModel[]} summonerSpells
+				 * @property {SpellModel[]} summonerSpells // TODO: not used anymore
 				 * @property {String} team
 				 * @property {number} index - 1-based
 				 */

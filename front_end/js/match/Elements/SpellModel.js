@@ -9,41 +9,60 @@ steal(
 		, /**TooltipCtrl*/ TooltipCtrl) {
 
 		/** * // TODO: add more from backend and doc here
-
-		 * @see SpellModel.init()
-		 * */
-		var SpellModel = can.Model.extend('SpellModel', {}, {
+		 * @typedef {Object} SpellModel
+		 *
+		 * @property {String} name
+		 * @property {String} type 'ability' or 'passive'
+		 * @property {String} description
+		 * @property {ImageModel} image
+		 * @property {Number} number The Number of the spell for the champ. <br>1 will be the passive, 2-4 the abilities and 5 will be the ultimate
+		 * @property {Number} enableVideo If this Spell has a Video or not (SummonerSpells do not
+		 * @property {Number} champId
+		 * @property {Array.<Number>} cooldown
+		 * @property {String} cooldownBurn
+		 * @property {Array.<Number>} range
+		 * @property {String} tooltip
+		 * @property {Array.<Array.<Number>>} effect
+		 * @property {Array.<String>} effectBurn
+		 * @property {String} resource
+		 * @property {Array.<Number>} cost
+		 * @property {String} costBurn
+		 * @property {String} costType
+		 */
+		var SpellModel = can.Map.extend('SpellModel', {}, {
 			/**
-			 * @param options.name {String}
-			 * @param options.type {String}
-			 * @param options.description {String}
-			 * @param options.tooltip {String}
-
-			 * @param options.image {ImageModel}
-			 * @param options.number {Number}
-			 * @param options.cooldownBurn    {String}
-			 * @param options.costBurn {String}
-			 * @param options.resource {String} - The Ressource used
-			 * @param options.rangeBurn {String} Array with range numbers per level ot 'self' if selfcast only
-
-			 * @param options.cooldown    {number[]}
-			 * @param options.cost {Number[]}
-			 * @param options.effect {String[][]}
-			 * @param options.effectBurn {String[][]}
-			 * @param options.costType {String} - THe Cost as {{ var }} with the ressource appended
-			 * @param options.range {Number[] | 'self'} Array with range numbers per level ot 'self' if selfcast only
+			 * @constructor
 			 *
-			 * @param options.vars {Array[]}
-			 * @param options.vars.coeff {number[]}
-			 * @param options.vars.dyn {String}
-			 * @param options.vars.key {String}
-			 * @param options.vars.link {String}
-			 * @param options.vars.ranksWith {String}
+			 * @param {String} options.name
+			 * @param {String} options.type
+			 * @param {String} options.description
+			 * @param {String} options.tooltip
+
+			 * @param {ImageModel} options.image
+			 * @param {Number} options.number
+			 * @param {String} options.cooldownBurn
+			 * @param {String} options.costBurn
+			 * @param {String} options.resource - The Ressource used
+			 * @param {String} options.rangeBurn Array with range numbers per level ot 'self' if selfcast only
+
+			 * @param {number[]} options.cooldown
+			 * @param {Number[]} options.cost
+			 * @param {String[][]} options.effect
+			 * @param {String[][]} options.effectBurn
+			 * @param {String} options.costType - the Cost as {{ var }} with the ressource appended
+			 * @param {Array.<Number>| 'self'} options.range Array with range numbers per level ot 'self' if selfcast only
 			 *
+			 * @param {Array.<Array>} options.vars
+			 * @param {Array.<Number>} options.vars.coeff
+			 * @param {String} options.vars.dyn
+			 * @param {String} options.vars.key
+			 * @param {String} options.vars.link
+			 * @param {String} options.vars.ranksWith
 			 */
 			init: function (options) {
-				this.image = new ImageModel(options.image);
-				options.image = this.image;
+
+				this.attr('image', new ImageModel(options.image));
+
 				this.attr('enableVideo', false);
 				if (options.type != undefined) {
 					this.attr('type', options.type);
@@ -61,75 +80,17 @@ steal(
 					}
 				}
 
-				if (options.tooltip != undefined && options.tooltip != null) {
+				if (typeof options.tooltip !== 'undefined' && options.tooltip !== null) {
 					// TODO: does this have to know TooltipCtrl to get the valued Tooltip?
 					this.attr('tooltip', TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars));
 				}
-				if (options.resource != undefined && options.resource != null) {
+				if (typeof options.resource !== 'undefined' && options.resource !== null) {
 					// TODO: does this have to know TooltipCtrl to get the valued ressource String?
 					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars));
 				} else {
 					this.attr('resource', options.costBurn);
 				}
 			},
-
-			///**@property
-			// * @type {String} */
-			//name: null,
-			///**@property
-			// * @type {String} */
-			//type: null,
-			///**@property
-			// * @type {String} */
-			//description: null,
-			///**@property
-			// * @type {ImageModel} */
-			//image: null,
-			///** The Number of the spell for the champ.
-			// *  1 will be the passive, 2-4 the abilities and 5 will be the ultimate
-			// * @property
-			// * @type {Number} */
-			//number: null,
-			///** If this Spell has a Video or not (SummonerSpells do not
-			// * @property
-			// * @type {Number} */
-			//enableVideo: null,
-			///**@property
-			// * @type {Number} */
-			//champId: null,
-			//
-			///** @property
-			// * @type {Number[]} */
-			//cooldown: null,
-			//
-			///** @property
-			// * @type {String} */
-			//cooldownBurn: null,
-			///** @property
-			// * @type {Number[]} */
-			//range: null,
-			//
-			///** @property
-			// * @type {Number[]} */
-			//tooltip: null,
-			///** @property
-			// * @type {Number[]} */
-			//effect: null,
-			///** @property
-			// * @type {Number[]} */
-			//effectBurn: null,
-			///** @property
-			// * @type {Number[]} */
-			//resource: null,
-			///** @property
-			// * @type {Number[]} */
-			//cost: null,
-			///** @property
-			// * @type {Number[]} */
-			//costBurn: null,
-			///** @property
-			// * @type {Number[]} */
-			//costType: null,
 
 			imgSrc: function () {
 				return this.image.src;
@@ -195,13 +156,6 @@ steal(
 				return CDN_ABILITIES_URL + 'videos/webm/' + this.cdnNumber() + '.webm';
 				//return null;
 			}
-
-			//// TODO:
-			//findAll: 'GET /champ.json',
-			//findOne: 'GET /champ/{id}.json',
-			//create:  'POST /champ.json',
-			////update:  'PUT /champ/{id}.json',
-			//destroy: 'DELETE /champ/{id}.json',
 		});
 		return SpellModel;
 	});

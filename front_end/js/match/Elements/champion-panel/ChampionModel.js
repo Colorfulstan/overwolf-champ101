@@ -18,15 +18,14 @@ steal(
 				options.passive.champId = this.id;
 				options.passive.type = 'passive'; // TODO: do in backend?
 				this.attr('passive', new SpellModel(options.passive));
-				this.image = new ImageModel(options.image);
-				options.image = this.image;
+				this.image = new ImageModel(options.image); // TODO: attr()
+				options.image = this.image; // TODO: why is this neccessary?
 
-				var spells = [];
-				options.spells.map(function (el, index) {
-					el.champId = self.id;
-					el.type = 'ability';
-					el.number = index + 2; // setting number to +2 since 1 will be the passive
-					spells.push(new SpellModel(el));
+				var spells = options.spells.map(function (spell, index) {
+					spell.champId = self.id;
+					spell.type = 'ability';
+					spell.number = index + 2; // setting number to +2 since 1 will be the passive
+					return new SpellModel(spell);
 				});
 				this.attr('spells', spells);
 			},

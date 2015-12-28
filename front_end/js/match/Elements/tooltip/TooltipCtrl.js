@@ -56,12 +56,11 @@ steal(
 				 * @param string
 				 * @param effect
 				 * @param vars
-				 * @return {*}
+				 * @return {String}
 				 */
 				tooltipValued: function (string, effect, vars) {
 					var ttNew = string;
 					var pattern;
-
 
 					/**
 					 * builds a string from an array - x / y / z / ... / or a single value if all values are the same.

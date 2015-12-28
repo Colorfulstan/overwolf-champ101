@@ -304,6 +304,7 @@ steal(
 			 * by calling the setters with the original values
 			 */
 			reset: function () {
+				// TODO: use http://canjs.com/docs/can.Map.backup.html
 				for (var prop in this.changedPropsOriginalValues) {
 					this[prop](this.changedPropsOriginalValues[prop]);
 				}
