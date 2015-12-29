@@ -1,7 +1,7 @@
 "use strict";
 steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settings) {
 
-	var debug = true;
+	var debug = false;
 
 	const TRACKER_ID = 'UA-71618029-2';
 	const appInstallerId = 'com.overwolf';
