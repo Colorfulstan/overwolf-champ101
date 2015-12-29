@@ -2,8 +2,10 @@
 steal(
 	'can'
 	, 'Routes.js'
+	, 'analytics.js'
 	, function (can
-		, /**Routes*/ Routes) {
+		, /**Routes*/ Routes
+		, analytics) {
 
 		/**
 		 * @see OverviewCtrl.init
@@ -36,7 +38,7 @@ steal(
 
 
 				// NOTE: correction for black "border" when using sprite in match overview
-				function correctSpritePosition(teamArray){
+				function correctSpritePosition(teamArray) {
 					for (var i = 0; i < teamArray.length; i++) {
 						var image = teamArray[i].champ.image;
 						image.x += 2;
@@ -48,13 +50,15 @@ steal(
 			'.portrait mouseenter': function ($el, ev) {
 				//steal.dev.log('.portrait mouseenter');
 				var $panel = $el.closest('.panel');
+				let name = $el.attr('title');
 				Routes.setRouteData({
 					route: Routes.tooltipChampion,
-					champ: $el.attr('title'),
+					champ: name,
 					overview: true,
 					y: $panel.offset().top + $panel.height(),
 					x: $panel.offset().left
 				}, true);
+				analytics.screenview('Champ-Summary-' + name);
 			},
 			'.portrait mouseout': function ($el, ev) {
 				//steal.dev.log('.portrait mouseout');
@@ -64,19 +68,21 @@ steal(
 				//steal.dev.log('.portrait click');
 				Routes.setRouteData({route: Routes.panelChampion, champ: $el.attr('title')});
 				$el.removeClass('addable');
+				analytics.screenview('Champ-Panel-' + champName);
 			},
 			'.show-team.blue click': function ($el, ev) {
 				Routes.setRouteData({team: 'blue', route: Routes.panelTeam});
 				ev.stopPropagation();
 				$('.team.blue').find('.portrait').removeClass('addable');
 				$('.show-team.blue').removeClass('addable');
-
+				analytics.screenview('Champ-Panel-Team-blue');
 			},
 			'.show-team.purple click': function ($el, ev) {
 				Routes.setRouteData({team: 'purple', route: Routes.panelTeam});
 				ev.stopPropagation();
 				$('.show-team.purple').removeClass('addable');
 				$('.team.purple').find('.portrait').removeClass('addable');
+				analytics.screenview('Champ-Panel-Team-purple');
 			}
 		});
 		return OverviewCtrl;
