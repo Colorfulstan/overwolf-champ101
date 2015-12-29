@@ -50,7 +50,7 @@ describe("Boot.js || ", function () {
 	describe("askForSummoner() || ", function () {
 		var mock_isSummonerSetGetter;
 		beforeEach(function () {
-			spyOn(WindowCtrl, 'openSettings').and.callFake(function () { });
+			WindowCtrl.openSettings = jasmine.createSpy('openSettings Stup');
 			mock_isSummonerSetGetter = jasmine.createSpy('isSummonerSetGetter');
 		});
 		describe("after settingsClosed Event is triggered", function () {

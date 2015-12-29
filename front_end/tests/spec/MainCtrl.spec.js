@@ -1,5 +1,6 @@
 import MainCtrl from 'MainCtrl';
 import SettingsModel from 'SettingsModel';
+import analytics from '../helper/analyticsMock';
 
 describe("MainCtrlSpec - testing the Main-Window", function () {
 	var mainCtrl, settingsModel;
@@ -39,17 +40,12 @@ describe("MainCtrlSpec - testing the Main-Window", function () {
 			expect($('.btn-close')).toBeInDOM();
 			expect($('i.btn-match')).toBeInDOM();
 		});
-		it(".app-buttons .btn-match should call static openMatch on MainCtrl superclass", function () {
-			mainCtrl.constructor.openMatch = jasmine.createSpy('"mainCtrl.constructor.openMatch spy"');
-			MainCtrl.openMatch = jasmine.createSpy('"MainCtrl.openMatch spy"'); // possible but not "clean"
-			mainCtrl.openMatch = jasmine.createSpy('"mainCtrl.openMatch spy"'); // not possible
+		it(".app-buttons .btn-match should call static openMatch on WindowCtrl", function () {
+			WindowCtrl.openMatch = jasmine.createSpy('"MainCtrl.openMatch spy"');
 
 			$('.btn-match').trigger('mousedown');
 
-			expect(MainCtrl.openMatch).toHaveBeenCalled();
-			expect(mainCtrl.constructor.openMatch).toHaveBeenCalled();
-
-			expect(mainCtrl.openMatch).not.toHaveBeenCalled();
+			expect(WindowCtrl.openMatch).toHaveBeenCalled();
 		});
 	});
 	//xdescribe(".start() || ", function () {

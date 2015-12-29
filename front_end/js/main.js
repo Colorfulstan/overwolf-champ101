@@ -16,7 +16,6 @@ steal(
 				analytics) {
 
 		analytics.init();
-
 		WindowCtrl.enableStorageEvents();
 
 		var main = new MainCtrl('html');

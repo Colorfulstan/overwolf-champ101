@@ -1,5 +1,6 @@
 import SettingsModel from "SettingsModel"
 import SettingsCtrl from "SettingsCtrl"
+import analytics from "../helper/analyticsMock"
 
 describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 	var settingsCtrl, settingsModel;
@@ -91,7 +92,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		it("should call close after successful request", function () { // TODO: fails because closeSettings is called within setTimeout
 			var server = 'euw', name = 'Test';
 			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
-			settingsCtrl.closeSettings = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
+			settingsCtrl.closeSettings = jasmine.createSpy('"settingsCtrl.closeSettings spy"');
 			settingsCtrl.odkWindow = {name: 'Settings'};
 
 			jasmine.Ajax.install();
@@ -176,14 +177,16 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		var hotkeyBtnClass = 'hotkey-btn';
 		function setUpHTMLHotkeyButtonFixture() {
 			jasmine.getFixtures().set('' +
-				'<a href="" class="' + hotkeyBtnClass + '">'
+				'<html><body><a href="" class="' + hotkeyBtnClass + '"></body></html>'
 			);
 		}
 		beforeEach(function () {
 			setUpHTMLHotkeyButtonFixture();
 			$hotkeyBtn = $('.' + hotkeyBtnClass);
-			spyOn(settingsModel, 'loadHotKeys').and.returnValue(true);
+			spyOn(settingsCtrl.options.settings, 'loadHotKeys').and.returnValue(true);
 			//settingsModel.loadHotKeys = jasmine.createSpy('"loadHotKeys spy"');
+			 settingsCtrl = new SettingsCtrl('html', {settings: settingsModel});
+
 			SettingsModel.getHotKeys = jasmine.createSpy('"getHotKeys spy"');
 			$hotkeyBtn.click();
 		});
@@ -192,9 +195,10 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			expect($._data(document, 'events').focus).not.toBeEmpty();
 		});
 		it("should call renderView after loading the Hotkeys", function () {
+			settingsCtrl.renderView = jasmine.createSpy('"renderView spy"').and.callFake(function () { });
+
 			$hotkeyBtn.click();
 			$(document).blur();
-			settingsCtrl.renderView = jasmine.createSpy('"renderView spy"');
 			$(document).focus();
 			expect(settingsCtrl.renderView).toHaveBeenCalled();
 

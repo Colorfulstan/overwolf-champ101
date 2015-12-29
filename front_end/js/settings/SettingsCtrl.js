@@ -2,8 +2,10 @@
 steal(
 	'can'
 	, 'WindowCtrl.js'
+	, 'analytics.js'
 	, function (can
-		, /**WindowCtrl*/ WindowCtrl) {
+		, /**WindowCtrl*/ WindowCtrl
+		, analytics) {
 
 		/**
 		 * Controller for the "Settings" view (settings.html / settings.js)
@@ -13,7 +15,8 @@ steal(
 			defaults: {
 				name: 'Settings',
 				settingsTmpl: 'templates/settings.mustache',
-				loadingSpinnerTmpl: 'templates/parts/loading-spinner.mustache'
+				loadingSpinnerTmpl: 'templates/parts/loading-spinner.mustache',
+				hotkeyBtns: '.hotkey-btn'
 			}
 		}, {
 			/**
@@ -28,7 +31,6 @@ steal(
 					self.odkWindow = odkWindow;
 				});
 				self.renderView();
-
 				//this.element.find('#summoner-name-input').focus();
 			},
 			renderView: function () {
@@ -121,24 +123,44 @@ steal(
 			'#summoner-name-input change': function ($el, ev) {
 				this.options.settings.summonerName($el.val());
 			},
-			'.hotkey-btn click': function ($el, ev) {
-				var self = this;
+			'{hotkeyBtns} click': function ($el, ev) {
+				let self = this;
+				ev.stopPropagation();
 
-				// TODO: find a cleaner solution
-				$(document).off('focus');
-				$(document).on('focus', focusHandler);
-				steal.dev.warn('document events:', $._data(document, 'events'));
-				function focusHandler() {
-					steal.dev.log('focusHandler after hotkey-btn click called');
-					$.when(self.options.settings.loadHotKeys()).then(function (noValueGiven) {
+				location.href = 'overwolf://settings/hotkeys#' + $el.attr('id');
+				$(document).one('focus', function () {
+					WindowCtrl.events.trigger('updateHotkeysEv');
+					steal.dev.log('updateHotkeysEv triggered in SettingsCtrl');
+					let oldHotkeys = $(SettingsCtrl.defaults.hotkeyBtns);
+					$.when(self.options.settings.loadHotKeys()).then(function (nothing) {
 						steal.dev.log('hotkeys reloaded');
 						self.renderView();
 						self.element.find('#hotkeys-rows').show();
+						analyticsSendNewHotkey(oldHotkeys, $(SettingsCtrl.defaults.hotkeyBtns));
 					});
-				}
+					function analyticsSendNewHotkey(oldHotkeys, newHotkeys) {
+						oldHotkeys.each(function (i) {
+							debugger;
+							let newValue = $(newHotkeys[i]).attr('data-key');
+							let oldValue = $(this).attr('data-key');
+							if (oldValue !== newValue) {
+								let fields = {};
+								fields[analytics.CUSTOM_DIMENSIONS.HOTKEY] = newValue;
+								analytics.event('Hotkey', 'changeTo', $(this).attr('id'), fields);
+							}
+						});
+					}
+				});
 			},
 			'#summoner-name-input focus': function ($el, ev) {
 				$el.val('');
+			},
+			'#dropdown-hotkeys click': function ($el, ev) {
+				ev.stopPropagation();
+
+				if ($('#dropdown-hotkeys').css('display') === 'none') {
+					analytics.screenview('Hotkeys');
+				}
 			}
 		});
 		return SettingsCtrl;

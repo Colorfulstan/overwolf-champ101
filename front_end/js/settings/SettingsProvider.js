@@ -12,6 +12,7 @@ steal(
 			if (!SettingsProvider.instance) {
 				SettingsProvider.instance = new SettingsModel();
 			}
+			SettingsProvider.instance.changedPropsOriginalValues = {};
 			return SettingsProvider.instance;
 		};
 		SettingsProvider.getClassObj = function SettingsProviderGetClassObj() {
