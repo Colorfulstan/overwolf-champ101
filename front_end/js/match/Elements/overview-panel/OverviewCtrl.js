@@ -50,7 +50,7 @@ steal(
 			'.portrait mouseenter': function ($el, ev) {
 				//steal.dev.log('.portrait mouseenter');
 				var $panel = $el.closest('.panel');
-				let name = $el.attr('title');
+				var name = $el.attr('title');
 				Routes.setRouteData({
 					route: Routes.tooltipChampion,
 					champ: name,

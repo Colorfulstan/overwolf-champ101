@@ -58,7 +58,7 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		initRan: false,
 		init: function () {
 			if (typeof window.ga === 'undefined') {
-				let src = (debug) ? 'http://www.google-analytics.com/analytics_debug.js' : 'http://www.google-analytics.com/analytics.js';
+				var src = (debug) ? 'http://www.google-analytics.com/analytics_debug.js' : 'http://www.google-analytics.com/analytics.js';
 				addScript(window, document, 'script', src, 'ga');
 			}
 			Settings.getClassObj().getManifest()
@@ -159,7 +159,7 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		 * @param dataPlaceHolders
 		 */
 		c101_exceptionTooltip: function (champ, ability, dataPlaceHolders, dataSurrogates) {
-			let fields = {};
+			var fields = {};
 			fields[this.CUSTOM_DIMENSIONS.CHAMP] = champ;
 			fields[this.CUSTOM_DIMENSIONS.DATA] = dataSurrogates;
 			fields[this.CUSTOM_DIMENSIONS.DATA_PLACEHOLDERS] = dataPlaceHolders;

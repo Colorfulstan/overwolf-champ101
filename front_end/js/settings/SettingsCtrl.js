@@ -70,16 +70,16 @@ steal(
 				}
 				function sendAnalytics(settings, summonerChanged) {
 					if (summonerChanged) {
-						let value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
-						let label = (settings.summonerName() === '---') ? 'random' : 'specific';
+						var value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
+						var label = (settings.summonerName() === '---') ? 'random' : 'specific';
 						analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
 					}
 					if (settings.hasValueChanged('startWithGame')){
-						let action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
+						var action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
 						analytics.event('Settings', action, 'startWithGame');
 					}
 					if (settings.hasValueChanged('closeMatchWithGame')){
-						let action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
+						var action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
 						analytics.event('Settings', action, 'closeMatchWithGame');
 					}
 				}
@@ -142,14 +142,14 @@ steal(
 				this.options.settings.summonerName($el.val());
 			},
 			'{hotkeyBtns} click': function ($el, ev) {
-				let self = this;
+				var self = this;
 				ev.stopPropagation();
 
 				location.href = 'overwolf://settings/hotkeys#' + $el.attr('id');
 				$(document).one('focus', function () {
 					WindowCtrl.events.trigger('updateHotkeysEv');
 					steal.dev.log('updateHotkeysEv triggered in SettingsCtrl');
-					let oldHotkeys = $(SettingsCtrl.defaults.hotkeyBtns);
+					var oldHotkeys = $(SettingsCtrl.defaults.hotkeyBtns);
 					$.when(self.options.settings.loadHotKeys()).then(function (nothing) {
 						steal.dev.log('hotkeys reloaded');
 						self.renderView();
@@ -158,10 +158,10 @@ steal(
 					});
 					function analyticsSendNewHotkey(oldHotkeys, newHotkeys) {
 						oldHotkeys.each(function (i) {
-							let newValue = $(newHotkeys[i]).attr('data-key');
-							let oldValue = $(this).attr('data-key');
+							var newValue = $(newHotkeys[i]).attr('data-key');
+							var oldValue = $(this).attr('data-key');
 							if (oldValue !== newValue) {
-								let fields = {};
+								var fields = {};
 								fields[analytics.CUSTOM_DIMENSIONS.HOTKEY] = newValue;
 								analytics.event('Hotkey', 'changeTo', $(this).attr('id'), fields);
 							}
