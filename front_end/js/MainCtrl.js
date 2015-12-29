@@ -219,7 +219,13 @@ steal(
 					//} else { // just open the damn thing
 					//}
 				});
-
+				analytics.event('Button', 'click', 'Match');
+			},
+			'.issues-link click': function () {
+				analytics.event('ExtLink', 'click', 'Github-issues');
+			},
+			'.email-link click': function () {
+				analytics.event('ExtLink', 'click', 'Email');
 			}
 		};
 

@@ -3,8 +3,8 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 
 	var debug = true;
 	const TRACKER_ID = 'UA-71618029-2';
+	const appInstallerId = 'com.overwolf';
 	var appName, appVersion;
-	var appInstallerId = 'com.overwolf';
 	var isReady = $.Deferred();
 
 	function setAppOptionsFromManifest(manifest) {
@@ -54,6 +54,7 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 					.then(createTracker)
 					.then(setReady)
 					.fail(function () {console.error('something went wrong with google analytics initialisation', arguments)});
+			this.initRan = true;
 		},
 		/** can be used to check if analytics has been added to the html page yet */
 		isReady: isReady.promise(),
