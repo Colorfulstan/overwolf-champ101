@@ -26,7 +26,6 @@ steal(
 				var deferred = $.Deferred();
 				overwolf.extensions.current.getManifest(function (r) {
 					steal.dev.log('Manifest response:', r);
-					debugger;
 					deferred.resolve(r);
 				});
 				return deferred.promise();

@@ -2,8 +2,10 @@
 steal(
 	'can'
 	, 'Routes.js'
+	, 'analytics.js'
 	, function (can
-		, /**Routes*/ Routes) {
+		, /**Routes*/ Routes
+		, analytics) {
 
 		/**
 		 * Controls the tooltip-container
@@ -56,11 +58,22 @@ steal(
 				 * @param string
 				 * @param effect
 				 * @param vars
-				 * @return {String}
+				 * @param champId to whom this ability belongs
+				 * @param name of the ability
+				 * @return {Array} [0] = tooltip with values, [1] = object with placeholders as keys and inserted Strings as values <br>
+				 *     keys were not correctly replacable and given values (if present) were used instead as a "best guess" for what data-point would be appropriate.
 				 */
-				tooltipValued: function (string, effect, vars) {
-					var ttNew = string;
-					var pattern;
+				tooltipValued: function (string, effect, vars, champId, name) {
+					let ttNew = string;
+					let pattern;
+
+					let missingPlaceHolders = {};
+					let allPlaceHolders = ttNew.match(/{{ (\w\d) }}/g);
+
+					let uniquePlaceHolders = (allPlaceHolders) ? allPlaceHolders.filter(function (itm, i, a) {
+						return i == a.indexOf(itm);
+					}) : [];
+					allPlaceHolders = null;
 
 					/**
 					 * builds a string from an array - x / y / z / ... / or a single value if all values are the same.
@@ -89,8 +102,8 @@ steal(
 					 */
 					if (vars) {
 						for (var j = 0; j < vars.length; j++) {
-							var valueString = "";
-							var link = vars[j].link;
+							let valueString = "";
+							let link = vars[j].link;
 							if (vars[j].coeff) {
 								valueString = buildValueString(vars[j].coeff);
 							}
@@ -101,6 +114,13 @@ steal(
 
 							pattern = new RegExp('{{ ' + vars[j].key + ' }}', 'g');
 							ttNew = ttNew.replace(pattern, '<span class="scaling-values">' + valueString + link + '</span>');
+
+							if (ttNew.indexOf(pattern.source) >= 0) {
+								missingPlaceHolders[pattern.source] = "null";
+								debugger;
+							}
+							let indexVar = uniquePlaceHolders.indexOf(pattern.source);
+							if (indexVar >= 0) uniquePlaceHolders.splice(indexVar, 1);
 						}
 					}
 
@@ -110,18 +130,54 @@ steal(
 							// {{ eX }} always referring to the effect / effectBurn Array
 							pattern = new RegExp('{{ e' + i + ' }}', 'g');
 
-							var effectValues = effect[i];
+							let effectValues = effect[i];
 							if (effectValues == null) { continue }
-							var effectString = buildValueString(effectValues);
+							let effectString = buildValueString(effectValues);
 							ttNew = ttNew.replace(pattern, '<span class="effect-e-values">' + effectString + '</span>');
+
+							if (ttNew.indexOf(pattern.source) >= 0) {
+								missingPlaceHolders[pattern.source] = "null";
+								debugger;
+							}
+							let indexEX = uniquePlaceHolders.indexOf(pattern.source);
+							if (indexEX >= 0) uniquePlaceHolders.splice(indexEX, 1);
 
 							// {{ fX }} was not found within the vars array, the achording index within effects / effectsburn will be used.
 							// sometimes this is used instead of {{ eX }} (eg Sona)
 							pattern = new RegExp('{{ f' + i + ' }}', 'g');
+
+							if (ttNew.indexOf(pattern.source) >= 0) {
+								missingPlaceHolders[pattern.source] = effectString;
+								debugger;
+							}
+
 							ttNew = ttNew.replace(pattern, '<span class="effect-f-values">' + effectString + '</span>');
+
+							let indexFX = uniquePlaceHolders.indexOf(pattern.source);
+							if (indexFX >= 0) uniquePlaceHolders.splice(indexFX, 1);
+
 						}
 					}
 
+					for (var i = 0; i < uniquePlaceHolders.length; i++) {
+						missingPlaceHolders[uniquePlaceHolders[i]] = "null";
+					}
+
+					uniquePlaceHolders = Object.keys(missingPlaceHolders);
+
+					let placeHolderValues = uniquePlaceHolders.map(function (key) {
+						return missingPlaceHolders[key];
+					});
+
+					if (uniquePlaceHolders.length > 0) {
+						debugger;
+						analytics.c101_exceptionTooltip(champId, name, uniquePlaceHolders, placeHolderValues);
+					}
+					debugger;
+
+					uniquePlaceHolders = null;
+					placeHolderValues = null;
+					missingPlaceHolders = null;
 					return ttNew;
 				}
 				,
@@ -133,7 +189,7 @@ steal(
 				 * @param costBurn The costburn for the spell
 				 * @param [varsArr]
 				 */
-				ressourceValued: function (string, effectBurnArr, costBurn, varsArr) {
+				ressourceValued: function (string, effectBurnArr, costBurn, varsArr, champId, name) {
 					var pattern;
 					var newString = string;
 
@@ -151,6 +207,9 @@ steal(
 
 					pattern = new RegExp('{{ cost }}', 'g');
 					newString = newString.replace(pattern, costBurn);
+					if (newString.indexOf('@') >= 0 || newString.indexOf('.' >= 0)){
+						analytics.c101_exceptionTooltip(champId, name, 'null', [costBurn, varsArr, effectBurnArr]);
+					}
 					return newString;
 				}
 			}, {
@@ -277,7 +336,11 @@ steal(
 								// TODO: maybe better error handling!?
 								steal.dev.log('Video got an Error', event, 'networkstate:', player.networkState);
 								$('#videoPlayer').remove();
-								$('.video--not-available').css('display', 'block')
+								$('.video--not-available').css('display', 'block');
+
+								let fields = {};
+								fields[analytics.CUSTOM_DIMENSIONS.DATA] = 'ability: ' + spell;
+								analytics.exception('Video is not available', false, fields);
 							});
 						});
 					}
@@ -320,4 +383,6 @@ steal(
 			;
 
 		return TooltipCtrl;
-	});
+	}
+)
+;

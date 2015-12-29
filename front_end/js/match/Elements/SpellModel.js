@@ -3,12 +3,14 @@ steal(
 	'can'
 	, 'ImageModel.js'
 	, 'TooltipCtrl.js'
+	, 'analytics.js'
 	, 'global.js'
 	, function (can
 		, /**ImageModel*/ ImageModel
-		, /**TooltipCtrl*/ TooltipCtrl) {
+		, /**TooltipCtrl*/ TooltipCtrl
+		, analytics) {
 
-		/** * // TODO: add more from backend and doc here
+		/**
 		 * @typedef {Object} SpellModel
 		 *
 		 * @property {String} name
@@ -34,6 +36,7 @@ steal(
 			 * @constructor
 			 *
 			 * @param {String} options.name
+			 * @param {String} options.champId
 			 * @param {String} options.type
 			 * @param {String} options.description
 			 * @param {String} options.tooltip
@@ -82,13 +85,18 @@ steal(
 
 				if (typeof options.tooltip !== 'undefined' && options.tooltip !== null) {
 					// TODO: does this have to know TooltipCtrl to get the valued Tooltip?
-					this.attr('tooltip', TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars));
+					let tooltipValued = TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars, options.champId, options.name);
+					this.attr('tooltip', tooltipValued);
 				}
 				if (typeof options.resource !== 'undefined' && options.resource !== null) {
 					// TODO: does this have to know TooltipCtrl to get the valued ressource String?
-					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars));
+					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars, options.champId, options.name));
 				} else {
 					this.attr('resource', options.costBurn);
+
+					if ((options.costBurn.indexOf('@') + options.costBurn.indexOf('.')) > -2) {
+						analytics.c101_exceptionTooltip(options.champId, options.name, "null", options.costBurn);
+					}
 				}
 			},
 

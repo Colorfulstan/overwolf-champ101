@@ -61,9 +61,8 @@ steal(
 					this.requestSummonerId(settings, self, $btn)
 						.then(function () {
 							WindowCtrl.events.trigger('summonerChangedEv');
-							sendAnalytics(true);
+							sendAnalytics(settings,true);
 							self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
-							debugger;
 							window.setTimeout(function () {
 								self.closeSettings();
 							}, 100);

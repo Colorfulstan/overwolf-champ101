@@ -10138,7 +10138,8 @@ i.fa {
     font-weight: bold; }
   #tooltip-container .effect-f-values {
     color: inherit;
-    font-weight: bold; }
+    font-weight: bold;
+    text-decoration: line-through !important; }
   #tooltip-container .spell-values-table {
     margin-bottom: 15px; }
     #tooltip-container .spell-values-table thead {
