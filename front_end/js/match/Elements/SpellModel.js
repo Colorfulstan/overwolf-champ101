@@ -11,56 +11,56 @@ steal(
 		, analytics) {
 
 		/**
-		 * @typedef {Object} SpellModel
+		 * @typedef {object} SpellModel
 		 *
-		 * @property {String} name
-		 * @property {String} type 'ability' or 'passive'
-		 * @property {String} description
+		 * @property {string} name
+		 * @property {string} type 'ability' or 'passive'
+		 * @property {string} description
 		 * @property {ImageModel} image
 		 * @property {Number} number The Number of the spell for the champ. <br>1 will be the passive, 2-4 the abilities and 5 will be the ultimate
 		 * @property {Number} enableVideo If this Spell has a Video or not (SummonerSpells do not
 		 * @property {Number} champId
 		 * @property {Array.<Number>} cooldown
-		 * @property {String} cooldownBurn
+		 * @property {string} cooldownBurn
 		 * @property {Array.<Number>} range
-		 * @property {String} tooltip
+		 * @property {string} tooltip
 		 * @property {Array.<Array.<Number>>} effect
-		 * @property {Array.<String>} effectBurn
-		 * @property {String} resource
+		 * @property {Array.<string>} effectBurn
+		 * @property {string} resource
 		 * @property {Array.<Number>} cost
-		 * @property {String} costBurn
-		 * @property {String} costType
+		 * @property {string} costBurn
+		 * @property {string} costType
 		 */
 		var SpellModel = can.Map.extend('SpellModel', {}, {
 			/**
 			 * @constructor
 			 *
-			 * @param {String} options.name
-			 * @param {String} options.champId
-			 * @param {String} options.type
-			 * @param {String} options.description
-			 * @param {String} options.tooltip
+			 * @param {string} options.name
+			 * @param {string} options.champId
+			 * @param {string} options.type
+			 * @param {string} options.description
+			 * @param {string} options.tooltip
 
 			 * @param {ImageModel} options.image
 			 * @param {Number} options.number
-			 * @param {String} options.cooldownBurn
-			 * @param {String} options.costBurn
-			 * @param {String} options.resource - The Ressource used
-			 * @param {String} options.rangeBurn Array with range numbers per level ot 'self' if selfcast only
+			 * @param {string} options.cooldownBurn
+			 * @param {string} options.costBurn
+			 * @param {string} options.resource - The Ressource used
+			 * @param {string} options.rangeBurn Array with range numbers per level ot 'self' if selfcast only
 
 			 * @param {number[]} options.cooldown
 			 * @param {Number[]} options.cost
-			 * @param {String[][]} options.effect
-			 * @param {String[][]} options.effectBurn
-			 * @param {String} options.costType - the Cost as {{ var }} with the ressource appended
+			 * @param {string[][]} options.effect
+			 * @param {string[][]} options.effectBurn
+			 * @param {string} options.costType - the Cost as {{ var }} with the ressource appended
 			 * @param {Array.<Number>| 'self'} options.range Array with range numbers per level ot 'self' if selfcast only
 			 *
 			 * @param {Array.<Array>} options.vars
 			 * @param {Array.<Number>} options.vars.coeff
-			 * @param {String} options.vars.dyn
-			 * @param {String} options.vars.key
-			 * @param {String} options.vars.link
-			 * @param {String} options.vars.ranksWith
+			 * @param {string} options.vars.dyn
+			 * @param {string} options.vars.key
+			 * @param {string} options.vars.link
+			 * @param {string} options.vars.ranksWith
 			 */
 			init: function (options) {
 
@@ -89,12 +89,11 @@ steal(
 					this.attr('tooltip', tooltipValued);
 				}
 				if (typeof options.resource !== 'undefined' && options.resource !== null) {
-					// TODO: does this have to know TooltipCtrl to get the valued ressource String?
+					// TODO: does this have to know TooltipCtrl to get the valued ressource string?
 					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars, options.champId, options.name));
 				} else {
 					this.attr('resource', options.costBurn);
-
-					if ((options.costBurn.indexOf('@') + options.costBurn.indexOf('.')) > -2) {
+					if (options.costBurn && (options.costBurn.indexOf('@') >= 0 || options.costBurn.indexOf('.') >= 0)) {
 						analytics.c101_exceptionTooltip(options.champId, options.name, "null", options.costBurn);
 					}
 				}

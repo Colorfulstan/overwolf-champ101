@@ -14,7 +14,7 @@ steal(
 		 * @class {Boot} Boot
 		 * @static
 		 * @readonly
-		 * @typedef {Object} Boot
+		 * @typedef {object} Boot
 		 * */
 		var Boot = {
 			strap: function (main, /** SettingsModel */ settings, isFirstAppStart) {

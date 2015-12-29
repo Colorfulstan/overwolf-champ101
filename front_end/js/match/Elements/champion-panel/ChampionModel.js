@@ -36,15 +36,15 @@ steal(
 				});
 			})(options);
 
-			/** @type {String} */
+			/** @type {string} */
 			this.name = options.name;
-			/** @type {String} */
+			/** @type {string} */
 			this.title = options.title;
 			/** @type {Number} */
 			this.id = options.id;
-			/** @type {Array.<String>} */
+			/** @type {Array.<string>} */
 			this.allytips = options.allytips;
-			/** @type {Array.<String>} */
+			/** @type {Array.<string>} */
 			this.enemytips = options.enemytips;
 
 			/** @get */

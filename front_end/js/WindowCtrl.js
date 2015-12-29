@@ -79,7 +79,7 @@ steal(
 					/**
 					 * triggers an Event for all Windows.
 					 * @param type
-					 * @param {Array | Object} [data] data to be given to the eventHandler <br>(NOTE: DATA CAN ONLY BE USED IF THE EVENT IS TRIGGERED IN THE SAME WINDOW THAT HANDLES THE EVENT)
+					 * @param {Array | object} [data] data to be given to the eventHandler <br>(NOTE: DATA CAN ONLY BE USED IF THE EVENT IS TRIGGERED IN THE SAME WINDOW THAT HANDLES THE EVENT)
 					 */
 					"trigger": function (type, data) {
 						steal.dev.log('triggering event', type);
@@ -166,14 +166,14 @@ steal(
 						if (result.status == "success") {
 							if (result.window.isVisible) {
 								self.minimize(name);
-								if (name == 'Match') {
+								if (name === 'Match') {
 									SettingsModel.isMatchMinimized(true);
 								}
 								deferred.resolve(null);
 							} else {
 								$.when(self.open(name)).then(function (/**ODKWindow*/ odkWindow) {
 									deferred.resolve(odkWindow);
-									if (name == 'Match') {
+									if (name === 'Match') {
 										SettingsModel.isMatchMinimized(false);
 									}
 								});
@@ -202,10 +202,9 @@ steal(
 				},
 				/** Opens the Match Window */
 				openMatch: function (needsReload) {
-					var p = WindowCtrl.open('Match').then(function () {
+					return WindowCtrl.open('Match').then(function () {
 						if (needsReload) { WindowCtrl.events.trigger('reloadMatchEv');}
 					});
-					return p;
 				},
 				/** Opens the Home / Main Window */
 				openMain: function () {
@@ -406,7 +405,7 @@ steal(
 				'{restoreWindowRoute} route': function (routeData) {
 					steal.dev.log('restore/:window - routeData:', routeData);
 					WindowCtrl.open(routeData.window);
-					if (routeData.window == 'Match') {
+					if (routeData.window === 'Match') {
 						SettingsModel.isMatchMinimized(false);
 					}
 					Routes.setRoute('', true);

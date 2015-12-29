@@ -226,7 +226,7 @@ steal('can.js'
 					return deferred.promise();
 				},
 				reloadMatch: function () {
-					var self = this;
+					//var self = this;
 					steal.dev.warn('calling reloadMatch()');
 
 					//this.options.match = routeData.match;
