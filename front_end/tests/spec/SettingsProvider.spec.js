@@ -18,4 +18,17 @@ describe('SettingsProvider (Settings) | ', function () {
 
 		expect(actual.attr()).toEqual(expected.attr());
 	});
+	it('should return SetttingsModel whose values are not saved for reset', function () {
+		var expected = {};
+
+		var settingsChanged = Settings.getInstance();
+		settingsChanged.summonerName('123');
+		settingsChanged.server('123');
+		var actual = settingsChanged.changedPropsOriginalValues;
+		expect(actual).not.toEqual(expected);
+
+		actual = Settings.getInstance().changedPropsOriginalValues;
+		expect(actual).toEqual(expected);
+
+	});
 });

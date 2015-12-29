@@ -45,19 +45,23 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 
 	var GoogleAnalyticsWrapper = {
 		CUSTOM_DIMENSIONS: {
-				HOTKEY : 'dimension1'
+			HOTKEY: 'dimension1'
+		},
+		VALUES: {
+			RANDOM_SUMMONER: 1,
+			SPECIFIC_SUMMONER: 5
 		},
 		initRan: false,
-		init: function(){
+		init: function () {
 			if (typeof window.ga === 'undefined') {
 				let src = (debug) ? 'http://www.google-analytics.com/analytics_debug.js' : 'http://www.google-analytics.com/analytics.js';
 				addScript(window, document, 'script', src, 'ga');
 			}
 			Settings.getClassObj().getManifest()
-					.done(setAppOptionsFromManifest)
-					.then(createTracker)
-					.then(setReady)
-					.fail(function () {console.error('something went wrong with google analytics initialisation', arguments)});
+				.done(setAppOptionsFromManifest)
+				.then(createTracker)
+				.then(setReady)
+				.fail(function () {console.error('something went wrong with google analytics initialisation', arguments)});
 			this.initRan = true;
 		},
 		/** can be used to check if analytics has been added to the html page yet */
@@ -65,7 +69,7 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 		/** Runs a function when analytics finished loading.
 		 * All calls to ga() should be delegated to this function to prevent undefined errors.
 		 * @param cb the function to run when analytics is ready */
-		runWhenReady: function(cb){
+		runWhenReady: function (cb) {
 			if (this.initRan === false) {throw new Error('analytics is not initialised. run .init() before sending data!')}
 			$.when(this.isReady).then(cb);
 		},
@@ -78,7 +82,7 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 		 * @param {string} type 'pageview', 'screenview', 'event', 'transaction', 'item', 'social', 'exception', 'timing'
 		 * @param {object} fields additional fields
 		 */
-		hit: function(type, fields){
+		hit: function (type, fields) {
 			this.runWhenReady(function () {
 				ga('send', type, fields);
 			});
@@ -87,12 +91,12 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 		/** Send a screenview hit
 		 * @param {String} screenName
 		 * @param {Object} [fields] additional fields to send with the screenview */
-		screenview: function(screenName, fields){
-			if (typeof screenName !== 'string'){ throw new Error('Mandatory parameter screenName has to be a string');}
+		screenview: function (screenName, fields) {
+			if (typeof screenName !== 'string') { throw new Error('Mandatory parameter screenName has to be a string');}
 			fields = fields || {};
 
 			fields.screenName = screenName;
-			this.runWhenReady(function(){
+			this.runWhenReady(function () {
 				ga('send', 'screenview', fields);
 			})
 		},
@@ -104,15 +108,15 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 		 * @param {String} action
 		 * @param {String} [label]
 		 * @param {Object} [fields] */
-		event: function(category, action, label, fields){
+		event: function (category, action, label, fields) {
 			fields = fields || {};
 
 			if (typeof category !== 'string') {throw new Error('Mandatory parameter category has to be a string')}
 			if (typeof action !== 'string') {throw new Error('Mandatory parameter action has to be a string')}
 			if (label !== undefined) {
-				if (typeof label === 'Object'){
+				if (typeof label === 'Object') {
 					fields = label;
-				} else if (typeof label !== 'string'){
+				} else if (typeof label !== 'string') {
 					throw new Error('Optional parameter label has to be a string');
 				} else {
 					fields.eventLabel = label;

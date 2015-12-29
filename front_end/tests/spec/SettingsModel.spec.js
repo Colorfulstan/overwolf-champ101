@@ -17,7 +17,7 @@ describe('SettingsModel', function () {
 			settings.summonerName('123');
 			expect(settings.hasValueChanged('summonerName')).toEqual(true);
 
-			settings = new SettingsModel();
+			settings.changedPropsOriginalValues = {};
 			settings.summonerName('321');
 			expect(settings.hasValueChanged('summonerName')).toEqual(true);
 			settings.summonerName('123');

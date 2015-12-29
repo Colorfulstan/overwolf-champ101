@@ -53,6 +53,7 @@ steal(
 				var settings = self.options.settings;
 				if (self.summonerUnchanged()) {	// no change - spare the request
 					self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
+					sendAnalytics(settings, false);
 					window.setTimeout(function () {
 						self.closeSettings();
 					}, 100);
@@ -60,11 +61,28 @@ steal(
 					this.requestSummonerId(settings, self, $btn)
 						.then(function () {
 							WindowCtrl.events.trigger('summonerChangedEv');
+							sendAnalytics(true);
 							self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
+							debugger;
 							window.setTimeout(function () {
 								self.closeSettings();
 							}, 100);
 						});
+				}
+				function sendAnalytics(settings, summonerChanged) {
+					if (summonerChanged) {
+						let value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
+						let label = (settings.summonerName() === '---') ? 'random' : 'specific';
+						analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
+					}
+					if (settings.hasValueChanged('startWithGame')){
+						let action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
+						analytics.event('Settings', action, 'startWithGame');
+					}
+					if (settings.hasValueChanged('closeMatchWithGame')){
+						let action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
+						analytics.event('Settings', action, 'closeMatchWithGame');
+					}
 				}
 			},
 			requestSummonerId: function (settings, self, $btn) {
@@ -104,6 +122,7 @@ steal(
 			},
 			'#btn-save-close click': function ($btn, ev) {
 				$btn.text('checking'); // TODO: replace with class
+				analytics.event('Button', 'click', 'save-settings');
 				this.saveAndCloseHandler(this, $btn);
 			},
 			'.btn-close click': function ($el, ev) {
@@ -112,10 +131,10 @@ steal(
 				self.closeSettings();
 			},
 			'.btn-cancel click': function ($el, ev) {
-				var self = this;
 				// restore the old settings-values
 				this.options.settings.reset();
-				self.closeSettings();
+				analytics.event('Button', 'click', 'cancel-settings');
+				this.closeSettings();
 			},
 			'#server-region-select change': function ($el, ev) {
 				this.options.settings.server($el.val());
@@ -140,7 +159,6 @@ steal(
 					});
 					function analyticsSendNewHotkey(oldHotkeys, newHotkeys) {
 						oldHotkeys.each(function (i) {
-							debugger;
 							let newValue = $(newHotkeys[i]).attr('data-key');
 							let oldValue = $(this).attr('data-key');
 							if (oldValue !== newValue) {
