@@ -1,10 +1,14 @@
 import can from "can";
+import analyticsMock from '../helper/analyticsMock';
 import WindowCtrl from "WindowCtrl";
 import Routes from "Routes";
 
 describe("WindowCtrlSpec - ", function () {
 	var winCtrl;
 
+	beforeEach(function () {
+		WindowCtrl.analytics.event = analyticsMock.event;
+	});
 	afterEach(function () {
 		if (winCtrl && winCtrl.destroy !== 'undefined') {
 			winCtrl.destroy();
@@ -113,8 +117,10 @@ describe("WindowCtrlSpec - ", function () {
 			expect($('.btn-close')).toBeInDOM();
 		});
 		it("mousedown on a button within .drag-window-handle should not result in dragging", function () {
+
 			var methodName = 'dragMove';
 			setupBtnMethodSpies(methodName);
+
 			mouseDown(true, '.btn-resize');
 			mouseDown(true, '.btn-minimize');
 			mouseDown(true, '.btn-settings');

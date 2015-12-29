@@ -39,6 +39,7 @@ steal(
 					toggleWindowRoute: Routes.toggleWindow,
 					restoreWindowRoute: Routes.restoreWindow
 				},
+				analytics: analytics, // for testing purposes
 				/**@static*/
 				SCREEN_WIDTH: window.screen.availWidth,
 				/**@static*/

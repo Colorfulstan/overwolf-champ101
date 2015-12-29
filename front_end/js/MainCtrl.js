@@ -5,11 +5,13 @@ steal(
 	, 'SettingsModel.js'
 	, 'SettingsProvider.js'
 	, 'Boot.js'
+	, 'analytics.js'
 	, function (can
 		, /** WindowCtrl */ WindowCtrl
 		, /**SettingsModel*/ SettingsModel
 		, /**SettingsProvider*/ Settings
-		, /** Boot */ Boot) {
+		, /** Boot */ Boot
+		, analytics) {
 
 		var Static = {
 			defaults: {
@@ -17,6 +19,7 @@ steal(
 				, matchBtn: '.btn-match'
 			},
 			mostRecentFPS: [],
+			analytics: analytics, // for testing purposes to be able to mock it
 
 
 			/**
@@ -237,5 +240,6 @@ steal(
 		 */
 		var MainCtrl = WindowCtrl.extend(Static, Instance);
 		return MainCtrl;
-	})
+	}
+)
 ;
