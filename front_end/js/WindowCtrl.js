@@ -29,7 +29,10 @@ steal(
 					, /** CSSSelectorString */ infoBtn: '.btn-info'
 					, /** CSSSelectorString */ helpBtn: '.btn-help'
 					, /** CSSSelectorString */ feedbackBtn: '.btn-feedback'
-					, /** CSSSelectorString */ closeBtn: '.btn-close',
+					, /** CSSSelectorString */ closeBtn: '.btn-close'
+					, /** CSSSelectorString */ rogLink: '.rog-logo a'
+					, /** CSSSelectorString */ dropdownListBtn: '[data-control="c101-dropdown"]'
+					, /** CSSSelectorString */ dropdownListTarget: '[data-c101-dropdown]',
 
 					// handled routes
 					/**@inheritDoc Routes.toggleWindow */
@@ -280,26 +283,13 @@ steal(
 					} else { // just open it
 						$el.parent().after(newNodeString);
 					}
+					analytics.event('Button', 'click', '?');
 				},
 
 				'.drag-window-handle mousedown': function ($el, ev) {
 					steal.dev.log('dragging');
 					WindowCtrl.dragMove(this.options.name);
-				}
-				,
-
-				/** Does prevent Event propagation
-				 * @listens MouseEvent#mousedown for the left Mousebutton
-				 * @param $el
-				 * @param ev
-				 *
-				 * @see WindowCtrl.defaults.closeBtn
-				 */
-				'{closeBtn} mousedown': function ($el, ev) {
-					if (ev.which == 1) {
-						WindowCtrl.close(this.options.name);
-						ev.stopPropagation();
-					}
+					analytics.event('Window', 'drag');
 				}
 				,
 				/** Does prevent Event propagation
@@ -310,6 +300,7 @@ steal(
 				'{resizeBtn} mousedown': function ($el, ev) {
 					WindowCtrl.dragResize(this.options.name, 'BottomRight');
 					ev.stopPropagation();
+					analytics.event('Window', 'resize');
 				}
 				,
 				/** Does prevent Event propagation
@@ -322,6 +313,22 @@ steal(
 					if (ev.which == 1) {
 						WindowCtrl.minimize(this.options.name);
 						ev.stopPropagation();
+						analytics.event('Button', 'click', 'minimize');
+					}
+				}
+				,
+				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left Mousebutton
+				 * @param $el
+				 * @param ev
+				 *
+				 * @see WindowCtrl.defaults.closeBtn
+				 */
+				'{closeBtn} mousedown': function ($el, ev) {
+					if (ev.which == 1) {
+						WindowCtrl.close(this.options.name);
+						ev.stopPropagation();
+						analytics.event('Button', 'click', 'close');
 					}
 				}
 				,
@@ -335,6 +342,7 @@ steal(
 						steal.dev.log('WindowCtrl: open settings');
 						WindowCtrl.openSettings();
 						ev.stopPropagation();
+						analytics.event('Button', 'click', 'Settings');
 					}
 				}
 				,
@@ -347,9 +355,32 @@ steal(
 					if (ev.which == 1) {
 						WindowCtrl.openMain();
 						ev.stopPropagation();
+						analytics.event('Button', 'click', 'Info');
 					}
 				}
 				,
+				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left MouseButton
+				 * @param $el
+				 * @param ev
+				 * @see WindowCtrl.defaults.dropdownListBtn*/
+				'{dropdownListBtn} mousedown': function ($el, ev) {
+					if (ev.which == 1) {
+						let targets = WindowCtrl.defaults.dropdownListTarget;
+						let listId = $el.attr('data-target');
+						let list = $('#' + listId);
+						if (list.css('display') === 'none') {
+							analytics.screenview('Info-' + listId);
+						}
+						$el.next(targets).siblings(targets).slideUp();
+						list.slideToggle();
+						ev.stopPropagation();
+					}
+				}
+				,
+				'{rogLink} click': function () {
+					analytics.event('AdLink', 'click', 'ROG-Logo');
+				},
 				/**
 				 * calls {@link WindowCtrl.toggle}
 				 * @listens can.Route#route {@link toggleWindowRoute}
