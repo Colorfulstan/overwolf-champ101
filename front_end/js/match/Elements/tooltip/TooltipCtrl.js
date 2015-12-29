@@ -64,13 +64,13 @@ steal(
 				 *     keys were not correctly replacable and given values (if present) were used instead as a "best guess" for what data-point would be appropriate.
 				 */
 				tooltipValued: function (string, effect, vars, champId, name) {
-					let ttNew = string;
-					let pattern;
+					var ttNew = string;
+					var pattern;
 
-					let missingPlaceHolders = {};
-					let allPlaceHolders = ttNew.match(/{{ (\w\d) }}/g);
+					var missingPlaceHolders = {};
+					var allPlaceHolders = ttNew.match(/{{ (\w\d) }}/g);
 
-					let uniquePlaceHolders = (allPlaceHolders) ? allPlaceHolders.filter(function (itm, i, a) {
+					var uniquePlaceHolders = (allPlaceHolders) ? allPlaceHolders.filter(function (itm, i, a) {
 						return i == a.indexOf(itm);
 					}) : [];
 					allPlaceHolders = null;
@@ -102,8 +102,8 @@ steal(
 					 */
 					if (vars) {
 						for (var j = 0; j < vars.length; j++) {
-							let valueString = "";
-							let link = vars[j].link;
+							var valueString = "";
+							var link = vars[j].link;
 							if (vars[j].coeff) {
 								valueString = buildValueString(vars[j].coeff);
 							}
@@ -119,7 +119,7 @@ steal(
 								missingPlaceHolders[pattern.source] = "null";
 								debugger;
 							}
-							let indexVar = uniquePlaceHolders.indexOf(pattern.source);
+							var indexVar = uniquePlaceHolders.indexOf(pattern.source);
 							if (indexVar >= 0) uniquePlaceHolders.splice(indexVar, 1);
 						}
 					}
@@ -130,16 +130,16 @@ steal(
 							// {{ eX }} always referring to the effect / effectBurn Array
 							pattern = new RegExp('{{ e' + i + ' }}', 'g');
 
-							let effectValues = effect[i];
+							var effectValues = effect[i];
 							if (effectValues == null) { continue }
-							let effectString = buildValueString(effectValues);
+							var effectString = buildValueString(effectValues);
 							ttNew = ttNew.replace(pattern, '<span class="effect-e-values">' + effectString + '</span>');
 
 							if (ttNew.indexOf(pattern.source) >= 0) {
 								missingPlaceHolders[pattern.source] = "null";
 								debugger;
 							}
-							let indexEX = uniquePlaceHolders.indexOf(pattern.source);
+							var indexEX = uniquePlaceHolders.indexOf(pattern.source);
 							if (indexEX >= 0) uniquePlaceHolders.splice(indexEX, 1);
 
 							// {{ fX }} was not found within the vars array, the achording index within effects / effectsburn will be used.
@@ -153,7 +153,7 @@ steal(
 
 							ttNew = ttNew.replace(pattern, '<span class="effect-f-values">' + effectString + '</span>');
 
-							let indexFX = uniquePlaceHolders.indexOf(pattern.source);
+							var indexFX = uniquePlaceHolders.indexOf(pattern.source);
 							if (indexFX >= 0) uniquePlaceHolders.splice(indexFX, 1);
 
 						}
@@ -165,7 +165,7 @@ steal(
 
 					uniquePlaceHolders = Object.keys(missingPlaceHolders);
 
-					let placeHolderValues = uniquePlaceHolders.map(function (key) {
+					var placeHolderValues = uniquePlaceHolders.map(function (key) {
 						return missingPlaceHolders[key];
 					});
 
@@ -338,7 +338,7 @@ steal(
 								$('#videoPlayer').remove();
 								$('.video--not-available').css('display', 'block');
 
-								let fields = {};
+								var fields = {};
 								fields[analytics.CUSTOM_DIMENSIONS.DATA] = 'ability: ' + spell;
 								analytics.exception('Video is not available', false, fields);
 							});

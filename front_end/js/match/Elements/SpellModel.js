@@ -85,7 +85,7 @@ steal(
 
 				if (typeof options.tooltip !== 'undefined' && options.tooltip !== null) {
 					// TODO: does this have to know TooltipCtrl to get the valued Tooltip?
-					let tooltipValued = TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars, options.champId, options.name);
+					var tooltipValued = TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars, options.champId, options.name);
 					this.attr('tooltip', tooltipValued);
 				}
 				if (typeof options.resource !== 'undefined' && options.resource !== null) {

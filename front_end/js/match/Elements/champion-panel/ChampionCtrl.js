@@ -70,7 +70,7 @@ steal(
 					if (this.element.find('[title="' + champName + '"]').length) {
 						return;
 					}
-					let numShownPanels = this.options.panels.length;
+					var numShownPanels = this.options.panels.length;
 					if (numShownPanels >= 4) {
 						analytics.event('Champions', 'show', '4 or more (manually)', {eventValue: numShownPanels});
 						if (numShownPanels >= 6) {

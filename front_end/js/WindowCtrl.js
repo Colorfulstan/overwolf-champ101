@@ -371,9 +371,9 @@ steal(
 				 * @see WindowCtrl.defaults.dropdownListBtn*/
 				'{dropdownListBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						let targets = WindowCtrl.defaults.dropdownListTarget;
-						let listId = $el.attr('data-target');
-						let list = $('#' + listId);
+						var targets = WindowCtrl.defaults.dropdownListTarget;
+						var listId = $el.attr('data-target');
+						var list = $('#' + listId);
 						if (list.css('display') === 'none') {
 							analytics.screenview('Info-' + listId);
 						}
