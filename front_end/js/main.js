@@ -8,10 +8,15 @@ steal(
 	, 'SettingsModel.js'
 	, 'SettingsProvider.js'
 	, 'Boot.js'
+	, 'analytics.js'
 	, function (/** MainCtrl */ MainCtrl
 		, /** SettingsModel*/ SettingsModel
 		, /** SettingsProvider */ Settings
-		, /** Boot */ Boot) {
+		, /** Boot */ Boot,
+				analytics) {
+
+		analytics.init();
+
 		WindowCtrl.enableStorageEvents();
 
 		var main = new MainCtrl('html');
