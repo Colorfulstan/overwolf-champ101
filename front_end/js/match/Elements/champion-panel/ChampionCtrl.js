@@ -70,8 +70,12 @@ steal(
 					if (this.element.find('[title="' + champName + '"]').length) {
 						return;
 					}
-					if (this.options.panels.length >= 6) {
-						this.options.panels.pop();
+					let numShownPanels = this.options.panels.length;
+					if (numShownPanels >= 4) {
+						analytics.event('Champions', 'show', '4 or more (manually)', {eventValue: numShownPanels});
+						if (numShownPanels >= 6) {
+							this.options.panels.pop();
+						}
 					}
 					var panel = this.options.match.participantsByChamp[champName];
 					panel.index = this.options.panels.length;
@@ -134,13 +138,13 @@ steal(
 
 				'{showTeamRoute} route': function (data) {
 					steal.dev.log(':team route triggered - adding Panels for Team:', data.team);
-					Routes.setRoute(Routes.tooltipHide, true)
+					Routes.setRoute(Routes.tooltipHide, true);
 					this.showTeam(data.team);
 					this.addCloseAllBtn();
 				},
 				'{addChampRoute} route': function (data) {
 					steal.dev.log(':champ route triggered - adding champ', data.champ);
-					Routes.setRoute(Routes.tooltipHide, true)
+					Routes.setRoute(Routes.tooltipHide, true);
 					this.addPanel(data.champ);
 					if (this.options.panels.length >= 2) {
 						this.addCloseAllBtn();
@@ -168,6 +172,7 @@ steal(
 					$panel.slideUp(function () {
 						self.removePanel(champName);
 					});
+					analytics.event('Champions', 'close', 'one');
 				},
 				'#close-all-btn click': function () {
 					var self = this;
@@ -175,6 +180,7 @@ steal(
 					$('.champion-panel').slideUp(function () {
 						self.closeAllPanels();
 					});
+					analytics.event('Champions', 'close', 'all');
 				},
 				mouseenterHandler: function ($el) {
 					var $panel = $el.closest('.panel');
@@ -196,6 +202,7 @@ steal(
 						y: $panel.offset().top + $panel.height(),
 						x: $panel.offset().left
 					}, true);
+					analytics.screenview('Spell-' + $el.attr('data-type') + '-' + $panel.attr('data-name')); // TODO: maybe remove bc saves a lot of requests
 				},
 				'.spell click': function ($el, ev) {
 					//steal.dev.log('clicked on .spell');
@@ -208,9 +215,11 @@ steal(
 					if (Routes.attr('video') == 1) {
 						steal.dev.log('setting video:0');
 						Routes.setRouteData({'video': 0}, false);
+						analytics.event('Video', 'stop');
 					} else {
 						steal.dev.log('setting video:1');
 						Routes.setRouteData({'video': 1}, false);
+						analytics.event('Video', 'play');
 					}
 				},
 				'.portrait mouseenter': function ($el, ev) {
@@ -221,7 +230,8 @@ steal(
 						champ: $panel.attr('data-name'),
 						y: $panel.offset().top + $panel.height(),
 						x: $panel.offset().left
-					}, true)
+					}, true);
+					analytics.screenview('Champ-Tips' + $panel.attr('data-name')); // TODO: maybe remove bc saves a lot of requests
 				},
 				'.img mouseout': function ($el, ev) {
 					var $panel = $el.closest('.panel');
