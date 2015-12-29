@@ -283,13 +283,13 @@ steal(
 					var newNodeString = '<div class="whats-this-display text-body"><p>' + $el.attr('title') + '</p></div>';
 					if ($el.parent().next('div').hasClass('whats-this-display')) { // close it again
 						$OpenWhats.remove();
-					} else if ($OpenWhats.length) { // another one is open - close that and open targeted
-						$OpenWhats.remove();
+					} else {
+						if ($OpenWhats.length) { // another one is open - close that before opening targeted
+							$OpenWhats.remove();
+						}
 						$el.parent().after(newNodeString);
-					} else { // just open it
-						$el.parent().after(newNodeString);
+						analytics.event('?', 'show', $el.parent().attr('for'));
 					}
-					analytics.event('Button', 'click', '?');
 				},
 
 				'.drag-window-handle mousedown': function ($el, ev) {
@@ -396,7 +396,6 @@ steal(
 					steal.dev.log('toggle/:window - routeData:', routeData);
 					WindowCtrl.toggle(routeData.window);
 					Routes.setRoute('', true);
-
 				}
 				,
 				/**
