@@ -1,9 +1,20 @@
 import MainCtrl from 'MainCtrl';
 import SettingsModel from 'SettingsModel';
-import analytics from '../helper/analyticsMock';
+import analyticsMock from '../helper/analyticsMock';
 
 describe("MainCtrlSpec - testing the Main-Window", function () {
 	var mainCtrl, settingsModel;
+
+	beforeEach(function () {
+		mainCtrl = new MainCtrl('html');
+		settingsModel = new SettingsModel();
+		MainCtrl.analytics.event = analyticsMock.event;
+	});
+	afterEach(function () {
+		if (mainCtrl.destroy !== 'undefined') {
+			mainCtrl.destroy();
+		}
+	});
 
 	function setUpHTMLButtonsFixture() {
 		jasmine.getFixtures().set('' +
@@ -16,16 +27,6 @@ describe("MainCtrlSpec - testing the Main-Window", function () {
 			'<i class="btn fa fa-search btn-match"></i>'
 		);
 	}
-
-	beforeEach(function () {
-		mainCtrl = new MainCtrl('html');
-		settingsModel = new SettingsModel();
-	});
-	afterEach(function () {
-		if (mainCtrl.destroy !== 'undefined') {
-			mainCtrl.destroy();
-		}
-	});
 
 	describe(".app-buttons", function () {
 		beforeEach(function () {
