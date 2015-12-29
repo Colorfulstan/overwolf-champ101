@@ -49,7 +49,7 @@ steal(
 				 * WindowCtrl.events.on(...)
 				 * WindowCtrl.events.trigger(...)
 				 *
-				 * Possible Events (bound somewhere):
+				 * Possible Events (emitted or listened on somewhere):
 				 *
 				 * collapsed after Match-panels got collapsed
 				 * expanded after Match-panels got expanded
@@ -66,6 +66,7 @@ steal(
 				 * settingsClosed - called right before Settingswindow closes
 				 * reloadMatchEv - when the match should get reloaded through external sources
 				 * restartAppEv - when the App will be restarted
+				 * updateHotkeysEv - when the Hotkeys bound should be refreshed and possible changes send to analytics
 				 */
 				events: {
 					"on": function (type, cb) {
@@ -74,12 +75,17 @@ steal(
 					"one": function (type, cb) {
 						$(this).one(type, cb);
 					},
-					"trigger": function (type) {
+					/**
+					 * triggers an Event for all Windows.
+					 * @param type
+					 * @param {Array | Object} [data] data to be given to the eventHandler <br>(NOTE: DATA CAN ONLY BE USED IF THE EVENT IS TRIGGERED IN THE SAME WINDOW THAT HANDLES THE EVENT)
+					 */
+					"trigger": function (type, data) {
 						steal.dev.log('triggering event', type);
 						var storageEventKey = 'eventFired';
 						var valueDivider = '||';
 
-						$(this).trigger(type);
+						$(this).trigger(type, data);
 						localStorage.setItem(storageEventKey, type + valueDivider + new Date());
 					},
 					"off": function (type) {
@@ -289,7 +295,6 @@ steal(
 				'.drag-window-handle mousedown': function ($el, ev) {
 					steal.dev.log('dragging');
 					WindowCtrl.dragMove(this.options.name);
-					analytics.event('Window', 'drag');
 				}
 				,
 				/** Does prevent Event propagation

@@ -6,7 +6,7 @@ describe('SettingsProvider (Settings) | ', function () {
 		Settings.instance = null;
 	});
 	it('should return the instance if thats not null', function () {
-		var expected = "whatever";
+		var expected = {name: 'whatever'};
 		Settings.instance = expected;
 		var actual = Settings.getInstance();
 

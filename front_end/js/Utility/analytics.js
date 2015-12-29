@@ -2,6 +2,7 @@
 steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 
 	var debug = true;
+
 	const TRACKER_ID = 'UA-71618029-2';
 	const appInstallerId = 'com.overwolf';
 	var appName, appVersion;
@@ -43,6 +44,9 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 	}
 
 	var GoogleAnalyticsWrapper = {
+		CUSTOM_DIMENSIONS: {
+				HOTKEY : 'dimension1'
+		},
 		initRan: false,
 		init: function(){
 			if (typeof window.ga === 'undefined') {

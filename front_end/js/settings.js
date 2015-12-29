@@ -8,11 +8,15 @@ steal(
 	, 'SettingsModel.js'
 	, 'SettingsProvider.js'
 	, 'Routes.js'
+	, 'analytics.js'
 	, function (/**WindowCtrl*/ WindowCtrl
 		, /**SettingsCtrl*/ SettingsCtrl
 		, /**SettingsModel*/ SettingsModel
 		, /**SettingsProvider*/ Settings
-		, /**Routes*/ Routes) {
+		, /**Routes*/ Routes
+		, analytics) {
+
+		analytics.init();
 
 		WindowCtrl.enableStorageEvents();
 		Routes.ready();
@@ -24,5 +28,7 @@ steal(
 			new SettingsCtrl('html', {settings: settings});
 		});
 
-		return settings;
-	});
+		return settings; // TODO: remove
+	}
+)
+;

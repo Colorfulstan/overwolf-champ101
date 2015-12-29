@@ -11,6 +11,8 @@ steal(
 	, 'WindowCtrl.js'
 	, 'MatchCtrl.js'
 	, 'Routes.js'
+	, 'analytics.js'
+
 	, function (Hotkeys
 		, /**MatchDAO*/ MatchDAO
 		, /**MatchModel*/ MatchModel
@@ -18,7 +20,10 @@ steal(
 		, /**SettingsProvider*/ Settings
 		, /** WindowCtrl */ WindowCtrl
 		, /** MatchCtrl */ MatchCtrl
-		, /** Routes */ Routes) {
+		, /** Routes */ Routes
+		, analytics) {
+
+		analytics.init();
 
 		WindowCtrl.enableStorageEvents();
 		Routes.ready();
@@ -44,5 +49,7 @@ steal(
 			new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings}); // window will open while Data is still loading
 			settings.isManualReloading(false);
 		}
-	});
+	}
+)
+;
 

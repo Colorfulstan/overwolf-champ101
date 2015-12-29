@@ -108,7 +108,7 @@ steal(
 			init: function () {
 
 				/** Holds the original values of the settings if they where changed.
-				 * @typer {string: propName, *: originialValue } */
+				 * @type {{propName: string, originialValue: * }} */
 				this.changedPropsOriginalValues = {};
 
 				// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
@@ -294,9 +294,12 @@ steal(
 			},
 			/** If the given propName wasn't changed already, oldVal gets stored under the propName as key */
 			valueChanged: function (propName, oldVal) {
-				if (this.changedPropsOriginalValues[propName] == undefined) {
+				if (typeof this.changedPropsOriginalValues[propName] === 'undefined') {
 					this.changedPropsOriginalValues[propName] = oldVal;
 				}
+			},
+			hasValueChanged: function (propName) {
+				return (typeof this.changedPropsOriginalValues[propName] !== 'undefined' && this.changedPropsOriginalValues[propName] !== this[propName]());
 			}
 		});
 		return SettingsModel;

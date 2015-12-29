@@ -19,14 +19,15 @@ import '../helper/overwolfMock';
 import './documentation.spec';
 
 // main-files
+import './WindowCtrl.spec';
 import './MainCtrl.spec';
 import './SettingsCtrl.spec';
+import './SettingsModel.spec';
 import './SettingsProvider.spec';
 import './match/MatchCtrl.spec';
 import './match/MatchModel.spec'
 import './Routes.spec';
 import 'Boot.spec';
-import './WindowCtrl.spec';
 
 beforeEach(function () {
 	localStorage.clear();
