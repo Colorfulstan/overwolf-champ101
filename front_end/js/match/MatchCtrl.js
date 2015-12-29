@@ -8,6 +8,7 @@ steal('can.js'
 	, 'TooltipCtrl.js'
 	, 'Routes.js'
 	, 'Boot.js'
+	, 'analytics.js'
 	, 'global.js'
 	, function (can
 		, /**WindowCtrl*/ WindowCtrl
@@ -17,7 +18,8 @@ steal('can.js'
 		, /**ChampionCtrl*/ ChampionCtrl
 		, /**TooltipCtrl*/ TooltipCtrl
 		, /**Routes*/ Routes
-		, /**Boot*/ Boot) {
+		, /**Boot*/ Boot
+		, analytics) {
 // TODO: replace with events for application-wide communication
 		/**
 		 *  Controller for the "Match" view (match.html / match.js)
@@ -130,6 +132,7 @@ steal('can.js'
 
 						WindowCtrl.events.on('matchReady', function () {
 							steal.dev.log(new Date(), 'matchReady triggered');
+							analytics.event('Game', 'loaded');
 							WindowCtrl.openMatch().then(function () {
 								if (options.settings.startMatchCollapsed()) {
 									WindowCtrl.events.trigger('collapsed');
