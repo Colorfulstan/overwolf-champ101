@@ -68,7 +68,7 @@ steal(
 				//steal.dev.log('.portrait click');
 				Routes.setRouteData({route: Routes.panelChampion, champ: $el.attr('title')});
 				$el.removeClass('addable');
-				analytics.screenview('Champ-Panel-' + champName);
+				analytics.screenview('Champ-Panel-' + $el.attr('title'));
 			},
 			'.show-team.blue click': function ($el, ev) {
 				Routes.setRouteData({team: 'blue', route: Routes.panelTeam});

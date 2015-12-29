@@ -11,7 +11,7 @@ steal(
 		, analytics) {
 
 		/**
-		 * @typedef {object} SpellModel
+		 * @class {object} SpellModel
 		 *
 		 * @property {string} name
 		 * @property {string} type 'ability' or 'passive'
