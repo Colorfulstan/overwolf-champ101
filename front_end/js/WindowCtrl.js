@@ -3,9 +3,11 @@ steal(
 	'can.js'
 	, 'Routes.js'
 	, 'SettingsModel.js'
+	, 'analytics.js'
 	, function (can
 		, /**Routes*/ Routes
-		, /**SettingsModel*/ SettingsModel) {
+		, /**SettingsModel*/ SettingsModel
+		, analytics) {
 
 		/**
 		 * Provides basic Window-Interaction Methods and Eventhandler for common Elements
@@ -67,7 +69,7 @@ steal(
 						$(this).on(type, cb);
 					},
 					"one": function (type, cb) {
-						$(this).one(type,cb);
+						$(this).one(type, cb);
 					},
 					"trigger": function (type) {
 						steal.dev.log('triggering event', type);
@@ -86,14 +88,14 @@ steal(
 					var valueDivider = '||';
 					$(window).off('storage');
 					$(window).on('storage', function () { // does not trigger for the window that made the storage-changes
-						if (event.key === storageEventKey){
+						if (event.key === storageEventKey) {
 							var evType = extractEvent(event.newValue);
 							WindowCtrl.events.trigger(evType);
 							steal.dev.log(event);
 						}
 					});
 
-					function extractEvent(value){
+					function extractEvent(value) {
 						return value.substr(0, value.indexOf(valueDivider));
 					}
 				},
@@ -127,8 +129,16 @@ steal(
 						if (result.status == "success") {
 							var odkWindow = result.window;
 							overwolf.windows.restore(odkWindow.id, function (result) {
-								WindowCtrl.events.trigger('restored');
-								deferred.resolve(odkWindow);
+
+								$.when(analytics.isReady)
+									.then(function () {
+										window.gaw = analytics;
+										WindowCtrl.events.trigger('restored');
+										deferred.resolve(odkWindow);
+										window.gaw.screenview(name);
+									})
+									.fail(function () {console.error(arguments)});
+
 							});
 						}
 					});
@@ -192,7 +202,10 @@ steal(
 					return WindowCtrl.open('Main');
 				},
 				/** closes the Match-Window */
-				closeMatch: function () { debugger; return WindowCtrl.close('Match'); },
+				closeMatch: function () {
+					debugger;
+					return WindowCtrl.close('Match');
+				},
 				/** Opens the Settings-Window and positions it centered on the screen */
 				openSettings: function () {
 					var self = this;
@@ -201,7 +214,7 @@ steal(
 
 
 						if (!SettingsModel.isSummonerSet()) {
-							overwolf.windows.setTopmost(odkWindow.id, true, function(){
+							overwolf.windows.setTopmost(odkWindow.id, true, function () {
 								steal.dev.log('Settingswindow set to topmost', arguments)
 							});
 						}

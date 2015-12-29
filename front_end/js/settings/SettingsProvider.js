@@ -3,7 +3,7 @@ steal(
 	'SettingsModel.js'
 	, function (/**SettingsModel*/ SettingsModel) {
 
-			/** @class SettingsProvider */
+		/** @class SettingsProvider */
 		var SettingsProvider = function SettingsProvider() {
 		};
 
@@ -13,6 +13,9 @@ steal(
 				SettingsProvider.instance = new SettingsModel();
 			}
 			return SettingsProvider.instance;
+		};
+		SettingsProvider.getClassObj = function SettingsProviderGetClassObj() {
+			return SettingsModel;
 		};
 
 		return SettingsProvider;

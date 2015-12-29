@@ -10,6 +10,7 @@ System.config({
 		'Routes': './js/Utility/Routes.js',
 		'Boot': './js/Utility/Boot.js',
 		'Boot.spec': './js/Utility/Boot.spec.js',
+		'analytics': './js/Utility/analytics.js',
 
 		'SettingsProvider': './js/settings/SettingsProvider.js',
 		'SettingsModel': './js/settings/SettingsModel.js',

@@ -81,7 +81,8 @@
   "permissions": [ "Hotkeys", "GameInfo", "Extensions"],
   "externally_connectable": {
 	"matches": [
-	  "http://*.krispin.it/*"
+	  "http://*.krispin.it/*",
+		"*google-analytics*"
 	]
   }
 }
