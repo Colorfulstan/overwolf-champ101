@@ -212,7 +212,6 @@ steal(
 				},
 				/** closes the Match-Window */
 				closeMatch: function () {
-					debugger;
 					return WindowCtrl.close('Match');
 				},
 				/** Opens the Settings-Window and positions it centered on the screen */

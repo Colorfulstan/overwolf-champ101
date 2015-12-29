@@ -25,6 +25,11 @@
   .effect-f-values {
     color: inherit;
     font-weight: bold;
+    text-decoration: line-through !important;
+    //&::after, &::before{
+    //  content: '*';
+    //  font-size: 3px;
+    //}
   }
 
   .spell-values-table {

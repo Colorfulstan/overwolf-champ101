@@ -37,7 +37,8 @@ steal(
 					, params
 					, function (data) { // success
 						steal.dev.log("gameData from Server:", data);
-						DDRAGON_URL = DDRAGON_BASE_URL + data.version + '/';
+						LOL_PATCH = data.version;
+						DDRAGON_URL = DDRAGON_BASE_URL + LOL_PATCH + '/';
 						deferred.resolve(data);
 
 					}).fail(function (data, status, jqXHR) {
@@ -91,7 +92,6 @@ steal(
 			_extractParticipants: function (transfer, dataArray, team) {
 				transfer[team] = [];
 				var teamArray = dataArray[team];
-				debugger;
 				for (var i = 0; i < teamArray.length; i++) {
 					var participant = {
 						'champ': new ChampionModel(teamArray[i].champ),

@@ -1,5 +1,5 @@
 "use strict";
-steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
+steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settings) {
 
 	var debug = true;
 
@@ -45,7 +45,11 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 
 	var GoogleAnalyticsWrapper = {
 		CUSTOM_DIMENSIONS: {
-			HOTKEY: 'dimension1'
+			HOTKEY: 'dimension1',
+			CHAMP: 'dimension2',
+			DATA: 'dimension3',
+			DATA_PLACEHOLDERS: 'dimension4',
+			LOL_PATCH: 'dimension5'
 		},
 		VALUES: {
 			RANDOM_SUMMONER: 1,
@@ -128,7 +132,40 @@ steal('SettingsProvider.js', function (/**SettingsProvider*/ Settings) {
 			this.runWhenReady(function () {
 				ga('send', 'event', fields);
 			})
+		},
+
+		/** Sends an exception
+		 * @param {String} description
+		 * @param {boolean} isFatal
+		 * @param fields
+		 */
+		exception: function (description, isFatal, fields) {
+			// TODO: make parameter optional
+
+			fields = fields || {};
+			fields.exDescription = description;
+			fields.exFatal = isFatal;
+
+			this.runWhenReady(function () {
+				ga('send', 'exception', fields);
+			});
+		},
+		/**
+		 * Sends an exception hit for missing Tooltip-values within Riots static data
+		 * @param champ
+		 * @param ability
+		 * @param dataSurrogates
+		 * @param dataPlaceHolders
+		 */
+		c101_exceptionTooltip: function (champ, ability, dataPlaceHolders, dataSurrogates) {
+			let fields = {};
+			fields[this.CUSTOM_DIMENSIONS.CHAMP] = champ;
+			fields[this.CUSTOM_DIMENSIONS.DATA] = dataSurrogates;
+			fields[this.CUSTOM_DIMENSIONS.DATA_PLACEHOLDERS] = dataPlaceHolders;
+			fields[this.CUSTOM_DIMENSIONS.LOL_PATCH] = LOL_PATCH;
+			this.exception('Tooltip is missing data | ability: ' + ability, false, fields)
 		}
+
 	};
 	return GoogleAnalyticsWrapper;
 });
