@@ -207,7 +207,7 @@ steal(
 			 * @param ev
 			 */
 			'{matchBtn} mousedown': function (el, ev) {
-				var self = this;
+				//var self = this;
 				steal.dev.log('WindowCtrl: open match');
 				var settings = Settings.getInstance();
 				Boot._showMatchLoading(settings).then(function () {

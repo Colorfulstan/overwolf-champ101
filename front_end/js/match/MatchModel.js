@@ -1,8 +1,5 @@
 "use strict";
-steal(
-	'can'
-	, 'global.js'
-	, function (/**can*/ can) {
+steal('global.js', function () {
 
 		/**
 		 * Data about the current Match
@@ -12,11 +9,11 @@ steal(
 		var MatchModel = function MatchModel(summonerId, server) {
 
 			/** The region-Code of a server
-			 * @type {String}*/
+			 * @type {string}*/
 			this.server = server; // TODO: model refactoring for computes
 
 			/**
-			 * @type {String} */
+			 * @type {string} */
 			this.summonerId = summonerId; // TODO: model refactoring for computes
 
 			/** Team 100
@@ -29,13 +26,13 @@ steal(
 
 			/**
 			 * Different representation of blue and purple.
-			 * @type {Object}
+			 * @type {object}
 			 */
 			this.participantsByChamp = {};
 
 			/** The most recent Version of the ddragon cdn ressources
 			 * Used within the ddragon URL
-			 * @type {String}*/
+			 * @type {string}*/
 			this.version = null;
 
 			/** The most recent GameId of the given summoner

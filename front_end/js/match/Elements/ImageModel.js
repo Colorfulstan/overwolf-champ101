@@ -11,15 +11,15 @@ steal(
 
 			/** Filename for the single Image
 			 * @property
-			 * @type {String} */
+			 * @type {string} */
 			this.full = options.full;
 			/** Image-group of this image for the URL after /img/
 			 * @property
-			 * @type {String} */
+			 * @type {string} */
 			this.group = options.group;
 
 			/**@property
-			 * @type {String} */
+			 * @type {string} */
 			this.sprite = options.sprite;
 
 			/**@property

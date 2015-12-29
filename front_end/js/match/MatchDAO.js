@@ -3,6 +3,7 @@ steal(
 	'ChampionModel.js'
 	, 'SettingsModel.js'
 	, 'SettingsProvider.js'
+	, 'global.js'
 	, function (/**ChampionModel*/ ChampionModel
 		, /** SettingsModel */ SettingsModel
 		, /**SettingsProvider*/ Settings) {
@@ -19,7 +20,7 @@ steal(
 			 * Loads the Data from RIOT_ADAPTER_URL
 			 * @param {MatchModel} transfer
 			 * @param {number} transfer.summonerId - for the Summoner to lookup
-			 * @param {String} transfer.server - of the Summoner to lookup
+			 * @param {string} transfer.server - of the Summoner to lookup
 			 * @returns {Promise | Array} Promise that resolves into an Array with all the Data from Riot for the match
 			 * structured like {@link MatchModel}
 			 * @private
@@ -27,8 +28,9 @@ steal(
 			_loadDataFromServer: function (transfer) {
 				var deferred = $.Deferred();
 
-				var settings = Settings.getInstance();
 				var params = {summonerId: transfer.summonerId, server: transfer.server};
+
+				//var settings = Settings.getInstance();
 				//if (settings.cachedGameAvailable()){ // if gameId is given, the game with that id will be load from DB instead of Riot-API
 				//	params['gameId'] = settings.cachedGameId();
 				//}
@@ -50,7 +52,7 @@ steal(
 			 * Loads the Data for the current match from Server and fills the given {@link MatchModel }
 			 * @param {MatchModel} transfer
 			 * @param {number} transfer.summonerId - for the Summoner to lookup
-			 * @param {String} transfer.server - of the Summoner to lookup
+			 * @param {string} transfer.server - of the Summoner to lookup
 			 * @returns {Promise | MatchModel} Promise that resolves into the filled {@link MatchModel} Object
 			 */
 			loadMatchModel: function (transfer) {

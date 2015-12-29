@@ -74,14 +74,16 @@ steal(
 						var label = (settings.summonerName() === '---') ? 'random' : 'specific';
 						analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
 					}
+					var action;
 					if (settings.hasValueChanged('startWithGame')){
-						var action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
+						action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
 						analytics.event('Settings', action, 'startWithGame');
 					}
 					if (settings.hasValueChanged('closeMatchWithGame')){
-						var action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
+						action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
 						analytics.event('Settings', action, 'closeMatchWithGame');
 					}
+					action = null;
 				}
 			},
 			requestSummonerId: function (settings, self, $btn) {

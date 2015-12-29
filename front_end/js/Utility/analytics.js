@@ -16,15 +16,11 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 	function addScript(i, s, o, g, r, a, m) {
 		var def = $.Deferred();
 		i['GoogleAnalyticsObject'] = r;
-		i[r] = i[r] || function () {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date();
-		a = s.createElement(o),
-			m = s.getElementsByTagName(o)[0];
+		i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date();
+		a = s.createElement(o), m = s.getElementsByTagName(o)[0];
 		a.async = 1;
 		a.src = g;
 		m.parentNode.insertBefore(a, m);
-
 		ga(function () { def.resolve(); });
 		return def.promise();
 	}
@@ -43,7 +39,7 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		isReady = null;
 	}
 
-	var GoogleAnalyticsWrapper = {
+	return {
 		CUSTOM_DIMENSIONS: {
 			HOTKEY: 'dimension1',
 			CHAMP: 'dimension2',
@@ -94,8 +90,8 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		},
 
 		/** Send a screenview hit
-		 * @param {String} screenName
-		 * @param {Object} [fields] additional fields to send with the screenview */
+		 * @param {string} screenName
+		 * @param {object} [fields] additional fields to send with the screenview */
 		screenview: function (screenName, fields) {
 			if (typeof screenName !== 'string') { throw new Error('Mandatory parameter screenName has to be a string');}
 			fields = fields || {};
@@ -109,17 +105,17 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		 * Can be called with 2,3 or 4 parameters. When called with 3 parameters,
 		 * type of the 3rd parameter determines if its paramter "label" or "fields".
 		 * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#events
-		 * @param {String} category
-		 * @param {String} action
-		 * @param {String} [label]
-		 * @param {Object} [fields] */
+		 * @param {string} category
+		 * @param {string} action
+		 * @param {string} [label]
+		 * @param {object} [fields] */
 		event: function (category, action, label, fields) {
 			fields = fields || {};
 
 			if (typeof category !== 'string') {throw new Error('Mandatory parameter category has to be a string')}
 			if (typeof action !== 'string') {throw new Error('Mandatory parameter action has to be a string')}
 			if (label !== undefined) {
-				if (typeof label === 'Object') {
+				if (typeof label === 'object') {
 					fields = label;
 				} else if (typeof label !== 'string') {
 					throw new Error('Optional parameter label has to be a string');
@@ -136,7 +132,7 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		},
 
 		/** Sends an exception
-		 * @param {String} description
+		 * @param {string} description
 		 * @param {boolean} isFatal
 		 * @param fields
 		 */
@@ -168,5 +164,4 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		}
 
 	};
-	return GoogleAnalyticsWrapper;
 });

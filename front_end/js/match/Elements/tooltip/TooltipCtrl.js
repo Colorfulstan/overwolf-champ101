@@ -159,8 +159,8 @@ steal(
 						}
 					}
 
-					for (var i = 0; i < uniquePlaceHolders.length; i++) {
-						missingPlaceHolders[uniquePlaceHolders[i]] = "null";
+					for (var k = 0; k < uniquePlaceHolders.length; k++) {
+						missingPlaceHolders[uniquePlaceHolders[k]] = "null";
 					}
 
 					uniquePlaceHolders = Object.keys(missingPlaceHolders);
@@ -183,7 +183,7 @@ steal(
 				,
 				/**
 				 * Replaces the placeholder within the ressource-string of a spell with the acchording
-				 * value and returns the new String
+				 * value and returns the new string
 				 * @param string e.g. { x } Mana
 				 * @param effectArr Array with the effect-values for the champ as given from Rriot API
 				 * @param costBurn The costburn for the spell
@@ -255,11 +255,11 @@ steal(
 				//},
 				/**
 				 * shows a Tooltip
-				 * @param type {String} - 'spell' || 'champ'
-				 * @param routeData {Object}
-				 * @param routeData.champ {String}
+				 * @param type {string} - 'spell' || 'champ'
+				 * @param routeData {object}
+				 * @param routeData.champ {string}
 				 * @param [routeData.index] {number} index of the spell within the spell array of a given champ
-				 * @param [routeData.type] {String} indicator for spell-type. Can be 'ability' || 'summoner'
+				 * @param [routeData.type] {string} indicator for spell-type. Can be 'ability' || 'summoner'
 				 * @param routeData.y {number} - The y position from top of the screen for the tooltip
 				 */
 				showTooltip: function (type, routeData) {

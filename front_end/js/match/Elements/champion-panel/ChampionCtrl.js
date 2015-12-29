@@ -1,9 +1,9 @@
 /**
  * Panel
- * @typedef {Object} Panel
+ * @typedef {object} Panel
  * @property {ChampionModel} champ
  * @property {SpellModel[]} summonerSpells // TODO: not used anymore
- * @property {String} team
+ * @property {string} team
  * @property {number} index - 1-based
  */
 
@@ -166,7 +166,7 @@ steal(
 				},
 				'.close click': function ($el, ev) {
 					var self = this;
-					Routes.setRoute(Routes.tooltipHide, true)
+					Routes.setRoute(Routes.tooltipHide, true);
 					var $panel = $el.closest('.panel');
 					var champName = $el.closest('.panel').attr('data-name');
 					$panel.slideUp(function () {
@@ -176,7 +176,7 @@ steal(
 				},
 				'#close-all-btn click': function () {
 					var self = this;
-					Routes.setRoute(Routes.tooltipHide, true)
+					Routes.setRoute(Routes.tooltipHide, true);
 					$('.champion-panel').slideUp(function () {
 						self.closeAllPanels();
 					});
@@ -206,7 +206,7 @@ steal(
 				},
 				'.spell click': function ($el, ev) {
 					//steal.dev.log('clicked on .spell');
-					var $panel = $el.closest('.panel');
+					//var $panel = $el.closest('.panel');
 					//if (!$el.hasClass('active')){
 					//$panel.toggleClass('sticky-tooltip');
 					$el.toggleClass('active');
@@ -234,9 +234,9 @@ steal(
 					analytics.screenview('Champ-Tips' + $panel.attr('data-name')); // TODO: maybe remove bc saves a lot of requests
 				},
 				'.img mouseout': function ($el, ev) {
-					var $panel = $el.closest('.panel');
+					//var $panel = $el.closest('.panel');
 					//if (!$panel.hasClass('sticky-tooltip')) {
-					Routes.setRoute(Routes.tooltipHide, true)
+					Routes.setRoute(Routes.tooltipHide, true);
 					//}
 				}
 			});
