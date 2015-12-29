@@ -117,7 +117,6 @@ steal(
 
 							if (ttNew.indexOf(pattern.source) >= 0) {
 								missingPlaceHolders[pattern.source] = "null";
-								debugger;
 							}
 							var indexVar = uniquePlaceHolders.indexOf(pattern.source);
 							if (indexVar >= 0) uniquePlaceHolders.splice(indexVar, 1);
@@ -137,7 +136,6 @@ steal(
 
 							if (ttNew.indexOf(pattern.source) >= 0) {
 								missingPlaceHolders[pattern.source] = "null";
-								debugger;
 							}
 							var indexEX = uniquePlaceHolders.indexOf(pattern.source);
 							if (indexEX >= 0) uniquePlaceHolders.splice(indexEX, 1);
@@ -148,7 +146,6 @@ steal(
 
 							if (ttNew.indexOf(pattern.source) >= 0) {
 								missingPlaceHolders[pattern.source] = effectString;
-								debugger;
 							}
 
 							ttNew = ttNew.replace(pattern, '<span class="effect-f-values">' + effectString + '</span>');
@@ -170,10 +167,8 @@ steal(
 					});
 
 					if (uniquePlaceHolders.length > 0) {
-						debugger;
 						analytics.c101_exceptionTooltip(champId, name, uniquePlaceHolders, placeHolderValues);
 					}
-					debugger;
 
 					uniquePlaceHolders = null;
 					placeHolderValues = null;

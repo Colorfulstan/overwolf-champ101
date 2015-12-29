@@ -70,7 +70,6 @@ steal('SettingsProvider.js', 'global.js', function (/**SettingsProvider*/ Settin
 		 * All calls to ga() should be delegated to this function to prevent undefined errors.
 		 * @param cb the function to run when analytics is ready */
 		runWhenReady: function (cb) {
-			debugger;
 			if (this.initRan === false) {throw new Error('analytics is not initialised. run .init() before sending data!')}
 			$.when(this.isReady).then(cb);
 		},
