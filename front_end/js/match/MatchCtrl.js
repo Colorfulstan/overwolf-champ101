@@ -132,7 +132,6 @@ steal('can.js'
 
 						WindowCtrl.events.on('matchReady', function () {
 							steal.dev.log(new Date(), 'matchReady triggered');
-							analytics.event('Game', 'loaded');
 							WindowCtrl.openMatch().then(function () {
 								if (options.settings.startMatchCollapsed()) {
 									WindowCtrl.events.trigger('collapsed');
@@ -181,6 +180,7 @@ steal('can.js'
 						if (data.status == 503) {
 							self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
 						}
+						analytics.event('Match', 'failed', data.status + ' | ' + data.statusText);
 						WindowCtrl.events.trigger('matchReady');
 						deferred.reject(data, status, jqXHR);
 					};
@@ -197,6 +197,7 @@ steal('can.js'
 							self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
 							// Controller for Tooltip
 							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+							analytics.event('Match', 'loaded');
 							WindowCtrl.events.trigger('matchReady');
 							deferred.resolve(matchModel);
 						}
@@ -271,6 +272,7 @@ steal('can.js'
 					self.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						WindowCtrl.events.trigger('expanded');
 					});
+					analytics.screenview('Match-Overview');
 				},
 				/** Collapse the champion panels
 				 * @fires MatchCtrl#collapsed
@@ -283,7 +285,6 @@ steal('can.js'
 					self.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						WindowCtrl.events.trigger('collapsed');
 					});
-
 				},
 // Eventhandler
 				'mouseenter': function (element, ev) {
@@ -295,6 +296,7 @@ steal('can.js'
 				},
 				'{appBar} mousedown': function (appBar, ev) {
 					if (ev.which == 1) { this.togglePanels(appBar); }
+					analytics.event('Button', 'click', 'app-bar');
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
@@ -303,6 +305,7 @@ steal('can.js'
 						});
 						ev.stopPropagation();
 					}
+					analytics.event('Button', 'click', 'reload-match');
 				},
 				'{togglePanelsRoute} route': function (routeData) {
 					steal.dev.log('toggle/all route');
@@ -317,38 +320,6 @@ steal('can.js'
 				'{reloadMatchRoute} route': function (routeData) {
 					var self = this;
 					self.reloadMatch();
-				},
-				/** Does prevent Event propagation
-				 *
-				 * NOTE: because all Windows are independent from each other the reload-routing for Match-Window
-				 * does not work when accessing settings from another Window.
-				 * That's why this event is overwritten here.
-				 *
-				 * @overwrite WindowCtrl {settingsBtn} mousedown
-				 * @listens MouseEvent#mousedown for the left MouseButton
-				 * @param $el
-				 * @param ev
-				 * @see WindowCtrl.defaults.settingsBtn*/
-				'{settingsBtn} mousedown': function ($el, ev) {
-					if (ev.which == 1) {
-						steal.dev.log('MatchCtrl: open settings');
-						WindowCtrl.openSettings();
-
-						var settings = Settings.getInstance();
-						var summonerId = settings.summonerId();
-						// Reload the Match-Window after Settings-Window gets closed
-						var interval = window.setInterval(function () {
-							overwolf.windows.getWindowState('Settings', function (/** WindowStateData */ result) {
-								if (result.status == "success" && result.window_state == 'closed') {
-									if (summonerId != settings.summonerId()) {
-										Routes.setRoute(Routes.reloadMatch);
-									}
-									window.clearInterval(interval);
-								}
-							})
-						}, 100);
-						ev.stopPropagation();
-					}
 				}
 			});
 		return MatchCtrl;
