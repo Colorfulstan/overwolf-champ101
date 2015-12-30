@@ -93,9 +93,6 @@ steal(
 					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars, options.champId, options.name));
 				} else {
 					this.attr('resource', options.costBurn);
-					if (options.costBurn && (options.costBurn.indexOf('@') >= 0 || options.costBurn.indexOf('.') >= 0)) {
-						analytics.c101_exceptionTooltip(options.champId, options.name, "null", options.costBurn);
-					}
 				}
 			},
 
