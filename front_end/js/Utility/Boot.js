@@ -90,7 +90,7 @@ steal(
 							return false; // App should not start automatically
 						}
 						wasAutoLaunched ? Boot._hideMatchLoading(settings) : Boot._showMatchLoading(settings);
-						wasAutoLaunched ? analytics.event('App', 'start-manual', 'ingame') : analytics.event('App', 'start-auto', 'ingame');
+						wasAutoLaunched ? analytics.event('App', 'start-auto', 'ingame') : analytics.event('App', 'start-manual', 'ingame');
 						Boot.openMatchIfIngame(main);
 					});
 			},
