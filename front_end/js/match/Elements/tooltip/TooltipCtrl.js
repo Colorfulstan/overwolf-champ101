@@ -202,9 +202,14 @@ steal(
 
 					pattern = new RegExp('{{ cost }}', 'g');
 					newString = newString.replace(pattern, costBurn);
+
 					if (newString.indexOf('@') >= 0 || newString.indexOf('.' >= 0)){
-						analytics.c101_exceptionTooltip(champId, name, 'null', [costBurn, varsArr, effectBurnArr]);
+						var fields = {};
+						fields[this.CUSTOM_DIMENSIONS.CHAMP] = champId;
+						fields[this.CUSTOM_DIMENSIONS.DATA] = newString;
+						analytics.exception('cost string is cryptic: ' + newString, false, fields);
 					}
+
 					return newString;
 				}
 			}, {
