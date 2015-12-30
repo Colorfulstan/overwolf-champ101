@@ -1,6 +1,17 @@
 module.exports = function (grunt) {
 
-	var appV = grunt.file.readJSON('manifest.json').meta.version;
+	var devV = grunt.file.readJSON('manifest.json').meta.version;
+	var appV = (function(){
+		// find last . (if there are 4)
+		var dots = devV.match(/\./g);
+		if (dots.length === 3){ // M.m.p.rc
+			var i = devV.lastIndexOf('.');
+			return devV.substring(0,i);
+		} else {
+			return devV;
+		}
+	})();
+	console.log('dev-Version: ' + devV, 'App-Version: ' + appV);
 	var appName = 'champ101';
 
 	grunt.initConfig({
@@ -37,7 +48,7 @@ module.exports = function (grunt) {
 				options: {force: true},
 				src: ['out'
 					, '../'+ appName +'_latest/app' // removing old release from submission folder
-					, '../releases/'+ appName +'_v' + appV + '/' // removing possible previous build from releases folder
+					, '../release-candidates/'+ appName +'_v' + devV + '/' // removing possible previous build from releases folder
 				]
 			},
 			postBuild: {
@@ -67,7 +78,7 @@ module.exports = function (grunt) {
 			, css: {expand: true, src: ['assets/css/*.css'], dest: 'out/'}
 			, fonts: {expand: true, src: ['assets/font/**/*'], dest: 'out/'}
 			, img: {expand: true, src: 'assets/img/**/*', dest: 'out/'}
-			, cfg: {expand: true, src: 'manifest.json', dest: 'out/'}
+			, manifest: {expand: true, src: 'manifest.json', dest: 'out/'}
 			, steal: {expand: true, cwd: 'node_modules/steal', src: ['steal.production.js'], dest: 'out/'}
 			,
 			videojs: {
@@ -76,8 +87,17 @@ module.exports = function (grunt) {
 				src: ['video.js', 'video-js.min.css'],
 				dest: 'out/vendor/videojs'
 			}
-			, postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../releases/'+ appName +'_v' + appV + '/'}
+			, postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../release-candidates/'+ appName +'_v' + devV + '/'}
 			, postBuildSubmission: {expand: true, cwd: 'out', src: '**/*', dest: '../'+ appName +'_latest/app/'}
+			, postBuildSubmissionManifest: {
+				expand: true, cwd: 'out', src: 'manifest.json', dest: '../' + appName + '_latest/app/'
+				, options: {
+					process: function (content, srcpath) {
+						// replace the Version for production
+						return content.replace(devV, appV);
+					}
+				}
+			}
 		},
 		"steal-export": {
 			dist: {
