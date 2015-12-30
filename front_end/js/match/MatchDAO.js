@@ -1,9 +1,12 @@
 "use strict";
 steal(
-	'ChampionModel.js',
-	'SettingsModel.js'
-	, function (/**ChampionModel*/ ChampionModel,
-	/** SettingsModel */ SettingsModel) {
+	'ChampionModel.js'
+	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
+	, 'global.js'
+	, function (/**ChampionModel*/ ChampionModel
+		, /** SettingsModel */ SettingsModel
+		, /**SettingsProvider*/ Settings) {
 
 		/**
 		 * @class
@@ -17,7 +20,7 @@ steal(
 			 * Loads the Data from RIOT_ADAPTER_URL
 			 * @param {MatchModel} transfer
 			 * @param {number} transfer.summonerId - for the Summoner to lookup
-			 * @param {String} transfer.server - of the Summoner to lookup
+			 * @param {string} transfer.server - of the Summoner to lookup
 			 * @returns {Promise | Array} Promise that resolves into an Array with all the Data from Riot for the match
 			 * structured like {@link MatchModel}
 			 * @private
@@ -25,30 +28,31 @@ steal(
 			_loadDataFromServer: function (transfer) {
 				var deferred = $.Deferred();
 
-				var settings = new SettingsModel();
-debugger;
 				var params = {summonerId: transfer.summonerId, server: transfer.server};
+
+				//var settings = Settings.getInstance();
 				//if (settings.cachedGameAvailable()){ // if gameId is given, the game with that id will be load from DB instead of Riot-API
 				//	params['gameId'] = settings.cachedGameId();
 				//}
 				steal.dev.log('request for gamedata with params:', params);
-				jQuery.get(RIOT_ADAPTER_URL
+				jQuery.get(RIOT_ADAPTER_URL // TODO: refactor to .ajax()
 					, params
 					, function (data) { // success
 						steal.dev.log("gameData from Server:", data);
-						DDRAGON_URL = DDRAGON_BASE_URL + data.version + '/';
+						LOL_PATCH = data.version;
+						DDRAGON_URL = DDRAGON_BASE_URL + LOL_PATCH + '/';
 						deferred.resolve(data);
 
 					}).fail(function (data, status, jqXHR) {
-						deferred.reject(data, status, jqXHR);
-					});
+					deferred.reject(data, status, jqXHR);
+				});
 				return deferred.promise();
 			},
 			/**
 			 * Loads the Data for the current match from Server and fills the given {@link MatchModel }
 			 * @param {MatchModel} transfer
 			 * @param {number} transfer.summonerId - for the Summoner to lookup
-			 * @param {String} transfer.server - of the Summoner to lookup
+			 * @param {string} transfer.server - of the Summoner to lookup
 			 * @returns {Promise | MatchModel} Promise that resolves into the filled {@link MatchModel} Object
 			 */
 			loadMatchModel: function (transfer) {
@@ -59,22 +63,22 @@ debugger;
 					.then(function (dataArray) {
 						//settings.cachedGameId(dataArray['gameId']);
 						//settings.cachedGameAvailable(true);
-						steal.dev.log(new Date(), 'GameData in loadMatchModel:',transfer );
+						steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
 
 						self._extractParticipants(transfer, dataArray, 'blue');
 						self._extractParticipants(transfer, dataArray, 'purple');
 						transfer.version = dataArray.version;
 
-						steal.dev.log(new Date(), 'GameData in loadMatchModel:',transfer );
+						steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
 						deferred.resolve(transfer);
 						dataArray = null;
 					}).fail(function (data, status, jqXHR) {
 
-						//settings.cachedGameAvailable(false);
-						steal.dev.warn(new Date(), "Loading MatchModel failed!", data, status, jqXHR);
+					//settings.cachedGameAvailable(false);
+					steal.dev.warn(new Date(), "Loading MatchModel failed!", data, status, jqXHR);
 
-						deferred.reject(data, status, jqXHR);
-					});
+					deferred.reject(data, status, jqXHR);
+				});
 				return deferred.promise();
 			},
 
@@ -90,7 +94,6 @@ debugger;
 			_extractParticipants: function (transfer, dataArray, team) {
 				transfer[team] = [];
 				var teamArray = dataArray[team];
-				debugger;
 				for (var i = 0; i < teamArray.length; i++) {
 					var participant = {
 						'champ': new ChampionModel(teamArray[i].champ),

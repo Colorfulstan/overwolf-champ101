@@ -4,11 +4,11 @@ steal(
 	, 'global.js'
 	, function (can) {
 		/**
-		 * @class {can.Model} SettingsModel
-		 * @extends {can.Model}
+		 * @class {can.Map} SettingsModel
+		 * @extends {can.Map}
 		 * @constructor {@link SettingsModel.init}
 		 */
-		var SettingsModel = can.Model.extend('SettingsModel', {
+		var SettingsModel = can.Map.extend('SettingsModel', {
 			STORAGE_KEY_REGION: 'region-code',
 			STORAGE_KEY_NAME: 'summoner-name',
 			STORAGE_KEY_ID: 'summoner-id',
@@ -107,7 +107,7 @@ steal(
 			init: function () {
 
 				/** Holds the original values of the settings if they where changed.
-				 * @typer {string: propName, *: originialValue } */
+				 * @type {{propName: string, originialValue: * }} */
 				this.changedPropsOriginalValues = {};
 
 				// NOTE: this.attr('hotkeys') gets initialized externally within settings.js
@@ -280,39 +280,25 @@ steal(
 				});
 				return deferred.promise();
 			},
-			///**
-			// * rturns a new instance with all the .attr() copied into it
-			// * @return {SettingsModel}
-			// */
-			//clone: function () {
-			//	var data = this.attr();
-			//	delete data[this.constructor.id];
-			//	return new this.constructor(data);
-			//	// TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
-			//},
-			///**
-			// * sets all attr() from the given Model in this instance
-			// * @param settingsModel
-			// */
-			//copyFrom: function (settingsModel) {
-			//	for (var attrKey in settingsModel.attr()) {
-			//		this.attr(attrKey, settingsModel.attr(attrKey));
-			//	} // TODO: does this still somewhat work? Don't think so since its not a real can.Model anymore
-			//},
 			/**
 			 * restores the original-values for this settingsModel Object
 			 * by calling the setters with the original values
 			 */
 			reset: function () {
+				// TODO: use http://canjs.com/docs/can.Map.backup.html ???
 				for (var prop in this.changedPropsOriginalValues) {
 					this[prop](this.changedPropsOriginalValues[prop]);
 				}
+				this.changedPropsOriginalValues = {};
 			},
 			/** If the given propName wasn't changed already, oldVal gets stored under the propName as key */
 			valueChanged: function (propName, oldVal) {
-				if (this.changedPropsOriginalValues[propName] == undefined) {
+				if (typeof this.changedPropsOriginalValues[propName] === 'undefined') {
 					this.changedPropsOriginalValues[propName] = oldVal;
 				}
+			},
+			hasValueChanged: function (propName) {
+				return (typeof this.changedPropsOriginalValues[propName] !== 'undefined' && this.changedPropsOriginalValues[propName] !== this[propName]());
 			}
 		});
 		return SettingsModel;

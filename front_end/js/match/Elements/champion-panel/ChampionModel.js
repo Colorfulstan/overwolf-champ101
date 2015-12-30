@@ -4,86 +4,74 @@ steal(
 	, 'SpellModel.js'
 	, 'ImageModel.js'
 	, 'global.js'
-	, function ( can
+	, function (can
 		, /**SpellModel*/ SpellModel
-		, /**ImageModel*/ ImageModel ) {
+		, /**ImageModel*/ ImageModel) {
 
 		/**
 		 * testblabla
 		 * @class {ChampionModel}
 		 */
-		var ChampionModel = can.Model.extend({}, {
-			init: function (options) {
-				var self = this;
-				options.passive.champId = this.id;
-				options.passive.type = 'passive'; // TODO: do in backend?
-				this.attr('passive', new SpellModel(options.passive));
-				this.image = new ImageModel(options.image);
-				options.image = this.image;
+		var ChampionModel = function ChampionModel(options) {
 
-				var spells = [];
-				options.spells.map(function (el, index) {
-					el.champId = self.id;
-					el.type = 'ability';
-					el.number = index + 2; // setting number to +2 since 1 will be the passive
-					spells.push(new SpellModel(el));
+			/** @type  {{ ImageModel }} */
+			this.image = (function (_options) {
+				return new ImageModel(_options.image); // TODO: attr()
+			})(options);
+
+			/** @type {SpellModel} */
+			this.passive = (function (_options) {
+				_options.passive.champId = _options.id;
+				_options.passive.type = 'passive'; // TODO: do in backend?
+				return new SpellModel(_options.passive);
+			})(options);
+
+			/** @type {Array.<SpellModel>} */
+			this.spells = (function (_options) {
+				return _options.spells.map(function (spell, index) {
+					spell.champId = _options.id;
+					spell.type = 'ability';
+					spell.number = index + 2; // setting number to +2 since 1 will be the passive
+					return new SpellModel(spell);
 				});
-				this.attr('spells', spells);
-			},
+			})(options);
 
-			///**@property
-			// * @type {String} */
-			//name: null,
-			//
-			///**@property
-			// * @type {Number} */
-			//id: null,
-			///**@property
-			// * @type {String[]} */
-			//allytips: null,
-			//
-			///**@property
-			// * @type {String[]} */
-			//enemytips: null,
-			//
-			///**@property
-			// * @type  {{ ImageModel }} */
-			//image: null,
-			//
-			///**@property
-			// * @type {SpellModel} */
-			//passive: null,
-			//
-			///**@property
-			// * @type {{ SpellModel[] }} */
-			//spells: null,
+			/** @type {string} */
+			this.name = options.name;
+			/** @type {string} */
+			this.title = options.title;
+			/** @type {Number} */
+			this.id = options.id;
+			/** @type {Array.<string>} */
+			this.allytips = options.allytips;
+			/** @type {Array.<string>} */
+			this.enemytips = options.enemytips;
 
-			imgSrc: function () {
+			/** @get */
+			this.imgSrc = function () { // TODO: get...
 				//return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;
-				return this.image.src ;
-			},
-			spriteSrc: function () {
+				return this.image.src;
+			};
+			/** @get */
+			this.spriteSrc = function () { // TODO: get...
 				return this.image.spriteSrc;
-			},
-			videoAvailable : function(){ // TODO: maybe don't implement for Champion Spotlight
+			};
+			/** @get */
+			this.videoAvailable = function () { // TODO: maybe don't implement for Champion Spotlight // TODO: get...
 				return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();
-			},
-			videoSrcOgg : function(){
+			};
+			/** @get */
+			this.videoSrcOgg = function () { // TODO: get...
 				return null; // TODO: Youtube video how to find??
-			},
-			videoSrcMp4 : function(){
+			};
+			/** @get */
+			this.videoSrcMp4 = function () { // TODO: get...
 				return null; // TODO: Youtube video how to find??
-			},
-			videoSrcWebm : function(){
+			};
+			/** @get */
+			this.videoSrcWebm = function () { // TODO: get...
 				return null; // TODO: Youtube video how to find??
-			}
-
-			//// TODO:
-			//findAll: 'GET /champ.json',
-			//findOne: 'GET /champ/{id}.json',
-			//create:  'POST /champ.json',
-			////update:  'PUT /champ/{id}.json',
-			//destroy: 'DELETE /champ/{id}.json',
-		});
+			};
+		};
 		return ChampionModel;
 	});

@@ -63,13 +63,13 @@
 			<thead class="no-border">
 			<tr>
 				<th id="dropdown-hotkeys" onclick="$('#hotkeys-rows').slideToggle()" class="btn center-vertical">
-					In-Game-Hotkeys <i class="fa fa-angle-down padded-left-half">
+					In-Game-Hotkeys <i class="fa fa-angle-down padded-left-half"></i>
 				</th>
 			</tr>
 			</thead>
 			<tbody id="hotkeys-rows" style="display: none;">
 			{{#hotkeys}}
-				<tr role="link" onclick="location.href='overwolf://settings/hotkeys#{{id}}';" class="btn hotkey-btn">
+				<tr role="link" data-title="{{ title }}" data-key="{{ string }}" id="{{ id }}" class="btn hotkey-btn">
 					<td class="padded-top-half padded-bot-half"><a href="#">{{ title }}</a></td>
 					<td class="padded-top-half padded-bot-half"><a href="#">{{ string }}</a></td>
 				</tr>

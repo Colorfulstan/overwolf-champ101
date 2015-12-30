@@ -3,48 +3,68 @@ steal(
 	'can'
 	, 'ImageModel.js'
 	, 'TooltipCtrl.js'
+	, 'analytics.js'
 	, 'global.js'
 	, function (can
 		, /**ImageModel*/ ImageModel
-		, /**TooltipCtrl*/ TooltipCtrl) {
+		, /**TooltipCtrl*/ TooltipCtrl
+		, analytics) {
 
-		/** * // TODO: add more from backend and doc here
-
-		 * @see SpellModel.init()
-		 * */
-		var SpellModel = can.Model.extend('SpellModel', {}, {
+		/**
+		 * @class {object} SpellModel
+		 *
+		 * @property {string} name
+		 * @property {string} type 'ability' or 'passive'
+		 * @property {string} description
+		 * @property {ImageModel} image
+		 * @property {Number} number The Number of the spell for the champ. <br>1 will be the passive, 2-4 the abilities and 5 will be the ultimate
+		 * @property {Number} enableVideo If this Spell has a Video or not (SummonerSpells do not
+		 * @property {Number} champId
+		 * @property {Array.<Number>} cooldown
+		 * @property {string} cooldownBurn
+		 * @property {Array.<Number>} range
+		 * @property {string} tooltip
+		 * @property {Array.<Array.<Number>>} effect
+		 * @property {Array.<string>} effectBurn
+		 * @property {string} resource
+		 * @property {Array.<Number>} cost
+		 * @property {string} costBurn
+		 * @property {string} costType
+		 */
+		var SpellModel = can.Map.extend('SpellModel', {}, {
 			/**
-			 * @param options.name {String}
-			 * @param options.type {String}
-			 * @param options.description {String}
-			 * @param options.tooltip {String}
-
-			 * @param options.image {ImageModel}
-			 * @param options.number {Number}
-			 * @param options.cooldownBurn    {String}
-			 * @param options.costBurn {String}
-			 * @param options.resource {String} - The Ressource used
-			 * @param options.rangeBurn {String} Array with range numbers per level ot 'self' if selfcast only
-
-			 * @param options.cooldown    {number[]}
-			 * @param options.cost {Number[]}
-			 * @param options.effect {String[][]}
-			 * @param options.effectBurn {String[][]}
-			 * @param options.costType {String} - THe Cost as {{ var }} with the ressource appended
-			 * @param options.range {Number[] | 'self'} Array with range numbers per level ot 'self' if selfcast only
+			 * @constructor
 			 *
-			 * @param options.vars {Array[]}
-			 * @param options.vars.coeff {number[]}
-			 * @param options.vars.dyn {String}
-			 * @param options.vars.key {String}
-			 * @param options.vars.link {String}
-			 * @param options.vars.ranksWith {String}
+			 * @param {string} options.name
+			 * @param {string} options.champId
+			 * @param {string} options.type
+			 * @param {string} options.description
+			 * @param {string} options.tooltip
+
+			 * @param {ImageModel} options.image
+			 * @param {Number} options.number
+			 * @param {string} options.cooldownBurn
+			 * @param {string} options.costBurn
+			 * @param {string} options.resource - The Ressource used
+			 * @param {string} options.rangeBurn Array with range numbers per level ot 'self' if selfcast only
+
+			 * @param {number[]} options.cooldown
+			 * @param {Number[]} options.cost
+			 * @param {string[][]} options.effect
+			 * @param {string[][]} options.effectBurn
+			 * @param {string} options.costType - the Cost as {{ var }} with the ressource appended
+			 * @param {Array.<Number>| 'self'} options.range Array with range numbers per level ot 'self' if selfcast only
 			 *
+			 * @param {Array.<Array>} options.vars
+			 * @param {Array.<Number>} options.vars.coeff
+			 * @param {string} options.vars.dyn
+			 * @param {string} options.vars.key
+			 * @param {string} options.vars.link
+			 * @param {string} options.vars.ranksWith
 			 */
 			init: function (options) {
-				//var imgData = options.image;
-				this.image = new ImageModel(options.image);
-				options.image = this.image;
+
+				this.attr('image', new ImageModel(options.image));
 
 				this.attr('enableVideo', false);
 				if (options.type != undefined) {
@@ -63,75 +83,21 @@ steal(
 					}
 				}
 
-				if (options.tooltip != undefined && options.tooltip != null) {
+				if (typeof options.tooltip !== 'undefined' && options.tooltip !== null) {
 					// TODO: does this have to know TooltipCtrl to get the valued Tooltip?
-					this.attr('tooltip', TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars));
+					var tooltipValued = TooltipCtrl.tooltipValued(options.tooltip, options.effect, options.vars, options.champId, options.name);
+					this.attr('tooltip', tooltipValued);
 				}
-				if (options.resource != undefined && options.resource != null) {
-					// TODO: does this have to know TooltipCtrl to get the valued ressource String?
-					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars));
+				if (typeof options.resource !== 'undefined' && options.resource !== null) {
+					// TODO: does this have to know TooltipCtrl to get the valued ressource string?
+					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars, options.champId, options.name));
 				} else {
 					this.attr('resource', options.costBurn);
+					if (options.costBurn && (options.costBurn.indexOf('@') >= 0 || options.costBurn.indexOf('.') >= 0)) {
+						analytics.c101_exceptionTooltip(options.champId, options.name, "null", options.costBurn);
+					}
 				}
 			},
-
-			///**@property
-			// * @type {String} */
-			//name: null,
-			///**@property
-			// * @type {String} */
-			//type: null,
-			///**@property
-			// * @type {String} */
-			//description: null,
-			///**@property
-			// * @type {ImageModel} */
-			//image: null,
-			///** The Number of the spell for the champ.
-			// *  1 will be the passive, 2-4 the abilities and 5 will be the ultimate
-			// * @property
-			// * @type {Number} */
-			//number: null,
-			///** If this Spell has a Video or not (SummonerSpells do not
-			// * @property
-			// * @type {Number} */
-			//enableVideo: null,
-			///**@property
-			// * @type {Number} */
-			//champId: null,
-			//
-			///** @property
-			// * @type {Number[]} */
-			//cooldown: null,
-			//
-			///** @property
-			// * @type {String} */
-			//cooldownBurn: null,
-			///** @property
-			// * @type {Number[]} */
-			//range: null,
-			//
-			///** @property
-			// * @type {Number[]} */
-			//tooltip: null,
-			///** @property
-			// * @type {Number[]} */
-			//effect: null,
-			///** @property
-			// * @type {Number[]} */
-			//effectBurn: null,
-			///** @property
-			// * @type {Number[]} */
-			//resource: null,
-			///** @property
-			// * @type {Number[]} */
-			//cost: null,
-			///** @property
-			// * @type {Number[]} */
-			//costBurn: null,
-			///** @property
-			// * @type {Number[]} */
-			//costType: null,
 
 			imgSrc: function () {
 				return this.image.src;
@@ -140,7 +106,7 @@ steal(
 				return this.image.spriteSrc;
 			},
 			videoAvailable: function () {
-				if (this.attr('enableVideo') != null) return this.attr('enableVideo');
+				if (this.enableVideo != null) return this.enableVideo;
 				else return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();
 			},
 			videoId: function () {
@@ -197,13 +163,6 @@ steal(
 				return CDN_ABILITIES_URL + 'videos/webm/' + this.cdnNumber() + '.webm';
 				//return null;
 			}
-
-			//// TODO:
-			//findAll: 'GET /champ.json',
-			//findOne: 'GET /champ/{id}.json',
-			//create:  'POST /champ.json',
-			////update:  'PUT /champ/{id}.json',
-			//destroy: 'DELETE /champ/{id}.json',
 		});
 		return SpellModel;
 	});

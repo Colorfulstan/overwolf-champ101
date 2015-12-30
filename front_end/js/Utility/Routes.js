@@ -6,7 +6,7 @@ steal(
 		 * @class {Routes} Routes
 		 * @static
 		 * @readonly
-		 * @typedef {Object} Routes
+		 * @typedef {object} Routes
 		 * */
 		var Routes = {
 			// TooltipCtrl

@@ -3,9 +3,11 @@ steal(
 	'can.js'
 	, 'Routes.js'
 	, 'SettingsModel.js'
+	, 'analytics.js'
 	, function (can
 		, /**Routes*/ Routes
-		, /**SettingsModel*/ SettingsModel) {
+		, /**SettingsModel*/ SettingsModel
+		, analytics) {
 
 		/**
 		 * Provides basic Window-Interaction Methods and Eventhandler for common Elements
@@ -27,13 +29,17 @@ steal(
 					, /** CSSSelectorString */ infoBtn: '.btn-info'
 					, /** CSSSelectorString */ helpBtn: '.btn-help'
 					, /** CSSSelectorString */ feedbackBtn: '.btn-feedback'
-					, /** CSSSelectorString */ closeBtn: '.btn-close',
+					, /** CSSSelectorString */ closeBtn: '.btn-close'
+					, /** CSSSelectorString */ rogLink: '.rog-logo a'
+					, /** CSSSelectorString */ dropdownListBtn: '[data-control="c101-dropdown"]'
+					, /** CSSSelectorString */ dropdownListTarget: '[data-c101-dropdown]',
 
 					// handled routes
 					/**@inheritDoc Routes.toggleWindow */
 					toggleWindowRoute: Routes.toggleWindow,
 					restoreWindowRoute: Routes.restoreWindow
 				},
+				analytics: analytics, // for testing purposes
 				/**@static*/
 				SCREEN_WIDTH: window.screen.availWidth,
 				/**@static*/
@@ -44,7 +50,7 @@ steal(
 				 * WindowCtrl.events.on(...)
 				 * WindowCtrl.events.trigger(...)
 				 *
-				 * Possible Events (bound somewhere):
+				 * Possible Events (emitted or listened on somewhere):
 				 *
 				 * collapsed after Match-panels got collapsed
 				 * expanded after Match-panels got expanded
@@ -61,20 +67,26 @@ steal(
 				 * settingsClosed - called right before Settingswindow closes
 				 * reloadMatchEv - when the match should get reloaded through external sources
 				 * restartAppEv - when the App will be restarted
+				 * updateHotkeysEv - when the Hotkeys bound should be refreshed and possible changes send to analytics
 				 */
 				events: {
 					"on": function (type, cb) {
 						$(this).on(type, cb);
 					},
 					"one": function (type, cb) {
-						$(this).one(type,cb);
+						$(this).one(type, cb);
 					},
-					"trigger": function (type) {
+					/**
+					 * triggers an Event for all Windows.
+					 * @param type
+					 * @param {Array | object} [data] data to be given to the eventHandler <br>(NOTE: DATA CAN ONLY BE USED IF THE EVENT IS TRIGGERED IN THE SAME WINDOW THAT HANDLES THE EVENT)
+					 */
+					"trigger": function (type, data) {
 						steal.dev.log('triggering event', type);
 						var storageEventKey = 'eventFired';
 						var valueDivider = '||';
 
-						$(this).trigger(type);
+						$(this).trigger(type, data);
 						localStorage.setItem(storageEventKey, type + valueDivider + new Date());
 					},
 					"off": function (type) {
@@ -86,14 +98,14 @@ steal(
 					var valueDivider = '||';
 					$(window).off('storage');
 					$(window).on('storage', function () { // does not trigger for the window that made the storage-changes
-						if (event.key === storageEventKey){
+						if (event.key === storageEventKey) {
 							var evType = extractEvent(event.newValue);
 							WindowCtrl.events.trigger(evType);
 							steal.dev.log(event);
 						}
 					});
 
-					function extractEvent(value){
+					function extractEvent(value) {
 						return value.substr(0, value.indexOf(valueDivider));
 					}
 				},
@@ -127,8 +139,16 @@ steal(
 						if (result.status == "success") {
 							var odkWindow = result.window;
 							overwolf.windows.restore(odkWindow.id, function (result) {
-								WindowCtrl.events.trigger('restored');
-								deferred.resolve(odkWindow);
+
+								$.when(analytics.isReady)
+									.then(function () {
+										window.gaw = analytics;
+										WindowCtrl.events.trigger('restored');
+										deferred.resolve(odkWindow);
+										window.gaw.screenview(name);
+									})
+									.fail(function () {console.error(arguments)});
+
 							});
 						}
 					});
@@ -146,14 +166,14 @@ steal(
 						if (result.status == "success") {
 							if (result.window.isVisible) {
 								self.minimize(name);
-								if (name == 'Match') {
+								if (name === 'Match') {
 									SettingsModel.isMatchMinimized(true);
 								}
 								deferred.resolve(null);
 							} else {
 								$.when(self.open(name)).then(function (/**ODKWindow*/ odkWindow) {
 									deferred.resolve(odkWindow);
-									if (name == 'Match') {
+									if (name === 'Match') {
 										SettingsModel.isMatchMinimized(false);
 									}
 								});
@@ -182,17 +202,18 @@ steal(
 				},
 				/** Opens the Match Window */
 				openMatch: function (needsReload) {
-					var p = WindowCtrl.open('Match').then(function () {
+					return WindowCtrl.open('Match').then(function () {
 						if (needsReload) { WindowCtrl.events.trigger('reloadMatchEv');}
 					});
-					return p;
 				},
 				/** Opens the Home / Main Window */
 				openMain: function () {
 					return WindowCtrl.open('Main');
 				},
 				/** closes the Match-Window */
-				closeMatch: function () { debugger; return WindowCtrl.close('Match'); },
+				closeMatch: function () {
+					return WindowCtrl.close('Match');
+				},
 				/** Opens the Settings-Window and positions it centered on the screen */
 				openSettings: function () {
 					var self = this;
@@ -201,7 +222,7 @@ steal(
 
 
 						if (!SettingsModel.isSummonerSet()) {
-							overwolf.windows.setTopmost(odkWindow.id, true, function(){
+							overwolf.windows.setTopmost(odkWindow.id, true, function () {
 								steal.dev.log('Settingswindow set to topmost', arguments)
 							});
 						}
@@ -261,32 +282,18 @@ steal(
 					var newNodeString = '<div class="whats-this-display text-body"><p>' + $el.attr('title') + '</p></div>';
 					if ($el.parent().next('div').hasClass('whats-this-display')) { // close it again
 						$OpenWhats.remove();
-					} else if ($OpenWhats.length) { // another one is open - close that and open targeted
-						$OpenWhats.remove();
+					} else {
+						if ($OpenWhats.length) { // another one is open - close that before opening targeted
+							$OpenWhats.remove();
+						}
 						$el.parent().after(newNodeString);
-					} else { // just open it
-						$el.parent().after(newNodeString);
+						analytics.event('?', 'show', $el.parent().attr('for'));
 					}
 				},
 
 				'.drag-window-handle mousedown': function ($el, ev) {
 					steal.dev.log('dragging');
 					WindowCtrl.dragMove(this.options.name);
-				}
-				,
-
-				/** Does prevent Event propagation
-				 * @listens MouseEvent#mousedown for the left Mousebutton
-				 * @param $el
-				 * @param ev
-				 *
-				 * @see WindowCtrl.defaults.closeBtn
-				 */
-				'{closeBtn} mousedown': function ($el, ev) {
-					if (ev.which == 1) {
-						WindowCtrl.close(this.options.name);
-						ev.stopPropagation();
-					}
 				}
 				,
 				/** Does prevent Event propagation
@@ -297,6 +304,7 @@ steal(
 				'{resizeBtn} mousedown': function ($el, ev) {
 					WindowCtrl.dragResize(this.options.name, 'BottomRight');
 					ev.stopPropagation();
+					analytics.event('Window', 'resize');
 				}
 				,
 				/** Does prevent Event propagation
@@ -309,6 +317,22 @@ steal(
 					if (ev.which == 1) {
 						WindowCtrl.minimize(this.options.name);
 						ev.stopPropagation();
+						analytics.event('Button', 'click', 'minimize');
+					}
+				}
+				,
+				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left Mousebutton
+				 * @param $el
+				 * @param ev
+				 *
+				 * @see WindowCtrl.defaults.closeBtn
+				 */
+				'{closeBtn} mousedown': function ($el, ev) {
+					if (ev.which == 1) {
+						WindowCtrl.close(this.options.name);
+						ev.stopPropagation();
+						analytics.event('Button', 'click', 'close');
 					}
 				}
 				,
@@ -322,6 +346,7 @@ steal(
 						steal.dev.log('WindowCtrl: open settings');
 						WindowCtrl.openSettings();
 						ev.stopPropagation();
+						analytics.event('Button', 'click', 'Settings');
 					}
 				}
 				,
@@ -334,9 +359,32 @@ steal(
 					if (ev.which == 1) {
 						WindowCtrl.openMain();
 						ev.stopPropagation();
+						analytics.event('Button', 'click', 'Info');
 					}
 				}
 				,
+				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left MouseButton
+				 * @param $el
+				 * @param ev
+				 * @see WindowCtrl.defaults.dropdownListBtn*/
+				'{dropdownListBtn} mousedown': function ($el, ev) {
+					if (ev.which == 1) {
+						var targets = WindowCtrl.defaults.dropdownListTarget;
+						var listId = $el.attr('data-target');
+						var list = $('#' + listId);
+						if (list.css('display') === 'none') {
+							analytics.screenview('Info-' + listId);
+						}
+						$el.next(targets).siblings(targets).slideUp();
+						list.slideToggle();
+						ev.stopPropagation();
+					}
+				}
+				,
+				'{rogLink} click': function () {
+					analytics.event('AdLink', 'click', 'ROG-Logo');
+				},
 				/**
 				 * calls {@link WindowCtrl.toggle}
 				 * @listens can.Route#route {@link toggleWindowRoute}
@@ -347,7 +395,6 @@ steal(
 					steal.dev.log('toggle/:window - routeData:', routeData);
 					WindowCtrl.toggle(routeData.window);
 					Routes.setRoute('', true);
-
 				}
 				,
 				/**
@@ -358,7 +405,7 @@ steal(
 				'{restoreWindowRoute} route': function (routeData) {
 					steal.dev.log('restore/:window - routeData:', routeData);
 					WindowCtrl.open(routeData.window);
-					if (routeData.window == 'Match') {
+					if (routeData.window === 'Match') {
 						SettingsModel.isMatchMinimized(false);
 					}
 					Routes.setRoute('', true);

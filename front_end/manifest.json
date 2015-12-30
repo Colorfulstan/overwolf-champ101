@@ -4,7 +4,7 @@
   "meta": {
   	"name": "League of Legends Champ 101",
   	"access-name": "it.krispin.champ101",
-  	"version": "1.0.5",
+  	"version": "1.1.0",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
   	"description": "Basic League of Legends champion information relevant for your current game",
@@ -36,7 +36,6 @@
 	  },
 	  "Settings": {
 		"file": "views/settings.html",
-		  "topmost":true,
 		"transparent": true,
 		"resizable": false,
 		"show_in_taskbar": true,
@@ -81,7 +80,8 @@
   "permissions": [ "Hotkeys", "GameInfo", "Extensions"],
   "externally_connectable": {
 	"matches": [
-	  "http://*.krispin.it/*"
+	  "http://*.krispin.it/*",
+		"*google-analytics*"
 	]
   }
 }

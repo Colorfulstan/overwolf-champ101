@@ -2,8 +2,10 @@
 steal(
 	'can'
 	, 'WindowCtrl.js'
+	, 'analytics.js'
 	, function (can
-		, /**WindowCtrl*/ WindowCtrl) {
+		, /**WindowCtrl*/ WindowCtrl
+		, analytics) {
 
 		/**
 		 * Controller for the "Settings" view (settings.html / settings.js)
@@ -13,7 +15,8 @@ steal(
 			defaults: {
 				name: 'Settings',
 				settingsTmpl: 'templates/settings.mustache',
-				loadingSpinnerTmpl: 'templates/parts/loading-spinner.mustache'
+				loadingSpinnerTmpl: 'templates/parts/loading-spinner.mustache',
+				hotkeyBtns: '.hotkey-btn'
 			}
 		}, {
 			/**
@@ -23,13 +26,11 @@ steal(
 				var self = this;
 
 				WindowCtrl.prototype.init.apply(self, arguments);
-				//WindowCtrl.enableStorageEvents();
 
 				$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
 					self.odkWindow = odkWindow;
 				});
 				self.renderView();
-
 				//this.element.find('#summoner-name-input').focus();
 			},
 			renderView: function () {
@@ -52,18 +53,37 @@ steal(
 				var settings = self.options.settings;
 				if (self.summonerUnchanged()) {	// no change - spare the request
 					self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
+					sendAnalytics(settings, false);
 					window.setTimeout(function () {
 						self.closeSettings();
-					},100);
+					}, 100);
 				} else {
 					this.requestSummonerId(settings, self, $btn)
 						.then(function () {
 							WindowCtrl.events.trigger('summonerChangedEv');
+							sendAnalytics(settings,true);
 							self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
 							window.setTimeout(function () {
 								self.closeSettings();
-							},100);
+							}, 100);
 						});
+				}
+				function sendAnalytics(settings, summonerChanged) {
+					if (summonerChanged) {
+						var value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
+						var label = (settings.summonerName() === '---') ? 'random' : 'specific';
+						analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
+					}
+					var action;
+					if (settings.hasValueChanged('startWithGame')){
+						action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
+						analytics.event('Settings', action, 'startWithGame');
+					}
+					if (settings.hasValueChanged('closeMatchWithGame')){
+						action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
+						analytics.event('Settings', action, 'closeMatchWithGame');
+					}
+					action = null;
 				}
 			},
 			requestSummonerId: function (settings, self, $btn) {
@@ -89,31 +109,33 @@ steal(
 				return def.promise();
 			},
 			triggerRestartIfNeccessary: function (startWithGameOrig, startWithGameCurrent) {
-					if (typeof startWithGameOrig !== 'undefined' && startWithGameOrig !== startWithGameCurrent){
-						WindowCtrl.events.trigger('restartAppEv');
-					}
+				if (typeof startWithGameOrig !== 'undefined' && startWithGameOrig !== startWithGameCurrent) {
+					WindowCtrl.events.trigger('restartAppEv');
+				}
 			},
 			closeSettings: function () {
 				var self = this;
 				WindowCtrl.events.trigger('settingsClosed');
 				window.setTimeout(function () {
 					WindowCtrl.close(self.odkWindow.name);
-				},100);
+				}, 100);
 
 			},
 			'#btn-save-close click': function ($btn, ev) {
 				$btn.text('checking'); // TODO: replace with class
+				analytics.event('Button', 'click', 'save-settings');
 				this.saveAndCloseHandler(this, $btn);
 			},
 			'.btn-close click': function ($el, ev) {
 				var self = this;
+				this.options.settings.reset();
 				self.closeSettings();
 			},
 			'.btn-cancel click': function ($el, ev) {
-				var self = this;
 				// restore the old settings-values
 				this.options.settings.reset();
-				self.closeSettings();
+				analytics.event('Button', 'click', 'cancel-settings');
+				this.closeSettings();
 			},
 			'#server-region-select change': function ($el, ev) {
 				this.options.settings.server($el.val());
@@ -121,24 +143,43 @@ steal(
 			'#summoner-name-input change': function ($el, ev) {
 				this.options.settings.summonerName($el.val());
 			},
-			'.hotkey-btn click': function ($el, ev) {
+			'{hotkeyBtns} click': function ($el, ev) {
 				var self = this;
+				ev.stopPropagation();
 
-				// TODO: find a cleaner solution
-				$(document).off('focus');
-				$(document).on('focus', focusHandler);
-				steal.dev.warn('document events:', $._data(document, 'events'));
-				function focusHandler() {
-					steal.dev.log('focusHandler after hotkey-btn click called');
-					$.when(self.options.settings.loadHotKeys()).then(function (noValueGiven) {
+				location.href = 'overwolf://settings/hotkeys#' + $el.attr('id');
+				$(document).one('focus', function () {
+					WindowCtrl.events.trigger('updateHotkeysEv');
+					steal.dev.log('updateHotkeysEv triggered in SettingsCtrl');
+					var oldHotkeys = $(SettingsCtrl.defaults.hotkeyBtns);
+					$.when(self.options.settings.loadHotKeys()).then(function (nothing) {
 						steal.dev.log('hotkeys reloaded');
 						self.renderView();
 						self.element.find('#hotkeys-rows').show();
+						analyticsSendNewHotkey(oldHotkeys, $(SettingsCtrl.defaults.hotkeyBtns));
 					});
-				}
+					function analyticsSendNewHotkey(oldHotkeys, newHotkeys) {
+						oldHotkeys.each(function (i) {
+							var newValue = $(newHotkeys[i]).attr('data-key');
+							var oldValue = $(this).attr('data-key');
+							if (oldValue !== newValue) {
+								var fields = {};
+								fields[analytics.CUSTOM_DIMENSIONS.HOTKEY] = newValue;
+								analytics.event('Hotkey', 'changeTo', $(this).attr('id'), fields);
+							}
+						});
+					}
+				});
 			},
 			'#summoner-name-input focus': function ($el, ev) {
 				$el.val('');
+			},
+			'#dropdown-hotkeys click': function ($el, ev) {
+				ev.stopPropagation();
+
+				if ($('#dropdown-hotkeys').css('display') === 'none') {
+					analytics.screenview('Hotkeys');
+				}
 			}
 		});
 		return SettingsCtrl;

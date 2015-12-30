@@ -3,11 +3,15 @@ steal(
 	'can'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, 'Boot.js'
+	, 'analytics.js'
 	, function (can
 		, /** WindowCtrl */ WindowCtrl
 		, /**SettingsModel*/ SettingsModel
-		, /** Boot */ Boot) {
+		, /**SettingsProvider*/ Settings
+		, /** Boot */ Boot
+		, analytics) {
 
 		var Static = {
 			defaults: {
@@ -15,6 +19,7 @@ steal(
 				, matchBtn: '.btn-match'
 			},
 			mostRecentFPS: [],
+			analytics: analytics, // for testing purposes to be able to mock it
 
 
 			/**
@@ -107,7 +112,7 @@ steal(
 				steal.dev.log('stableFPSHandler added');
 				WindowCtrl.events.one('fpsStable', function () {
 					steal.dev.warn('fps Stable, Match should now open');
-					var settings = new SettingsModel();
+					var settings = Settings.getInstance();
 					MainCtrl.removeStableFpsListener(settings.isFpsStable);
 					MainCtrl.mostRecentFPS = [];
 
@@ -118,7 +123,7 @@ steal(
 				});
 			},
 			_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
-				steal.dev.warn('League of Legends game started', new Date() , 'closing Matchwindow for reopening');
+				steal.dev.warn('League of Legends game started', new Date(), 'closing Matchwindow for reopening');
 				if (SettingsModel.isSummonerSet()) {
 					MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
 					settings.isInGame(true);
@@ -202,9 +207,9 @@ steal(
 			 * @param ev
 			 */
 			'{matchBtn} mousedown': function (el, ev) {
-				var self = this;
+				//var self = this;
 				steal.dev.log('WindowCtrl: open match');
-				var settings = new SettingsModel;
+				var settings = Settings.getInstance();
 				Boot._showMatchLoading(settings).then(function () {
 					return WindowCtrl.openMatch(true);
 				}).then(function () {
@@ -212,13 +217,18 @@ steal(
 					//	Boot._showMatchLoading(settings)
 					//			.then(function () { Boot.openMatchIfIngame(self, true); })
 					//			.fail(function () { // === not in a game and matchwindow waits for stable fps
-									WindowCtrl.event.trigger('fpsStable');
-								//});
+					WindowCtrl.events.trigger('fpsStable');
+					//});
 					//} else { // just open the damn thing
-						settings.destroy();
 					//}
 				});
-
+				analytics.event('Button', 'click', 'Match');
+			},
+			'.issues-link click': function () {
+				analytics.event('ExtLink', 'click', 'Github-issues');
+			},
+			'.email-link click': function () {
+				analytics.event('ExtLink', 'click', 'Email');
 			}
 		};
 
@@ -230,5 +240,6 @@ steal(
 		 */
 		var MainCtrl = WindowCtrl.extend(Static, Instance);
 		return MainCtrl;
-	})
+	}
+)
 ;

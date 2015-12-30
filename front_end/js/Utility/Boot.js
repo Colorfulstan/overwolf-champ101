@@ -3,17 +3,21 @@ steal(
 	'can'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
+	, 'analytics.js'
 	, function (/**can*/ can
 		, /** WindowCtrl */ WindowCtrl
-		, /** SettingsModel*/ SettingsModel) {
+		, /** SettingsModel*/ SettingsModel
+		, /**SettingsProvider*/ Settings
+		, analytics) {
 		/**
 		 * @class {Boot} Boot
 		 * @static
 		 * @readonly
-		 * @typedef {Object} Boot
+		 * @typedef {object} Boot
 		 * */
 		var Boot = {
-			strap: function (main, isFirstAppStart, /** SettingsModel */ settings) {
+			strap: function (main, /** SettingsModel */ settings, isFirstAppStart) {
 				steal.dev.log('starting bootstraping');
 				Boot.checkIfIngame(overwolf.games.getRunningGameInfo, settings.isInGame)
 					.then(function () {
@@ -51,6 +55,7 @@ steal(
 			},
 			_firstAppLaunch: function (main, settings) {
 				steal.dev.log('first time launch');
+				analytics.event('App', 'first-launch');
 				return Boot.setDefaultSettings(settings)
 					.then(function () {
 						return Boot.askForSummoner(SettingsModel.isSummonerSet);
@@ -74,6 +79,7 @@ steal(
 				} else {
 					WindowCtrl.openMain();
 					steal.dev.log('starting out of game');
+					analytics.event('App', 'start-manual', 'not-ingame');
 				}
 			},
 			_inGameStart: function (main, settings) {
@@ -84,6 +90,7 @@ steal(
 							return false; // App should not start automatically
 						}
 						wasAutoLaunched ? Boot._hideMatchLoading(settings) : Boot._showMatchLoading(settings);
+						wasAutoLaunched ? analytics.event('App', 'start-manual', 'ingame') : analytics.event('App', 'start-auto', 'ingame');
 						Boot.openMatchIfIngame(main);
 					});
 			},
@@ -186,7 +193,7 @@ steal(
 				steal.dev.log('openMatchIfIngame');
 				if (SettingsModel.isInGame()) {
 					steal.dev.log('is in game, opening match');
-					var settings = new SettingsModel();
+					var settings = Settings.getInstance();
 					main.constructor.addStableFpsListenerAndHandler(settings.isFpsStable);
 					return WindowCtrl.openMatch(needsReload);
 				}

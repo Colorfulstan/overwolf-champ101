@@ -2,8 +2,10 @@
 steal(
 	'can'
 	, 'Routes.js'
+	, 'analytics.js'
 	, function (can
-		, /**Routes*/ Routes) {
+		, /**Routes*/ Routes
+		, analytics) {
 
 		/**
 		 * Controls the tooltip-container
@@ -56,12 +58,22 @@ steal(
 				 * @param string
 				 * @param effect
 				 * @param vars
-				 * @return {*}
+				 * @param champId to whom this ability belongs
+				 * @param name of the ability
+				 * @return {Array} [0] = tooltip with values, [1] = object with placeholders as keys and inserted Strings as values <br>
+				 *     keys were not correctly replacable and given values (if present) were used instead as a "best guess" for what data-point would be appropriate.
 				 */
-				tooltipValued: function (string, effect, vars) {
+				tooltipValued: function (string, effect, vars, champId, name) {
 					var ttNew = string;
 					var pattern;
 
+					var missingPlaceHolders = {};
+					var allPlaceHolders = ttNew.match(/{{ (\w\d) }}/g);
+
+					var uniquePlaceHolders = (allPlaceHolders) ? allPlaceHolders.filter(function (itm, i, a) {
+						return i == a.indexOf(itm);
+					}) : [];
+					allPlaceHolders = null;
 
 					/**
 					 * builds a string from an array - x / y / z / ... / or a single value if all values are the same.
@@ -102,6 +114,12 @@ steal(
 
 							pattern = new RegExp('{{ ' + vars[j].key + ' }}', 'g');
 							ttNew = ttNew.replace(pattern, '<span class="scaling-values">' + valueString + link + '</span>');
+
+							if (ttNew.indexOf(pattern.source) >= 0) {
+								missingPlaceHolders[pattern.source] = "null";
+							}
+							var indexVar = uniquePlaceHolders.indexOf(pattern.source);
+							if (indexVar >= 0) uniquePlaceHolders.splice(indexVar, 1);
 						}
 					}
 
@@ -116,25 +134,57 @@ steal(
 							var effectString = buildValueString(effectValues);
 							ttNew = ttNew.replace(pattern, '<span class="effect-e-values">' + effectString + '</span>');
 
+							if (ttNew.indexOf(pattern.source) >= 0) {
+								missingPlaceHolders[pattern.source] = "null";
+							}
+							var indexEX = uniquePlaceHolders.indexOf(pattern.source);
+							if (indexEX >= 0) uniquePlaceHolders.splice(indexEX, 1);
+
 							// {{ fX }} was not found within the vars array, the achording index within effects / effectsburn will be used.
 							// sometimes this is used instead of {{ eX }} (eg Sona)
 							pattern = new RegExp('{{ f' + i + ' }}', 'g');
+
+							if (ttNew.indexOf(pattern.source) >= 0) {
+								missingPlaceHolders[pattern.source] = effectString;
+							}
+
 							ttNew = ttNew.replace(pattern, '<span class="effect-f-values">' + effectString + '</span>');
+
+							var indexFX = uniquePlaceHolders.indexOf(pattern.source);
+							if (indexFX >= 0) uniquePlaceHolders.splice(indexFX, 1);
+
 						}
 					}
 
+					for (var k = 0; k < uniquePlaceHolders.length; k++) {
+						missingPlaceHolders[uniquePlaceHolders[k]] = "null";
+					}
+
+					uniquePlaceHolders = Object.keys(missingPlaceHolders);
+
+					var placeHolderValues = uniquePlaceHolders.map(function (key) {
+						return missingPlaceHolders[key];
+					});
+
+					if (uniquePlaceHolders.length > 0) {
+						analytics.c101_exceptionTooltip(champId, name, uniquePlaceHolders, placeHolderValues);
+					}
+
+					uniquePlaceHolders = null;
+					placeHolderValues = null;
+					missingPlaceHolders = null;
 					return ttNew;
 				}
 				,
 				/**
 				 * Replaces the placeholder within the ressource-string of a spell with the acchording
-				 * value and returns the new String
+				 * value and returns the new string
 				 * @param string e.g. { x } Mana
 				 * @param effectArr Array with the effect-values for the champ as given from Rriot API
 				 * @param costBurn The costburn for the spell
 				 * @param [varsArr]
 				 */
-				ressourceValued: function (string, effectBurnArr, costBurn, varsArr) {
+				ressourceValued: function (string, effectBurnArr, costBurn, varsArr, champId, name) {
 					var pattern;
 					var newString = string;
 
@@ -152,6 +202,9 @@ steal(
 
 					pattern = new RegExp('{{ cost }}', 'g');
 					newString = newString.replace(pattern, costBurn);
+					if (newString.indexOf('@') >= 0 || newString.indexOf('.' >= 0)){
+						analytics.c101_exceptionTooltip(champId, name, 'null', [costBurn, varsArr, effectBurnArr]);
+					}
 					return newString;
 				}
 			}, {
@@ -175,7 +228,7 @@ steal(
 
 					if (this.options.videoPlayer) {
 						this.options.videoPlayer.dispose();
-						delete this.options.videoPlayer;
+						this.options.videoPlayer = null;
 					}
 					this.element.hide();
 				},
@@ -197,11 +250,11 @@ steal(
 				//},
 				/**
 				 * shows a Tooltip
-				 * @param type {String} - 'spell' || 'champ'
-				 * @param routeData {Object}
-				 * @param routeData.champ {String}
+				 * @param type {string} - 'spell' || 'champ'
+				 * @param routeData {object}
+				 * @param routeData.champ {string}
 				 * @param [routeData.index] {number} index of the spell within the spell array of a given champ
-				 * @param [routeData.type] {String} indicator for spell-type. Can be 'ability' || 'summoner'
+				 * @param [routeData.type] {string} indicator for spell-type. Can be 'ability' || 'summoner'
 				 * @param routeData.y {number} - The y position from top of the screen for the tooltip
 				 */
 				showTooltip: function (type, routeData) {
@@ -237,7 +290,6 @@ steal(
 							} else {
 								champTooltipView = can.view(this.options.championTmpl, champ);
 							}
-
 							this.element.html(champTooltipView);
 							break;
 					}
@@ -279,7 +331,11 @@ steal(
 								// TODO: maybe better error handling!?
 								steal.dev.log('Video got an Error', event, 'networkstate:', player.networkState);
 								$('#videoPlayer').remove();
-								$('.video--not-available').css('display', 'block')
+								$('.video--not-available').css('display', 'block');
+
+								var fields = {};
+								fields[analytics.CUSTOM_DIMENSIONS.DATA] = 'ability: ' + spell;
+								analytics.exception('Video is not available', false, fields);
 							});
 						});
 					}
@@ -322,4 +378,6 @@ steal(
 			;
 
 		return TooltipCtrl;
-	});
+	}
+)
+;

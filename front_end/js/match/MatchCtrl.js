@@ -2,20 +2,24 @@
 steal('can.js'
 	, 'WindowCtrl.js'
 	, 'SettingsModel.js'
+	, 'SettingsProvider.js'
 	, 'OverviewCtrl.js'
 	, 'ChampionCtrl.js'
 	, 'TooltipCtrl.js'
 	, 'Routes.js'
 	, 'Boot.js'
+	, 'analytics.js'
 	, 'global.js'
 	, function (can
 		, /**WindowCtrl*/ WindowCtrl
 		, /**SettingsModel*/ SettingsModel
+		, /**SettingsProvider*/ Settings
 		, /**OverviewCtrl*/ OverviewCtrl
 		, /**ChampionCtrl*/ ChampionCtrl
 		, /**TooltipCtrl*/ TooltipCtrl
 		, /**Routes*/ Routes
-		, /**Boot*/ Boot) {
+		, /**Boot*/ Boot
+		, analytics) {
 // TODO: replace with events for application-wide communication
 		/**
 		 *  Controller for the "Match" view (match.html / match.js)
@@ -176,6 +180,7 @@ steal('can.js'
 						if (data.status == 503) {
 							self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
 						}
+						analytics.event('Match', 'failed', data.status + ' | ' + data.statusText);
 						WindowCtrl.events.trigger('matchReady');
 						deferred.reject(data, status, jqXHR);
 					};
@@ -192,7 +197,7 @@ steal('can.js'
 							self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
 							// Controller for Tooltip
 							self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
-							debugger;
+							analytics.event('Match', 'loaded');
 							WindowCtrl.events.trigger('matchReady');
 							deferred.resolve(matchModel);
 						}
@@ -221,7 +226,7 @@ steal('can.js'
 					return deferred.promise();
 				},
 				reloadMatch: function () {
-					var self = this;
+					//var self = this;
 					steal.dev.warn('calling reloadMatch()');
 
 					//this.options.match = routeData.match;
@@ -267,6 +272,7 @@ steal('can.js'
 					self.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						WindowCtrl.events.trigger('expanded');
 					});
+					analytics.screenview('Match-Overview');
 				},
 				/** Collapse the champion panels
 				 * @fires MatchCtrl#collapsed
@@ -279,7 +285,6 @@ steal('can.js'
 					self.options.$panelContainer.slideUp(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 						WindowCtrl.events.trigger('collapsed');
 					});
-
 				},
 // Eventhandler
 				'mouseenter': function (element, ev) {
@@ -291,14 +296,16 @@ steal('can.js'
 				},
 				'{appBar} mousedown': function (appBar, ev) {
 					if (ev.which == 1) { this.togglePanels(appBar); }
+					analytics.event('Button', 'click', 'app-bar');
 				},
 				'{reloadBtn} mousedown': function ($el, ev) {
 					if (ev.which == 1) {
-						Boot._showMatchLoading(new SettingsModel()).then(function () {
+						Boot._showMatchLoading(Settings.getInstance()).then(function () {
 							Routes.setRoute(Routes.reloadMatch, true);
 						});
 						ev.stopPropagation();
 					}
+					analytics.event('Button', 'click', 'reload-match');
 				},
 				'{togglePanelsRoute} route': function (routeData) {
 					steal.dev.log('toggle/all route');
@@ -313,38 +320,6 @@ steal('can.js'
 				'{reloadMatchRoute} route': function (routeData) {
 					var self = this;
 					self.reloadMatch();
-				},
-				/** Does prevent Event propagation
-				 *
-				 * NOTE: because all Windows are independent from each other the reload-routing for Match-Window
-				 * does not work when accessing settings from another Window.
-				 * That's why this event is overwritten here.
-				 *
-				 * @overwrite WindowCtrl {settingsBtn} mousedown
-				 * @listens MouseEvent#mousedown for the left MouseButton
-				 * @param $el
-				 * @param ev
-				 * @see WindowCtrl.defaults.settingsBtn*/
-				'{settingsBtn} mousedown': function ($el, ev) {
-					if (ev.which == 1) {
-						steal.dev.log('MatchCtrl: open settings');
-						WindowCtrl.openSettings();
-
-						var settings = new SettingsModel();
-						var summonerId = settings.summonerId();
-						// Reload the Match-Window after Settings-Window gets closed
-						var interval = window.setInterval(function () {
-							overwolf.windows.getWindowState('Settings', function (/** WindowStateData */ result) {
-								if (result.status == "success" && result.window_state == 'closed') {
-									if (summonerId != settings.summonerId()) {
-										Routes.setRoute(Routes.reloadMatch);
-									}
-									window.clearInterval(interval);
-								}
-							})
-						}, 100);
-						ev.stopPropagation();
-					}
 				}
 			});
 		return MatchCtrl;
