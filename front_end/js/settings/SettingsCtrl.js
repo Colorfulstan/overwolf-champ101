@@ -61,7 +61,7 @@ steal(
 					this.requestSummonerId(settings, self, $btn)
 						.then(function () {
 							WindowCtrl.events.trigger('summonerChangedEv');
-							sendAnalytics(settings,true);
+							sendAnalytics(settings, true);
 							self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
 							window.setTimeout(function () {
 								self.closeSettings();
@@ -75,11 +75,11 @@ steal(
 						analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
 					}
 					var action;
-					if (settings.hasValueChanged('startWithGame')){
+					if (settings.hasValueChanged('startWithGame')) {
 						action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
 						analytics.event('Settings', action, 'startWithGame');
 					}
-					if (settings.hasValueChanged('closeMatchWithGame')){
+					if (settings.hasValueChanged('closeMatchWithGame')) {
 						action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
 						analytics.event('Settings', action, 'closeMatchWithGame');
 					}
@@ -94,6 +94,7 @@ steal(
 					, function (summonerId, status, jqXHR) {
 						steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
 						settings.summonerId(summonerId);
+						analytics.event('SummonerRequest', 'success');
 						def.resolve(summonerId, status, jqXHR);
 					})
 					.fail(function (data, status, jqXHR) {
@@ -103,6 +104,7 @@ steal(
 						// 503 temp unavailable
 						// 404 not found
 						// statusText 'error' == kein Internet??
+						analytics.event('SummonerRequest', 'failed', data.status + ' | ' + data.statusText);
 						$btn.text(data.statusText);
 						def.reject(data, status, jqXHR);
 					});

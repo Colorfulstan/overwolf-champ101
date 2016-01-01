@@ -142,13 +142,12 @@ steal(
 
 								$.when(analytics.isReady)
 									.then(function () {
-										window.gaw = analytics;
 										WindowCtrl.events.trigger('restored');
 										deferred.resolve(odkWindow);
-										window.gaw.screenview(name);
+										analytics.screenview(odkWindow.name);
+										//analytics.screenview(name); // TODO: somehow here is null send for the screenname!? appears as "not set" in analytics
 									})
 									.fail(function () {console.error(arguments)});
-
 							});
 						}
 					});

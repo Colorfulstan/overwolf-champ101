@@ -3,10 +3,12 @@ steal(
 	'ChampionModel.js'
 	, 'SettingsModel.js'
 	, 'SettingsProvider.js'
+	, 'analytics.js'
 	, 'global.js'
 	, function (/**ChampionModel*/ ChampionModel
 		, /** SettingsModel */ SettingsModel
-		, /**SettingsProvider*/ Settings) {
+		, /**SettingsProvider*/ Settings
+		, analytics) {
 
 		/**
 		 * @class
