@@ -90,7 +90,7 @@ steal(
 				}
 				if (typeof options.resource !== 'undefined' && options.resource !== null) {
 					// TODO: does this have to know TooltipCtrl to get the valued ressource string?
-					this.attr('resource', TooltipCtrl.ressourceValued(options.resource, options.effectBurn, options.costBurn, options.vars, options.champId, options.name));
+					this.attr('resource', TooltipCtrl.resourceValued(options.resource, options.effectBurn, options.costBurn, options.vars, options.champId, options.name));
 				} else {
 					this.attr('resource', options.costBurn);
 				}
