@@ -18,4 +18,4 @@ for bugs and suggestions instead.</p>
 
 <p><strong>Note:</strong> Despite our effort to work around cases of incosistency within the public datasets
 used for the displayed information there might still be a few missing or wrong values.<br>
-Feel free to report those by <a href="mailto:champinfo@krispin.it" target="_blank">email</a> or open a <a href="https://github.com/Colorfulstan/champ101/issues">github-issue</a> including the champion and ability for reference.</p>
+Feel free to report those by <a href="mailto:champ101@krispin.it" target="_blank">email</a> or open a <a href="https://github.com/Colorfulstan/champ101/issues">github-issue</a> including the champion and ability for reference.</p>
