@@ -199,18 +199,15 @@ steal(
 				}
 				return $.Deferred().reject().promise();
 			},
-			_checkIfAutoLaunched: function () { // TODO: not sure if this works as intended // and only usable if checked for ingame before
-				// if app is started manually, the main-window will open anyways.
-				// So if that window is not present, the game was started through auto-launch
-				// TODO: change main-window to some kind of indicator-window so that main-window don't have to open when app gets started manually
+			_checkIfAutoLaunched: function () { // can only be checked within the main-window
 
-				// TODO: add check for ingame here and then make public
-				var def = $.Deferred();
-				WindowCtrl.isWindowVisible('Main').then(function (isVisible) {
-					if (!isVisible) steal.dev.warn('App started through overwolf');
-					def.resolve(!isVisible);
-				});
-				return def.promise();
+				// possible scenarios:
+				// app starts thorugh user, Main-window opens => var autoLaunch = location.valueOf().search.indexOf('source=gamelaunchevent') >= 0; equals false
+				// app starts through gamelaunch => var autoLaunch = location.valueOf().search.indexOf('source=gamelaunchevent') >= 0;		equals true
+				// app ran in background and new game starts => Boot.js will not run again until App is shutdown
+
+				var autoLaunched = location.search.indexOf('source=gamelaunchevent') >= 0;
+				return $.Deferred().resolve(autoLaunched).promise();
 			},
 			_showMatchLoading: function (settings, data) {
 				steal.dev.warn('setting loading to be shown');
