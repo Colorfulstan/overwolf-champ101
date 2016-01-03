@@ -339,7 +339,7 @@ steal(
 								$('.video--not-available').css('display', 'block');
 
 								var fields = {};
-								fields[analytics.CUSTOM_DIMENSIONS.DATA] = 'ability: ' + spell;
+								fields[analytics.CUSTOM_DIMENSIONS.DATA] = 'ability: ' + spell.name;
 								analytics.exception('Video is not available', false, fields);
 							});
 						});
