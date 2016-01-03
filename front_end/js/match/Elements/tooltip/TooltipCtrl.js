@@ -184,7 +184,7 @@ steal(
 				 * @param costBurn The costburn for the spell
 				 * @param [varsArr]
 				 */
-				ressourceValued: function (string, effectBurnArr, costBurn, varsArr, champId, name) {
+				resourceValued: function (string, effectBurnArr, costBurn, varsArr, champId, name) {
 					var pattern;
 					var newString = string;
 
@@ -202,9 +202,14 @@ steal(
 
 					pattern = new RegExp('{{ cost }}', 'g');
 					newString = newString.replace(pattern, costBurn);
-					if (newString.indexOf('@') >= 0 || newString.indexOf('.' >= 0)){
-						analytics.c101_exceptionTooltip(champId, name, 'null', [costBurn, varsArr, effectBurnArr]);
+
+					if (newString.indexOf('@') >= 0 || newString.indexOf('.') >= 0){
+						var fields = {};
+						fields[analytics.CUSTOM_DIMENSIONS.CHAMP] = champId;
+						fields[analytics.CUSTOM_DIMENSIONS.DATA] = newString;
+						analytics.exception('cost string is cryptic: ' + newString, false, fields);
 					}
+
 					return newString;
 				}
 			}, {

@@ -30,6 +30,7 @@ steal(
 					, /** CSSSelectorString */ helpBtn: '.btn-help'
 					, /** CSSSelectorString */ feedbackBtn: '.btn-feedback'
 					, /** CSSSelectorString */ closeBtn: '.btn-close'
+					, /** CSSSelectorString */ exitBtn: '.btn-exit'
 					, /** CSSSelectorString */ rogLink: '.rog-logo a'
 					, /** CSSSelectorString */ dropdownListBtn: '[data-control="c101-dropdown"]'
 					, /** CSSSelectorString */ dropdownListTarget: '[data-c101-dropdown]',
@@ -142,13 +143,12 @@ steal(
 
 								$.when(analytics.isReady)
 									.then(function () {
-										window.gaw = analytics;
 										WindowCtrl.events.trigger('restored');
 										deferred.resolve(odkWindow);
-										window.gaw.screenview(name);
+										analytics.screenview(odkWindow.name);
+										//analytics.screenview(name); // TODO: somehow here is null send for the screenname!? appears as "not set" in analytics
 									})
 									.fail(function () {console.error(arguments)});
-
 							});
 						}
 					});
@@ -333,6 +333,21 @@ steal(
 						WindowCtrl.close(this.options.name);
 						ev.stopPropagation();
 						analytics.event('Button', 'click', 'close');
+					}
+				}
+				,
+				/** Does prevent Event propagation
+				 * @listens MouseEvent#mousedown for the left Mousebutton
+				 * @param $el
+				 * @param ev
+				 *
+				 * @see WindowCtrl.defaults.exitBtn
+				 */
+				'{exitBtn} mousedown': function ($el, ev) {
+					if (ev.which == 1) {
+						WindowCtrl.close('Main');
+						ev.stopPropagation();
+						analytics.event('Button', 'click', 'exit');
 					}
 				}
 				,

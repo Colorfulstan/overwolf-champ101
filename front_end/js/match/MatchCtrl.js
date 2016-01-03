@@ -186,7 +186,7 @@ steal('can.js'
 					};
 					var resolveCB = function (matchModel) {
 						if (typeof matchModel[1] === 'string' && matchModel[1] === 'error') {
-							var args = matchModel;
+							var args = matchModel; // TODO: here analytics event "Match failed 0 | error" comes from
 							rejectCb(args[0], args[1], args[2]); // delegating to .fail() callback
 						} else {
 							// TODO: find a cleaner solution for this (side-effects)
