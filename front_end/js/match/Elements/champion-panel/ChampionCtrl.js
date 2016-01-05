@@ -8,17 +8,11 @@
  */
 
 "use strict";
-steal(
-	'can'
-	, 'ChampionModel.js'
-	, 'SpellModel.js'
-	, 'Routes.js'
-	, 'analytics.js'
-	, function (can
-		, /**ChampionModel*/ ChampionModel
-		, /**SpellModel*/ SpellModel
-		, /**Routes*/ Routes
-		, analytics) {
+import can from 'can';
+import ChampionModel from 'ChampionModel';
+import SpellModel from 'SpellModel';
+import Routes from 'Routes';
+import analytics from 'analytics';
 
 		/**
 		 * @class
@@ -240,5 +234,4 @@ steal(
 					//}
 				}
 			});
-		return ChampionCtrl;
-	});
+		export default ChampionCtrl;
