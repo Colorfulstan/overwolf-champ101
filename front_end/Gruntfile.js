@@ -79,6 +79,7 @@ module.exports = function (grunt) {
 			, fonts: {expand: true, src: ['assets/font/**/*'], dest: 'out/'}
 			, img: {expand: true, src: 'assets/img/**/*', dest: 'out/'}
 			, manifest: {expand: true, src: 'manifest.json', dest: 'out/'}
+			, publicReadme: {expand: true, src: 'readme-curious-dev.md', dest: 'out/'}
 			, steal: {expand: true, cwd: 'node_modules/steal', src: ['steal.production.js'], dest: 'out/'}
 			,
 			videojs: {
