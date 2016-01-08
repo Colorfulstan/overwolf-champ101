@@ -1,0 +1,25 @@
+# IntelliJ project files
+*.iml
+
+# generic temp folders
+out
+gen
+dist
+temp
+.grunt
+
+# vendor folders
+node_modules
+bower_components
+
+# production-folders
+champ101_latest/app
+champ101_latest/_wip
+release-candidates
+
+# local folders
+logo
+back_end
+01_material
+screens_champ101*
+# Created by .ignore support plugin (hsz.mobi)
