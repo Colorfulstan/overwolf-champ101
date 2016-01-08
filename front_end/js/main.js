@@ -3,28 +3,21 @@
 // Only gets executed with the first start after overwolf restart
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 "use strict";
-steal(
-	'MainCtrl.js'
-	, 'SettingsModel.js'
-	, 'SettingsProvider.js'
-	, 'Boot.js'
-	, 'analytics.js'
-	, function (/** MainCtrl */ MainCtrl
-		, /** SettingsModel*/ SettingsModel
-		, /** SettingsProvider */ Settings
-		, /** Boot */ Boot,
-				analytics) {
+import WindowCtrl from 'WindowCtrl';
+import MainCtrl from 'MainCtrl';
+import SettingsModel from 'SettingsModel';
+import Settings from 'SettingsProvider';
+import Boot from 'Boot';
+import analytics from 'analytics';
 
-		analytics.init();
-		WindowCtrl.enableStorageEvents();
+analytics.init();
+WindowCtrl.enableStorageEvents();
 
-		var main = new MainCtrl('html');
-		var settings = Settings.getInstance();
+var main = new MainCtrl('html');
+var settings = Settings.getInstance();
 
-		var firstStart = !SettingsModel.isSummonerSet();  // localStorage has no items on first start
+var firstStart = !SettingsModel.isSummonerSet();  // localStorage has no items on first start
 
-		Boot.strap(main, settings, firstStart);
-
-	});
+Boot.strap(main, settings, firstStart);
 
 
