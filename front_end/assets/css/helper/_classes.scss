@@ -5,6 +5,10 @@
   font-size: 2.5rem;
 }
 
+.rog-logo {
+  width: 128px;
+}
+
 .blue {
   background: $color-blue;
 }
@@ -57,8 +61,32 @@
   &-2 { padding: $spacer*2 }
 }
 
-.margin-0 {
-  margin: 0 0 0 0 !important;
+.margin {
+  margin: $spacer;
+  &-left { margin-left: $spacer !important;
+    &-0 { margin-left: 0 !important; }
+    &-half { margin-left: $spacer/2 !important; }
+    &-2 { margin-left: $spacer*2 !important; }
+  }
+  &-right { margin-right: $spacer !important; &-0 {
+    margin-right: 0 !important;
+  }
+    &-half { margin-right: $spacer/2 !important; }
+    &-2 { margin-right: $spacer*2 !important; }
+  }
+  &-top { margin-top: $spacer !important;
+    &-0 { margin-top: 0 !important; }
+    &-half { margin-top: $spacer/2 !important; }
+    &-2 { margin-top: $spacer*2 !important; }
+  }
+  &-bot { margin-bottom: $spacer !important;
+    &-0 { margin-bottom: 0 !important; }
+    &-half { margin-bottom: $spacer/2 !important; }
+    &-2 { margin-bottom: $spacer*2 !important; }
+  }
+  &-0 { margin: 0 }
+  &-half { margin: $spacer/2 }
+  &-2 { margin: $spacer*2 }
 }
 
 .line {
