@@ -2,7 +2,7 @@
 import Settings from 'SettingsProvider';
 import 'global';
 
-var debug = false;
+var debug = true;
 
 const TRACKER_ID = 'UA-71618029-2';
 const appInstallerId = 'com.overwolf';
@@ -31,6 +31,8 @@ function createTracker() {
 	ga('set', 'appName', appName);
 	ga('set', 'appVersion', appVersion);
 	ga('set', 'appInstallerId', appInstallerId);
+	// CUSTOM_DIMENSIONS.LOL_SERVER
+	ga('set', 'dimension6', Settings.getInstance().server());
 	ga('set', 'checkProtocolTask', function () { /* nothing */ });
 	return $.Deferred().resolve().promise();
 }
@@ -46,7 +48,8 @@ export default {
 		CHAMP: 'dimension2',
 		DATA: 'dimension3',
 		DATA_PLACEHOLDERS: 'dimension4',
-		LOL_PATCH: 'dimension5'
+		LOL_PATCH: 'dimension5',
+		LOL_SERVER: 'dimension6'
 	},
 	VALUES: {
 		RANDOM_SUMMONER: 1,
