@@ -289,7 +289,9 @@ var MatchCtrl = WindowCtrl.extend(
 		},
 		'{appBar} mousedown': function (appBar, ev) {
 			if (ev.which == 1) { this.togglePanels(appBar); }
-			analytics.event('Button', 'click', 'app-bar');
+			var fields = {};
+			fields[analytics.CUSTOM_DIMENSIONS.DATA] = $(appBar).hasClass('collapsed')? 'expanding' : 'collapsing';
+			analytics.event('Button', 'click', 'app-bar', fields);
 		},
 		'{reloadBtn} mousedown': function ($el, ev) {
 			if (ev.which == 1) {
