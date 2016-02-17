@@ -265,7 +265,7 @@ var MatchCtrl = WindowCtrl.extend(
 			self.options.$panelContainer.slideDown(ANIMATION_SLIDE_SPEED_PER_PANEL, function () {
 				WindowCtrl.events.trigger('expanded');
 			});
-			analytics.screenview('Match-Overview');
+			//analytics.screenview('Match-Overview'); // not very useful information + bloats analytics hits
 		},
 		/** Collapse the champion panels
 		 * @fires MatchCtrl#collapsed
