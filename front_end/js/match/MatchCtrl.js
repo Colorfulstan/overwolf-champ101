@@ -223,7 +223,7 @@ var MatchCtrl = WindowCtrl.extend(
 			steal.dev.warn('calling reloadMatch()');
 
 			//this.options.match = routeData.match;
-			//this.renderView(this.options.match.blue,this.options.match.purple);
+			//this.renderView(this.options.match.blue,this.options.match.red);
 
 			location.reload();
 			// NOTE: this is executed BEFORE window gets reloaded

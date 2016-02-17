@@ -22,10 +22,10 @@ var MatchModel = function MatchModel(summonerId, server) {
 
 	/** Team 200
 	 * @type {SummonerModel[]} */
-	this.purple = [];
+	this.red = [];
 
 	/**
-	 * Different representation of blue and purple.
+	 * Different representation of blue and red.
 	 * @type {object}
 	 */
 	this.participantsByChamp = {};

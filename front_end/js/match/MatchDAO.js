@@ -64,7 +64,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 				steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
 
 				self._extractParticipants(transfer, dataArray, 'blue');
-				self._extractParticipants(transfer, dataArray, 'purple');
+				self._extractParticipants(transfer, dataArray, 'red');
 				transfer.version = dataArray.version;
 
 				steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);

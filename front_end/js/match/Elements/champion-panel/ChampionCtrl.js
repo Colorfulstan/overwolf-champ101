@@ -118,7 +118,7 @@ import analytics from 'analytics';
 					}
 					$('.team').find('[title="' + panel.champ.key + '"]').addClass('addable'); // TODO: test this and fix if name of champ comes from elsewhere then panel.champ.key
 				},
-				/** * @param team 'blue' or 'purple' */
+				/** * @param team 'blue' or 'red' */
 				showTeam: function (team) {
 					var self = this;
 					self.closeAllPanels();

@@ -39,7 +39,7 @@ Hotkeys.registerHotkeys = function () {
 		analytics.event('Hotkey', 'use', 'open_panels_team_blue');
 	});
 	overwolf.settings.registerHotKey("open_panels_team_red", function (result) {
-		team_handler(result, 'purple');
+		team_handler(result, 'red');
 		analytics.event('Hotkey', 'use', 'open_panels_team_red');
 	});
 	overwolf.settings.registerHotKey("close_panels", function (result) {
