@@ -13,7 +13,7 @@ Fast, simple and relevant to your current game!</p>
 <p>Feel free to give feedback here or <a href="mailto:champ101@krispin.it" target="_blank">send a message</a>
 <br><br>
 If you're using Github, consider opening an
-<a href="https://github.com/Colorfulstan/champ101/issues" target="_blank">issue</a>
+<a href="https://github.com/Colorfulstan/overwolf-champ101/issues" target="_blank">issue</a>
 for bugs and suggestions instead.</p>
 
 <p><strong>Note:</strong> Despite our effort to work around cases of incosistency within the public datasets
