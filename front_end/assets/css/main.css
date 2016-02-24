@@ -149,10 +149,10 @@
 .rog-logo {
   width: 128px; }
 
-.blue {
+.team_100, .blue {
   background: #0372a5; }
 
-.red {
+.team_200, .red {
   background: #a02a1f; }
 
 .vertical-center {
@@ -10307,13 +10307,13 @@ i.fa {
       position: absolute;
       bottom: -14px;
       left: 24px; }
-  .champion-panel.blue {
+  .champion-panel.team_100 {
     background-color: #0372a5; }
-    .champion-panel.blue .champion-spell:after {
+    .champion-panel.team_100 .champion-spell:after {
       color: #0372a5; }
-  .champion-panel.red {
+  .champion-panel.team_200 {
     background-color: #a02a1f; }
-    .champion-panel.red .champion-spell:after {
+    .champion-panel.team_200 .champion-spell:after {
       color: #a02a1f; }
   .champion-panel .passive {
     width: 48px;
@@ -10556,15 +10556,15 @@ select {
     #match-overview-container #vs .show-team {
       z-index: 99;
       border-radius: 100%; }
-    #match-overview-container #vs .red {
+    #match-overview-container #vs .team_200 {
       right: -19px; }
-      #match-overview-container #vs .red .add {
+      #match-overview-container #vs .team_200 .add {
         position: relative;
         right: 7px; }
-    #match-overview-container #vs .blue {
+    #match-overview-container #vs .team_100 {
       left: -17px;
       width: 37px; }
-      #match-overview-container #vs .blue .add {
+      #match-overview-container #vs .team_100 .add {
         position: relative;
         left: 7px; }
 

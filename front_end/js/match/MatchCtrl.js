@@ -167,6 +167,7 @@ var MatchCtrl = WindowCtrl.extend(
 
 			var deferred = $.Deferred();
 
+
 			var rejectCb = function (data, status, jqXHR) {
 				steal.dev.warn("Loading Match failed!", data, status, jqXHR);
 				self.options.$overviewContainer.removeClass('loading').addClass('failed');
@@ -189,7 +190,7 @@ var MatchCtrl = WindowCtrl.extend(
 					// Controller for Champion-Panels
 					self.options.champions = new ChampionCtrl('#champion-container', {match: matchModel});
 					// Controller for Tooltip
-					self.options.tooltip = new TooltipCtrl('#tooltip-container', {match: matchModel});
+					self.options.tooltip = new TooltipCtrl('#tooltip-container', {participantsByChamp: matchModel.participantsByChamp});
 					analytics.event('Match', 'loaded');
 					WindowCtrl.events.trigger('matchReady');
 					deferred.resolve(matchModel);
@@ -219,6 +220,7 @@ var MatchCtrl = WindowCtrl.extend(
 			return deferred.promise();
 		},
 		reloadMatch: function () {
+
 			//var self = this;
 			steal.dev.warn('calling reloadMatch()');
 
@@ -290,7 +292,7 @@ var MatchCtrl = WindowCtrl.extend(
 		'{appBar} mousedown': function (appBar, ev) {
 			if (ev.which == 1) { this.togglePanels(appBar); }
 			var fields = {};
-			fields[analytics.CUSTOM_DIMENSIONS.DATA] = $(appBar).hasClass('collapsed')? 'expanding' : 'collapsing';
+			fields[analytics.CUSTOM_DIMENSIONS.DATA] = $(appBar).hasClass('collapsed') ? 'expanding' : 'collapsing';
 			analytics.event('Button', 'click', 'app-bar', fields);
 		},
 		'{reloadBtn} mousedown': function ($el, ev) {

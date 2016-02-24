@@ -12,6 +12,7 @@ import WindowCtrl from 'WindowCtrl';
 import MatchCtrl from 'MatchCtrl';
 import Routes from 'Routes';
 import analytics from 'analytics';
+import $ from 'jquery';
 
 analytics.init();
 
@@ -25,7 +26,7 @@ var settings = Settings.getInstance();
 var match = new MatchModel(settings.summonerId(), settings.server());
 if (!SettingsModel.isSummonerSet()) {
 	WindowCtrl.closeMatch();
-}else {
+} else {
 	var preloadMatchBeforeShowing = settings.isInGame() && !settings.isManualReloading();
 	if (preloadMatchBeforeShowing) { // ingame == preload data
 		steal.dev.log('preloading data');

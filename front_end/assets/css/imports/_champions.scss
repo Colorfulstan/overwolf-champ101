@@ -80,12 +80,12 @@ $portrait-width-height: 75px;
       }
     }
   }
-  &.blue {
+  &.team_100 {
     background-color: $color-blue;
     .champion-spell:after { color: $color-blue}
   }
 
-  &.red {
+  &.team_200 {
     background-color: $color-red;
     .champion-spell:after { color: $color-red
     }

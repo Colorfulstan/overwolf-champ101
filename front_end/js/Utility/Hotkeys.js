@@ -35,11 +35,11 @@ Hotkeys.registerHotkeys = function () {
 		}
 	};
 	overwolf.settings.registerHotKey("open_panels_team_blue", function (result) {
-		team_handler(result, 'blue');
+		team_handler(result, 'team_100');
 		analytics.event('Hotkey', 'use', 'open_panels_team_blue');
 	});
 	overwolf.settings.registerHotKey("open_panels_team_red", function (result) {
-		team_handler(result, 'red');
+		team_handler(result, 'team_200');
 		analytics.event('Hotkey', 'use', 'open_panels_team_red');
 	});
 	overwolf.settings.registerHotKey("close_panels", function (result) {

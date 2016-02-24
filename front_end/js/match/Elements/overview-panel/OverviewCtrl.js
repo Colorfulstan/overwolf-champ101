@@ -14,21 +14,21 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 	/**
 	 *
 	 * @param el
-	 * @param options.match {MatchModel}
+	 * @param {MatchModel} options.match
 	 */
 	init: function (el, options) {
-		this.renderView(options.match.blue, options.match.red);
+		this.renderView(options.match.team_100, options.match.team_200);
 	},
-	renderView: function (teamBlue, teamRed) {
+	renderView: function (team100, team200) {
 		steal.dev.log("rendering view for OverviewCtrl");
 
-		teamBlue = correctSpritePosition(teamBlue);
-		teamRed = correctSpritePosition(teamRed);
+		team100 = correctSpritePosition(team100);
+		team200 = correctSpritePosition(team200);
 
 		this.element.html(
 			can.view(this.options.overviewTmpl, {
-				blue: teamBlue,
-				red: teamRed
+				blue: team100, // TODO: change here too to 100/200 ?
+				red: team200
 			})
 		);
 
@@ -66,15 +66,15 @@ var OverviewCtrl = can.Control.extend('OverviewCtrl', {
 		$el.removeClass('addable');
 		analytics.screenview('Champ-Panel-' + $el.attr('title'));
 	},
-	'.show-team.blue click': function ($el, ev) {
-		Routes.setRouteData({team: 'blue', route: Routes.panelTeam});
+	'.show-team.team_100 click': function ($el, ev) {
+		Routes.setRouteData({team: 'team_100', route: Routes.panelTeam});
 		ev.stopPropagation();
 		$('.team.blue').find('.portrait').removeClass('addable');
 		$('.show-team.blue').removeClass('addable');
 		analytics.screenview('Champ-Panel-Team-blue');
 	},
-	'.show-team.red click': function ($el, ev) {
-		Routes.setRouteData({team: 'red', route: Routes.panelTeam});
+	'.show-team.team_200 click': function ($el, ev) {
+		Routes.setRouteData({team: 'team_200', route: Routes.panelTeam});
 		ev.stopPropagation();
 		$('.show-team.red').removeClass('addable');
 		$('.team.red').find('.portrait').removeClass('addable');
