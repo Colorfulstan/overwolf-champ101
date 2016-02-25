@@ -51,10 +51,11 @@ var Boot = {
 	_firstAppLaunch: function (main, settings) {
 		steal.dev.log('first time launch');
 		analytics.event('App', 'first-launch');
+		settings.firstStartDate(new Date().toISOString());
 		return Boot.setDefaultSettings(settings)
-			.then(function () {
-				return Boot.askForSummoner(SettingsModel.isSummonerSet);
-			})
+			//.then(function () {
+			//	return Boot.askForSummoner(SettingsModel.isSummonerSet);
+			//})
 			.then(function () {
 				return Boot._showMatchLoading(settings);
 			})
@@ -135,10 +136,10 @@ var Boot = {
 
 			Boot.checkIfIngame(overwolf.games.getRunningGameInfo, settings.isInGame)
 				.then(function (isIngame) {
-					if (SettingsModel.isSummonerSet()) {
-						return isIngame ? Boot._hideMatchLoading(settings) : Boot._showMatchLoading(settings);
-					} else {
+					if (SettingsModel.isFirstStart()) { // TODO: is this extra check neccessary or can we assume it is not the first start?
 						return Boot._firstAppLaunch(main, settings);
+					} else {
+						return isIngame ? Boot._hideMatchLoading(settings) : Boot._showMatchLoading(settings);
 					}
 				}).done(function () {
 					var needsReload = !SettingsModel.startWithGame();
@@ -151,6 +152,7 @@ var Boot = {
 	},
 	/**
 	 * @returns {Promise} gets resolved after Summoner is set.<br> gets rejected if Settings-Window is closed and still no summonerId is set
+	 * @deprecated summoner is not neccessary anymore to be set manually
 	 */
 	askForSummoner: function (/** function */ isSummonerSetGetter) {
 		var def = jQuery.Deferred();

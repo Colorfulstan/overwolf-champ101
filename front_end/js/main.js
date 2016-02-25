@@ -16,7 +16,7 @@ WindowCtrl.enableStorageEvents();
 var main = new MainCtrl('html');
 var settings = Settings.getInstance();
 
-var firstStart = !SettingsModel.isSummonerSet();  // localStorage has no items on first start
+var firstStart = !SettingsModel.isFirstStart();  // localStorage has no items on first start
 
 Boot.strap(main, settings, firstStart);
 

@@ -1,5 +1,7 @@
 import $ from 'jquery'
 
+var PLUGIN_ID = 'plugin';
+
 var isReady = $.Deferred();
 var GLOBAL_GAME_LOG_FILE_ID = "currGameLog";
 var matchFetcher = {
@@ -9,12 +11,12 @@ var matchFetcher = {
 	init: function () {
 		console.log('initialising matchFetcher..........');
 		console.log('adding simpleIOplugin to DOM.........');
-		$('body').append('<embed id="plugin" type="application/x-simple-io-plugin" width=0px height=0px/>');
+		$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
 		navigator.plugins.refresh(false);
 
 		setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
-			var a = document.getElementById("plugin");
-			var b = document.querySelector("#plugin");
+			var a = document.getElementById(PLUGIN_ID);
+			var b = document.querySelector("#" + PLUGIN_ID);
 		}, 1000);
 
 		this.initRan = true;

@@ -117,17 +117,17 @@ var Static = {
 	},
 	_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
 		steal.dev.warn('League of Legends game started', new Date(), 'closing Matchwindow for reopening');
-		if (SettingsModel.isSummonerSet()) {
+		//if (SettingsModel.isSummonerSet()) {
 			MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
 			settings.isInGame(true);
 			settings.startMatchCollapsed(true);
 			WindowCtrl.openMatch();
 			steal.dev.warn('opened Match again, waiting for stable fps')
-		} else {
-			steal.dev.log('_handleGameStart relaunches App');
-			// TODO: circular dependency (to onMainWindowRestored Listener)! rework this
-			WindowCtrl.openMain(); // rest is handled from there for first start
-		}
+		//} else {
+		//	steal.dev.log('_handleGameStart relaunches App');
+		//	// TODO: circular dependency (to onMainWindowRestored Listener)! rework this
+		//	WindowCtrl.openMain(); // rest is handled from there for first start
+		//}
 	},
 	_handleGameEnd: function (settings) {// TODO: move all this eventstuff into own service!
 		MainCtrl.removeStableFpsListener(settings.isFpsStable);

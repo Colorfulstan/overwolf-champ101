@@ -24,9 +24,9 @@ var dao = new MatchDAO();
 var settings = Settings.getInstance();
 
 var match = new MatchModel(settings.summonerId(), settings.server());
-if (!SettingsModel.isSummonerSet()) {
-	WindowCtrl.closeMatch();
-} else {
+//if (!SettingsModel.isSummonerSet()) {
+//	WindowCtrl.closeMatch();
+//} else {
 	var preloadMatchBeforeShowing = settings.isInGame() && !settings.isManualReloading();
 	if (preloadMatchBeforeShowing) { // ingame == preload data
 		steal.dev.log('preloading data');
@@ -39,6 +39,6 @@ if (!SettingsModel.isSummonerSet()) {
 		new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings}); // window will open while Data is still loading
 		settings.isManualReloading(false);
 	}
-}
+//}
 
 

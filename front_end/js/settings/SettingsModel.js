@@ -5,6 +5,7 @@ import 'global';
 /**
  * @class {can.Map} SettingsModel
  * @extends {can.Map}
+ * @typedef SettingsModel
  * @constructor {@link SettingsModel.init}
  */
 var SettingsModel = can.Map.extend('SettingsModel', {
@@ -14,6 +15,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	STORAGE_KEY_RELOADING: 'setting-manual-reload',
 	STORAGE_KEY_IN_GAME: 'setting-in-game',
 	STORAGE_KEY_START_WITH_GAME: 'setting-start-with-game',
+	STORAGE_KEY_FIRST_START_DATE: 'setting-first-start-at',
 	STORAGE_KEY_CLOSE_MATCH_WITH_GAME: 'setting-close-match-with-game',
 	STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 	STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
@@ -71,9 +73,14 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		});
 		return deferred.promise();
 	},
-	/** @static */
+	/** @static
+	 * @deprecated will be removed in the future since Summoner gets fetched per game now.*/
 	isSummonerSet: function () {
 		return localStorage.getItem(SettingsModel.STORAGE_KEY_ID);
+	},
+	/** @static*/
+	isFirstStart: function () {
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE) !== null;
 	},
 	isMatchMinimized: function (newVal) {
 		if (typeof newVal === 'undefined') { // getter
@@ -113,7 +120,8 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	},
 
 	/** @type {string}
-	 * @property */
+	 * @property
+	 * @deprecated will be removed in the future since Summoner gets fetched per game now. */
 	summonerName: can.compute(function (newVal) {
 		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_NAME); // getter
 		else if (newVal === null) {localStorage.removeItem(SettingsModel.STORAGE_KEY_REGION)} // reset
@@ -126,7 +134,8 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		}
 	}, this),
 	/** @type {string}
-	 * @propterty */
+	 * @propterty
+	 * @deprecated Might be used for decision if player is watching replay or live game */
 	summonerId: can.compute(function (newVal) {
 		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_ID); // getter
 		if (newVal === null) localStorage.removeItem(SettingsModel.STORAGE_KEY_ID);
@@ -139,8 +148,22 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			//this.cachedGameAvailable(false); // TODO: TEST
 		}
 	}, false),
+
 	/** @type {string}
-	 * @propterty */
+	 * @propterty*/
+	firstStartDate: can.compute(function (newVal) {
+		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE); // getter
+		if (newVal === null) localStorage.removeItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE);
+		else { // setter
+			var oldVal = this.firstStartDate();
+
+			this.valueChanged('firstStartDate', oldVal);
+			localStorage.setItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE, newVal);
+		}
+	}, false),
+	/** @type {string}
+	 * @propterty
+	 * @deprecated Can be fetched dynamically */
 	server: can.compute(function (newVal) {
 		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION); // getter
 		else if (newVal === null) {localStorage.removeItem(SettingsModel.STORAGE_KEY_REGION)} // reset
