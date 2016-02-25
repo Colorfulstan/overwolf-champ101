@@ -205,6 +205,14 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 		openMain: function () {
 			return WindowCtrl.open('Main');
 		},
+		/** Closes the Main-Window and with that the App */
+		closeMain: function () {
+			return WindowCtrl.close('Main');
+		},
+		/** @see {@link WindowCtrl.closeMain} */
+		closeApp: function () {
+			return WindowCtrl.closeMain();
+		},
 		/** closes the Match-Window */
 		closeMatch: function () {
 			return WindowCtrl.close('Match');
@@ -340,7 +348,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 		 */
 		'{exitBtn} mousedown': function ($el, ev) {
 			if (ev.which == 1) {
-				WindowCtrl.close('Main');
+				WindowCtrl.closeApp();
 				ev.stopPropagation();
 				analytics.event('Button', 'click', 'exit');
 			}

@@ -133,12 +133,13 @@ var Static = {
 		MainCtrl.removeStableFpsListener(settings.isFpsStable);
 		//settings.cachedGameAvailable(false);
 		steal.dev.warn('League of Legends game finished', new Date());
-		if (SettingsModel.closeMatchWithGame()) {
-			WindowCtrl.closeMatch();
-		}
 		settings.isInGame(false);
 		settings.startMatchCollapsed(false);
 		WindowCtrl.events.trigger('gameEnded');
+		if (SettingsModel.closeMatchWithGame()) {
+			WindowCtrl.closeMatch();
+			WindowCtrl.closeApp();
+		}
 	},
 	registerGameStartEndListener: function (settings) {// TODO: move all this eventstuff into own service!
 		MainCtrl.registerGameStartListenerAndHandler(settings);
