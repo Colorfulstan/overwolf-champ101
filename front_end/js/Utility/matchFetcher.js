@@ -2,11 +2,25 @@ import $ from 'jquery'
 
 var PLUGIN_ID = 'plugin';
 
+// TODO: implement mechanism to not be required to open and close the same file over and over but still having the possibility to use the methods independently
+// TODO: cache gamelog constantly and use the cache to read information
+
 var isReady = $.Deferred();
-var GLOBAL_GAME_LOG_FILE_ID = "currGameLog";
+var GAME_LOG_FILE_ID = "currGameLog";
+var GAME_LOG_5v5_SPAWNING_DONE_MARK = 'GAMESTATE_GAMELOOP Begin'; // both in replay and live safe way // not working in 3v3?
+//var GAME_LOG_ALT_SPAWNING_DONE_MARK = 'Finished spawning heroes/minions'; // NOTE: can appear before all champs spawned!
+// 5v5 also: GAMESTATE_GAMELOOP Begin
+/** If there is no line with 'replay mode' until the hardware section, its an actual game */
+var GAME_LOG_CHECK_FOR_REPLAY_END = '-----HARDWARE INFORMATION START-----';
+var GAME_LOG_REPLAY_INDICATOR = 'Replay mode';
+
 var matchFetcher = {
 	isReady: isReady.promise(),
 	initRan: false,
+
+	STRING_ACTIVE_GAME: 'game',
+	STRING_SPECTATE: 'spectate',
+	STRING_REPLAY: 'replay',
 
 	init: function () {
 		console.log('initialising matchFetcher..........');
@@ -15,43 +29,40 @@ var matchFetcher = {
 		navigator.plugins.refresh(false);
 
 		setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
-			var a = document.getElementById(PLUGIN_ID);
-			var b = document.querySelector("#" + PLUGIN_ID);
+			var a = document.getElementById('plugin');
+			var b = document.querySelector("#plugin");
 		}, 1000);
 
 		this.initRan = true;
 		setReady();
 	},
 	throwIfNotReady(){
+		navigator.plugins.refresh(false);
 		if (this.initRan === false) {throw new Error('matchFetcher is not initialised. run .init() before sending data!')}
 	},
-	getGameRoot: function () {
+	getGameRoot: function () { // cached
 		matchFetcher.throwIfNotReady();
 		var def = $.Deferred();
-		overwolf.games.getRunningGameInfo(function (gameInfo) {
-			if (gameInfo == null || parseInt(gameInfo.id / 10) != 5426) {
-				console.log("Not in game.");
-				def.reject("Not in game.");
-			} else if (plugin() == null) {
-				console.log("Plugin not loaded.");
-				def.reject("Plugin not loaded.");
-			} else {
-				console.log("Plugin loaded.");
-				var gamePath = gameInfo.executionPath;
-				var gameRoot = gamePath.substring(0, gamePath.indexOf("RADS"));
-				def.resolve(gameRoot);
-			}
-		});
+
+		if (matchFetcher.gameRoot){
+			def.resolve(matchFetcher.gameRoot);
+		} else {
+			overwolf.games.getRunningGameInfo(function (gameInfo) {
+				if (gameInfo == null || parseInt(gameInfo.id / 10) != 5426) {
+					console.log("Not in game.");
+					def.reject("Not in game.");
+				} else {
+					console.log("Plugin loaded.");
+					var gamePath = gameInfo.executionPath;
+					var gameRoot = gamePath.substring(0, gamePath.indexOf("RADS"));
+					matchFetcher.gameRoot = gameRoot;
+					def.resolve(gameRoot);
+				}
+			});
+		}
 		return def.promise();
 	},
-	/**
-	 *
-	 * @param data
-	 * @param data.gameRoot
-	 * @param data.latestAirClientVersion
-	 * @returns {*}
-	 */
-	getActiveSummoner: function (data) {
+	getActiveSummoner: function () {
 		matchFetcher.throwIfNotReady();
 
 		var def = $.Deferred();
@@ -61,9 +72,9 @@ var matchFetcher = {
 		matchFetcher.getGameRoot().then(function (gameRoot) {
 			return getAirClientVersion(gameRoot).then(
 				function (latestAirClientVersion) {
-					plugin().getLatestFileInDirectory(gameRoot + "RADS/projects/lol_air_client/releases/" + latestAirClientVersion + "/deploy/preferences/*",
-						function (status, filename) {
-							if (!status || !filename.endsWith(".properties")) {
+					getLatestFileInDirectory(gameRoot + "RADS/projects/lol_air_client/releases/" + latestAirClientVersion + "/deploy/preferences/")
+						.then(function (filename) {
+							if (!filename.endsWith(".properties")) {
 								console.log("Couldn't find summoner name from file.");
 								def.reject("Couldn't find summoner name from file.");
 								return;
@@ -85,6 +96,10 @@ var matchFetcher = {
 								console.log("Couldn't find summoner name from file.");
 								def.reject("Couldn't find summoner name from file.");
 							}
+						})
+						.fail(function (errMsg) {
+							console.log(errMsg);
+							def.reject(errMsg)
 						});
 				}
 			)
@@ -97,35 +112,39 @@ var matchFetcher = {
 
 		var def = $.Deferred();
 		matchFetcher.getGameRoot().then(function (gameRoot) {
-			plugin().getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/*LoLPatcher.log", function (status, filename) {
-				if (!status) {
+			getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/", "LoLPatcher.log")
+				.then(function (filename) {
+
+					console.log('opened ' + filename);
+
+					var lineStartString = 'common.region: ';
+					var region = '';
+					var foundRegion = false;
+					var fileId = 'patcherLog';
+					plugin().listenOnFile(fileId, gameRoot + "Logs/Patcher Logs/" + filename, false, function (id, status, fileData) {
+						if (foundRegion) {
+							return; // don't read anymore lines when finished with this file
+						}
+
+						if (id != fileId || !status) {
+							return;
+						}
+
+						if (!fileData.includes("common.region")) {
+							return;
+						}
+
+						region = fileData.substring(lineStartString.length);
+						console.log('Found region ' + region);
+						foundRegion = true;
+						closeFile(fileId);
+						def.resolve(region.toLowerCase());
+					});
+				})
+				.fail(function (errMsg) {
 					console.log("Couldn't open logfile for Patcher - assuming Garena Client");
 					def.resolve('garena');
-					return;
-				}
-
-				console.log('opened ' + filename);
-
-				var lineStartString = 'common.region: ';
-				var region = '';
-				var foundRegion = false;
-				plugin().listenOnFile('patcherLog', gameRoot + "Logs/Patcher Logs/" + filename, false, function (id, status, fileData) {
-
-					if (id != 'patcherLog' || !status || foundRegion) {
-						return;
-					}
-
-					if (!fileData.includes("common.region")) {
-						return;
-					}
-
-					region = fileData.substring(lineStartString.length);
-					console.log('Found region ' + region);
-					foundRegion = true;
-					closeFile(id);
-					def.resolve(region.toLowerCase());
 				});
-			});
 		});
 		return def.promise();
 	},
@@ -135,8 +154,10 @@ var matchFetcher = {
 		var result = new Result();
 		result.status = "error";
 
+
 		matchFetcher.getGameRoot()
 			.then(function (gameRoot) {
+
 				return getAirClientVersion(gameRoot).then(
 					function (clientVersion) {
 						return addFilenameAndSummonerToData({gameRoot: gameRoot, latestAirClientVersion: clientVersion})
@@ -157,6 +178,51 @@ var matchFetcher = {
 				def.reject(errorMsg);
 			});
 		return def.promise();
+	},
+	getGameLogFilePath : function () { // cached
+		matchFetcher.throwIfNotReady();
+		var def = $.Deferred();
+		if (matchFetcher.gameLogFilePath){
+			def.resolve(matchFetcher.gameLogFilePath);
+		} else {
+			var path = 'Logs/Game - R3d Logs/';
+			matchFetcher.getGameRoot().then(function (gameRoot) {
+				return getLatestFileInDirectory(gameRoot + path).then(function(filename){
+					matchFetcher.gameLogFilePath = gameRoot + path + filename;
+					def.resolve(matchFetcher.gameLogFilePath);
+				});
+			}).fail(function () {
+				console.warn('getGameLogFilePath failed');
+			});
+		}
+		return def.promise();
+	},
+	/** User spectates his own game */
+	isReplay: function () {
+		matchFetcher.throwIfNotReady();
+		var def = $.Deferred();
+		matchFetcher.getGameRoot().then(isReplayClient).then(function(isReplayClient){
+			if (isReplayClient) {
+				isUserReplay().then(function (isUserReplay) {
+					def.resolve(isUserReplay);
+				});
+			} else {
+				def.resolve(false);
+			}
+		}).fail(function (errMsg) {
+			console.log('isReplay failed');
+			def.reject(errMsg);
+		});
+		return def.promise();
+	},
+	/** User spectates someone other */
+	isSpectate: function () {
+		matchFetcher.throwIfNotReady();
+		return matchFetcher.getGameRoot().then(isReplayClient);
+	},
+	isReplayOrSpectate: function () {
+		matchFetcher.throwIfNotReady();
+		return matchFetcher.isSpectate();
 	}
 };
 
@@ -190,7 +256,14 @@ function Result() {
  * @constructor
  */
 function MatchInfo() {
-	this.myChampion = "";
+	/**
+	 * Contains the name of your own champion
+	 * @property
+	 * @type {null}
+	 */
+	this.myChampion = null;
+	/** true if the user is a participant within this match */
+	this.containsMyself = false;
 
 	this.team_100 = [];
 	this.team_200 = [];
@@ -214,7 +287,7 @@ function setReady() {
 }
 
 function closeFile(fileId) {
-	console.log("Closing file " + fileId + " in 2 seconds...");
+	console.log("Closing file " + fileId + " in 2000 MS...");
 	setTimeout(function () {
 		plugin().stopFileListen(fileId);
 		console.log("File listener closed.");
@@ -235,22 +308,24 @@ function addFilenameAndSummonerToData(data) { // TODO: rename appropriatly
 
 	matchFetcher.getActiveSummoner()
 		.then(function (mySummoner) {
-			plugin().getLatestFileInDirectory(data.gameRoot + "Logs/Game - R3d Logs/*", function (status, filename) {
-				if (!status) {
-					result.errorMessage = "Couldn't open match info file.";
-					console.log("Couldn't open match info file.");
-					def.reject(result.errorMessage);
-					return;
-				}
-
-				data.mySummoner = mySummoner;
-				data.filename = filename;
-				def.resolve(data);
-			});
+			getLatestFileInDirectory(data.gameRoot + "Logs/Game - R3d Logs/")
+				.then(function (filename) {
+					data.mySummoner = mySummoner;
+					data.filename = filename;
+					def.resolve(data);
+				})
+				.fail(function (errMsg) {
+						console.log(errMsg);
+						def.reject(errMsg);
+					}
+				);
 		});
 	return def.promise();
 }
 
+function isGameLogSpawningFinished(lineDataString) {
+	return lineDataString.includes(GAME_LOG_5v5_SPAWNING_DONE_MARK);
+}
 /**
  * @param {Object} data
  * @param {string} data.latestAirClientVersion
@@ -266,22 +341,44 @@ function collectParticipantsData(data) {
 	var foundMySummoner = false;
 	var myTeam;
 	var matchInfo = new MatchInfo();
+	var fileListenerIsClosing = false;
 
-	plugin().listenOnFile(GLOBAL_GAME_LOG_FILE_ID, data.gameRoot + "Logs/Game - R3d Logs/" + data.filename, false, function (id, status, fileData) {
-		if (lines.length == 10) { // TODO: what does this mean?
-			return; // not processing anything after 10 valid lines found
+	plugin().listenOnFile(GAME_LOG_FILE_ID, data.gameRoot + "Logs/Game - R3d Logs/" + data.filename, false, function (id, status, fileData) {
+		console.warn(fileData);
+		//region condition-checks
+		if (fileListenerIsClosing) {
+			return; // don't read anymore lines when finished with this file
+		}
+		if (id != GAME_LOG_FILE_ID || !status) {
+			closeFile(id);
+			fileListenerIsClosing = true;
+			def.reject("Couldn't find match info from file.");
+			return;
 		}
 
-		if (id != GLOBAL_GAME_LOG_FILE_ID || !status) {
-			closeFile(id);
-			def.reject("Couldn't find match info from file.");
+		var allParticipantsRead = (lines.length == 10 || isGameLogSpawningFinished(fileData));
+		if (allParticipantsRead) {
+			closeFile(GAME_LOG_FILE_ID);
+			fileListenerIsClosing = true;
+			console.log('Matchdata is ready');
+
+			if (foundMySummoner) {
+				matchInfo.containsMyself = true;
+				console.log("User is present in this game (playing or replay)", matchInfo);
+			} else {
+				matchInfo.containsMyself = false; // spectating someone
+				console.log("User is spectating someone else", matchInfo);
+			}
+			def.resolve(matchInfo);
 			return;
 		}
 
 		if (!fileData.includes("Spawning champion")) {
 			return;
 		}
+		//endregion
 
+		//region logic
 		var matches = regEx.exec(fileData);
 
 		var line = new LineInfo();
@@ -305,27 +402,13 @@ function collectParticipantsData(data) {
 			matchInfo.alliedTeamKey = 'team_' + line.team;
 		}
 
-		console.log(matchInfo); // TODO: TESTING INFO
-
 		if (line.summoner.toLowerCase() == data.mySummoner.toLowerCase() || unescape(encodeURIComponent(line.summoner)).toLowerCase() == data.mySummoner.toLowerCase()) {
 			myTeam = line.team;
 			matchInfo.myChampion = line.champion;
 			foundMySummoner = true;
 			console.log("Found my summoner in match.");
 		}
-
-		if (lines.length == 10) {
-			if (!foundMySummoner) {
-				closeFile(GLOBAL_GAME_LOG_FILE_ID);
-				//def.reject("Found 10 summoners but did not find my summoner.");
-				def.resolve(matchInfo); // TODO: remove again - testing purpose
-				return;
-			}
-
-			console.log("Match info ready.", matchInfo);
-			closeFile(GLOBAL_GAME_LOG_FILE_ID);
-			def.resolve(matchInfo);
-		}
+		//endregion
 	});
 
 	return def.promise();
@@ -361,6 +444,121 @@ function getAirClientVersion(gameRoot) {
 		}
 	});
 
+	return def.promise();
+}
+
+/**
+ * Checks if the current summoner participates within the match.
+ * Assumes that the match is a replayClient match, otherwise the summoner
+ * is always within the match unless something went wrong with the logs or
+ * processing of it.
+ *
+ * @param summoner name of the summoner to check for
+ * @requires isReplayClient to be true
+ */
+function isUserReplay() { // TODO: testen
+	var def = $.Deferred();
+
+	var fileId = 'checkForSummoner';
+	var fileListenerIsClosing = false;
+	$.when(matchFetcher.getGameLogFilePath(), matchFetcher.getActiveSummoner()).then(function (gameLogPath, summoner) {
+		plugin().listenOnFile(fileId, gameLogPath, false, function (id, status, fileData) {
+			if (fileListenerIsClosing) {
+				return; // don't read anymore lines when finished with this file
+			}
+			if (id != fileId || !status) {
+				fileListenerIsClosing = true;
+				closeFile(id);
+				def.reject("Couldn't find match info from file.");
+				return;
+			}
+
+			if (fileData.toLowerCase().includes(summoner)) {
+				fileListenerIsClosing = true;
+				closeFile(fileId);
+				console.log('Summoner found in Match, it\'s a replay');
+				def.resolve(true);
+				return;
+			}
+
+			if (isGameLogSpawningFinished(fileData)) {
+				fileListenerIsClosing = true;
+				closeFile(fileId);
+				console.log('Summoner not found in Match, it\'s a spectate');
+				def.resolve(false);
+				return;
+			}
+		});
+	});
+	return def.promise();
+}
+
+/**
+ *
+ * @param {string} dir directory-path with trailing slash (e.g. path/to/something/ )
+ * @param searchTerm limits possible result to only the filenames containing the searchTerm somewhere in its name
+ * @returns {*} Promise that resolves to the name of the last modified file
+ */
+function getLatestFileInDirectory(dir, searchTerm) { // TODO: add directory to resolve and use it for the path instead of combining it all over the place
+	var def = $.Deferred();
+
+	searchTerm = (typeof searchTerm === 'undefined') ? "*" : "*" + searchTerm + "*";
+	plugin().getLatestFileInDirectory(dir + searchTerm, function (status, filename) {
+		if (!status) {
+			def.reject("Unable to open any file.");
+			return;
+		}
+		def.resolve(filename);
+	});
+
+	return def.promise();
+
+}
+/**
+ * Checks if the logged match is a replay or an actual game the user plays atm
+ * @param gameRoot
+ */
+function isReplayClient(gameRoot) { // TODO: testen
+	var def = $.Deferred();
+
+	var foundReplayMode = false;
+	var fileId = 'checkForReplayClient';
+	var fileListenerIsClosing = false;
+	getLatestFileInDirectory(gameRoot + "Logs/Game - R3d Logs/")
+		.then(function (filename) {
+			plugin().listenOnFile(fileId, gameRoot + "Logs/Game - R3d Logs/" + filename, false, function (id, status, fileData) {
+				if (fileListenerIsClosing) {
+					return; // don't read anymore lines when finished with this file
+				}
+				if (id != fileId || !status) {
+					fileListenerIsClosing = true;
+					closeFile(fileId);
+					def.reject("Couldn't find match info from file.");
+					return;
+				}
+
+				if (fileData.includes(GAME_LOG_REPLAY_INDICATOR)) {
+					fileListenerIsClosing = true;
+					closeFile(fileId);
+					foundReplayMode = true;
+					console.log('Match is in Replay Mode');
+					def.resolve(true);
+					return;
+				}
+
+				if (fileData.includes(GAME_LOG_CHECK_FOR_REPLAY_END)) {
+					fileListenerIsClosing = true;
+					closeFile(fileId);
+					console.log('Match is an actual game, no replay mode indicator found');
+					def.resolve(false);
+					return;
+				}
+			});
+		})
+		.fail(function () {
+			console.log(errMsg);
+			def.reject(errMsg);
+		});
 	return def.promise();
 }
 

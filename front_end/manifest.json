@@ -4,7 +4,7 @@
   "meta": {
   	"name": "League of Legends Champ 101",
   	"access-name": "it.krispin.champ101",
-  	"version": "2.0.0.1",
+  	"version": "2.1.0.1",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
   	"description": "Basic League of Legends champion information relevant for your current game",
@@ -50,7 +50,7 @@
 		"file": "views/match.html",
 		"transparent": true,
 		"resizable": false,
-		"show_in_taskbar": true,
+		"show_in_taskbar": false,
 		"disable_restore_animation": true,
 		"size": {"width": 800, "height": 1200},
 		"min_size": {"width": 800, "height": 1200},

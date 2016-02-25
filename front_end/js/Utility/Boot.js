@@ -53,9 +53,7 @@ var Boot = {
 		analytics.event('App', 'first-launch');
 		settings.firstStartDate(new Date().toISOString());
 		return Boot.setDefaultSettings(settings)
-			//.then(function () {
-			//	return Boot.askForSummoner(SettingsModel.isSummonerSet);
-			//})
+			.then(Boot.showSettingsUntilClosed)
 			.then(function () {
 				return Boot._showMatchLoading(settings);
 			})
@@ -149,6 +147,18 @@ var Boot = {
 					steal.dev.warn('then() chain in _registerMainWindowRestoredListeners failed', arguments)
 				});
 		});
+	},
+	showSettingsUntilClosed: function () {
+		var def = jQuery.Deferred();
+		WindowCtrl.events.one('settingsClosed', function () {
+			steal.dev.log('executing settingsClosed Listener in showSettingsUntilClosed');
+			def.resolve();
+		});
+		window.setTimeout(function () {
+			//WindowCtrl.minimize('Main');
+			WindowCtrl.openSettings();
+		}, 100);
+		return def.promise();
 	},
 	/**
 	 * @returns {Promise} gets resolved after Summoner is set.<br> gets rejected if Settings-Window is closed and still no summonerId is set
