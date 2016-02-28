@@ -1,6 +1,7 @@
 import $ from 'jquery'
 
 var PLUGIN_ID = 'plugin';
+var DEBUG = true;
 
 // TODO: implement mechanism to not be required to open and close the same file over and over but still having the possibility to use the methods independently
 // TODO: cache gamelog constantly and use the cache to read information
@@ -49,13 +50,13 @@ var matchFetcher = {
 		} else {
 			overwolf.games.getRunningGameInfo(function (gameInfo) {
 				if (gameInfo == null || parseInt(gameInfo.id / 10) != 5426) {
-					console.log("Not in game.");
-					def.reject("Not in game.");
+					console.log("matchFetcher().getGameRoot(): Not in game.");
+					def.reject("Unable to get GameRoot - Not in game.");
 				} else {
-					console.log("Plugin loaded.");
 					var gamePath = gameInfo.executionPath;
 					var gameRoot = gamePath.substring(0, gamePath.indexOf("RADS"));
 					matchFetcher.gameRoot = gameRoot;
+					console.log("matchFetcher().getGameRoot(): GameRoot loaded.");
 					def.resolve(gameRoot);
 				}
 			});
@@ -383,6 +384,9 @@ function collectParticipantsData(data) {
 
 		var line = new LineInfo();
 		line.champion = matches[1];
+		if (line.champion === 'MonkeyKing'){
+			line.champion = 'Wukong'
+		}
 		line.team = matches[2];
 		line.summoner = matches[4];
 
