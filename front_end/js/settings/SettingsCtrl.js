@@ -82,6 +82,10 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
 				analytics.event('Settings', action, 'closeMatchWithGame');
 			}
+			if (settings.hasValueChanged('isWaitingForStableFps')) {
+				action = (settings.constructor.isWaitingForStableFps()) ? 'enabled' : 'disabled';
+				analytics.event('Settings', action, 'waitForStableFpsBeforeOpening');
+			}
 			action = null;
 		}
 	},

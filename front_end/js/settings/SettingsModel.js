@@ -2,6 +2,10 @@
 import can from 'can';
 import 'global';
 
+function createInfoTextHtml(msg) {
+		return '<p class="padded-bot-half">' + msg + '</p>';
+}
+
 /**
  * @class {can.Map} SettingsModel
  * @extends {can.Map}
@@ -20,6 +24,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	STORAGE_KEY_START_MATCH_COLLAPSED: 'setting-start-match-collapsed',
 	STORAGE_KEY_MATCH_WINDOW_ON_SIDE: 'setting-match-position',
 	STORAGE_FPS_STABLE: 'setting-fps-stable',
+	STORAGE_KEY_AWAIT_FPS: 'setting-wait-for-fps',
 	//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
 
 	/** @static */
@@ -73,6 +78,14 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		});
 		return deferred.promise();
 	},
+	/** @static */
+	startWithGame: function () {
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_START_WITH_GAME) == 'true'
+	},
+	/** @static */
+	closeMatchWithGame: function () {
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME) == 'true'
+	},
 	/** @static
 	 * @deprecated will be removed in the future since Summoner gets fetched per game now.*/
 	isSummonerSet: function () {
@@ -80,7 +93,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	},
 	/** @static*/
 	isFirstStart: function () {
-		return localStorage.getItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE) !== null;
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE) === null;
 	},
 	isMatchMinimized: function (newVal) {
 		if (typeof newVal === 'undefined') { // getter
@@ -90,9 +103,9 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			else if (newVal == true) localStorage.setItem('lock_matchMinimized', 'true');
 		}
 	},
-	/** @static */
-	startWithGame: function () {
-		return localStorage.getItem(SettingsModel.STORAGE_KEY_START_WITH_GAME) == 'true'
+	isWaitingForStableFps: function () {
+		//return false;
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_AWAIT_FPS) !== null;
 	},
 	/** @static */
 	isInGame: function () {
@@ -101,10 +114,6 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	/** @static */
 	isManualReloading: function () {
 		return localStorage.getItem(SettingsModel.STORAGE_KEY_RELOADING) == 'true'
-	},
-	/** @static */
-	closeMatchWithGame: function () {
-		return localStorage.getItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME) == 'true'
 	}
 }, {
 	/**
@@ -224,6 +233,19 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	}),
 	/** @type {boolean}
 	 * @propterty */
+	isWaitingForStableFps: can.compute(function (newVal) {
+		if (typeof newVal === 'undefined') {
+			return SettingsModel.isWaitingForStableFps();
+		} else { // setter
+			var oldVal = SettingsModel.isWaitingForStableFps();
+			this.valueChanged('isWaitingForStableFps', oldVal);
+			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_AWAIT_FPS);
+			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_AWAIT_FPS, newVal);
+		}
+	}),
+	isWaitingForStableFpsInfo: createInfoTextHtml("Uncheck if you want to open the Match-window as soon as possible. Expect lagging Animation during loading screen!"),
+	/** @type {boolean}
+	 * @propterty */
 	startWithGame: can.compute(function (newVal) {
 		if (typeof newVal === 'undefined') {
 			return SettingsModel.startWithGame();
@@ -242,7 +264,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			}
 		}
 	}),
-	startWithGameInfo: '<p class="padded-bot-half">Uncheck if you want to prevent this app from starting automatically.</p>',
+	startWithGameInfo: createInfoTextHtml('Uncheck if you want to prevent this app from starting automatically'),
 	startWithGameMessage: null,
 
 	/** @type {boolean}
@@ -257,7 +279,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME, newVal);
 		}
 	}),
-	closeMatchWithGameInfo: '<p>Uncheck if you want to finish reading about the champions after you left the game.</p>',
+	closeMatchWithGameInfo: createInfoTextHtml('Uncheck if you want to finish reading about the champions after you left the game.'),
 
 	/**
 	 * @property

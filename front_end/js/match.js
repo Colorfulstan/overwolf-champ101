@@ -28,7 +28,7 @@ var match = new MatchModel(settings.summonerId(), settings.server());
 //	WindowCtrl.closeMatch();
 //} else {
 	var preloadMatchBeforeShowing = settings.isInGame() && !settings.isManualReloading();
-	if (preloadMatchBeforeShowing) { // ingame == preload data
+	if (preloadMatchBeforeShowing) { // ingame == preload data // TODO: seems to make no difference in both conditions!
 		steal.dev.log('preloading data');
 		dao.loadMatchModel(match).always(function (matchPromise) { // TODO: currently not accounting for manual starts!?
 			new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings});

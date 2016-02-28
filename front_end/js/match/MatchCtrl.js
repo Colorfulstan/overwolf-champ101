@@ -58,18 +58,12 @@ var MatchCtrl = WindowCtrl.extend(
 			var self = this;
 			registerEventHandlers();
 
-			self.countDocumentBlurHandlers = 0; // TODO: remove, nut used
-
-
-			self.options.$document = $(document); // TODO: remove, not used anymore
 			self.options.matchPromise = options.model;
-
-
 			overwolf.windows.obtainDeclaredWindow(self.options.name, function (/** WindowResultData */ result) {
 				self.options.odkWindow = result.window;
 				var x = WindowCtrl.getCenteredX(self.options.odkWindow.width), y = 0;
 				//x += 100; // accounting for App-Buttons on the right
-				x -= 14; // accounting for unknown positioning flaw
+				//x -= 14; // accounting for unknown positioning flaw
 				overwolf.windows.changePosition(self.options.odkWindow.id, x, y);
 
 				//options.settings.cachedGameAvailable(false);
@@ -183,7 +177,7 @@ var MatchCtrl = WindowCtrl.extend(
 				if (data.status == 503) {
 					self.options.$overviewContainer.find('failed-state .message').html('<h3>Riot-Api is temporarily unavailable. You may try again later.</h3>');
 				}
-				if (data.statusText === 'error'){
+				if (data.statusText === 'error') {
 					var customData = 'jqXHR: ' + JSON.stringify(jqXHR) + ' | data: ' + JSON.stringify(data);
 					var fields = {};
 					fields[analytics.CUSTOM_DIMENSIONS.DATA] = customData;
@@ -229,8 +223,10 @@ var MatchCtrl = WindowCtrl.extend(
 
 
 			var waitForStableFps = window.setInterval(function () {
-				if (self.options.settings.isFpsStable()) {
-					steal.dev.log(new Date(), 'fps are stable, beginning to show Match-Window');
+				var settings = self.options.settings;
+				var openMatchNow = !settings.isWaitingForStableFps() || (settings.isWaitingForStableFps() && settings.isFpsStable());
+				if (openMatchNow) {
+					steal.dev.log(new Date(), 'beginning to show Match-Window');
 					//console.log('fps stable', localStorage.getItem(SettingsModel.STORAGE_FPS_STABLE));
 					// FPS is stable - if data loading finishes before FPS-stable, match-opoening will be delayed until settings.isFpsStable('true') got called
 					window.clearInterval(waitForStableFps);

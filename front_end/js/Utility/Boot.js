@@ -230,6 +230,7 @@ var Boot = {
 	setDefaultSettings: function (settings) {
 		settings.startWithGame(true);
 		settings.closeMatchWithGame(true);
+		settings.isWaitingForStableFps(true);
 		settings.isFpsStable('true');
 		return $.Deferred().resolve().promise();
 	}
