@@ -19,10 +19,6 @@ var matchFetcher = {
 	isReady: isReady.promise(),
 	initRan: false,
 
-	STRING_ACTIVE_GAME: 'game',
-	STRING_SPECTATE: 'spectate',
-	STRING_REPLAY: 'replay',
-
 	init: function () {
 		console.log('initialising matchFetcher..........');
 		console.log('adding simpleIOplugin to DOM.........');
@@ -36,6 +32,7 @@ var matchFetcher = {
 
 		this.initRan = true;
 		setReady();
+		return this.isReady;
 	},
 	throwIfNotReady(){
 		navigator.plugins.refresh(false);

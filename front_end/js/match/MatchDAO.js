@@ -4,7 +4,6 @@ import ChampionModel from 'ChampionModel';
 import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import analytics from 'analytics';
-import matchFetcher from 'matchFetcher';
 
 import 'global';
 
@@ -25,38 +24,35 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	 * structured like {@link MatchModel}
 	 * @private
 	 */
-	_loadDataFromServer: function (transfer) {
+	_loadDataFromServer: function (transfer, matchFetcher) { // TODO: move variables into transferItem
 		var deferred = $.Deferred();
 
 		var params;
 
-		// TODO: start here with new matchloading
-		matchFetcher.init();
-
 		var championParam, serverParam;
-		$.when(matchFetcher.getActiveRegion(), matchFetcher.getMatchInfo())
+		$.when(matchFetcher.getActiveRegion(), matchFetcher.getMatchInfo())// TODO: maybe load this previously and give as dependencies
 			.then(function (/** string */ server, /** MatchInfoResult */ matchData) {
 
 				/** LeagueMatchInfo */
-				var matchInfo = matchData.matchInfo;
+				var matchInfo = matchData.matchInfo; // TODO: move variables into transferItem
 
 				var champions = [];
-				for (var i = 0; i < matchInfo.team_100.length; i++) {
-					champions.push(matchInfo.team_100[i].champion);
+				for (var i = 0; i < matchInfo.team_100.length; i++) {// TODO: move variables into transferItem
+					champions.push(matchInfo.team_100[i].champion);// TODO: move variables into transferItem
 				}
-				for (var i = 0; i < matchInfo.team_200.length; i++) {
-					champions.push(matchInfo.team_200[i].champion);
+				for (var i = 0; i < matchInfo.team_200.length; i++) {// TODO: move variables into transferItem
+					champions.push(matchInfo.team_200[i].champion);// TODO: move variables into transferItem
 				}
 
-				params = {server: server, championNames: champions.toString()};
+				params = {server: server, championNames: champions.toString()};// TODO: move variables into transferItem
 				steal.dev.log('request for champion-data with params:', params);
 				return jQuery.get(RIOT_ADAPTER_CHAMPION_URL // TODO: refactor to .ajax()
 					, params
 					, function (/** LeagueMatchInfo */ data) { // success
 						steal.dev.log("championData from Server:", data);
 
-						data.team_100 = matchInfo.team_100;
-						data.team_200 = matchInfo.team_200;
+						data.team_100 = matchInfo.team_100;// TODO: move variables into transferItem
+						data.team_200 = matchInfo.team_200;// TODO: move variables into transferItem
 
 						LOL_PATCH = data.version;
 						DDRAGON_URL = DDRAGON_BASE_URL + LOL_PATCH + '/';
@@ -95,11 +91,11 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	 * @param {string} transfer.server - of the Summoner to lookup
 	 * @returns {Promise | MatchModel} Promise that resolves into the filled {@link MatchModel} Object
 	 */
-	loadMatchModel: function (transfer) {
+	loadMatchModel: function (transfer, matchFetcher) { // TODO: move variables into transferItem
 		var deferred = $.Deferred();
 		var self = this;
 
-		$.when(self._loadDataFromServer(transfer))
+		$.when(self._loadDataFromServer(transfer, matchFetcher))
 			.then(function (dataArray) {
 				steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
 
