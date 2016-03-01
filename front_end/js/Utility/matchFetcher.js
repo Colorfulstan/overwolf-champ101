@@ -5,253 +5,291 @@ var DEBUG = true;
 
 // TODO: rename module to something more fitting
 
-// TODO: implement mechanism to not be required to open and close the same file over and over but still having the possibility to use the methods independently
-// TODO: cache gamelog constantly and use the cache to read information
-
 var isReady = $.Deferred();
-var GAME_LOG_FILE_ID = "currGameLog";
 var GAME_LOG_5v5_SPAWNING_DONE_MARK = 'GAMESTATE_GAMELOOP Begin'; // both in replay and live safe way // works in 3v3 custom game - TODO: test in live games 3v3?
 //var GAME_LOG_ALT_SPAWNING_DONE_MARK = 'Finished spawning heroes/minions'; // NOTE: can appear before all champs spawned!
 /** If there is no line with 'replay mode' until the hardware section, its played game */
 var GAME_LOG_CHECK_FOR_REPLAY_END = '-----HARDWARE INFORMATION START-----';
 var GAME_LOG_REPLAY_INDICATOR = 'Replay mode';
+var PATCHER_LOG_END_INDICATOR = 'event_name: app_start'; // pretty early but after neccessary informations
 
 var matchFetcher = {
-	isReady: isReady.promise(),
-	initRan: false,
+		isReady: isReady.promise(),
+		initRan: false,
+		logCache: {
+			'game': [],
+			'patcher': []
+		},
 
-	/**
-	 * Contains sideeffects!
-	 * @see {@link setReady}
-	 * @returns {Promise} resolves to true when matchFetcher is ready
-	 */
-	init: function () {
-		debugLog('initialising matchFetcher..........');
+		/**
+		 * Contains sideeffects!
+		 * @see {@link setReady}
+		 * @returns {Promise} resolves to true when matchFetcher is ready
+		 */
+		init: function () {
+			debugLog('initialising matchFetcher..........');
 
-		debugLog('adding simpleIOplugin to DOM.........');
-		$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
-		navigator.plugins.refresh(false);
-		setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
-			var a = document.getElementById('plugin');
-			var b = document.querySelector("#plugin");
-		}, 1000);
+			debugLog('adding simpleIOplugin to DOM.........');
+			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
+			navigator.plugins.refresh(false);
+			setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
+				var a = document.getElementById('plugin');
+				//var b = document.querySelector("#plugin");
+			}, 1000);
 
-		this.initRan = true;
-		setReady();
-		return this.isReady;
-	},
-	throwIfNotReady(){
-		navigator.plugins.refresh(false);
-		if (this.initRan === false) {throw new Error('matchFetcher is not initialised. run .init() before sending data!')}
-	},
-	getGameRoot: function () { // cached
-		matchFetcher.throwIfNotReady();
-		var def = $.Deferred();
-
-		if (matchFetcher.gameRoot) {
-			def.resolve(matchFetcher.gameRoot);
-		} else {
-			overwolf.games.getRunningGameInfo(function (gameInfo) {
-				if (gameInfo == null || parseInt(gameInfo.id / 10) != 5426) {
-					debugLog("matchFetcher().getGameRoot(): Not in game.");
-					def.reject("Unable to get GameRoot - Not in game.");
-				} else {
-					var gamePath = gameInfo.executionPath;
-					var indexRADS = gamePath.indexOf("RADS");
-					var gameRoot;
-					if (indexRADS > 0) {
-						gameRoot = gamePath.substring(0, indexRADS);
-					} else {
-						// garena
-						var gameRootDirGarena = "Game\\";
-						var index = gamePath.indexOf(gameRootDirGarena) + gameRootDirGarena.length;
-						gameRoot = gamePath.substring(0, index);
-					}
-					if (gameRoot.length == 0) {
-						delete matchFetcher.gameRoot;
-						def.reject("Could not find GameRoot - Neither RIOT nor Garena Client could be identified");
-					} else {
-						matchFetcher.gameRoot = gameRoot;
-						debugLog("matchFetcher().getGameRoot(): GameRoot loaded. ", matchFetcher.gameRoot);
-						def.resolve(gameRoot);
-					}
-				}
+			this.initRan = true;
+			setReady();
+			return this.isReady;
+		},
+		getGameLogCache: function () {
+			var def = $.Deferred();
+			matchFetcher.getGameLogFilePath().then(function (gameLogPath) {
+				cacheLog('game', gameLogPath, GAME_LOG_5v5_SPAWNING_DONE_MARK)
+					.then(function (logCache) {
+						def.resolve(logCache);
+					});
 			});
-		}
-		return def.promise();
-	},
-	getActiveSummoner: function () {
-		debugLog('getting active summoner');
-		matchFetcher.throwIfNotReady();
+			return def.promise();
+		},
+		getPatcherLogCache: function () {
+			var def = $.Deferred();
+			matchFetcher.getPatcherLogFilePath().then(function (patcherLogPath) {
+				cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
+					.then(function (logCache) {
+						def.resolve(logCache);
+					});
+			});
+			return def.promise();
+		},
+		throwIfNotReady(){
+			navigator.plugins.refresh(false);
+			if (this.initRan === false) {throw new Error('matchFetcher is not initialised. run .init() before sending data!')}
+		},
+		getGameRoot: function () { // cached
+			matchFetcher.throwIfNotReady();
+			var def = $.Deferred();
 
-		var def = $.Deferred();
+			if (matchFetcher.gameRoot) {
+				def.resolve(matchFetcher.gameRoot);
+			} else {
+				overwolf.games.getRunningGameInfo(function (gameInfo) {
 
-		var foundSummonerName = false;
-
-		matchFetcher.getActiveRegion()
-			.then(function (region) {
-				var isGarenaClient = false;
-				if (region === 'garena') {
-					isGarenaClient = true;
-				}
-				return getPreferencesPath(isGarenaClient)
-					.then(getLatestFileInDirectory)
-					.then(function (filename) {
-						if (!filename.endsWith(".properties")) {
-							debugLog("Couldn't find summoner name from file.");
-							def.reject("Couldn't find summoner name from file.");
-							return;
-						}
-
-						if (filename.startsWith("shared_")) {
-							filename = filename.substring("shared_".length);
-						}
-
-						filename = filename.substring(0, filename.indexOf("."));
-
-						var mySummoner = filename;
-						foundSummonerName = true;
-
-						if (foundSummonerName) {
-							debugLog("My summoner (lowercase): " + mySummoner);
-							def.resolve(mySummoner);
+					if (gameInfo == null || parseInt(gameInfo.id / 10) != 5426) {
+						if (DEBUG) {
+							matchFetcher.gameRoot = 'C:/Games/league/';
+							debugLog("matchFetcher().getGameRoot(): Not in game but in DEBUG mode, using fix path.");
+							def.resolve(matchFetcher.gameRoot);
 						} else {
-							debugLog("Couldn't find summoner name from file.");
-							def.reject("Couldn't find summoner name from file.");
+							debugLog("matchFetcher().getGameRoot(): Not in game.");
+							def.reject("Unable to get GameRoot - Not in game.");
 						}
-					});
-			})
-			.fail(function (errMsg) {
-				debugLog('matchFetcher.getActiveSummoner():' + errMsg);
-				def.reject(errMsg)
-			});
-		return def.promise();
-	},
-	getActiveRegion: function () { // needs to be chained after a method to check if in game and get the gameroot
-		debugLog('getting active region');
-		matchFetcher.throwIfNotReady();
+					} else {
+						var gamePath = gameInfo.executionPath;
+						var indexRADS = gamePath.indexOf("RADS");
+						var gameRoot;
+						if (indexRADS > 0) {
+							gameRoot = gamePath.substring(0, indexRADS);
+						} else {
+							// garena
+							var gameRootDirGarena = "Game\\";
+							var index = gamePath.indexOf(gameRootDirGarena) + gameRootDirGarena.length;
+							gameRoot = gamePath.substring(0, index);
+						}
+						if (gameRoot.length == 0) {
+							delete matchFetcher.gameRoot;
+							def.reject("Could not find GameRoot - Neither RIOT nor Garena Client could be identified");
+						} else {
+							matchFetcher.gameRoot = gameRoot;
+							debugLog("matchFetcher().getGameRoot(): GameRoot loaded. ", matchFetcher.gameRoot);
+							def.resolve(gameRoot);
+						}
+					}
+				});
+			}
+			return def.promise();
+		},
+		getActiveSummoner: function () {
+			debugLog('getting active summoner');
+			matchFetcher.throwIfNotReady();
 
+			var def = $.Deferred();
 
-		var def = $.Deferred();
-		if (matchFetcher.region) {
-			def.resolve(matchFetcher.region);
-		} else {
-			matchFetcher.getGameRoot().then(function (gameRoot) {
-				return getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/", "LoLPatcher.log")
-					.then(function (filename) {
+			var foundSummonerName = false;
 
-						debugLog('opened ' + filename);
-
-						var lineStartString = 'common.region: ';
-						var region = '';
-						var foundRegion = false;
-						var fileId = 'patcherLog';
-						plugin().listenOnFile(fileId, gameRoot + "Logs/Patcher Logs/" + filename, false, function (id, status, fileData) {
-							if (foundRegion) {
-								return; // don't read anymore lines when finished with this file
-							}
-
-							if (id != fileId || !status) {
+			matchFetcher.getActiveRegion()
+				.then(function (region) {
+					var isGarenaClient = false;
+					if (region === 'garena') {
+						isGarenaClient = true;
+					}
+					return getPreferencesPath(isGarenaClient)
+						.then(getLatestFileInDirectory)
+						.then(function (filename) {
+							if (!filename.endsWith(".properties")) {
+								debugLog("Couldn't find summoner name from file.");
+								def.reject("Couldn't find summoner name from file.");
 								return;
 							}
 
-							if (!fileData.includes("common.region")) {
-								return;
+							if (filename.startsWith("shared_")) {
+								filename = filename.substring("shared_".length);
 							}
 
-							region = fileData.substring(lineStartString.length);
-							foundRegion = true;
-							closeFile(fileId);
-							matchFetcher.region = region.toLowerCase();
-							debugLog('Found region ' + matchFetcher.region);
-							def.resolve(matchFetcher.region);
+							filename = filename.substring(0, filename.indexOf("."));
+
+							var mySummoner = filename;
+							foundSummonerName = true;
+
+							if (foundSummonerName) {
+								debugLog("My summoner (lowercase): " + mySummoner);
+								def.resolve(mySummoner);
+							} else {
+								debugLog("Couldn't find summoner name from file.");
+								def.reject("Couldn't find summoner name from file.");
+							}
 						});
-					});
-			}).fail(function (errMsg) {
-				debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
-				matchFetcher.region = 'garena';
+				})
+				.fail(function (errMsg) {
+					debugLog('matchFetcher.getActiveSummoner():' + errMsg);
+					def.reject(errMsg)
+				});
+			return def.promise();
+		},
+		getActiveRegion: function () { // needs to be chained after a method to check if in game and get the gameroot
+			debugLog('getting active region');
+			matchFetcher.throwIfNotReady();
+
+
+			var def = $.Deferred();
+			if (matchFetcher.region) {
 				def.resolve(matchFetcher.region);
-			});
-		}
+			} else {
+				var lineStartString = 'common.region: ';
+				var region = '';
+				var foundRegion = false;
+				matchFetcher.getPatcherLogCache().then(function (patcherLogCache) {
+						for (var i = 0; i < patcherLogCache.length && !foundRegion; i++) {
+							var lineData = patcherLogCache[i];
 
-		return def.promise();
-	},
-	getMatchInfo: function () {
-		debugLog('getting match info');
-
-		matchFetcher.throwIfNotReady();
-		var def = $.Deferred();
-		var result = new Result();
-		result.status = "error";
-
-		$.when(matchFetcher.getActiveRegion())
-			.then(function (region) {
-				return $.when(matchFetcher.getGameLogFilePath(), matchFetcher.getActiveSummoner())
-					.then(collectParticipantsData)
-					.then(function (matchInfo) {
-						result.status = "success";
-						result.errorMessage = null;
-						result.matchInfo = matchInfo;
-						debugLog("success: ", matchInfo);
-						def.resolve(result);
+							if (lineData.includes("common.region")) {
+								region = lineData.substring(lineStartString.length);
+								foundRegion = true;
+								matchFetcher.region = region.toLowerCase();
+								debugLog('Found region ' + matchFetcher.region);
+								def.resolve(matchFetcher.region);
+							}
+						}
+						if (!foundRegion) {
+							delete matchFetcher.region;
+							def.reject('could not find region from patcherLog');
+						}
+					})
+					.fail(function (errMsg) {
+						debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
+						matchFetcher.region = 'garena';
+						def.resolve(matchFetcher.region);
 					});
-			})
-			.fail(function (errorMsg) {
+			}
+
+			return def.promise();
+		},
+		getPatcherLogFilePath: function () {
+			var def = $.Deferred();
+			if (matchFetcher.patcherLogFilePath) {
+				def.resolve(matchFetcher.patcherLogFilePath);
+			} else {
+				matchFetcher.getGameRoot().then(function (gameRoot) {
+						return getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/", "LoLPatcher.log")
+							.then(function (fileName) {
+								matchFetcher.patcherLogFilePath = gameRoot + "Logs/Patcher Logs/" + fileName;
+								def.resolve(matchFetcher.patcherLogFilePath);
+							});
+					})
+					.fail(function (errMsg) {
+						debugLog(errMsg);
+						delete matchFetcher.patcherLogFilePath;
+						def.reject(errMsg);
+					});
+			}
+			return def.promise();
+		},
+		getMatchInfo: function () {
+			debugLog('getting match info');
+
+			matchFetcher.throwIfNotReady();
+			var def = $.Deferred();
+			var result = new Result();
+			result.status = "error";
+
+			matchFetcher.getActiveSummoner()
+				.then(collectParticipantsData)
+				.then(function (matchInfo) {
+					result.status = "success";
+					result.errorMessage = null;
+					result.matchInfo = matchInfo;
+					debugLog("success: ", matchInfo);
+					def.resolve(result);
+				}).fail(function (errorMsg) {
 				result.errorMessage = errorMsg;
 				debugLog(errorMsg);
 				def.reject(errorMsg);
 			});
-		return def.promise();
-	},
-	getGameLogFilePath: function () { // cached
-		matchFetcher.throwIfNotReady();
-		var def = $.Deferred();
-		if (matchFetcher.gameLogFilePath) {
-			debugLog('using cached gameLogFilePath: ', matchFetcher.gameLogFilePath);
-			def.resolve(matchFetcher.gameLogFilePath);
-		} else {
-			debugLog('getting gameLogFilePath from files');
-			var path = 'Logs/Game - R3d Logs/';
-			matchFetcher.getGameRoot().then(function (gameRoot) {
-				return getLatestFileInDirectory(gameRoot + path).then(function (filename) {
-					matchFetcher.gameLogFilePath = gameRoot + path + filename;
-					def.resolve(matchFetcher.gameLogFilePath);
-				});
-			}).fail(function () {
-				console.warn('getGameLogFilePath failed');
-				def.reject('getGameLogFilePath failed');
-			});
+			return def.promise();
 		}
-		return def.promise();
-	},
-	/** User spectates his own game */
-	isReplay: function () {
-		matchFetcher.throwIfNotReady();
-		var def = $.Deferred();
-		matchFetcher.getGameRoot().then(isReplayClient).then(function (isReplayClient) {
-			if (isReplayClient) {
-				isUserReplay().then(function (isUserReplay) {
-					def.resolve(isUserReplay);
-				});
+		,
+		getGameLogFilePath: function () { // cached
+			matchFetcher.throwIfNotReady();
+			var def = $.Deferred();
+			if (matchFetcher.gameLogFilePath) {
+				debugLog('using cached gameLogFilePath: ', matchFetcher.gameLogFilePath);
+				def.resolve(matchFetcher.gameLogFilePath);
 			} else {
-				def.resolve(false);
+				debugLog('getting gameLogFilePath from files');
+				var path = 'Logs/Game - R3d Logs/';
+				matchFetcher.getGameRoot().then(function (gameRoot) {
+					return getLatestFileInDirectory(gameRoot + path).then(function (filename) {
+						matchFetcher.gameLogFilePath = gameRoot + path + filename;
+						def.resolve(matchFetcher.gameLogFilePath);
+					});
+				}).fail(function () {
+					console.warn('getGameLogFilePath failed');
+					def.reject('getGameLogFilePath failed');
+				});
 			}
-		}).fail(function (errMsg) {
-			debugLog('isReplay failed');
-			def.reject(errMsg);
-		});
-		return def.promise();
-	},
-	/** User spectates someone other */
-	isSpectate: function () {
-		matchFetcher.throwIfNotReady();
-		return matchFetcher.getGameRoot().then(isReplayClient);
-	},
-	isReplayOrSpectate: function () {
-		matchFetcher.throwIfNotReady();
-		return matchFetcher.isSpectate();
+			return def.promise();
+		}
+		,
+		/** User spectates his own game */
+		isReplay: function () {
+			matchFetcher.throwIfNotReady();
+			var def = $.Deferred();
+			matchFetcher.getGameRoot().then(isReplayClient).then(function (isReplayClient) {
+				if (isReplayClient) {
+					isUserReplay().then(function (isUserReplay) {
+						def.resolve(isUserReplay);
+					});
+				} else {
+					def.resolve(false);
+				}
+			}).fail(function (errMsg) {
+				debugLog('isReplay failed');
+				def.reject(errMsg);
+			});
+			return def.promise();
+		}
+		,
+		/** User spectates someone other */
+		isSpectate: function () {
+			matchFetcher.throwIfNotReady();
+			return matchFetcher.getGameRoot().then(isReplayClient);
+		}
+		,
+		isReplayOrSpectate: function () {
+			matchFetcher.throwIfNotReady();
+			return matchFetcher.isSpectate();
+		}
 	}
-};
+	;
 
 
 //region Data-Objects
@@ -305,8 +343,45 @@ function LineInfo() {
 }
 //endregion
 
+function cacheLog(type, path, endIndicator) {
+	var def = $.Deferred();
+	var fileId = type + 'Log';
+	var closingFile = false;
+	var logCache = matchFetcher.logCache[type];
+
+	if (logCache.length > 0) {
+		def.resolve(logCache); // TODO: gets cleaned up when a new match begins, otherwise some cache validation would be neccessary
+	} else {
+		plugin().listenOnFile(fileId, path, false, function (id, status, lineData) {
+			if (closingFile) {
+				return;
+			}
+			if (id != fileId || !status) {
+				closingFile = true;
+				closeFile(fileId).then(function () {
+					def.reject("Couldn't find info from file.");
+				});
+				return;
+			}
+
+			var l = logCache.length;
+			var lineText = lineData.substring(lineData.lastIndexOf('|') + 1); // if no | is found, index will be 0
+			if (logCache[l - 1] !== lineText) {
+				logCache.push(lineText);
+			}
+			if (!closingFile && lineText.includes(endIndicator)) {
+				closingFile = true;
+				closeFile(fileId).then(function () {
+					def.resolve(logCache);
+				});
+			}
+		});
+	}
+	return def.promise();
+}
+
 function plugin() {
-	return document.querySelector('#plugin');
+	return document.getElementById('plugin');
 }
 function setReady() {
 	isReady.resolve(true);
@@ -314,11 +389,14 @@ function setReady() {
 }
 
 function closeFile(fileId) {
-	debugLog("Closing file " + fileId + " in 2000 MS...");
+	var def = $.Deferred();
+	debugLog("Closing file " + fileId + " in 100 MS...");
 	setTimeout(function () {
 		plugin().stopFileListen(fileId);
 		debugLog("File listener closed.");
-	}, 2000);
+		def.resolve(true);
+	}, 100);
+	return def.promise();
 }
 
 // getMatchInfo(function(res) {
@@ -378,6 +456,7 @@ function getPreferencesPath(isGarenaClient) {
 	});
 	return def.promise();
 }
+/**@deprecated cacheGameLog already has an argument for end indicator */
 function isGameLogSpawningFinished(lineDataString) {
 	return lineDataString.includes(GAME_LOG_5v5_SPAWNING_DONE_MARK);
 }
@@ -385,84 +464,76 @@ function isGameLogSpawningFinished(lineDataString) {
  * @param latestGameLogFullPath
  * @param mySummoner
  */
-function collectParticipantsData(latestGameLogFullPath, mySummoner) {
+function collectParticipantsData(mySummoner) {
 	var def = $.Deferred();
 	var regEx = /[0-9.| a-zA-Z]*[()]([\w]+)[) ]\ with skinID [\d]+ on team ([\d]+) for clientID ([-]*[\d]) and summonername [(]([^)]+)\)/;
 	var lines = [];
 	var foundMySummoner = false;
 	var myTeam;
 	var matchInfo = new MatchInfo();
-	var fileListenerIsClosing = false;
+	var stopLoop = false;
+	matchFetcher.getGameLogCache().then(function (gameLogCache) {
 
-	plugin().listenOnFile(GAME_LOG_FILE_ID, latestGameLogFullPath, false, function (id, status, fileData) {
-		if (DEBUG) { console.warn(fileData); }
-		//region condition-checks
-		if (fileListenerIsClosing) {
-			return; // don't read anymore lines when finished with this file
-		}
-		if (id != GAME_LOG_FILE_ID || !status) {
-			closeFile(id);
-			fileListenerIsClosing = true;
-			def.reject("Couldn't find match info from file.");
-			return;
-		}
+		for (var i = 0; i < gameLogCache.length && !stopLoop; i++) {
+			var lineData = gameLogCache[i];
+			if (DEBUG) { console.warn(lineData); }
 
-		var allParticipantsRead = (lines.length == 10 || isGameLogSpawningFinished(fileData));
-		if (allParticipantsRead) {
-			closeFile(GAME_LOG_FILE_ID);
-			fileListenerIsClosing = true;
-			debugLog('Matchdata is ready');
+			//region condition-checks
+			var allParticipantsRead = (lines.length == 10);
+			if (allParticipantsRead) {
+				debugLog('Matchdata is ready');
 
-			if (foundMySummoner) {
-				matchInfo.containsMyself = true;
-				debugLog("User is present in this game (playing or replay)", matchInfo);
-			} else {
-				matchInfo.containsMyself = false; // spectating someone
-				debugLog("User is spectating someone else", matchInfo);
+				if (foundMySummoner) {
+					matchInfo.containsMyself = true;
+					debugLog("User is present in this game (playing or replay)", matchInfo);
+				} else {
+					matchInfo.containsMyself = false; // spectating someone
+					debugLog("User is spectating someone else", matchInfo);
+				}
+				def.resolve(matchInfo);
+				stopLoop = true; // break;
 			}
-			def.resolve(matchInfo);
-			return;
+
+			if (!lineData.includes("Spawning champion")) {
+				continue; // return
+			}
+			//endregion
+
+			//region logic
+			var matches = regEx.exec(lineData);
+
+			var line = new LineInfo();
+			line.champion = matches[1];
+			if (line.champion === 'MonkeyKing') {
+				line.champion = 'Wukong'
+			}
+			line.team = matches[2];
+			line.summoner = matches[4];
+
+			lines.push(line);
+
+			debugLog("Found line for summoner: " + line.summoner);
+
+			matchInfo['team_' + line.team].push({
+				champion: line.champion,
+				summoner: line.summoner,
+				team: line.team
+			});
+
+			if (line.team != myTeam) {
+				matchInfo.enemyTeamKey = 'team_' + line.team;
+			} else {
+				matchInfo.alliedTeamKey = 'team_' + line.team;
+			}
+
+			if (line.summoner.toLowerCase() == mySummoner.toLowerCase() || unescape(encodeURIComponent(line.summoner)).toLowerCase() == mySummoner.toLowerCase()) { // TODO: ???
+				myTeam = line.team;
+				matchInfo.myChampion = line.champion;
+				foundMySummoner = true;
+				debugLog("Found my summoner in match.");
+			}
+			//endregion
 		}
-
-		if (!fileData.includes("Spawning champion")) {
-			return;
-		}
-		//endregion
-
-		//region logic
-		var matches = regEx.exec(fileData);
-
-		var line = new LineInfo();
-		line.champion = matches[1];
-		if (line.champion === 'MonkeyKing') {
-			line.champion = 'Wukong'
-		}
-		line.team = matches[2];
-		line.summoner = matches[4];
-
-		lines.push(line);
-
-		debugLog("Found line for summoner: " + line.summoner);
-
-		matchInfo['team_' + line.team].push({
-			champion: line.champion,
-			summoner: line.summoner,
-			team: line.team
-		});
-
-		if (line.team != myTeam) {
-			matchInfo.enemyTeamKey = 'team_' + line.team;
-		} else {
-			matchInfo.alliedTeamKey = 'team_' + line.team;
-		}
-
-		if (line.summoner.toLowerCase() == mySummoner.toLowerCase() || unescape(encodeURIComponent(line.summoner)).toLowerCase() == mySummoner.toLowerCase()) { // TODO: ???
-			myTeam = line.team;
-			matchInfo.myChampion = line.champion;
-			foundMySummoner = true;
-			debugLog("Found my summoner in match.");
-		}
-		//endregion
 	});
 
 	return def.promise();
@@ -513,34 +584,21 @@ function getAirClientVersion(gameRoot) {
 function isUserReplay() { // TODO: testen
 	var def = $.Deferred();
 
-	var fileId = 'checkForSummoner';
-	var fileListenerIsClosing = false;
-	$.when(matchFetcher.getGameLogFilePath(), matchFetcher.getActiveSummoner()).then(function (gameLogPath, summoner) {
-		plugin().listenOnFile(fileId, gameLogPath, false, function (id, status, fileData) {
-			if (fileListenerIsClosing) {
-				return; // don't read anymore lines when finished with this file
-			}
-			if (id != fileId || !status) {
-				fileListenerIsClosing = true;
-				closeFile(id);
-				def.reject("Couldn't find match info from file.");
-				return;
-			}
+	var stopLoop = false;
 
-			if (fileData.toLowerCase().includes(summoner)) {
-				fileListenerIsClosing = true;
-				closeFile(fileId);
-				debugLog('Summoner found in Match, it\'s a replay');
-				def.resolve(true);
-				return;
+	$.when(matchFetcher.getActiveSummoner()).then(function (summoner) {
+		matchFetcher.getGameLogCache().then(function (gameLogCache) {
+			for (var i = 0; i < gameLogCache.length && !stopLoop; i++) {
+				var lineData = gameLogCache[i];
+				if (lineData.toLowerCase().includes(summoner)) {
+					debugLog('Summoner found in Match, it\'s a replay');
+					def.resolve(true);
+					stopLoop = true;
+				}
 			}
-
-			if (isGameLogSpawningFinished(fileData)) {
-				fileListenerIsClosing = true;
-				closeFile(fileId);
+			if (!stopLoop) { // gameLogCache got searched through completely
 				debugLog('Summoner not found in Match, it\'s a spectate');
 				def.resolve(false);
-				return;
 			}
 		});
 	});
@@ -574,53 +632,30 @@ function getLatestFileInDirectory(dir, searchTerm) { // TODO: add directory to r
  */
 function isReplayClient(gameRoot) { // TODO: testen
 	var def = $.Deferred();
+	var stopLoop = false;
+	matchFetcher.getGameLogCache().then(function (gameLogCache) {
+		for (var i = 0; i < gameLogCache.length && !stopLoop; i++) {
+			var lineData = gameLogCache[i];
 
-	var foundReplayMode = false;
-	var fileId = 'checkForReplayClient';
-	var fileListenerIsClosing = false;
-	getLatestFileInDirectory(gameRoot + "Logs/Game - R3d Logs/")
-		.then(function (filename) {
-			plugin().listenOnFile(fileId, gameRoot + "Logs/Game - R3d Logs/" + filename, false, function (id, status, fileData) {
-				if (fileListenerIsClosing) {
-					return; // don't read anymore lines when finished with this file
-				}
-				if (id != fileId || !status) {
-					fileListenerIsClosing = true;
-					closeFile(fileId);
-					def.reject("Couldn't find match info from file.");
-					return;
-				}
-
-				if (fileData.includes(GAME_LOG_REPLAY_INDICATOR)) {
-					fileListenerIsClosing = true;
-					closeFile(fileId);
-					foundReplayMode = true;
-					debugLog('Match is in Replay Mode');
-					def.resolve(true);
-					return;
-				}
-
-				if (fileData.includes(GAME_LOG_CHECK_FOR_REPLAY_END)) {
-					fileListenerIsClosing = true;
-					closeFile(fileId);
-					debugLog('Match is an actual game, no replay mode indicator found');
-					def.resolve(false);
-					return;
-				}
-			});
-		})
-		.fail(function () {
-			debugLog(errMsg);
-			def.reject(errMsg);
-		});
+			if (lineData.includes(GAME_LOG_REPLAY_INDICATOR)) {
+				debugLog('Match is in Replay Mode');
+				def.resolve(true);
+				stopLoop = true;
+			} else if (lineData.includes(GAME_LOG_CHECK_FOR_REPLAY_END)) {
+				debugLog('Match is an actual game, no replay mode indicator found');
+				def.resolve(false);
+				stopLoop = true;
+			}
+		}
+	});
 	return def.promise();
 }
 
 function debugLog(msg, obj) {
 	if (DEBUG) {
-		if (typeof obj === 'undefined'){
+		if (typeof obj === 'undefined') {
 			console.log(msg);
-		}else {
+		} else {
 			console.log(msg, obj);
 		}
 	}

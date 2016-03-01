@@ -187,7 +187,6 @@ var Instance = { // Instance
 	 * @see MainCtrl.start opening of the Window separated into start() to enable more detailed control over the start of the app */
 	init: function () {
 		WindowCtrl.prototype.init.apply(this, arguments);
-		debugger;
 		var self = this;
 		this.options.version.then(function (v) {
 			self.element.find('#version').html(

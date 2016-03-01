@@ -29,9 +29,14 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 		var params;
 
+		var server;
+
 		var championParam, serverParam;
-		$.when(matchFetcher.getActiveRegion(), matchFetcher.getMatchInfo())// TODO: maybe load this previously and give as dependencies
-			.then(function (/** string */ server, /** MatchInfoResult */ matchData) {
+		matchFetcher.getActiveRegion().then(function (serv) {// TODO: maybe load this previously and give as dependencies
+				server = serv;
+			return matchFetcher.getMatchInfo();// TODO: maybe load this previously and give as dependencies
+			})
+			.then(function (/** MatchInfoResult */ matchData) {
 
 				/** LeagueMatchInfo */
 				var matchInfo = matchData.matchInfo; // TODO: move variables into transferItem

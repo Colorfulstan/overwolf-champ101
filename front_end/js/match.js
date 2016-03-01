@@ -2,7 +2,6 @@
 // Entry point for match.html
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 "use strict";
-
 import Hotkeys from 'Hotkeys';
 import MatchDAO from 'MatchDAO';
 import MatchModel from 'MatchModel';
@@ -15,6 +14,8 @@ import analytics from 'analytics';
 import matchFetcher from 'matchFetcher';
 import $ from 'jquery';
 
+steal.dev.log('match.js starts ..........');
+
 analytics.init();
 
 WindowCtrl.enableStorageEvents();
@@ -25,12 +26,10 @@ var dao = new MatchDAO();
 var settings = Settings.getInstance();
 
 var match = new MatchModel(settings.summonerId(), settings.server());
-//if (!SettingsModel.isSummonerSet()) {
-//	WindowCtrl.closeMatch();
-//} else {
+
 $.when(matchFetcher.init()).then(
 	function () {
-		var preloadMatchBeforeShowing = settings.isInGame() && !settings.isManualReloading();
+		var preloadMatchBeforeShowing = settings.isInGame() && ( !settings.isManualReloading() && settings.isWaitingForStableFps());
 		if (preloadMatchBeforeShowing) { // ingame == preload data // TODO: seems to make no difference in both conditions!
 			steal.dev.log('preloading data');
 			dao.loadMatchModel(match,matchFetcher).always(function (matchPromise) { // TODO: currently not accounting for manual starts!?
@@ -44,6 +43,5 @@ $.when(matchFetcher.init()).then(
 		}
 	}
 );
-//}
 
 

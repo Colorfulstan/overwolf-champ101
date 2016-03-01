@@ -115,7 +115,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	},
 	isWaitingForStableFps: function () {
 		//return false;
-		return localStorage.getItem(SettingsModel.STORAGE_KEY_AWAIT_FPS) !== null;
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_AWAIT_FPS) == 'true';
 	},
 	/** @static */
 	isInGame: function () {
