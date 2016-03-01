@@ -27,7 +27,9 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	STORAGE_KEY_AWAIT_FPS: 'setting-wait-for-fps',
 	//MOUSEOUT_KEY_ID = 'mouse-out-timeout'
 
-	/** @static */
+	/** @static
+	 * @return {Promise} resolves into the manifest JSON object of the app
+	 * */
 	getManifest: function () {
 		var deferred = $.Deferred();
 		overwolf.extensions.current.getManifest(function (r) {
@@ -77,6 +79,14 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			deferred.resolve(result);
 		});
 		return deferred.promise();
+	},
+	/** @static */
+	getVersion: function () {
+		var def = $.Deferred();
+		SettingsModel.getManifest().then(function (manifest) {
+			def.resolve(manifest.meta.version);
+		});
+		return def.promise();
 	},
 	/** @static */
 	startWithGame: function () {

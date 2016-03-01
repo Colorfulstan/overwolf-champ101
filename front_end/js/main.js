@@ -13,7 +13,7 @@ import analytics from 'analytics';
 analytics.init();
 WindowCtrl.enableStorageEvents();
 
-var main = new MainCtrl('html');
+var main = new MainCtrl('html', {version: SettingsModel.getVersion()});
 var settings = Settings.getInstance();
 
 var firstStart = SettingsModel.isFirstStart();  // localStorage has no items on first start
