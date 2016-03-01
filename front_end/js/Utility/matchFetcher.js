@@ -119,11 +119,11 @@ var matchFetcher = {
 							debugLog("Couldn't find summoner name from file.");
 							def.reject("Couldn't find summoner name from file.");
 						}
-					})
-					.fail(function (errMsg) {
-						debugLog(errMsg);
-						def.reject(errMsg)
 					});
+			})
+			.fail(function (errMsg) {
+				debugLog('matchFetcher.getActiveSummoner():' + errMsg);
+				def.reject(errMsg)
 			});
 		return def.promise();
 	},
@@ -137,7 +137,7 @@ var matchFetcher = {
 			def.resolve(matchFetcher.region);
 		} else {
 			matchFetcher.getGameRoot().then(function (gameRoot) {
-				getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/", "LoLPatcher.log")
+				return getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/", "LoLPatcher.log")
 					.then(function (filename) {
 
 						debugLog('opened ' + filename);
@@ -166,12 +166,11 @@ var matchFetcher = {
 							debugLog('Found region ' + matchFetcher.region);
 							def.resolve(matchFetcher.region);
 						});
-					})
-					.fail(function (errMsg) {
-						debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
-						matchFetcher.region = 'garena';
-						def.resolve(matchFetcher.region);
 					});
+			}).fail(function (errMsg) {
+				debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
+				matchFetcher.region = 'garena';
+				def.resolve(matchFetcher.region);
 			});
 		}
 
@@ -187,7 +186,7 @@ var matchFetcher = {
 
 		$.when(matchFetcher.getActiveRegion())
 			.then(function (region) {
-				$.when(matchFetcher.getGameLogFilePath(), matchFetcher.getActiveSummoner())
+				return $.when(matchFetcher.getGameLogFilePath(), matchFetcher.getActiveSummoner())
 					.then(collectParticipantsData)
 					.then(function (matchInfo) {
 						result.status = "success";
@@ -195,12 +194,12 @@ var matchFetcher = {
 						result.matchInfo = matchInfo;
 						debugLog("success: ", matchInfo);
 						def.resolve(result);
-					})
-					.fail(function (errorMsg) {
-						result.errorMessage = errorMsg;
-						debugLog(errorMsg);
-						def.reject(errorMsg);
 					});
+			})
+			.fail(function (errorMsg) {
+				result.errorMessage = errorMsg;
+				debugLog(errorMsg);
+				def.reject(errorMsg);
 			});
 		return def.promise();
 	},
