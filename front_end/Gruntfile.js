@@ -88,6 +88,11 @@ module.exports = function (grunt) {
 				src: ['video.js', 'video-js.min.css'],
 				dest: 'out/vendor/videojs'
 			}
+			, fakeFilesForUpload : { // files without function neccessary for store-uploading process
+				expand: true,
+				cwd: 'filesForUploadRestriction',
+				src: ['*'], dest: 'out'
+			}
 			// release canditates
 			, postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../release-candidates/'+ appName +'_v' + devV + '/'}
 			// submission to the store
