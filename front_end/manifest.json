@@ -76,7 +76,7 @@
 			"default": "Num -"
 		}
 	},
-	"plugins": ["plugins/npSimpleIOPlugin.dll"],
+	"plugins": ["plugins/npSimpleIOPlugin.dll"]
   },
   "permissions": [ "Hotkeys", "GameInfo", "Extensions"],
   "externally_connectable": {
