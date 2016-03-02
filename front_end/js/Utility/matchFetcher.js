@@ -16,6 +16,9 @@ var PATCHER_LOG_END_INDICATOR = 'event_name: app_start'; // pretty early but aft
 var matchFetcher = {
 		isReady: isReady.promise(),
 		initRan: false,
+		/** indicator if plugin currently is processing something where no other API calls can be made (listenOnFile for time being)
+		 * gets set to true when calling listenToFile() and set to false when calling closeFile().*/
+		isPluginInUse: false,
 		logCache: {
 			'game': [],
 			'patcher': []
@@ -27,37 +30,45 @@ var matchFetcher = {
 		 * @returns {Promise} resolves to true when matchFetcher is ready
 		 */
 		init: function () {
-			debugLog('initialising matchFetcher..........');
+			if (!this.initRan) {
+				debugLog('initialising matchFetcher..........');
 
-			debugLog('adding simpleIOplugin to DOM.........');
-			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
-			navigator.plugins.refresh(false);
-			setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
-				var a = document.getElementById('plugin');
-				//var b = document.querySelector("#plugin");
-			}, 1000);
+				debugLog('adding simpleIOplugin to DOM.........');
+				$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
+				navigator.plugins.refresh(false);
+				setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
+					var a = document.getElementById('plugin');
+					//var b = document.querySelector("#plugin");
+				}, 1000);
 
-			this.initRan = true;
-			setReady();
+				this.initRan = true;
+				setReady();
+			}
 			return this.isReady;
 		},
 		getGameLogCache: function () {
 			var def = $.Deferred();
 			matchFetcher.getGameLogFilePath().then(function (gameLogPath) {
-				cacheLog('game', gameLogPath, GAME_LOG_5v5_SPAWNING_DONE_MARK)
-					.then(function (logCache) {
-						def.resolve(logCache);
-					});
+				waitForPlugin(50,5000).then(function () {
+					cacheLog('game', gameLogPath, GAME_LOG_5v5_SPAWNING_DONE_MARK)
+						.then(function (logCache) {
+							def.resolve(logCache);
+						});
+					}
+				);
 			});
 			return def.promise();
 		},
 		getPatcherLogCache: function () {
 			var def = $.Deferred();
 			matchFetcher.getPatcherLogFilePath().then(function (patcherLogPath) {
-				cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
-					.then(function (logCache) {
-						def.resolve(logCache);
-					});
+				waitForPlugin(50,5000).then(function () {
+						cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
+							.then(function (logCache) {
+								def.resolve(logCache);
+							});
+					}
+				);
 			});
 			return def.promise();
 		},
@@ -292,6 +303,27 @@ var matchFetcher = {
 	;
 
 
+/**
+ * resolves when the plugin is not used anymore.
+ * rejected after the given timeout.
+ * Should be chained before any other method to ensure
+ */
+function waitForPlugin(intervallMs, timeoutMs) {
+	var def = $.Deferred();
+	var passedTimeMs = 0;
+	var ival = window.setInterval(function () {
+		if (passedTimeMs > timeoutMs) {
+			def.reject('matchFetcher.waitForPlugin() timed out after' + passedTimeMs + 'MS');
+			window.clearInterval(ival);
+		} else if (!matchFetcher.isPluginInUse){
+			window.clearInterval(ival);
+			def.resolve(true);
+		}
+		passedTimeMs += intervallMs;
+	}, intervallMs);
+	return def.promise();
+}
+
 //region Data-Objects
 
 /** @typedef {object} MatchInfoResult
@@ -349,10 +381,12 @@ function cacheLog(type, path, endIndicator) {
 	var closingFile = false;
 	var logCache = matchFetcher.logCache[type];
 
+
 	if (logCache.length > 0) {
 		def.resolve(logCache); // TODO: gets cleaned up when a new match begins, otherwise some cache validation would be neccessary
 	} else {
-		plugin().listenOnFile(fileId, path, false, function (id, status, lineData) {
+		matchFetcher.isBusy = true;
+		listenOnFile(fileId, path, false, function (id, status, lineData) {
 			if (closingFile) {
 				return;
 			}
@@ -367,6 +401,7 @@ function cacheLog(type, path, endIndicator) {
 			var l = logCache.length;
 			var lineText = lineData.substring(lineData.lastIndexOf('|') + 1); // if no | is found, index will be 0
 			if (logCache[l - 1] !== lineText) {
+				if (DEBUG) { console.warn(lineData); }
 				logCache.push(lineText);
 			}
 			if (!closingFile && lineText.includes(endIndicator)) {
@@ -383,6 +418,10 @@ function cacheLog(type, path, endIndicator) {
 function plugin() {
 	return document.getElementById('plugin');
 }
+function listenOnFile(fileId, path, bool, callback) {
+	matchFetcher.isPluginInUse = true;
+	plugin().listenOnFile(fileId, path, bool, callback);
+}
 function setReady() {
 	isReady.resolve(true);
 	isReady = null;
@@ -390,12 +429,13 @@ function setReady() {
 
 function closeFile(fileId) {
 	var def = $.Deferred();
-	debugLog("Closing file " + fileId + " in 100 MS...");
+	debugLog("Closing file " + fileId + " in 500 MS...");
 	setTimeout(function () {
 		plugin().stopFileListen(fileId);
 		debugLog("File listener closed.");
+		matchFetcher.isPluginInUse = false;
 		def.resolve(true);
-	}, 100);
+	}, 500); // timing is crucial! Too little time and there will be an error trying to calling stopFileListen()
 	return def.promise();
 }
 
@@ -476,10 +516,9 @@ function collectParticipantsData(mySummoner) {
 
 		for (var i = 0; i < gameLogCache.length && !stopLoop; i++) {
 			var lineData = gameLogCache[i];
-			if (DEBUG) { console.warn(lineData); }
 
 			//region condition-checks
-			var allParticipantsRead = (lines.length == 10);
+			var allParticipantsRead = (lines.length == 10 || i == gameLogCache.length - 1);
 			if (allParticipantsRead) {
 				debugLog('Matchdata is ready');
 
@@ -548,6 +587,7 @@ function getAirClientVersion(gameRoot) {
 	var latestAirClientVersion = "0";
 
 	plugin().listDirectory(gameRoot + "RADS/projects/lol_air_client/releases/*", function (status, listing) {
+		matchFetcher.isPluginInUse = false;
 		var foundLatestAirClientVersion = false;
 		var res = JSON.parse(listing);
 

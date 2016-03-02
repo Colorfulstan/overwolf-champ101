@@ -11,6 +11,7 @@ import TooltipCtrl from 'TooltipCtrl';
 import Routes from 'Routes';
 import Boot from 'Boot';
 import analytics from 'analytics';
+import matchFetcher from 'matchFetcher';
 import 'global';
 
 // TODO: replace with events for application-wide communication
@@ -56,6 +57,15 @@ var MatchCtrl = WindowCtrl.extend(
 		init: function (element, options) {
 			WindowCtrl.prototype.init.apply(this, arguments);
 			var self = this;
+
+			matchFetcher.isReplayOrSpectate().then(function (isReplayOrSpectate) {
+				if(isReplayOrSpectate){
+					WindowCtrl.closeMatch();
+				}
+			}).fail(function (errMsg) {
+				steal.dev.log(errMsg);
+			});
+
 			registerEventHandlers();
 
 			self.options.matchPromise = options.model;

@@ -5,6 +5,7 @@ import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import Boot from 'Boot';
 import analytics from 'analytics';
+import matchFetcher from 'matchFetcher'
 
 var Static = {
 	defaults: {
@@ -117,17 +118,13 @@ var Static = {
 	},
 	_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
 		steal.dev.warn('League of Legends game started', new Date(), 'closing Matchwindow for reopening');
-		//if (SettingsModel.isSummonerSet()) {
-			MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
-			settings.isInGame(true);
-			settings.startMatchCollapsed(true);
-			WindowCtrl.openMatch();
-			steal.dev.warn('opened Match again, waiting for stable fps')
-		//} else {
-		//	steal.dev.log('_handleGameStart relaunches App');
-		//	// TODO: circular dependency (to onMainWindowRestored Listener)! rework this
-		//	WindowCtrl.openMain(); // rest is handled from there for first start
-		//}
+
+		MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
+		settings.isInGame(true);
+		settings.startMatchCollapsed(true);
+		WindowCtrl.openMatch();
+		steal.dev.warn('opened Match again, waiting for stable fps');
+
 	},
 	_handleGameEnd: function (settings) {// TODO: move all this eventstuff into own service!
 		MainCtrl.removeStableFpsListener(settings.isFpsStable);
@@ -190,7 +187,7 @@ var Instance = { // Instance
 		var self = this;
 		this.options.version.then(function (v) {
 			self.element.find('#version').html(
-				'v'+v
+				'v' + v
 			);
 		});
 		steal.dev.log('MainCtrl initialized :', this);
