@@ -58,14 +58,6 @@ var MatchCtrl = WindowCtrl.extend(
 			WindowCtrl.prototype.init.apply(this, arguments);
 			var self = this;
 
-			matchFetcher.isReplayOrSpectate().then(function (isReplayOrSpectate) {
-				if(isReplayOrSpectate){
-					WindowCtrl.closeMatch();
-				}
-			}).fail(function (errMsg) {
-				steal.dev.log(errMsg);
-			});
-
 			registerEventHandlers();
 
 			self.options.matchPromise = options.model;

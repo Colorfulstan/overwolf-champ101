@@ -29,10 +29,10 @@ var match = new MatchModel(settings.summonerId(), settings.server());
 
 $.when(matchFetcher.init()).then(
 	function () {
-		var preloadMatchBeforeShowing = settings.isInGame() && ( !settings.isManualReloading() && settings.isWaitingForStableFps());
+		var preloadMatchBeforeShowing = settings.isGameRunning() && ( !settings.isManualReloading() && settings.isWaitingForStableFps());
 		if (preloadMatchBeforeShowing) { // ingame == preload data // TODO: seems to make no difference in both conditions!
 			steal.dev.log('preloading data');
-			dao.loadMatchModel(match,matchFetcher).always(function (matchPromise) { // TODO: currently not accounting for manual starts!?
+			dao.loadMatchModel(match, matchFetcher).always(function (matchPromise) { // TODO: currently not accounting for manual starts!?
 				new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings});
 			});
 		} else { // else == show match with promise (handled within MatchCtrl)
@@ -42,6 +42,8 @@ $.when(matchFetcher.init()).then(
 			settings.isManualReloading(false);
 		}
 	}
-);
+).fail(function (errMsg) {
+	steal.dev.log(errMsg);
+});
 
 

@@ -120,7 +120,7 @@ var Static = {
 		steal.dev.warn('League of Legends game started', new Date(), 'closing Matchwindow for reopening');
 
 		MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
-		settings.isInGame(true);
+		settings.isGameRunning(true);
 		settings.startMatchCollapsed(true);
 		WindowCtrl.openMatch();
 		steal.dev.warn('opened Match again, waiting for stable fps');
@@ -130,7 +130,7 @@ var Static = {
 		MainCtrl.removeStableFpsListener(settings.isFpsStable);
 		//settings.cachedGameAvailable(false);
 		steal.dev.warn('League of Legends game finished', new Date());
-		settings.isInGame(false);
+		settings.isGameRunning(false);
 		settings.startMatchCollapsed(false);
 		WindowCtrl.events.trigger('gameEnded');
 		if (SettingsModel.closeMatchWithGame()) {

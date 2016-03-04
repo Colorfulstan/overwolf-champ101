@@ -14,295 +14,296 @@ var GAME_LOG_REPLAY_INDICATOR = 'Replay mode';
 var PATCHER_LOG_END_INDICATOR = 'event_name: app_start'; // pretty early but after neccessary informations
 
 var matchFetcher = {
-		isReady: isReady.promise(),
-		initRan: false,
-		/** indicator if plugin currently is processing something where no other API calls can be made (listenOnFile for time being)
-		 * gets set to true when calling listenToFile() and set to false when calling closeFile().*/
-		isPluginInUse: false,
-		logCache: {
-			'game': [],
-			'patcher': []
-		},
+	isReady: isReady.promise(),
+	initRan: false,
+	/** indicator if plugin currently is processing something where no other API calls can be made (listenOnFile for time being)
+	 * gets set to true when calling listenToFile() and set to false when calling closeFile().*/
+	isPluginInUse: false,
+	logCache: {
+		'game': [],
+		'patcher': []
+	},
 
-		/**
-		 * Contains sideeffects!
-		 * @see {@link setReady}
-		 * @returns {Promise} resolves to true when matchFetcher is ready
-		 */
-		init: function () {
-			if (!this.initRan) {
-				debugLog('initialising matchFetcher..........');
+	/**
+	 * Contains sideeffects!
+	 * @see {@link setReady}
+	 * @returns {Promise} resolves to true when matchFetcher is ready
+	 */
+	init: function () {
+		if (!this.initRan) {
+			debugLog('initialising matchFetcher..........');
 
-				debugLog('adding simpleIOplugin to DOM.........');
-				$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
-				navigator.plugins.refresh(false);
-				setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
-					var a = document.getElementById('plugin');
-					//var b = document.querySelector("#plugin");
-				}, 1000);
+			debugLog('adding simpleIOplugin to DOM.........');
+			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
+			navigator.plugins.refresh(false);
+			setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
+				var a = document.getElementById('plugin');
+				//var b = document.querySelector("#plugin");
+			}, 1000);
 
-				this.initRan = true;
-				setReady();
-			}
-			return this.isReady;
-		},
-		getGameLogCache: function () {
-			var def = $.Deferred();
-			matchFetcher.getGameLogFilePath().then(function (gameLogPath) {
-				waitForPlugin(50,5000).then(function () {
+			this.initRan = true;
+			setReady();
+		}
+		return this.isReady;
+	},
+	getGameLogCache: function () {
+		var def = $.Deferred();
+		matchFetcher.getGameLogFilePath().then(function (gameLogPath) {
+			waitForPlugin(50, 5000).then(function () {
 					cacheLog('game', gameLogPath, GAME_LOG_5v5_SPAWNING_DONE_MARK)
 						.then(function (logCache) {
 							def.resolve(logCache);
 						});
-					}
-				);
-			});
-			return def.promise();
-		},
-		getPatcherLogCache: function () {
-			var def = $.Deferred();
-			matchFetcher.getPatcherLogFilePath().then(function (patcherLogPath) {
-				return waitForPlugin(50,5000).then(function () {
-						cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
-							.then(function (logCache) {
-								def.resolve(logCache);
-							});
-					}
-				);
-			}).fail(function (errMsg) {
-				def.reject(errMsg);
-			});
-			return def.promise();
-		},
-		throwIfNotReady(){
-			navigator.plugins.refresh(false);
-			if (this.initRan === false) {throw new Error('matchFetcher is not initialised. run .init() before sending data!')}
-		},
-		getGameRoot: function () { // cached
-			matchFetcher.throwIfNotReady();
-			var def = $.Deferred();
+				}
+			);
+		});
+		return def.promise();
+	},
+	getPatcherLogCache: function () {
+		var def = $.Deferred();
+		matchFetcher.getPatcherLogFilePath().then(function (patcherLogPath) {
+			return waitForPlugin(50, 5000).then(function () {
+					cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
+						.then(function (logCache) {
+							def.resolve(logCache);
+						});
+				}
+			);
+		}).fail(function (errMsg) {
+			def.reject(errMsg);
+		});
+		return def.promise();
+	},
+	/**
+	 * @deprecated replace with "initIfNeccessary" (NYI)
+	 */
+	throwIfNotReady(){
+		navigator.plugins.refresh(false);
+		if (this.initRan === false) {throw new Error('matchFetcher is not initialised. run .init() before sending data!')}
+	},
+	getGameRoot: function () { // cached
+		matchFetcher.throwIfNotReady();
+		var def = $.Deferred();
 
-			if (matchFetcher.gameRoot) {
-				def.resolve(matchFetcher.gameRoot);
-			} else {
-				overwolf.games.getRunningGameInfo(function (gameInfo) {
+		if (matchFetcher.gameRoot) {
+			def.resolve(matchFetcher.gameRoot);
+		} else {
+			overwolf.games.getRunningGameInfo(function (gameInfo) {
 
-					if (gameInfo == null || parseInt(gameInfo.id / 10) != 5426) {
-						if (DEBUG) {
-							matchFetcher.gameRoot = 'C:/Games/league/';
-							debugLog("matchFetcher().getGameRoot(): Not in game but in DEBUG mode, using fix path.");
-							def.resolve(matchFetcher.gameRoot);
-						} else {
-							debugLog("matchFetcher().getGameRoot(): Not in game.");
-							def.reject("Unable to get GameRoot - Not in game.");
-						}
+				if (gameInfo == null || parseInt(gameInfo.id / 10) != 5426) {
+					if (DEBUG) {
+						matchFetcher.gameRoot = 'C:/Games/league/';
+						debugLog("matchFetcher().getGameRoot(): Not in game but in DEBUG mode, using fix path.");
+						def.resolve(matchFetcher.gameRoot);
 					} else {
-						var gamePath = gameInfo.executionPath;
-						var indexRADS = gamePath.indexOf("RADS");
-						var gameRoot;
-						if (indexRADS > 0) {
-							gameRoot = gamePath.substring(0, indexRADS);
-						} else {
-							// garena
-							var gameRootDirGarena = "Game\\";
-							var index = gamePath.indexOf(gameRootDirGarena) + gameRootDirGarena.length;
-							gameRoot = gamePath.substring(0, index);
+						debugLog("matchFetcher().getGameRoot(): Not in game.");
+						def.reject("Unable to get GameRoot - Not in game.");
+					}
+				} else {
+					var gamePath = gameInfo.executionPath;
+					var indexRADS = gamePath.indexOf("RADS");
+					var gameRoot;
+					if (indexRADS > 0) {
+						gameRoot = gamePath.substring(0, indexRADS);
+					} else {
+						// garena
+						var gameRootDirGarena = "Game\\";
+						var index = gamePath.indexOf(gameRootDirGarena) + gameRootDirGarena.length;
+						gameRoot = gamePath.substring(0, index);
+					}
+					if (gameRoot.length == 0) {
+						delete matchFetcher.gameRoot;
+						def.reject("Could not find GameRoot - Neither RIOT nor Garena Client could be identified");
+					} else {
+						matchFetcher.gameRoot = gameRoot;
+						debugLog("matchFetcher().getGameRoot(): GameRoot loaded. ", matchFetcher.gameRoot);
+						def.resolve(gameRoot);
+					}
+				}
+			});
+		}
+		return def.promise();
+	},
+	getActiveSummoner: function () {
+		debugLog('getting active summoner');
+		matchFetcher.throwIfNotReady();
+
+		var def = $.Deferred();
+
+		var foundSummonerName = false;
+
+		matchFetcher.getActiveRegion()
+			.then(function (region) {
+				var isGarenaClient = false;
+				if (region === 'garena') {
+					isGarenaClient = true;
+				}
+				return getPreferencesPath(isGarenaClient)
+					.then(getLatestFileInDirectory)
+					.then(function (filename) {
+						if (!filename.endsWith(".properties")) {
+							debugLog("Couldn't find summoner name from file.");
+							def.reject("Couldn't find summoner name from file.");
+							return;
 						}
-						if (gameRoot.length == 0) {
-							delete matchFetcher.gameRoot;
-							def.reject("Could not find GameRoot - Neither RIOT nor Garena Client could be identified");
+
+						if (filename.startsWith("shared_")) {
+							filename = filename.substring("shared_".length);
+						}
+
+						filename = filename.substring(0, filename.indexOf("."));
+
+						var mySummoner = filename;
+						foundSummonerName = true;
+
+						if (foundSummonerName) {
+							debugLog("My summoner (lowercase): " + mySummoner);
+							def.resolve(mySummoner);
 						} else {
-							matchFetcher.gameRoot = gameRoot;
-							debugLog("matchFetcher().getGameRoot(): GameRoot loaded. ", matchFetcher.gameRoot);
-							def.resolve(gameRoot);
+							debugLog("Couldn't find summoner name from file.");
+							def.reject("Couldn't find summoner name from file.");
+						}
+					});
+			})
+			.fail(function (errMsg) {
+				debugLog('matchFetcher.getActiveSummoner():' + errMsg);
+				def.reject(errMsg)
+			});
+		return def.promise();
+	},
+	getActiveRegion: function () { // needs to be chained after a method to check if in game and get the gameroot
+		debugLog('getting active region');
+		matchFetcher.throwIfNotReady();
+
+
+		var def = $.Deferred();
+		if (matchFetcher.region) {
+			def.resolve(matchFetcher.region);
+		} else {
+			var lineStartString = 'common.region: ';
+			var region = '';
+			var foundRegion = false;
+			matchFetcher.getPatcherLogCache().then(function (patcherLogCache) {
+					for (var i = 0; i < patcherLogCache.length && !foundRegion; i++) {
+						var lineData = patcherLogCache[i];
+
+						if (lineData.includes("common.region")) {
+							region = lineData.substring(lineStartString.length);
+							foundRegion = true;
+							matchFetcher.region = region.toLowerCase();
+							debugLog('Found region ' + matchFetcher.region);
+							def.resolve(matchFetcher.region);
 						}
 					}
+					if (!foundRegion) {
+						delete matchFetcher.region;
+						def.reject('could not find region from patcherLog');
+					}
+				})
+				.fail(function (errMsg) {
+					debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
+					matchFetcher.region = 'garena';
+					def.resolve(matchFetcher.region);
 				});
-			}
-			return def.promise();
-		},
-		getActiveSummoner: function () {
-			debugLog('getting active summoner');
-			matchFetcher.throwIfNotReady();
+		}
 
-			var def = $.Deferred();
-
-			var foundSummonerName = false;
-
-			matchFetcher.getActiveRegion()
-				.then(function (region) {
-					var isGarenaClient = false;
-					if (region === 'garena') {
-						isGarenaClient = true;
-					}
-					return getPreferencesPath(isGarenaClient)
-						.then(getLatestFileInDirectory)
-						.then(function (filename) {
-							if (!filename.endsWith(".properties")) {
-								debugLog("Couldn't find summoner name from file.");
-								def.reject("Couldn't find summoner name from file.");
-								return;
-							}
-
-							if (filename.startsWith("shared_")) {
-								filename = filename.substring("shared_".length);
-							}
-
-							filename = filename.substring(0, filename.indexOf("."));
-
-							var mySummoner = filename;
-							foundSummonerName = true;
-
-							if (foundSummonerName) {
-								debugLog("My summoner (lowercase): " + mySummoner);
-								def.resolve(mySummoner);
-							} else {
-								debugLog("Couldn't find summoner name from file.");
-								def.reject("Couldn't find summoner name from file.");
-							}
+		return def.promise();
+	},
+	getPatcherLogFilePath: function () {
+		var def = $.Deferred();
+		if (matchFetcher.patcherLogFilePath) {
+			def.resolve(matchFetcher.patcherLogFilePath);
+		} else {
+			matchFetcher.getGameRoot().then(function (gameRoot) {
+					return getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/", "LoLPatcher.log")
+						.then(function (fileName) {
+							matchFetcher.patcherLogFilePath = gameRoot + "Logs/Patcher Logs/" + fileName;
+							def.resolve(matchFetcher.patcherLogFilePath);
 						});
 				})
 				.fail(function (errMsg) {
-					debugLog('matchFetcher.getActiveSummoner():' + errMsg);
-					def.reject(errMsg)
+					debugLog(errMsg);
+					delete matchFetcher.patcherLogFilePath;
+					def.reject(errMsg);
 				});
-			return def.promise();
-		},
-		getActiveRegion: function () { // needs to be chained after a method to check if in game and get the gameroot
-			debugLog('getting active region');
-			matchFetcher.throwIfNotReady();
-
-
-			var def = $.Deferred();
-			if (matchFetcher.region) {
-				def.resolve(matchFetcher.region);
-			} else {
-				var lineStartString = 'common.region: ';
-				var region = '';
-				var foundRegion = false;
-				matchFetcher.getPatcherLogCache().then(function (patcherLogCache) {
-						for (var i = 0; i < patcherLogCache.length && !foundRegion; i++) {
-							var lineData = patcherLogCache[i];
-
-							if (lineData.includes("common.region")) {
-								region = lineData.substring(lineStartString.length);
-								foundRegion = true;
-								matchFetcher.region = region.toLowerCase();
-								debugLog('Found region ' + matchFetcher.region);
-								def.resolve(matchFetcher.region);
-							}
-						}
-						if (!foundRegion) {
-							delete matchFetcher.region;
-							def.reject('could not find region from patcherLog');
-						}
-					})
-					.fail(function (errMsg) {
-						debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
-						matchFetcher.region = 'garena';
-						def.resolve(matchFetcher.region);
-					});
-			}
-
-			return def.promise();
-		},
-		getPatcherLogFilePath: function () {
-			var def = $.Deferred();
-			if (matchFetcher.patcherLogFilePath) {
-				def.resolve(matchFetcher.patcherLogFilePath);
-			} else {
-				matchFetcher.getGameRoot().then(function (gameRoot) {
-						return getLatestFileInDirectory(gameRoot + "Logs/Patcher Logs/", "LoLPatcher.log")
-							.then(function (fileName) {
-								matchFetcher.patcherLogFilePath = gameRoot + "Logs/Patcher Logs/" + fileName;
-								def.resolve(matchFetcher.patcherLogFilePath);
-							});
-					})
-					.fail(function (errMsg) {
-						debugLog(errMsg);
-						delete matchFetcher.patcherLogFilePath;
-						def.reject(errMsg);
-					});
-			}
-			return def.promise();
-		},
-		getMatchInfo: function () {
-			debugLog('getting match info');
-
-			matchFetcher.throwIfNotReady();
-			var def = $.Deferred();
-			var result = new Result();
-			result.status = "error";
-
-			matchFetcher.getActiveSummoner()
-				.then(collectParticipantsData)
-				.then(function (matchInfo) {
-					result.status = "success";
-					result.errorMessage = null;
-					result.matchInfo = matchInfo;
-					debugLog("success: ", matchInfo);
-					def.resolve(result);
-				}).fail(function (errorMsg) {
-				result.errorMessage = errorMsg;
-				debugLog(errorMsg);
-				def.reject(errorMsg);
-			});
-			return def.promise();
 		}
-		,
-		getGameLogFilePath: function () { // cached
-			matchFetcher.throwIfNotReady();
-			var def = $.Deferred();
-			if (matchFetcher.gameLogFilePath) {
-				debugLog('using cached gameLogFilePath: ', matchFetcher.gameLogFilePath);
-				def.resolve(matchFetcher.gameLogFilePath);
-			} else {
-				debugLog('getting gameLogFilePath from files');
-				var path = 'Logs/Game - R3d Logs/';
-				matchFetcher.getGameRoot().then(function (gameRoot) {
-					return getLatestFileInDirectory(gameRoot + path).then(function (filename) {
-						matchFetcher.gameLogFilePath = gameRoot + path + filename;
-						def.resolve(matchFetcher.gameLogFilePath);
-					});
-				}).fail(function () {
-					console.warn('getGameLogFilePath failed');
-					def.reject('getGameLogFilePath failed');
-				});
-			}
-			return def.promise();
-		}
-		,
-		/** User spectates his own game */
-		isReplay: function () {
-			matchFetcher.throwIfNotReady();
-			var def = $.Deferred();
-			matchFetcher.getGameRoot().then(isReplayClient).then(function (isReplayClient) {
-				if (isReplayClient) {
-					isUserReplay().then(function (isUserReplay) {
-						def.resolve(isUserReplay);
-					});
-				} else {
-					def.resolve(false);
-				}
-			}).fail(function (errMsg) {
-				debugLog('isReplay failed');
-				def.reject(errMsg);
-			});
-			return def.promise();
-		}
-		,
-		/** User spectates someone other */
-		isSpectate: function () {
-			matchFetcher.throwIfNotReady();
-			return matchFetcher.getGameRoot().then(isReplayClient);
-		}
-		,
-		isReplayOrSpectate: function () {
-			matchFetcher.throwIfNotReady();
-			return matchFetcher.isSpectate();
-		}
+		return def.promise();
+	},
+	getMatchInfo: function () {
+		debugLog('getting match info');
+
+		matchFetcher.throwIfNotReady();
+		var def = $.Deferred();
+		var result = new Result();
+		result.status = "error";
+
+		matchFetcher.getActiveSummoner()
+			.then(collectParticipantsData)
+			.then(function (matchInfo) {
+				result.status = "success";
+				result.errorMessage = null;
+				result.matchInfo = matchInfo;
+				debugLog("success: ", matchInfo);
+				def.resolve(result);
+			}).fail(function (errorMsg) {
+			result.errorMessage = errorMsg;
+			debugLog(errorMsg);
+			def.reject(errorMsg);
+		});
+		return def.promise();
 	}
-	;
+	,
+	getGameLogFilePath: function () { // cached
+		matchFetcher.throwIfNotReady();
+		var def = $.Deferred();
+		if (matchFetcher.gameLogFilePath) {
+			debugLog('using cached gameLogFilePath: ', matchFetcher.gameLogFilePath);
+			def.resolve(matchFetcher.gameLogFilePath);
+		} else {
+			debugLog('getting gameLogFilePath from files');
+			var path = 'Logs/Game - R3d Logs/';
+			matchFetcher.getGameRoot().then(function (gameRoot) {
+				return getLatestFileInDirectory(gameRoot + path).then(function (filename) {
+					matchFetcher.gameLogFilePath = gameRoot + path + filename;
+					def.resolve(matchFetcher.gameLogFilePath);
+				});
+			}).fail(function () {
+				console.warn('getGameLogFilePath failed');
+				def.reject('getGameLogFilePath failed');
+			});
+		}
+		return def.promise();
+	}
+	,
+	/** User spectates his own game */
+	isReplay: function () {
+		matchFetcher.throwIfNotReady();
+		var def = $.Deferred();
+		matchFetcher.getGameRoot().then(isReplayClient).then(function (isReplayClient) {
+			if (isReplayClient) {
+				isUserReplay().then(function (isUserReplay) {
+					def.resolve(isUserReplay);
+				});
+			} else {
+				def.resolve(false);
+			}
+		}).fail(function (errMsg) {
+			debugLog('isReplay failed');
+			def.reject(errMsg);
+		});
+		return def.promise();
+	}
+	,
+	/** User spectates someone other */
+	isSpectate: function () {
+		matchFetcher.throwIfNotReady();
+		return matchFetcher.getGameRoot().then(isReplayClient);
+	}
+	,
+	isReplayOrSpectate: function () {
+		return matchFetcher.init().then(matchFetcher.isSpectate);
+	}
+};
 
 
 /**
@@ -317,7 +318,7 @@ function waitForPlugin(intervallMs, timeoutMs) {
 		if (passedTimeMs > timeoutMs) {
 			def.reject('matchFetcher.waitForPlugin() timed out after' + passedTimeMs + 'MS');
 			window.clearInterval(ival);
-		} else if (!matchFetcher.isPluginInUse){
+		} else if (!matchFetcher.isPluginInUse) {
 			window.clearInterval(ival);
 			def.resolve(true);
 		}

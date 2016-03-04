@@ -4,6 +4,7 @@ import WindowCtrl from 'WindowCtrl';
 import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import analytics from 'analytics';
+import matchFetcher from 'matchFetcher';
 
 /**
  * @class {Boot} Boot
@@ -14,7 +15,7 @@ import analytics from 'analytics';
 var Boot = {
 	strap: function (main, /** SettingsModel */ settings, isFirstAppStart) {
 		steal.dev.log('starting bootstraping');
-		Boot.checkIfIngame(overwolf.games.getRunningGameInfo, settings.isInGame)
+		Boot.checkIfGameIsRunning(overwolf.games.getRunningGameInfo, settings.isGameRunning)
 			.then(function () {
 				return Boot.launchApp(main, settings, isFirstAppStart);
 			})
@@ -68,7 +69,7 @@ var Boot = {
 	_regularLaunch: function (main, settings) {
 		//settings.cachedGameAvailable(false);
 		//settings.cachedGameId(null);
-		if (settings.isInGame()) {
+		if (settings.isGameRunning()) {
 			Boot._inGameStart(main, settings);
 		} else {
 			WindowCtrl.openMain();
@@ -132,12 +133,12 @@ var Boot = {
 		overwolf.windows.onMainWindowRestored.addListener(function (/** null */ result) { // each time Main-Window gets opened (app manually started)
 			steal.dev.log('triggering MainWindowRestored Listener');
 
-			Boot.checkIfIngame(overwolf.games.getRunningGameInfo, settings.isInGame)
-				.then(function (isIngame) {
+			Boot.checkIfGameIsRunning(overwolf.games.getRunningGameInfo, settings.isGameRunning)
+				.then(function (isGameRunning) {
 					if (SettingsModel.isFirstStart()) { // TODO: is this extra check neccessary or can we assume it is not the first start?
 						return Boot._firstAppLaunch(main, settings);
 					} else {
-						return isIngame ? Boot._hideMatchLoading(settings) : Boot._showMatchLoading(settings);
+						return isGameRunning ? Boot._hideMatchLoading(settings) : Boot._showMatchLoading(settings);
 					}
 				}).done(function () {
 					var needsReload = !SettingsModel.startWithGame();
@@ -182,27 +183,31 @@ var Boot = {
 		}, 100);
 		return def.promise();
 	},
-	checkIfIngame: function (ow_GetRunningGameInfoFn, isInGameSetterFn) {
+	checkIfGameIsRunning: function (ow_GetRunningGameInfoFn, isGameRunningSetterFn) {
 		steal.dev.log('checking if in game');
 		var def = $.Deferred();
 		// NOTE: first of two points where app determines if player is within a game
 		// other point is through listener (registerOverwolfListener)
-		var isInGame;
+		var isGameRunning;
 		ow_GetRunningGameInfoFn(function (/** GameInfo */ gameData) {
-			isInGame = !(gameData == undefined || gameData == null);
-			isInGameSetterFn(isInGame);
-			def.resolve(isInGame);
+			isGameRunning = !(gameData == undefined || gameData == null);
+			isGameRunningSetterFn(isGameRunning);
+			def.resolve(isGameRunning);
 		});
 
 		return def.promise();
 	},
 	openMatchIfIngame: function (main, needsReload) { // TODO: should be called if manually opening the app with option startwithGame disabled
 		steal.dev.log('openMatchIfIngame');
-		if (SettingsModel.isInGame()) {
-			steal.dev.log('is in game, opening match');
-			var settings = Settings.getInstance();
-			main.constructor.addStableFpsListenerAndHandler(settings.isFpsStable);
-			return WindowCtrl.openMatch(needsReload);
+		if (SettingsModel.isGameRunning()) {
+			matchFetcher.isReplayOrSpectate().then(function (isReplayOrSpectate) {
+				if (!isReplayOrSpectate){
+					steal.dev.log('game is running, opening match');
+					var settings = Settings.getInstance();
+					main.constructor.addStableFpsListenerAndHandler(settings.isFpsStable);
+					return WindowCtrl.openMatch(needsReload);
+				}
+			});
 		}
 		return $.Deferred().reject().promise();
 	},

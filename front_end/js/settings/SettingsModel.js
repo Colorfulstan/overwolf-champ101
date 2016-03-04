@@ -17,7 +17,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	STORAGE_KEY_NAME: 'summoner-name',
 	STORAGE_KEY_ID: 'summoner-id',
 	STORAGE_KEY_RELOADING: 'setting-manual-reload',
-	STORAGE_KEY_IN_GAME: 'setting-in-game',
+	STORAGE_KEY_GAME_IS_RUNNING: 'setting-in-game',
 	STORAGE_KEY_START_WITH_GAME: 'setting-start-with-game',
 	STORAGE_KEY_FIRST_START_DATE: 'setting-first-start-at',
 	STORAGE_KEY_CLOSE_MATCH_WITH_GAME: 'setting-close-match-with-game',
@@ -118,8 +118,8 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		return localStorage.getItem(SettingsModel.STORAGE_KEY_AWAIT_FPS) == 'true';
 	},
 	/** @static */
-	isInGame: function () {
-		return localStorage.getItem(SettingsModel.STORAGE_KEY_IN_GAME) == 'true'
+	isGameRunning: function () {
+		return localStorage.getItem(SettingsModel.STORAGE_KEY_GAME_IS_RUNNING) == 'true'
 	},
 	/** @static */
 	isManualReloading: function () {
@@ -219,14 +219,14 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	}),
 	/** @type {boolean}
 	 * @propterty */
-	isInGame: can.compute(function (newVal) {
+	isGameRunning: can.compute(function (newVal) {
 		if (typeof newVal === 'undefined') {
-			return SettingsModel.isInGame();
+			return SettingsModel.isGameRunning();
 		} else { // setter
-			var oldVal = SettingsModel.isInGame();
-			this.valueChanged('isInGame', oldVal);
-			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_IN_GAME);
-			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_IN_GAME, newVal);
+			var oldVal = SettingsModel.isGameRunning();
+			this.valueChanged('isGameRunning', oldVal);
+			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_GAME_IS_RUNNING);
+			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_GAME_IS_RUNNING, newVal);
 		}
 	}),
 	/** @type {boolean}
