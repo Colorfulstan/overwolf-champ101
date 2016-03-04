@@ -62,13 +62,15 @@ var matchFetcher = {
 		getPatcherLogCache: function () {
 			var def = $.Deferred();
 			matchFetcher.getPatcherLogFilePath().then(function (patcherLogPath) {
-				waitForPlugin(50,5000).then(function () {
+				return waitForPlugin(50,5000).then(function () {
 						cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
 							.then(function (logCache) {
 								def.resolve(logCache);
 							});
 					}
 				);
+			}).fail(function (errMsg) {
+				def.reject(errMsg);
 			});
 			return def.promise();
 		},
