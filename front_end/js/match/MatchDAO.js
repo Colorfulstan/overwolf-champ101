@@ -49,7 +49,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 					champions.push(matchInfo.team_200[i].champion);// TODO: move variables into transferItem
 				}
 
-				params = {server: server, championNames: champions.toString()};// TODO: move variables into transferItem
+				params = {server: server, championNames: champions.toString(), ownChamp: matchInfo.myChampion};// TODO: move variables into transferItem
 				steal.dev.log('request for champion-data with params:', params);
 				return jQuery.get(RIOT_ADAPTER_CHAMPION_URL // TODO: refactor to .ajax()
 					, params
@@ -102,18 +102,21 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 		$.when(self._loadDataFromServer(transfer, matchFetcher))
 			.then(function (dataArray) {
-				steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
+				steal.dev.log(new Date(), 'GameData in loadMatchModel (start):', transfer);
 
 				transfer.team_100 = dataArray.team_100;
 				transfer.team_200 = dataArray.team_200;
+
 				self._extractParticipants(transfer, dataArray, 'team_100');
 				self._extractParticipants(transfer, dataArray, 'team_200');
 
 				transfer.version = dataArray.version;
 
-				steal.dev.log(new Date(), 'GameData in loadMatchModel:', transfer);
+				steal.dev.log(new Date(), 'GameData in loadMatchModel (end):', transfer);
 				deferred.resolve(transfer);
 				dataArray = null;
+
+
 			}).fail(function (data, status, jqXHR) {
 
 			//settings.cachedGameAvailable(false);
@@ -130,17 +133,17 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	 * @param dataArray {Array}
 	 * @param dataArray.team_100 {Array}
 	 * @param dataArray.team_200 {Array}
-	 * @param dataArray.champsByName {Array} key->value champName->champData
+	 * @param dataArray.champsByKey {Array} key->value champKey->champData
 	 * @param {string} team team_100 | team_200
 	 * @private
 	 */
 	_extractParticipants: function (transfer, dataArray, team) {
 		transfer[team] = [];
 		var teamArray = dataArray[team];
-		var champsByName = dataArray.champsByName;
+		var champsByKey = dataArray.champsByKey;
 		for (var i = 0; i < teamArray.length; i++) {
 			var participant = {
-				'champ': new ChampionModel(champsByName[teamArray[i].champion]),
+				'champ': new ChampionModel(champsByKey[teamArray[i].champion]),
 				'team': team
 			};
 			transfer[team][i] = participant;
