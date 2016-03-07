@@ -1,0 +1,41 @@
+#changelog {
+  height: 350px;
+  overflow-y: scroll;
+  margin-right: 5px;
+
+
+  ul::before {
+    content: "("attr(id)")";
+  }
+  li{
+    border-bottom: 1px solid;
+    border-color: $color-accent-1;
+    padding-bottom: $spacer/2;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+} /* this targets the default scrollbar (compulsory) */
+::-webkit-scrollbar-track {
+  //background-color: $color-accent-1;
+  padding-right: 5px;
+} /* the new scrollbar will have a flat appearance with the set background color */
+
+::-webkit-scrollbar-thumb {
+  background-color: $color-accent-1;
+} /* this will style the thumb, ignoring the track */
+
+::-webkit-scrollbar-button {
+  display: none;
+  //background-color: $color-accent-2;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+
+::-webkit-scrollbar-corner {
+  //background-color: black;
+} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+

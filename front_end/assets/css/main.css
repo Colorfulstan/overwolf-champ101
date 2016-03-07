@@ -10574,6 +10574,38 @@ select {
   #match-participants * {
     height: 100%; }
 
+#changelog {
+  height: 350px;
+  overflow-y: scroll;
+  margin-right: 5px; }
+  #changelog ul::before {
+    content: "(" attr(id) ")"; }
+  #changelog li {
+    border-bottom: 1px solid;
+    border-color: #039be5;
+    padding-bottom: 7.5px; }
+    #changelog li:last-child {
+      border-bottom: none; }
+
+::-webkit-scrollbar {
+  width: 5px;
+  position: relative;
+  right: 5px; }
+
+/* this targets the default scrollbar (compulsory) */
+::-webkit-scrollbar-track {
+  padding-right: 5px; }
+
+/* the new scrollbar will have a flat appearance with the set background color */
+::-webkit-scrollbar-thumb {
+  background-color: #039be5; }
+
+/* this will style the thumb, ignoring the track */
+::-webkit-scrollbar-button {
+  display: none; }
+
+/* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+/* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
 * {
   overflow: hidden;
   color: #fff;

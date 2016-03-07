@@ -2,6 +2,7 @@
 
 var RIOT_ADAPTER_URL = "http://api.champinfo.krispin.it";
 var RIOT_ADAPTER_CHAMPION_URL = "http://api.champinfo.krispin.it/champions.php";
+var CHANGELOG_URL = "http://api.champinfo.krispin.it/changelog.php";
 
 var DDRAGON_BASE_URL = "http://ddragon.leagueoflegends.com/cdn/";
 var DDRAGON_URL = undefined; // gets set from MatchDAO after loading the current Version-number

@@ -6,6 +6,8 @@ import Settings from 'SettingsProvider';
 import Boot from 'Boot';
 import analytics from 'analytics';
 import matchFetcher from 'matchFetcher'
+import $ from 'jquery'
+import 'global';
 
 var Static = {
 	defaults: {
@@ -190,6 +192,16 @@ var Instance = { // Instance
 				'v' + v
 			);
 		});
+
+		$.get(CHANGELOG_URL).then(function (data) {
+			self.element.find('#changelog').html(data);
+		}).fail(
+			function () {
+				steal.dev.log('Could not get changelog', arguments);
+				self.element.find('#changelog').html('could not receive changelog');
+			}
+		);
+
 		steal.dev.log('MainCtrl initialized :', this);
 		WindowCtrl.events.one('restartAppEv', function () {
 			steal.dev.warn('restarting App by reloading Main-Window');

@@ -46,7 +46,7 @@
 				class="fa fa-angle-down fa-lg padded-left"></i></h3>
 		<ul id="general-info" style="display: none" data-c101-dropdown>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
-				<p>Champ 101 starts and minimises automatically by default</p>
+				<p>Champ 101 starts and closes automatically by default</p>
 			</li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
@@ -71,13 +71,7 @@
 				class="fa fa-angle-down fa-lg padded-left"></i></h3>
 		<ul id="app-tutorial" data-c101-dropdown style="display: none">
 			<li class="padded-bot-half padded-left-2 padded-right-2">
-				<p>Set the summoner name within the settings &nbsp;<i
-						class="btn fa fa-cog fa-lg btn-settings padded-top-half"></i>&nbsp; to a player who is in a game
-				   (or try three dashes)</p></li>
-			<hr>
-			<li class="padded-bot-half padded-left-2 padded-right-2">
-				<p>Open the match window by clicking &nbsp;<i
-						class="btn fa fa-search padded-top-half btn-match"></i></p></li>
+				<p>Join any game of League of Legends (try basic tutorial for a very quick test)</p></li>
 			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2">
 				<!-- TODO: dynamic number if this gets changed -->
@@ -103,17 +97,6 @@
 					could be mapped at all.
 					Please do not report those cases, since we collect them already.</p></li>
 			<hr>
-			<li class="padded-bot-half padded-left-2 padded-right-2"><p><strong>No data will be available</strong> for
-																												   games
-																												   with
-																												   spectators
-																												   disabled
-																												   or
-																												   for
-																												   bots
-			</p>
-			</li>
-			<hr>
 			<li class="padded-bot-half padded-left-2 padded-right-2"><p><strong>Hotkeys will not work</strong> outside
 																											   of the
 																											   game and
@@ -133,6 +116,14 @@
 			</li>
 		</ul>
 		<hr>
+		<h3 class="btn center-vertical padded-bot-half padded-left-2 padded-right-2 headline-muted"
+			data-control="c101-dropdown" data-target="changelog">Changelog <i
+				class="fa fa-angle-down fa-lg padded-left"></i>
+		</h3>
+		<ul id="changelog" data-c101-dropdown style="display: none">
+			<!-- will be filled through MainCtrl.init() -->
+		</ul>
+		<hr>
 		<ul>
 			<li class="padded-top padded-bot-half padded-left-2 padded-right-2">
 				<p>Feel free to give feedback at the overwolf-store or send a message to
@@ -146,6 +137,7 @@
 		</ul>
 
 	</div>
+
 	<footer id="disclaimer" class="padded-2 padded-top">
 		<p>Champ 101 – Basic Champion Knowledge isn't endorsed by Riot Games and doesn't reflect the views or opinions
 		   of Riot Games or anyone
