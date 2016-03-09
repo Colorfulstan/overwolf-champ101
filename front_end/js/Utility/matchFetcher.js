@@ -2,6 +2,8 @@ import $ from 'jquery'
 
 var PLUGIN_ID = 'plugin';
 var DEBUG = true;
+var PLUGIN_CHECK_READY_INTERVAL_MS = 50;
+var PLUGIN_TIMEOUT_MS = 10000;
 
 // TODO: rename module to something more fitting
 
@@ -37,7 +39,7 @@ var matchFetcher = {
 			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
 			navigator.plugins.refresh(false);
 			setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
-				var a = document.getElementById('plugin');
+				document.getElementById('plugin');
 				//var b = document.querySelector("#plugin");
 			}, 1000);
 
@@ -49,7 +51,7 @@ var matchFetcher = {
 	getGameLogCache: function () {
 		var def = $.Deferred();
 		matchFetcher.getGameLogFilePath().then(function (gameLogPath) {
-			waitForPlugin(50, 5000).then(function () {
+			waitForPlugin(PLUGIN_CHECK_READY_INTERVAL_MS, PLUGIN_TIMEOUT_MS).then(function () {
 					cacheLog('game', gameLogPath, GAME_LOG_5v5_SPAWNING_DONE_MARK)
 						.then(function (logCache) {
 							def.resolve(logCache);
@@ -62,13 +64,12 @@ var matchFetcher = {
 	getPatcherLogCache: function () {
 		var def = $.Deferred();
 		matchFetcher.getPatcherLogFilePath().then(function (patcherLogPath) {
-			return waitForPlugin(50, 5000).then(function () {
+			return waitForPlugin(PLUGIN_CHECK_READY_INTERVAL_MS, PLUGIN_TIMEOUT_MS).then(function () {
 					cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
 						.then(function (logCache) {
 							def.resolve(logCache);
 						});
-				}
-			);
+				});
 		}).fail(function (errMsg) {
 			def.reject(errMsg);
 		});
@@ -395,7 +396,7 @@ function cacheLog(type, path, endIndicator) {
 			}
 			if (id != fileId || !status) {
 				closingFile = true;
-				closeFile(fileId).then(function () {
+				closeFile(fileId).always(function () {
 					def.reject("Couldn't find info from file.");
 				});
 				return;
@@ -411,6 +412,9 @@ function cacheLog(type, path, endIndicator) {
 				closingFile = true;
 				closeFile(fileId).then(function () {
 					def.resolve(logCache);
+				}).fail(function (errMsg) {
+					debugLog('matchFetcher.cacheLog(): couldn\'t close file listener. ' + errMsg);
+					def.reject(errMsg);
 				});
 			}
 		});
@@ -432,13 +436,20 @@ function setReady() {
 
 function closeFile(fileId) {
 	var def = $.Deferred();
-	debugLog("Closing file " + fileId + " in 500 MS...");
+	debugLog("Closing file " + fileId + " in 2000 MS...");
 	setTimeout(function () {
-		plugin().stopFileListen(fileId);
-		debugLog("File listener closed.");
-		matchFetcher.isPluginInUse = false;
-		def.resolve(true);
-	}, 500); // timing is crucial! Too little time and there will be an error trying to calling stopFileListen()
+		try {
+			plugin().stopFileListen(fileId);
+			debugLog("File listener closed.");
+		} catch (e){
+			//plugin().stopFileListen(fileId);
+			console.warn("Error closing File listener for fileId: " + fileId, e);
+		} finally {
+			debugLog('closeFile() moving on...');
+			matchFetcher.isPluginInUse = false;
+			def.resolve(true);
+		}
+	}, 2000); // timing is crucial! Too little time and there will be an error trying to calling stopFileListen() - 2 seconds seem to be a safe amount
 	return def.promise();
 }
 
