@@ -51,7 +51,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 				params = {server: server, championNames: champions.toString(), ownChamp: matchInfo.myChampion};// TODO: move variables into transferItem
 				steal.dev.log('request for champion-data with params:', params);
-				return jQuery.get(RIOT_ADAPTER_CHAMPION_URL // TODO: refactor to .ajax()
+				return jQuery.get(RIOT_ADAPTER_URL_V2 // TODO: refactor to .ajax()
 					, params
 					, function (/** LeagueMatchInfo */ data) { // success
 						steal.dev.log("championData from Server:", data);

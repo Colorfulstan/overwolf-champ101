@@ -185,6 +185,8 @@ var matchFetcher = {
 			var region = '';
 			var foundRegion = false;
 			matchFetcher.getPatcherLogCache().then(function (patcherLogCache) {
+				// TODO: known issue: only the region the client had set when opened will be found with this.
+				// i.e. if the user changes the server-region without restarting the client, the old region will be used to get the data
 					for (var i = 0; i < patcherLogCache.length && !foundRegion; i++) {
 						var lineData = patcherLogCache[i];
 
@@ -390,7 +392,8 @@ function cacheLog(type, path, endIndicator) {
 		def.resolve(logCache); // TODO: gets cleaned up when a new match begins, otherwise some cache validation would be neccessary
 	} else {
 		matchFetcher.isBusy = true;
-		listenOnFile(fileId, path, false, function (id, status, lineData) {
+		var skipToEndOfFile = false;
+		listenOnFile(fileId, path, skipToEndOfFile, function (id, status, lineData) {
 			if (closingFile) {
 				return;
 			}
@@ -494,8 +497,8 @@ function getPreferencesPath(isGarenaClient) {
 		.then(function (gameRoot) {
 			var root;
 			if (isGarenaClient) {
-				root = gameRoot.replace('\\Game\\', '');
-				def.resolve(root + "/Air/preferences/");
+				root = gameRoot.replace('\\Game\\', '\\');
+				def.resolve(root + "Air/preferences/");
 			} else {
 				root = gameRoot;
 				return getAirClientVersion(root).then(
