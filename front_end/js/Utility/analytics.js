@@ -26,13 +26,16 @@ function addScript(i, s, o, g, r, a, m) {
 	return def.promise();
 }
 
+function refreshRegionFromSettings() {
+	// CUSTOM_DIMENSIONS.LOL_SERVER
+	ga('set', 'dimension6', Settings.getInstance().server()); // TODO: might not been set!
+}
 function createTracker() {
 	ga('create', TRACKER_ID, 'none');
 	ga('set', 'appName', appName);
 	ga('set', 'appVersion', appVersion);
 	ga('set', 'appInstallerId', appInstallerId);
-	// CUSTOM_DIMENSIONS.LOL_SERVER
-	ga('set', 'dimension6', Settings.getInstance().server()); // TODO: might not been set!
+	refreshRegionFromSettings();
 	ga('set', 'checkProtocolTask', function () { /* nothing */ });
 	return $.Deferred().resolve().promise();
 }
@@ -76,6 +79,9 @@ export default {
 	runWhenReady: function (cb) {
 		if (this.initRan === false) {throw new Error('analytics is not initialised. run .init() before sending data!')}
 		$.when(this.isReady).then(cb);
+	},
+	refreshRegion: function () {
+		refreshRegionFromSettings();
 	},
 
 	/**

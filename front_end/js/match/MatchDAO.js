@@ -34,6 +34,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 		matchFetcher.getActiveRegion().then(function (serv) {// TODO: load this previously and give as dependencies
 				server = serv;
 			Settings.getInstance().server(server); // TODO: handle this outside of DAO!
+			analytics.refreshRegion();
 			return matchFetcher.getMatchInfo();// TODO:  load this previously and give as dependencies
 			})
 			.then(function (/** MatchInfoResult */ matchData) {
