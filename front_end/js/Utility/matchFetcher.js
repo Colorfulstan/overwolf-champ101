@@ -1,7 +1,10 @@
 import $ from 'jquery'
 
+// TODO: integrate good logger and replace console and debugLog calls
+
+var DEBUG = false;
+
 var PLUGIN_ID = 'plugin';
-var DEBUG = true;
 var PLUGIN_CHECK_READY_INTERVAL_MS = 50;
 var PLUGIN_TIMEOUT_MS = 10000;
 
@@ -36,11 +39,10 @@ var matchFetcher = {
 			debugLog('initialising matchFetcher..........');
 
 			debugLog('adding simpleIOplugin to DOM.........');
-			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width=0px height=0px/>');
+			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width="0px" height="0px" style="position: absolute; pointer-events: none" />');
 			navigator.plugins.refresh(false);
 			setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
 				document.getElementById('plugin');
-				//var b = document.querySelector("#plugin");
 			}, 1000);
 
 			this.initRan = true;
@@ -271,7 +273,7 @@ var matchFetcher = {
 					def.resolve(matchFetcher.gameLogFilePath);
 				});
 			}).fail(function () {
-				console.warn('getGameLogFilePath failed');
+				debugLog('getGameLogFilePath failed');
 				def.reject('getGameLogFilePath failed');
 			});
 		}
@@ -446,7 +448,7 @@ function closeFile(fileId) {
 			debugLog("File listener closed.");
 		} catch (e){
 			//plugin().stopFileListen(fileId);
-			console.warn("Error closing File listener for fileId: " + fileId, e);
+			if (DEBUG) console.warn("Error closing File listener for fileId: " + fileId, e);
 		} finally {
 			debugLog('closeFile() moving on...');
 			matchFetcher.isPluginInUse = false;
@@ -455,36 +457,6 @@ function closeFile(fileId) {
 	}, 2000); // timing is crucial! Too little time and there will be an error trying to calling stopFileListen() - 2 seconds seem to be a safe amount
 	return def.promise();
 }
-
-// getMatchInfo(function(res) {
-//     debugLog(res);
-// });
-//
-///**
-// * @param {Object} data
-// * @param {string} data.latestAirClientVersion
-// * @param {string} data.gameRoot
-// * @deprecated
-// */
-//function addFilenameAndSummonerToData(data) { // TODO: rename appropriatly
-//	var def = $.Deferred();
-//
-//	matchFetcher.getActiveSummoner()
-//		.then(function (mySummoner) {
-//			getLatestFileInDirectory(data.gameRoot + "Logs/Game - R3d Logs/")
-//				.then(function (filename) {
-//					data.mySummoner = mySummoner;
-//					data.filename = filename;
-//					def.resolve(data);
-//				})
-//				.fail(function (errMsg) {
-//						debugLog(errMsg);
-//						def.reject(errMsg);
-//					}
-//				);
-//		});
-//	return def.promise();
-//}
 
 /**
  *
@@ -596,7 +568,7 @@ function collectParticipantsData(mySummoner) {
 }
 
 /**
- * return Promise - resolves into {{string} gameroot, {string} latestAirClientVersion}
+ * return Promise - resolves into {string} latestAirClientVersion}
  */
 function getAirClientVersion(gameRoot) {
 	var def = $.Deferred();
