@@ -205,6 +205,14 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 		openMain: function () {
 			return WindowCtrl.open('Main');
 		},
+		/** Closes the Main-Window and with that the App */
+		closeMain: function () {
+			return WindowCtrl.close('Main');
+		},
+		/** @see {@link WindowCtrl.closeMain} */
+		closeApp: function () {
+			return WindowCtrl.closeMain();
+		},
 		/** closes the Match-Window */
 		closeMatch: function () {
 			return WindowCtrl.close('Match');
@@ -216,11 +224,11 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 				steal.dev.log("WindowCtrl.openSettings: ", odkWindow);
 
 
-				if (!SettingsModel.isSummonerSet()) {
-					overwolf.windows.setTopmost(odkWindow.id, true, function () {
-						steal.dev.log('Settingswindow set to topmost', arguments)
-					});
-				}
+				//if (!SettingsModel.isSummonerSet()) {
+				//	overwolf.windows.setTopmost(odkWindow.id, true, function () {
+				//		steal.dev.log('Settingswindow set to topmost', arguments)
+				//	});
+				//}
 				if (!localStorage.getItem('settings-opened-before')) {
 					// Only center settings-window the first time it opens
 					var x = self.getCenteredX(odkWindow.width);
@@ -340,7 +348,7 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 		 */
 		'{exitBtn} mousedown': function ($el, ev) {
 			if (ev.which == 1) {
-				WindowCtrl.close('Main');
+				WindowCtrl.closeApp();
 				ev.stopPropagation();
 				analytics.event('Button', 'click', 'exit');
 			}

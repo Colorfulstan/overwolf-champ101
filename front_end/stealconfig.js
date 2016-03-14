@@ -11,6 +11,7 @@ System.config({
 		'Boot': './js/Utility/Boot.js',
 		'Boot.spec': './js/Utility/Boot.spec.js',
 		'analytics': './js/Utility/analytics.js',
+		'matchFetcher': './js/Utility/matchFetcher.js',
 
 		'SettingsProvider': './js/settings/SettingsProvider.js',
 		'SettingsModel': './js/settings/SettingsModel.js',

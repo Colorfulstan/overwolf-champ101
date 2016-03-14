@@ -5,6 +5,9 @@ import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import Boot from 'Boot';
 import analytics from 'analytics';
+import matchFetcher from 'matchFetcher'
+import $ from 'jquery'
+import 'global';
 
 var Static = {
 	defaults: {
@@ -117,28 +120,25 @@ var Static = {
 	},
 	_handleGameStart: function (settings) {// TODO: move all this eventstuff into own service!
 		steal.dev.warn('League of Legends game started', new Date(), 'closing Matchwindow for reopening');
-		if (SettingsModel.isSummonerSet()) {
-			MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
-			settings.isInGame(true);
-			settings.startMatchCollapsed(true);
-			WindowCtrl.openMatch();
-			steal.dev.warn('opened Match again, waiting for stable fps')
-		} else {
-			steal.dev.log('_handleGameStart relaunches App');
-			// TODO: circular dependency (to onMainWindowRestored Listener)! rework this
-			WindowCtrl.openMain(); // rest is handled from there for first start
-		}
+
+		MainCtrl.addStableFpsListenerAndHandler(settings.isFpsStable);
+		settings.isGameRunning(true);
+		settings.startMatchCollapsed(true);
+		WindowCtrl.openMatch();
+		steal.dev.warn('opened Match again, waiting for stable fps');
+
 	},
 	_handleGameEnd: function (settings) {// TODO: move all this eventstuff into own service!
 		MainCtrl.removeStableFpsListener(settings.isFpsStable);
 		//settings.cachedGameAvailable(false);
 		steal.dev.warn('League of Legends game finished', new Date());
-		if (SettingsModel.closeMatchWithGame()) {
-			WindowCtrl.closeMatch();
-		}
-		settings.isInGame(false);
+		settings.isGameRunning(false);
 		settings.startMatchCollapsed(false);
 		WindowCtrl.events.trigger('gameEnded');
+		if (SettingsModel.closeMatchWithGame()) {
+			WindowCtrl.closeMatch();
+			WindowCtrl.closeApp();
+		}
 	},
 	registerGameStartEndListener: function (settings) {// TODO: move all this eventstuff into own service!
 		MainCtrl.registerGameStartListenerAndHandler(settings);
@@ -186,6 +186,22 @@ var Instance = { // Instance
 	 * @see MainCtrl.start opening of the Window separated into start() to enable more detailed control over the start of the app */
 	init: function () {
 		WindowCtrl.prototype.init.apply(this, arguments);
+		var self = this;
+		this.options.version.then(function (v) {
+			self.element.find('#version').html(
+				'v' + v
+			);
+		});
+
+		$.get(CHANGELOG_URL).then(function (data) {
+			self.element.find('#changelog').html(data);
+		}).fail(
+			function () {
+				steal.dev.log('Could not get changelog', arguments);
+				self.element.find('#changelog').html('could not receive changelog');
+			}
+		);
+
 		steal.dev.log('MainCtrl initialized :', this);
 		WindowCtrl.events.one('restartAppEv', function () {
 			steal.dev.warn('restarting App by reloading Main-Window');

@@ -223,7 +223,7 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl',
 		 * @constructs TooltipCtrl
 		 * @param element
 		 * @param options
-		 * @param {MatchModel } options.match
+		 * @param {object} options.participantsByChamp Map with champnames as keys
 		 * @param {* } options.videoPlayer will be set later
 		 */
 		init: function (element, options) {
@@ -273,20 +273,20 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl',
 				case 'spell':
 					var spell;
 					if (routeData.type == 'ability') {
-						spell = this.options.match.participantsByChamp[routeData.champ].champ.spells[routeData.index];
+						spell = this.options.participantsByChamp[routeData.champ].champ.spells[routeData.index];
 					}
 					if (routeData.type == 'passive') {
-						spell = this.options.match.participantsByChamp[routeData.champ].champ.passive;
+						spell = this.options.participantsByChamp[routeData.champ].champ.passive;
 					}
 					if (routeData.type == 'summoner') {
-						spell = this.options.match.participantsByChamp[routeData.champ].summonerSpells[routeData.index];
+						spell = this.options.participantsByChamp[routeData.champ].summonerSpells[routeData.index];
 					}
 					this.element.html(can.view(this.options.spellTmpl, spell));
 					this.initVideo(spell);
 					break;
 				case 'champ':
 					var removedSpells = [];
-					var champ = this.options.match.participantsByChamp[routeData.champ].champ;
+					var champ = this.options.participantsByChamp[routeData.champ].champ;
 					var champTooltipView;
 					if (routeData.overview) {
 						// NOTE: since elise and nidalee have 7 skills and they are not combined to 4 data-objects

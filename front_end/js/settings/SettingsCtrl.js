@@ -36,6 +36,9 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 		this.element.removeClass('hidden');
 	},
 
+	/**
+	 * @deprecated summoner name will not be set manually anymore
+	 * */
 	summonerUnchanged: function () {
 		var settings = this.options.settings;
 		// testing string;
@@ -47,29 +50,29 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	saveAndCloseHandler: function (self, $btn) {
 		/**@type {SettingsModel} */
 		var settings = self.options.settings;
-		if (self.summonerUnchanged()) {	// no change - spare the request
+		//if (self.summonerUnchanged()) {	// no change - spare the request
 			self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
-			sendAnalytics(settings, false);
+			sendAnalytics(settings);
 			window.setTimeout(function () {
 				self.closeSettings();
 			}, 100);
-		} else {
-			this.requestSummonerId(settings, self, $btn)
-				.then(function () {
-					WindowCtrl.events.trigger('summonerChangedEv');
-					sendAnalytics(settings, true);
-					self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
-					window.setTimeout(function () {
-						self.closeSettings();
-					}, 100);
-				});
-		}
+		//} else {
+		//	this.requestSummonerId(settings, $btn)
+		//		.then(function () {
+		//			WindowCtrl.events.trigger('summonerChangedEv');
+		//			sendAnalytics(settings, true);
+		//			self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
+		//			window.setTimeout(function () {
+		//				self.closeSettings();
+		//			}, 100);
+		//		});
+		//}
 		function sendAnalytics(settings, summonerChanged) {
-			if (summonerChanged) {
-				var value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
-				var label = (settings.summonerName() === '---') ? 'random' : 'specific';
-				analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
-			}
+			//if (summonerChanged) {
+			//	var value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
+			//	var label = (settings.summonerName() === '---') ? 'random' : 'specific';
+			//	analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
+			//}
 			var action;
 			if (settings.hasValueChanged('startWithGame')) {
 				action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
@@ -79,14 +82,18 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				action = (settings.constructor.closeMatchWithGame()) ? 'enabled' : 'disabled';
 				analytics.event('Settings', action, 'closeMatchWithGame');
 			}
+			if (settings.hasValueChanged('isWaitingForStableFps')) {
+				action = (settings.constructor.isWaitingForStableFps()) ? 'enabled' : 'disabled';
+				analytics.event('Settings', action, 'waitForStableFpsBeforeOpening');
+			}
 			action = null;
 		}
 	},
-	requestSummonerId: function (settings, self, $btn) {
+	requestSummonerId: function (/**SettingsModel*/ settings, summonerName, server, $btn) {
 		var def = $.Deferred();
 		$.get(
 				RIOT_ADAPTER_URL + '/getSummonerId.php'
-			, {'server': settings.server(), 'summoner': settings.summonerName()}
+			, {'server': server, 'summoner': summonerName}
 			, function (summonerId, status, jqXHR) {
 				steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
 				settings.summonerId(summonerId);
@@ -100,7 +107,14 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				// 503 temp unavailable
 				// 404 not found
 				// statusText 'error' == kein Internet??
-				analytics.event('SummonerRequest', 'failed', data.status + ' | ' + data.statusText);
+				if (data.statusText == 'error'){
+					var customData = 'jqXHR: ' + JSON.stringify(jqXHR) + ' | data: ' + JSON.stringify(data);
+					var fields = {};
+					fields[analytics.CUSTOM_DIMENSIONS.DATA] = customData;
+					analytics.event('SummonerRequest', 'failed', data.status + ' | ' + data.statusText, fields);
+				} else {
+					analytics.event('SummonerRequest', 'failed', data.status + ' | ' + data.statusText);
+				}
 				$btn.text(data.statusText);
 				def.reject(data, status, jqXHR);
 			});

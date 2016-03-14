@@ -142,14 +142,14 @@ $app-bar-height: 30px;
       z-index: 99;
       border-radius: 100%;
     }
-    .purple {
-      right: -17px;
+    .team_200 {
+      right: -19px;
       .add {
         position: relative;
         right: 7px;
       }
     }
-    .blue {
+    .team_100 {
       left: -17px;
       width: 37px; // NOTE: fixed width to prevent widht-jumping when adding .addable
       .add {

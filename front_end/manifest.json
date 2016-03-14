@@ -4,7 +4,7 @@
   "meta": {
   	"name": "League of Legends Champ 101",
   	"access-name": "it.krispin.champ101",
-  	"version": "1.2.1.1",
+  	"version": "2.3.8.6",
 	"minimum-overwolf-version": "0.91.22",
 	"author": "Colorfulstan",
   	"description": "Basic League of Legends champion information relevant for your current game",
@@ -13,7 +13,7 @@
 	"icon_gray": "assets/img/icon_gray.png"
   },
   "data": {
-	  "launch_events": [
+	"launch_events": [
 		{
 		  "event": "GameLaunch",
 		  "event_data": {
@@ -75,7 +75,8 @@
 			"action-type": "custom",
 			"default": "Num -"
 		}
-	}
+	},
+	"plugins": ["plugins/npSimpleIOPlugin.dll"]
   },
   "permissions": [ "Hotkeys", "GameInfo", "Extensions"],
   "externally_connectable": {

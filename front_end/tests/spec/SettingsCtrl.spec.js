@@ -14,7 +14,7 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			settingsCtrl.destroy();
 		}
 	});
-	describe("summonerUnchanged ", function () {
+	xdescribe("summonerUnchanged ", function () {
 		function createTrueCondition(settingsCtrl) {
 			spyOn(SettingsModel, 'isSummonerSet').and.returnValue(true);
 			var settings = settingsCtrl.options.settings;

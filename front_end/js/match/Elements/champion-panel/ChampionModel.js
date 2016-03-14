@@ -42,6 +42,71 @@ var ChampionModel = function ChampionModel(options) {
 	/** @type {Array.<string>} */
 	this.enemytips = options.enemytips;
 
+	/**
+	 * @typedef {object} ChampionGGDmgCompositionData
+	 * @property {number} magicDmg
+	 * @property {number} physicalDmg
+	 * @property {number} trueDmg
+	 */
+	/**
+	 * @typedef {object} ChampionGGItemsetsData
+	 * @property {Array.<number>} items ids used by RIOT static data API
+	 * @property {number} games
+	 * @property {string} role
+	 * @property {number} winPercent with the particular items
+	 * */
+	/**
+	 * @typedef {object} ChampionGGSkillOrderData
+	 * @property {Array.<string>} order skill key in order of leveling up
+	 * @property {number} games
+	 * @property {string} role
+	 * @property {number} winPercent
+	 */
+	/**
+	 * @typedef {object} ChampionGGStatsGeneral
+	 * @property {number} assists
+	 * @property {number} banRate
+	 * @property {number} deaths
+	 * @property {number} experience
+	 * @property {number} goldEarned
+	 * @property {number} kills
+	 * @property {number} largestKillingSpree
+	 * @property {number} minionsKilled
+	 * @property {number} neutralMinionsKilledEnemyJungle
+	 * @property {number} neutralMinionsKilledTeamJungle
+	 * @property {number} overallPosition
+	 * @property {number} overallPositionChange
+	 * @property {number} playPercent
+	 * @property {number} totalDamageDealtToChampions
+	 * @property {number} totalDamageTaken
+	 * @property {number} totalHeal
+	 * @property {number} winPercent
+	 */
+	/**
+	 * @typedef {object} ChampionGGMatchupData
+	 * @property {number} games
+	 * @property {string} role
+	 * @property {number} statScore
+	 * @property {number} winRate
+	 */
+	/**
+	 * Contains the Data from champion.gg for each role of the champ.
+	 * @typedef {object} ChampionGGRoleData
+	 * @property {ChampionGGDmgCompositionData} dmgComposition
+	 * @property {object.<ChampionGGItemsetsData>} items mostPopular | mostWins | mostPopularStart | mostWinsStart
+	 * @property {object.<ChampionGGSkillOrderData>} skillOrder mostPopular | mostWins
+	 * @property {ChampionGGStatsGeneral} statsGeneral
+	 * @property {object.<ChampionGGMatchupData>} matchup matchup.statsAgainsUser | not defined if no matchups are found
+	 */
+
+	/**
+	 * Contains the data for each role the champ is used for acchording to champion.gg
+	 * Possible keys:
+	 * ADC | SUPPORT | JUNGLE | MIDDLE | TOP
+	 * @typedef {object.<ChampionGGRoleData>} ChampionGGData
+	 */
+	this.roles = options.roles;
+
 	/** @get */
 	this.imgSrc = function () { // TODO: get...
 		//return DDRAGON_URL + '/img/' + this.image.group + "/" + this.image.full;

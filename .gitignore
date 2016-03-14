@@ -19,7 +19,10 @@ release-candidates
 
 # local folders
 logo
-back_end
+back_end/feedback
+back_end/tests
+back_end/api/data
+back_end/api/vendor
 01_material
 screens_champ101*
 # Created by .ignore support plugin (hsz.mobi)

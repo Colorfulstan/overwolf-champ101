@@ -2,7 +2,7 @@
 import Settings from 'SettingsProvider';
 import 'global';
 
-var debug = false;
+var debug = true;
 
 const TRACKER_ID = 'UA-71618029-2';
 const appInstallerId = 'com.overwolf';
@@ -26,11 +26,16 @@ function addScript(i, s, o, g, r, a, m) {
 	return def.promise();
 }
 
+function refreshRegionFromSettings() {
+	// CUSTOM_DIMENSIONS.LOL_SERVER
+	ga('set', 'dimension6', Settings.getInstance().server()); // TODO: might not been set!
+}
 function createTracker() {
 	ga('create', TRACKER_ID, 'none');
 	ga('set', 'appName', appName);
 	ga('set', 'appVersion', appVersion);
 	ga('set', 'appInstallerId', appInstallerId);
+	refreshRegionFromSettings();
 	ga('set', 'checkProtocolTask', function () { /* nothing */ });
 	return $.Deferred().resolve().promise();
 }
@@ -46,7 +51,8 @@ export default {
 		CHAMP: 'dimension2',
 		DATA: 'dimension3',
 		DATA_PLACEHOLDERS: 'dimension4',
-		LOL_PATCH: 'dimension5'
+		LOL_PATCH: 'dimension5',
+		LOL_SERVER: 'dimension6'
 	},
 	VALUES: {
 		RANDOM_SUMMONER: 1,
@@ -73,6 +79,9 @@ export default {
 	runWhenReady: function (cb) {
 		if (this.initRan === false) {throw new Error('analytics is not initialised. run .init() before sending data!')}
 		$.when(this.isReady).then(cb);
+	},
+	refreshRegion: function () {
+		refreshRegionFromSettings();
 	},
 
 	/**

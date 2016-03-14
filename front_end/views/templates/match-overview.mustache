@@ -1,5 +1,5 @@
 <div id="match-participants">
-	<div class="col-xs-5 team blue">
+	<div class="col-xs-5 team team_100">
 		<div class="pull-right">
 	{{#blue}}
 		{{#champ}}
@@ -11,22 +11,22 @@
 		{{/blue}}</div>
 	</div>
 	<div id="vs" class="col-xs-2">
-		<div class="col-xs-4 btn show-team blue addable">
+		<div class="col-xs-4 btn show-team team_100 addable">
 			<i class="add fa fa-plus fa"></i>
 		</div>
 		<p class="col-xs-4 padded-top">VS</p>
-		<div class="col-xs-4 btn show-team purple addable">
+		<div class="col-xs-4 btn show-team team_200 addable">
 			<i class="add fa fa-plus fa"></i>
 		</div>
 	</div>
-	<div class="col-xs-5 team purple"><div class="pull-left">
-		{{#purple}}
+	<div class="col-xs-5 team team_200"><div class="pull-left">
+		{{#red}}
 				{{#champ}}
 					<div title="{{name}}" class="portrait img addable"
 						 style="background: url('{{spriteSrc}}') -{{image.x}}px -{{image.y}}px;">
 						<i class="add fa fa-plus fa-lg"></i>
 					</div>
 				{{/champ}}
-		{{/purple}}
+		{{/red}}
 	</div></div>
 </div>

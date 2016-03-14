@@ -4,22 +4,22 @@ import WindowCtrl from 'WindowCtrl'
 describe("Boot.js || ", function () {
 	describe("strap() || ", function () {
 		beforeEach(function () {
-			spyOn(Boot, 'checkIfIngame');
-			Boot.checkIfIngame.and.returnValue($.Deferred().resolve().promise());
+			spyOn(Boot, 'checkIfGameIsRunning');
+			Boot.checkIfGameIsRunning.and.returnValue($.Deferred().resolve().promise());
 
 			spyOn(Boot, 'launchApp');
 		});
-		it("should call checkIfIngame and launchApp", function () {
+		it("should call checkIfGameIsRunning and launchApp", function () {
 			var isFirstAppStart = 'boolean';
 			var settings = {};
 			var main = {name: 'main'};
 			Boot.strap(main, settings, isFirstAppStart);
-			expect(Boot.checkIfIngame).toHaveBeenCalled();
+			expect(Boot.checkIfGameIsRunning).toHaveBeenCalled();
 			expect(Boot.launchApp).toHaveBeenCalledWith(main, settings, isFirstAppStart);
 		});
 	});
-	describe("checkIfIngame() || ", function () {
-		var mock_getRunningGameInfo_inGame, mock_getRunningGameInfo_notInGame, spy_isInGameSetter;
+	describe("checkIfGameIsRunning() || ", function () {
+		var mock_getRunningGameInfo_inGame, mock_getRunningGameInfo_notInGame, spy_isGameRunningSetter;
 		var mock_GameInfo = {property: 'value'};
 		beforeEach(function () {
 			mock_getRunningGameInfo_inGame = jasmine.createSpy('getRunningGameInfo_inGame');
@@ -28,23 +28,23 @@ describe("Boot.js || ", function () {
 			mock_getRunningGameInfo_notInGame = jasmine.createSpy('getRunningGameInfo_notInGame');
 			mock_getRunningGameInfo_notInGame.and.callFake(function (cb) { cb(null);});
 
-			spy_isInGameSetter = jasmine.createSpy('settings.isInGame()');
+			spy_isGameRunningSetter = jasmine.createSpy('settings.isGameRunning()');
 		});
 		it("should resolve to true if in a game", function () {
-			Boot.checkIfIngame(mock_getRunningGameInfo_inGame, spy_isInGameSetter)
+			Boot.checkIfGameIsRunning(mock_getRunningGameInfo_inGame, spy_isGameRunningSetter)
 				.then(function (value) { expect(value).toBe(true); });
 		});
-		it("should set isInGame to true if in a game", function () {
-			Boot.checkIfIngame(mock_getRunningGameInfo_inGame, spy_isInGameSetter);
-			expect(spy_isInGameSetter).toHaveBeenCalledWith(true);
+		it("should set isGameRunning to true if in a game", function () {
+			Boot.checkIfGameIsRunning(mock_getRunningGameInfo_inGame, spy_isGameRunningSetter);
+			expect(spy_isGameRunningSetter).toHaveBeenCalledWith(true);
 		});
 		it("should resolve to false if not in a game", function () {
-			Boot.checkIfIngame(mock_getRunningGameInfo_notInGame, spy_isInGameSetter)
+			Boot.checkIfGameIsRunning(mock_getRunningGameInfo_notInGame, spy_isGameRunningSetter)
 				.then(function (value) { expect(value).toBe(false); });
 		});
-		it("should set isInGame to false if not in a game", function () {
-			Boot.checkIfIngame(mock_getRunningGameInfo_notInGame, spy_isInGameSetter);
-			expect(spy_isInGameSetter).toHaveBeenCalledWith(false);
+		it("should set isGameRunning to false if not in a game", function () {
+			Boot.checkIfGameIsRunning(mock_getRunningGameInfo_notInGame, spy_isGameRunningSetter);
+			expect(spy_isGameRunningSetter).toHaveBeenCalledWith(false);
 		});
 	});
 	describe("askForSummoner() || ", function () {

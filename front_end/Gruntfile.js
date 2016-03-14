@@ -79,16 +79,23 @@ module.exports = function (grunt) {
 			, fonts: {expand: true, src: ['assets/font/**/*'], dest: 'out/'}
 			, img: {expand: true, src: 'assets/img/**/*', dest: 'out/'}
 			, manifest: {expand: true, src: 'manifest.json', dest: 'out/'}
+			, plugins: {expand: true, src: 'plugins/*', dest:'out/'}
 			, publicReadme: {expand: true, src: 'readme-curious-dev.md', dest: 'out/'}
 			, steal: {expand: true, cwd: 'node_modules/steal', src: ['steal.production.js'], dest: 'out/'}
-			,
-			videojs: {
+			, videojs: {
 				expand: true,
 				cwd: 'node_modules/video.js/dist/video-js',
 				src: ['video.js', 'video-js.min.css'],
 				dest: 'out/vendor/videojs'
 			}
+			, fakeFilesForUpload : { // files without function neccessary for store-uploading process
+				expand: true,
+				cwd: 'filesForUploadRestriction',
+				src: ['*'], dest: 'out'
+			}
+			// release canditates
 			, postBuildRelease: {expand: true, cwd: 'out', src: '**/*', dest: '../release-candidates/'+ appName +'_v' + devV + '/'}
+			// submission to the store
 			, postBuildSubmission: {expand: true, cwd: 'out', src: '**/*', dest: '../'+ appName +'_latest/app/'}
 			, postBuildSubmissionManifest: {
 				expand: true, cwd: 'out', src: 'manifest.json', dest: '../' + appName + '_latest/app/'
