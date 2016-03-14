@@ -8,16 +8,15 @@
 </ul>
 Fast, simple and relevant to your current game!</p>
 
-<p>For a more detailed explanation of the app and its features visit <a href="http://champ101.krispin.it">the app's web-page</a></p>
-
-<p>Feel free to give feedback here or <a href="mailto:champ101@krispin.it" target="_blank">send a message</a>
-<br><br>
-If you're using Github, consider opening an
-<a href="https://github.com/Colorfulstan/overwolf-champ101/issues" target="_blank">issue</a>
-for bugs and suggestions instead.</p>
+<p>Please contact us if you run into problems or want to give feedback:</p>
+<ul>
+<li><a href="http://forums.overwolf.com/index.php?/topic/6757-champ-101-feedback-and-suggestions-thread/">Forum</a></li>
+<li><a href="https://github.com/Colorfulstan/overwolf-champ101/issues">Github</a></li>
+<li><a href="mailto:champ101@krispin.it">Mail</a></li>
+</ul>
 
 <p><strong>Note:</strong> Despite our effort to work around cases of incosistency within the public datasets
 used for the displayed information there might still be a few missing or wrong values.<br>
 Values that we are unsure about are displayed with <span style="text-decoration: line-through">linethrough</span>.
-They might still be correct, but don't bet on it. Where you see placeholders like {{ f3 }} no value
+They might still be correct, but don't bet on it. Where you see placeholders like <span ng-non-bindable>{{ f3 }}</span> no value
 could be mapped at all. Please do not report those cases, since we collect them already.</p>

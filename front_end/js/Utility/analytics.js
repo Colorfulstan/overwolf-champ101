@@ -32,7 +32,7 @@ function createTracker() {
 	ga('set', 'appVersion', appVersion);
 	ga('set', 'appInstallerId', appInstallerId);
 	// CUSTOM_DIMENSIONS.LOL_SERVER
-	ga('set', 'dimension6', Settings.getInstance().server());
+	ga('set', 'dimension6', Settings.getInstance().server()); // TODO: might not been set!
 	ga('set', 'checkProtocolTask', function () { /* nothing */ });
 	return $.Deferred().resolve().promise();
 }

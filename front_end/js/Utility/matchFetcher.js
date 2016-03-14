@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import $ from 'jquery';
 
 // TODO: integrate good logger and replace console and debugLog calls
 
@@ -116,7 +116,8 @@ var matchFetcher = {
 					}
 					if (gameRoot.length == 0) {
 						delete matchFetcher.gameRoot;
-						def.reject("Could not find GameRoot - Neither RIOT nor Garena Client could be identified");
+						var errMsg = "Could not find GameRoot - Neither RIOT nor Garena Client could be identified";
+						def.reject();
 					} else {
 						matchFetcher.gameRoot = gameRoot;
 						debugLog("matchFetcher().getGameRoot(): GameRoot loaded. ", matchFetcher.gameRoot);

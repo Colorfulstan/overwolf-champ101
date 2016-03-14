@@ -31,10 +31,10 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 		var server;
 
-		var championParam, serverParam;
-		matchFetcher.getActiveRegion().then(function (serv) {// TODO: maybe load this previously and give as dependencies
+		matchFetcher.getActiveRegion().then(function (serv) {// TODO: load this previously and give as dependencies
 				server = serv;
-			return matchFetcher.getMatchInfo();// TODO: maybe load this previously and give as dependencies
+			Settings.getInstance().server(server); // TODO: handle this outside of DAO!
+			return matchFetcher.getMatchInfo();// TODO:  load this previously and give as dependencies
 			})
 			.then(function (/** MatchInfoResult */ matchData) {
 
@@ -51,7 +51,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 				params = {server: server, championNames: champions.toString(), ownChamp: matchInfo.myChampion};// TODO: move variables into transferItem
 				steal.dev.log('request for champion-data with params:', params);
-				return jQuery.get(RIOT_ADAPTER_URL_V2 // TODO: refactor to .ajax()
+				return jQuery.get(RIOT_ADAPTER_URL_V2
 					, params
 					, function (/** LeagueMatchInfo */ data) { // success
 						steal.dev.log("championData from Server:", data);
