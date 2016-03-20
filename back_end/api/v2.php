@@ -5,19 +5,21 @@ include_once './vendor/autoload.php';
 include_once './dataFiltering.php';
 
 use LeagueWrap\Api;
-$server = "";
+$platformID = "";
 if (isset($_REQUEST['server'])){
-	$server = $_REQUEST['server'];
+	$platformID = $_REQUEST['server'];
 } else {
-	$server = 'garena';
+	$platformID = 'garena';
 	// TODO: other regions that are not provided by RIOT Servers will count as 'garena' too (China / Korea)
 }
 include_once 'riot-api-key.php'; // own file with RIOT API key stored to $RIOT_API_KEY variable
 $api = new Api($RIOT_API_KEY);            // Load up the API
 
+
+
 // TODO: remove jp condition when implemented by RIOT (https://developer.riotgames.com/discussion/announcements/show/9iYdLpZZ)
-if (strtolower($server) !== 'garena' && strtolower($server) !== 'jp'){
-	$api->setRegion($server);
+if (strtolower($platformID) !== 'garena' && strtolower($platformID) !== 'jp'){
+	$api->setRegion(mapPlatformIDToRegion($platformID));
 } else {
 	$api->setRegion('na'); // TODO: This might lead to differences in data if garena servers are not up to date
 }
@@ -58,7 +60,7 @@ if (isset($champions['MonkeyKing'])){
 
 $appData['champsByKey'] = $champions;
 $appData['version'] = $api->staticData()->getRealm()->get('v');
-$appData['server'] = $server;
+$appData['server'] = $platformID; // TODO: rename achordingly when next patch in development
 
 
 header('Content-type: application/json');
@@ -73,4 +75,38 @@ function normalizeChampName($name){
 	$nameClean = strtolower($nameClean);
 
 	return $nameClean;
+}
+
+function mapPlatformIDToRegion($platformID){
+	$region = $platformID;
+	switch (strtolower($platformID)){
+		case 'br1':
+			$region = 'BR';
+			break;
+		case 'eun1':
+			$region = 'EUNE';
+			break;
+		case 'euw1':
+			$region = 'EUW';
+			break;
+		case 'la1':
+			$region = 'LAN';
+			break;
+		case 'la2':
+			$region = 'LAS';
+			break;
+		case 'na1':
+			$region = 'NA';
+			break;
+		case 'oc1':
+			$region = 'OCE';
+			break;
+		case 'tr1':
+			$region = 'TR';
+			break;
+		case 'pbe1':
+			$region = 'PBE';
+			break;
+	}
+	return $region;
 }

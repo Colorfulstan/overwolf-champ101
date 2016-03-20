@@ -2,7 +2,7 @@
 import Settings from 'SettingsProvider';
 import 'global';
 
-var debug = true;
+var debug = false;
 
 const TRACKER_ID = 'UA-71618029-2';
 const appInstallerId = 'com.overwolf';

@@ -184,6 +184,8 @@ var MatchCtrl = WindowCtrl.extend(
 					var fields = {};
 					fields[analytics.CUSTOM_DIMENSIONS.DATA] = customData;
 					analytics.event('Match', 'failed', data.status + ' | ' + data.statusText, fields);
+				} else if (typeof data.status === 'undefined'){
+					analytics.event('Match', 'failed', 'not in a game');
 				} else {
 					analytics.event('Match', 'failed', data.status + ' | ' + data.statusText);
 				}

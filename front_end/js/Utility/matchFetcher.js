@@ -8,6 +8,7 @@ var PLUGIN_ID = 'plugin';
 var PLUGIN_CHECK_READY_INTERVAL_MS = 50;
 var PLUGIN_TIMEOUT_MS = 10000;
 
+var MSG_NOT_IN_GAME = "Not in game.";
 // TODO: rename module to something more fitting
 
 var isReady = $.Deferred();
@@ -67,11 +68,11 @@ var matchFetcher = {
 		var def = $.Deferred();
 		matchFetcher.getPatcherLogFilePath().then(function (patcherLogPath) {
 			return waitForPlugin(PLUGIN_CHECK_READY_INTERVAL_MS, PLUGIN_TIMEOUT_MS).then(function () {
-					cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
-						.then(function (logCache) {
-							def.resolve(logCache);
-						});
-				});
+				cacheLog('patcher', patcherLogPath, PATCHER_LOG_END_INDICATOR)
+					.then(function (logCache) {
+						def.resolve(logCache);
+					});
+			});
 		}).fail(function (errMsg) {
 			def.reject(errMsg);
 		});
@@ -100,7 +101,7 @@ var matchFetcher = {
 						def.resolve(matchFetcher.gameRoot);
 					} else {
 						debugLog("matchFetcher().getGameRoot(): Not in game.");
-						def.reject("Unable to get GameRoot - Not in game.");
+						def.reject(MSG_NOT_IN_GAME);
 					}
 				} else {
 					var gamePath = gameInfo.executionPath;
@@ -188,8 +189,8 @@ var matchFetcher = {
 			var region = '';
 			var foundRegion = false;
 			matchFetcher.getPatcherLogCache().then(function (patcherLogCache) {
-				// TODO: known issue: only the region the client had set when opened will be found with this.
-				// i.e. if the user changes the server-region without restarting the client, the old region will be used to get the data
+					// TODO: known issue: only the region the client had set when opened will be found with this.
+					// i.e. if the user changes the server-region without restarting the client, the old region will be used to get the data
 					for (var i = 0; i < patcherLogCache.length && !foundRegion; i++) {
 						var lineData = patcherLogCache[i];
 
@@ -207,8 +208,15 @@ var matchFetcher = {
 					}
 				})
 				.fail(function (errMsg) {
-					debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
-					matchFetcher.region = 'garena';
+					// TODO: currently means that when someone opens the matchwindow outside of a game their server will be set to garena bc no gameroot can be found!
+					debugger;
+					if (errMsg === MSG_NOT_IN_GAME){
+						debugLog("No Running Game - can't determine server");
+						matchFetcher.region = 'undefined';
+					} else {
+						debugLog("Couldn't open logfile for Patcher - assuming Garena Client");
+						matchFetcher.region = 'garena';
+					}
 					def.resolve(matchFetcher.region);
 				});
 		}
@@ -447,7 +455,7 @@ function closeFile(fileId) {
 		try {
 			plugin().stopFileListen(fileId);
 			debugLog("File listener closed.");
-		} catch (e){
+		} catch (e) {
 			//plugin().stopFileListen(fileId);
 			if (DEBUG) console.warn("Error closing File listener for fileId: " + fileId, e);
 		} finally {
