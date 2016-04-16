@@ -77,13 +77,15 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 			 * @param type
 			 * @param {Array | object} [data] data to be given to the eventHandler <br>(NOTE: DATA CAN ONLY BE USED IF THE EVENT IS TRIGGERED IN THE SAME WINDOW THAT HANDLES THE EVENT)
 			 */
-			"trigger": function (type, data) {
+			"trigger": function (type, data, alreadyGotTriggered) {
 				steal.dev.log('triggering event', type);
 				var storageEventKey = 'eventFired';
 				var valueDivider = '||';
 
 				$(this).trigger(type, data);
-				localStorage.setItem(storageEventKey, type + valueDivider + new Date());
+				if (!alreadyGotTriggered) { // only propagate the event to localstorage the first time events.trigger is called
+					localStorage.setItem(storageEventKey, type + valueDivider + new Date())
+				}
 			},
 			"off": function (type) {
 				$(this).off(type);
@@ -96,7 +98,10 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 			$(window).on('storage', function () { // does not trigger for the window that made the storage-changes
 				if (event.key === storageEventKey) {
 					var evType = extractEvent(event.newValue);
-					WindowCtrl.events.trigger(evType);
+
+					// loops back to events.trigger to make sure every other window triggers the event
+					// to prevent infinity-loop parameter "alreadyGotTriggered" is given
+					WindowCtrl.events.trigger(evType, null, true);
 					steal.dev.log(event);
 				}
 			});

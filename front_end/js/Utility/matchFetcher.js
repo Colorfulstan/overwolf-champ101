@@ -419,7 +419,7 @@ function cacheLog(type, path, endIndicator) {
 			var l = logCache.length;
 			var lineText = lineData.substring(lineData.lastIndexOf('|') + 1); // if no | is found, index will be 0
 			if (logCache[l - 1] !== lineText) {
-				if (DEBUG) { console.warn(lineData); }
+				//if (DEBUG) { console.warn(lineData); }
 				logCache.push(lineText);
 			}
 			if (!closingFile && lineText.includes(endIndicator)) {

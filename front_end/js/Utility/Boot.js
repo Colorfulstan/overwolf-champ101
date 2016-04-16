@@ -20,7 +20,7 @@ var Boot = {
 				return Boot.launchApp(main, settings, isFirstAppStart);
 			})
 			.fail(function () {
-				steal.dev.warn(arguments)
+				steal.dev.warn('checkIfGameIsRunning() failed', arguments)
 			});
 	},
 	launchApp: function (main, settings, isFirstStart, promiseData) {
