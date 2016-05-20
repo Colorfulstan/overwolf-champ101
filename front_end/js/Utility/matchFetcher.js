@@ -5,6 +5,7 @@ import $ from 'jquery';
 var DEBUG = false;
 
 var PLUGIN_ID = 'plugin';
+var PLUGIN_VERSION = '1-1-1-3';
 var PLUGIN_CHECK_READY_INTERVAL_MS = 50;
 var PLUGIN_TIMEOUT_MS = 10000;
 
@@ -40,7 +41,7 @@ var matchFetcher = {
 			debugLog('initialising matchFetcher..........');
 
 			debugLog('adding simpleIOplugin to DOM.........');
-			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin" width="0px" height="0px" style="position: absolute; pointer-events: none" />');
+			$('body').append('<embed id="' + PLUGIN_ID + '" type="application/x-simple-io-plugin-' + PLUGIN_VERSION + '" width="0px" height="0px" style="position: absolute; pointer-events: none" />');
 			navigator.plugins.refresh(false);
 			setInterval(function () { // TODO: what is this for? Some kind of hack-fix, not sure if neccessary
 				document.getElementById('plugin');
