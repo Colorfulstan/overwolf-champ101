@@ -3,7 +3,6 @@
 
 import can from 'can';
 import WindowCtrl from 'WindowCtrl';
-import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import OverviewCtrl from 'OverviewCtrl';
 import ChampionCtrl from 'ChampionCtrl';
@@ -11,7 +10,6 @@ import TooltipCtrl from 'TooltipCtrl';
 import Routes from 'Routes';
 import Boot from 'Boot';
 import analytics from 'analytics';
-import matchFetcher from 'matchFetcher';
 import 'global';
 
 // TODO: replace with events for application-wide communication

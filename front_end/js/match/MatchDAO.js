@@ -24,21 +24,20 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	 * structured like {@link MatchModel}
 	 * @private
 	 */
-	_loadDataFromServer: function (transfer, matchFetcher) { // TODO: move variables into transferItem
+	_loadDataFromServer: function (transfer, owIoLolService) { // TODO: move variables into transferItem
 		var deferred = $.Deferred();
 
 		var params;
 
 		var server;
 
-		matchFetcher.getActiveRegion().then(function (serv) {// TODO: load this previously and give as dependencies
+		owIoLolService.getActiveRegion().then(function (serv) {// TODO: load this previously and give as dependencies
 				server = serv;
 			Settings.getInstance().server(server); // TODO: handle this outside of DAO!
 			analytics.refreshRegion();
-			return matchFetcher.getMatchInfo();// TODO:  load this previously and give as dependencies
+			return owIoLolService.getMatchInfo();// TODO:  load this previously and give as dependencies
 			})
 			.then(function (/** MatchInfoResult */ matchData) {
-
 				/** LeagueMatchInfo */
 				var matchInfo = matchData.matchInfo; // TODO: move variables into transferItem
 
@@ -84,7 +83,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 			//if (settings.cachedGameAvailable()){ // if gameId is given, the game with that id will be load from DB instead of Riot-API
 			//	params['gameId'] = settings.cachedGameId();
 			//}
-			.fail(function (data, status, jqXHR) {
+			.catch(function (data, status, jqXHR) {
 				deferred.reject(data, status, jqXHR);
 			});
 
@@ -97,17 +96,16 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	 * @param {string} transfer.server - of the Summoner to lookup
 	 * @returns {Promise | MatchModel} Promise that resolves into the filled {@link MatchModel} Object
 	 */
-	loadMatchModel: function (transfer, matchFetcher) { // TODO: move variables into transferItem
+	loadMatchModel: function (transfer, owIoLolService) { // TODO: move variables into transferItem
 		var deferred = $.Deferred();
 		var self = this;
 
-		$.when(self._loadDataFromServer(transfer, matchFetcher))
+		self._loadDataFromServer(transfer, owIoLolService)
 			.then(function (dataArray) {
 				steal.dev.log(new Date(), 'GameData in loadMatchModel (start):', transfer);
 
 				transfer.team_100 = dataArray.team_100;
 				transfer.team_200 = dataArray.team_200;
-
 				self._extractParticipants(transfer, dataArray, 'team_100');
 				self._extractParticipants(transfer, dataArray, 'team_200');
 

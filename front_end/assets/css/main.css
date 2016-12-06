@@ -10542,7 +10542,6 @@ select {
   #match-overview-container .portrait {
     width: 44px;
     height: 44px;
-    transform: scale(1.1);
     float: left;
     /* border-right: ridge 3px white; */
     border-radius: 100%;
@@ -10588,9 +10587,7 @@ select {
       border-bottom: none; }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  position: relative;
-  right: 5px; }
+  width: 5px; }
 
 /* this targets the default scrollbar (compulsory) */
 ::-webkit-scrollbar-track {

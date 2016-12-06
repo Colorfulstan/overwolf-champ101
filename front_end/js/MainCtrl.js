@@ -5,7 +5,6 @@ import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import Boot from 'Boot';
 import analytics from 'analytics';
-import matchFetcher from 'matchFetcher'
 import $ from 'jquery'
 import 'global';
 

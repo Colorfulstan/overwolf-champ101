@@ -122,7 +122,7 @@ $app-bar-height: 30px;
     width: 44px;
     height: 44px;
 
-    transform: scale(1.1); // NOTE: correction for size since the images from ddragon have black "borders".
+    //transform: scale(1.1); // NOTE: correction for size since the images from ddragon have black "borders".
     //Since here sprites are used, the scaling of the background is not a solution (unless sprites are exchanged for the single images – which are 150*150 px in dimensions)
     float: left;
     //cursor: url('../img/cursor/hand-pointer-o_000000_20.png'), auto !important;

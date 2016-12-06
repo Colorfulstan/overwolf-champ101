@@ -5,17 +5,17 @@
 import Hotkeys from 'Hotkeys';
 import MatchDAO from 'MatchDAO';
 import MatchModel from 'MatchModel';
-import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import WindowCtrl from 'WindowCtrl';
 import MatchCtrl from 'MatchCtrl';
 import Routes from 'Routes';
 import analytics from 'analytics';
-import matchFetcher from 'matchFetcher';
-import $ from 'jquery';
+
+import {OwIoLolService} from 'ow.io.lol.service'
+import {OwSimpleIOPluginService} from 'ow.simpleIOPlugin.service'
+const owIoLolService = new OwIoLolService(console, overwolf, new OwSimpleIOPluginService(console))
 
 steal.dev.log('match.js starts ..........');
-
 analytics.init();
 
 WindowCtrl.enableStorageEvents();
@@ -26,24 +26,18 @@ var dao = new MatchDAO();
 var settings = Settings.getInstance();
 
 var match = new MatchModel(settings.summonerId(), settings.server());
-
-$.when(matchFetcher.init()).then(
-	function () {
-		var preloadMatchBeforeShowing = settings.isGameRunning() && ( !settings.isManualReloading() && settings.isWaitingForStableFps());
-		if (preloadMatchBeforeShowing) { // ingame == preload data // TODO: seems to make no difference in both conditions!
-			steal.dev.log('preloading data');
-			dao.loadMatchModel(match, matchFetcher).always(function (matchPromise) { // TODO: currently not accounting for manual starts!?
-				new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings});
-			});
-		} else { // else == show match with promise (handled within MatchCtrl)
-			steal.dev.log('not preloading data');
-			var matchPromise = dao.loadMatchModel(match, matchFetcher);
-			new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings}); // window will open while Data is still loading
-			settings.isManualReloading(false);
-		}
+debugger;
+var preloadMatchBeforeShowing = settings.isGameRunning() && ( !settings.isManualReloading() && settings.isWaitingForStableFps());
+owIoLolService.simpleIOPlugin.refreshingPlugin().then(function () {
+	if (preloadMatchBeforeShowing) { // ingame == preload data // TODO: seems to make no difference in both conditions!
+		steal.dev.log('preloading data');
+		dao.loadMatchModel(match, owIoLolService).always(function (matchPromise) { // TODO: currently not accounting for manual starts!?
+			new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings});
+		});
+	} else { // else == show match with promise (handled within MatchCtrl)
+		steal.dev.log('not preloading data');
+		var matchPromise = dao.loadMatchModel(match, owIoLolService);
+		new MatchCtrl('html', {dao: dao, model: matchPromise, settings: settings}); // window will open while Data is still loading
+		settings.isManualReloading(false);
 	}
-).fail(function (errMsg) {
-	steal.dev.log(errMsg);
-});
-
-
+})

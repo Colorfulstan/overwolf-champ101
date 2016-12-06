@@ -1,10 +1,11 @@
 "use strict";
-import can from 'can';
 import WindowCtrl from 'WindowCtrl';
 import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import analytics from 'analytics';
-import matchFetcher from 'matchFetcher';
+
+import {OwIoLolService} from 'ow.io.lol.service'
+import {OwSimpleIOPluginService} from 'ow.simpleIOPlugin.service'
 
 /**
  * @class {Boot} Boot
@@ -200,7 +201,9 @@ var Boot = {
 	openMatchIfIngame: function (main, needsReload) { // TODO: should be called if manually opening the app with option startwithGame disabled
 		steal.dev.log('openMatchIfIngame');
 		if (SettingsModel.isGameRunning()) {
-			matchFetcher.isReplayOrSpectate().then(function (isReplayOrSpectate) {
+			const owIoLolService = new OwIoLolService(console, overwolf, new OwSimpleIOPluginService(console))
+
+			owIoLolService.simpleIOPlugin.refreshingPlugin().then(owIoLolService.isReplayOrSpectate.bind(owIoLolService)).then(function (isReplayOrSpectate) {
 				if (!isReplayOrSpectate){
 					steal.dev.log('game is running, opening match');
 					var settings = Settings.getInstance();

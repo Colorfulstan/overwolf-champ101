@@ -11,7 +11,10 @@ System.config({
 		'Boot': './js/Utility/Boot.js',
 		'Boot.spec': './js/Utility/Boot.spec.js',
 		'analytics': './js/Utility/analytics.js',
-		'matchFetcher': './js/Utility/matchFetcher.js',
+
+		'overwolfplugin': './js/Utility/io/overwolfplugin.js',
+		'ow.simpleIOPlugin.service': './js/Utility/io/simpleIOPlugin/ow.simpleIOPlugin.service.js',
+		'ow.io.lol.service': './js/Utility/io/lol/ow.io.lol.service.js',
 
 		'SettingsProvider': './js/settings/SettingsProvider.js',
 		'SettingsModel': './js/settings/SettingsModel.js',
