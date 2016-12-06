@@ -11,7 +11,6 @@ import Boot from 'Boot';
 import analytics from 'analytics';
 
 analytics.init();
-WindowCtrl.enableStorageEvents();
 
 var main = new MainCtrl('html', {version: SettingsModel.getVersion()});
 var settings = Settings.getInstance();

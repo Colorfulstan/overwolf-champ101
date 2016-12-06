@@ -20,7 +20,6 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	 */
 	init: function (options) {
 		var self = this;
-
 		WindowCtrl.prototype.init.apply(self, arguments);
 
 		$.when(WindowCtrl.open('Settings')).then(function (/**ODKWindow*/ odkWindow) {
@@ -51,11 +50,11 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 		/**@type {SettingsModel} */
 		var settings = self.options.settings;
 		//if (self.summonerUnchanged()) {	// no change - spare the request
-			self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
-			sendAnalytics(settings);
-			window.setTimeout(function () {
-				self.closeSettings();
-			}, 100);
+		self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
+		sendAnalytics(settings);
+		window.setTimeout(function () {
+			self.closeSettings();
+		}, 100);
 		//} else {
 		//	this.requestSummonerId(settings, $btn)
 		//		.then(function () {
@@ -92,7 +91,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	requestSummonerId: function (/**SettingsModel*/ settings, summonerName, server, $btn) {
 		var def = $.Deferred();
 		$.get(
-				RIOT_ADAPTER_URL + '/getSummonerId.php'
+			RIOT_ADAPTER_URL + '/getSummonerId.php'
 			, {'server': server, 'summoner': summonerName}
 			, function (summonerId, status, jqXHR) {
 				steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
@@ -107,7 +106,7 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				// 503 temp unavailable
 				// 404 not found
 				// statusText 'error' == kein Internet??
-				if (data.statusText == 'error'){
+				if (data.statusText == 'error') {
 					var customData = 'jqXHR: ' + JSON.stringify(jqXHR) + ' | data: ' + JSON.stringify(data);
 					var fields = {};
 					fields[analytics.CUSTOM_DIMENSIONS.DATA] = customData;

@@ -145,8 +145,14 @@ var Static = {
 	},
 	registerGameStartListenerAndHandler: function (settings) {// TODO: move all this eventstuff into own service!
 		steal.dev.log('registering GameStartListener');
+		let previousChangeData = null
 		// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
 		overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
+			if (equals(previousChangeData, changeData)) {
+				return;
+			} else {
+				previousChangeData = changeData;
+			}
 			steal.dev.log('debug', 'MainCtrl - registerGameStartListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
 			if (MainCtrl.gameStarted(result)) {
 				// to get the match reloading
@@ -158,9 +164,15 @@ var Static = {
 	},
 	registerGameEndListenerAndHandler: function (settings) {// TODO: move all this eventstuff into own service!
 		steal.dev.log('registering GameEndListener');
+		let previousChangeData = null
 
 		// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
 		overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
+			if (equals(previousChangeData, changeData)) {
+				return;
+			} else {
+				previousChangeData = changeData;
+			}
 			steal.dev.log('debug', 'MainCtrl - registerGameEndListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
 			if (MainCtrl.gameFinished(result)) { MainCtrl._handleGameEnd(settings); }
 		});

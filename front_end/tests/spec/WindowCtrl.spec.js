@@ -276,7 +276,6 @@ describe("WindowCtrlSpec - ", function () {
 			expect(actual).toContain(expected);
 		});
 		it("should listen to storageEvent and trigger event acchordingly", function () {
-			WindowCtrl.enableStorageEvents();
 			WindowCtrl.events.on('thisEvent', handlerMock);
 
 			var key = 'eventFired',

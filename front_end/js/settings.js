@@ -11,7 +11,6 @@ import analytics from 'analytics';
 
 analytics.init();
 
-WindowCtrl.enableStorageEvents();
 Routes.ready();
 
 var settings = Settings.getInstance();

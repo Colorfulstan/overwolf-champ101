@@ -67,47 +67,52 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 		 */
 		events: {
 			"on": function (type, cb) {
-				$(this).on(type, cb);
+				overwolf.windows.onMessageReceived.addListener(function (data) {
+					let messageId = data.id
+					let messageContent = data.content
+					if (messageId === type) {
+						steal.dev.log(`firing event ${messageId} with data. ${messageContent}`)
+						cb(messageContent)
+					}
+				})
+
+				// $(this).on(type, cb);
 			},
 			"one": function (type, cb) {
-				$(this).one(type, cb);
+				overwolf.windows.onMessageReceived.addListener(function (data) {
+					let messageId = data.id
+					let messageContent = data.content
+					let callback = cb
+					if (messageId === type) {
+						steal.dev.log(`removing listener from overwolf.windows.onMessageReceived`)
+						overwolf.windows.onMessageReceived.removeListener(callback)
+						callback(messageContent)
+					}
+				})
+				// $(this).one(type, cb);
 			},
 			/**
-			 * triggers an Event for all Windows.
+			 * triggers an Event for all Windows except the current one.
 			 * @param type
 			 * @param {Array | object} [data] data to be given to the eventHandler <br>(NOTE: DATA CAN ONLY BE USED IF THE EVENT IS TRIGGERED IN THE SAME WINDOW THAT HANDLES THE EVENT)
 			 */
 			"trigger": function (type, data, alreadyGotTriggered) {
-				steal.dev.log('triggering event', type);
-				var storageEventKey = 'eventFired';
-				var valueDivider = '||';
+				overwolf.windows.getCurrentWindow(function (result) {
+					let currentWindowName = result.window.name
+					overwolf.windows.getWindowsStates(function (result) {
+						let windowStates = result.result
+						let windowNames = Object.keys(windowStates)
+						windowNames.forEach(function (windowName) {
+							if (windowStates[windowName] !== 'closed') {
+								steal.dev.log(`triggering event ${type} with data. ${data} for window: ${windowName}`)
+								overwolf.windows.sendMessage(windowName, type, data, function () {
+									console.error(arguments) // TODO: remove again
+								})
 
-				$(this).trigger(type, data);
-				if (!alreadyGotTriggered) { // only propagate the event to localstorage the first time events.trigger is called
-					localStorage.setItem(storageEventKey, type + valueDivider + new Date())
-				}
-			},
-			"off": function (type) {
-				$(this).off(type);
-			}
-		},
-		enableStorageEvents: function () {
-			var storageEventKey = 'eventFired';
-			var valueDivider = '||';
-			$(window).off('storage');
-			$(window).on('storage', function () { // does not trigger for the window that made the storage-changes
-				if (event.key === storageEventKey) {
-					var evType = extractEvent(event.newValue);
-
-					// loops back to events.trigger to make sure every other window triggers the event
-					// to prevent infinity-loop parameter "alreadyGotTriggered" is given
-					WindowCtrl.events.trigger(evType, null, true);
-					steal.dev.log(event);
-				}
-			});
-
-			function extractEvent(value) {
-				return value.substr(0, value.indexOf(valueDivider));
+							}
+						})
+					})
+				})
 			}
 		},
 		/**@static*/
@@ -272,7 +277,6 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 			// enables using and testing document.focus() since $(window).focus() does nothing
 			$(window).on('focus', function () {$(document).focus()});
 			$(window).on('blur', function () {$(document).blur()});
-			//WindowCtrl.enableStorageEvents();
 		}
 		,
 		/** @type {ODKWindow} */
