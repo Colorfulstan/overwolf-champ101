@@ -7,12 +7,12 @@
     "video.js": "^4.12.14"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-copy": "^0.8.1",
-    "steal": "^0.10.5",
+    "del": "~2.2.2",
+    "gulp": "~3.9.1",
+    "gulp-replace": "~0.5.4",
+    "steal": "~0.14.1",
     "steal-jasmine": "0.0.2",
-    "steal-tools": "^0.10.7"
+    "steal-tools": "~0.14.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
