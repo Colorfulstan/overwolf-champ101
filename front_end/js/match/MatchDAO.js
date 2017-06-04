@@ -48,9 +48,9 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 					champions.push(matchInfo.team_200[i].champion);// TODO: move variables into transferItem
 				}
 
-				params = {server: server, championNames: champions.toString(), ownChamp: matchInfo.myChampion};// TODO: move variables into transferItem
-				steal.dev.log('request for champion-data with params:', params, RIOT_ADAPTER_URL_V2);
-				return jQuery.get(RIOT_ADAPTER_URL_V2
+				params = {server: server, championKeys: champions.toString()};// TODO: move variables into transferItem
+				steal.dev.log('request for champion-data with params:', params, CHAMPION_INFO_URL);
+				return jQuery.get(CHAMPION_INFO_URL
 					, params
 					, function (/** LeagueMatchInfo */ data) { // success
 						steal.dev.log("championData from Server:", data);
@@ -60,7 +60,7 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 
 						LOL_PATCH = data.version;
 						DDRAGON_URL = DDRAGON_BASE_URL + LOL_PATCH + '/';
-						deferred.resolve(data); // TODO: comment when done with other request type
+						deferred.resolve(data); // TODO: comment when done with other request type (2017/06/04: what??)
 					});
 			})
 			.catch(function (data, status, jqXHR) {
@@ -80,19 +80,19 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 		var self = this;
 
 		self._loadDataFromServer(transfer, owIoLolService)
-			.then(function (dataArray) {
+			.then(function (dataJson) {
 				steal.dev.log(new Date(), 'GameData in loadMatchModel (start):', transfer);
 
-				transfer.team_100 = dataArray.team_100;
-				transfer.team_200 = dataArray.team_200;
-				self._extractParticipants(transfer, dataArray, 'team_100');
-				self._extractParticipants(transfer, dataArray, 'team_200');
+				transfer.team_100 = dataJson.team_100;
+				transfer.team_200 = dataJson.team_200;
+				self._extractParticipants(transfer, dataJson, 'team_100');
+				self._extractParticipants(transfer, dataJson, 'team_200');
 
-				transfer.version = dataArray.version;
+				transfer.version = dataJson.version;
 
 				steal.dev.log(new Date(), 'GameData in loadMatchModel (end):', transfer);
 				deferred.resolve(transfer);
-				dataArray = null;
+				dataJson = null;
 			}).fail(function (data, status, jqXHR) {
 
 			//settings.cachedGameAvailable(false);

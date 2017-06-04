@@ -7,10 +7,11 @@ Basic League of Legends Champion Knowledge [get it on overwolf](http://store.ove
 so that google-analytics data stays seperated for development / production versions.**
 If you're interested in access to the analytics reports send a message to github@krispin.it
 
+**ANOTHER IMPORTANT NOTE: backend is located within another one of my (private) overwolf repos, so this repo is more or less deprecated.**
+
 ## Requirements:
 
 - node & npm installed
-- grunt installed
 
 optional:
 
@@ -35,7 +36,7 @@ It is recommended to use the front_end folder while developing to save the build
 Run:
 
     > cd front_end
-    > grunt build
+    > gulp build
 
 This will create following directories:
 * ``` release-candidates/champ101_vM.m.p.b ```

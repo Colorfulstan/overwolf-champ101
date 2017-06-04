@@ -1,7 +1,7 @@
 'use strict';
 
-var RIOT_ADAPTER_URL_V2 = "http://api.champ101.krispin.it/v2.php";
-var LB_API_URL = "http://legbuilds.overwolf.co";
+var API_URL = "http://legbuildstwitchnocdn.overwolf.com";
+var CHAMPION_INFO_URL = API_URL + '/champ101';
 var CHANGELOG_URL = "http://changelog.champ101.krispin.it/changelog.php";
 
 var DDRAGON_BASE_URL = "http://ddragon.leagueoflegends.com/cdn/";
