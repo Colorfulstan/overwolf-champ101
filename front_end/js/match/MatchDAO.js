@@ -18,7 +18,6 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	/**
 	 * Loads the Data from RIOT_ADAPTER_URL
 	 * @param {MatchModel} transfer
-	 * @param {number} transfer.summonerId - for the Summoner to lookup
 	 * @param {string} transfer.server - of the Summoner to lookup
 	 * @returns {Promise | Array} Promise that resolves into an Array with all the Data from Riot for the match
 	 * structured like {@link MatchModel}
@@ -64,25 +63,6 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 						deferred.resolve(data); // TODO: comment when done with other request type
 					});
 			})
-			//.then(function () {
-			//	/** @deprecated */
-			//	params = {summonerId: transfer.summonerId, server: transfer.server};
-			//
-			//	steal.dev.log('request for champion-data with params:', params);
-			//	return jQuery.get(RIOT_ADAPTER_URL // TODO: refactor to .ajax()
-			//		, params
-			//		, function (data) { // success
-			//			steal.dev.log("gameData from Server:", data);
-			//			//LOL_PATCH = data.version;
-			//			//DDRAGON_URL = DDRAGON_BASE_URL + LOL_PATCH + '/';
-			//			deferred.resolve(data);
-			//		})
-			//})
-
-			//var settings = Settings.getInstance();
-			//if (settings.cachedGameAvailable()){ // if gameId is given, the game with that id will be load from DB instead of Riot-API
-			//	params['gameId'] = settings.cachedGameId();
-			//}
 			.catch(function (data, status, jqXHR) {
 				deferred.reject(data, status, jqXHR);
 			});
@@ -92,7 +72,6 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 	/**
 	 * Loads the Data for the current match from Server and fills the given {@link MatchModel }
 	 * @param {MatchModel} transfer
-	 * @param {number} transfer.summonerId - for the Summoner to lookup
 	 * @param {string} transfer.server - of the Summoner to lookup
 	 * @returns {Promise | MatchModel} Promise that resolves into the filled {@link MatchModel} Object
 	 */
@@ -114,8 +93,6 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 				steal.dev.log(new Date(), 'GameData in loadMatchModel (end):', transfer);
 				deferred.resolve(transfer);
 				dataArray = null;
-
-
 			}).fail(function (data, status, jqXHR) {
 
 			//settings.cachedGameAvailable(false);

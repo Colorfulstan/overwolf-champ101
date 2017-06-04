@@ -13,23 +13,6 @@ var MatchModel = function MatchModel(summonerId, server) {
 	 * @type {string}*/
 	this.server = server; // TODO: model refactoring for computes
 
-	/**
-	 * @type {string}
-	 * @property
-	 * @deprecated */
-	this.summonerId = summonerId; // TODO: model refactoring for computes
-
-	/** Team 100
-	 * @property
-	 * @type {SummonerModel[]}
-	 * @deprecated use team_100 instead*/
-	this.blue = [];
-
-	/** Team 200
-	 * @type {SummonerModel[]}
-	 * @deprecated use team_200 instead*/
-	this.red = [];
-
 	/** Team blue
 	 * @property
 	 * @type {Array} */
@@ -52,11 +35,6 @@ var MatchModel = function MatchModel(summonerId, server) {
 	 * @type {string}*/
 	this.version = null;
 
-	/** The most recent GameId of the given summoner
-	 * @property
-	 * @type {number}
-	 * @deprecated */
-	this.gameId = null;
 };
 
 export default MatchModel;

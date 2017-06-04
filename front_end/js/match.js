@@ -24,7 +24,7 @@ Hotkeys.registerHotkeys();
 var dao = new MatchDAO();
 var settings = Settings.getInstance();
 
-var match = new MatchModel(settings.summonerId(), settings.server());
+var match = new MatchModel(settings.server());
 var preloadMatchBeforeShowing = settings.isGameRunning() && ( !settings.isManualReloading() && settings.isWaitingForStableFps());
 owIoLolService.simpleIOPlugin.refreshingPlugin().then(function () {
 	if (preloadMatchBeforeShowing) { // ingame == preload data // TODO: seems to make no difference in both conditions!

@@ -56,10 +56,6 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		});
 	});
 	describe("saveAndCloseHandler ", function () {
-		function requestSummonerId(server, name) {
-
-			return request;
-		}
 
 		it("should not make a request if summonerUnchanged returns true", function () {
 			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(true);

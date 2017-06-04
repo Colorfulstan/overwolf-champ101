@@ -55,17 +55,6 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 		window.setTimeout(function () {
 			self.closeSettings();
 		}, 100);
-		//} else {
-		//	this.requestSummonerId(settings, $btn)
-		//		.then(function () {
-		//			WindowCtrl.events.trigger('summonerChangedEv');
-		//			sendAnalytics(settings, true);
-		//			self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
-		//			window.setTimeout(function () {
-		//				self.closeSettings();
-		//			}, 100);
-		//		});
-		//}
 		function sendAnalytics(settings, summonerChanged) {
 			//if (summonerChanged) {
 			//	var value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
@@ -87,37 +76,6 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 			}
 			action = null;
 		}
-	},
-	requestSummonerId: function (/**SettingsModel*/ settings, summonerName, server, $btn) {
-		var def = $.Deferred();
-		$.get(
-			RIOT_ADAPTER_URL + '/getSummonerId.php'
-			, {'server': server, 'summoner': summonerName}
-			, function (summonerId, status, jqXHR) {
-				steal.dev.log('data:', summonerId, 'status:', status, 'jqXHR:', jqXHR);
-				settings.summonerId(summonerId);
-				analytics.event('SummonerRequest', 'success');
-				def.resolve(summonerId, status, jqXHR);
-			})
-			.fail(function (data, status, jqXHR) {
-				steal.dev.log('data:', data, 'status:', status, 'jqXHR:', jqXHR);
-				settings.summonerId(null);
-				// TODO: Error message and try again on the button
-				// 503 temp unavailable
-				// 404 not found
-				// statusText 'error' == kein Internet??
-				if (data.statusText == 'error') {
-					var customData = 'jqXHR: ' + JSON.stringify(jqXHR) + ' | data: ' + JSON.stringify(data);
-					var fields = {};
-					fields[analytics.CUSTOM_DIMENSIONS.DATA] = customData;
-					analytics.event('SummonerRequest', 'failed', data.status + ' | ' + data.statusText, fields);
-				} else {
-					analytics.event('SummonerRequest', 'failed', data.status + ' | ' + data.statusText);
-				}
-				$btn.text(data.statusText);
-				def.reject(data, status, jqXHR);
-			});
-		return def.promise();
 	},
 	triggerRestartIfNeccessary: function (startWithGameOrig, startWithGameCurrent) {
 		if (typeof startWithGameOrig !== 'undefined' && startWithGameOrig !== startWithGameCurrent) {

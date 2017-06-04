@@ -152,21 +152,6 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			//this.cachedGameAvailable(false); // TODO: TEST
 		}
 	}, this),
-	/** @type {string}
-	 * @propterty
-	 * @deprecated Might be used for decision if player is watching replay or live game */
-	summonerId: can.compute(function (newVal) {
-		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_ID); // getter
-		if (newVal === null) localStorage.removeItem(SettingsModel.STORAGE_KEY_ID);
-		else { // setter
-			var oldVal = this.summonerId();
-
-			this.valueChanged('summonerId', oldVal);
-			localStorage.setItem(SettingsModel.STORAGE_KEY_ID, newVal);
-
-			//this.cachedGameAvailable(false); // TODO: TEST
-		}
-	}, false),
 
 	/** @type {string}
 	 * @propterty*/
