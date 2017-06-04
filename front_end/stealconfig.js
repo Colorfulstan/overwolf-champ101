@@ -15,6 +15,8 @@ System.config({
 		'overwolfplugin': './js/Utility/io/overwolfplugin.js',
 		'ow.simpleIOPlugin.service': './js/Utility/io/simpleIOPlugin/ow.simpleIOPlugin.service.js',
 		'ow.io.lol.service': './js/Utility/io/lol/ow.io.lol.service.js',
+		'Utility/typechecks': './js/Utility/typechecks.js',
+		'Utility/equality': './js/Utility/equality.js',
 
 		'SettingsProvider': './js/settings/SettingsProvider.js',
 		'SettingsModel': './js/settings/SettingsModel.js',

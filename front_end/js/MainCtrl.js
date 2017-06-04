@@ -5,6 +5,7 @@ import SettingsModel from 'SettingsModel';
 import Settings from 'SettingsProvider';
 import Boot from 'Boot';
 import analytics from 'analytics';
+import {equals} from 'Utility/equality'
 import $ from 'jquery'
 import 'global';
 
@@ -147,14 +148,14 @@ var Static = {
 		steal.dev.log('registering GameStartListener');
 		let previousChangeData = null
 		// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
-		overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
+		overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ changeData) {
 			if (equals(previousChangeData, changeData)) {
 				return;
 			} else {
 				previousChangeData = changeData;
 			}
-			steal.dev.log('debug', 'MainCtrl - registerGameStartListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
-			if (MainCtrl.gameStarted(result)) {
+			steal.dev.log('debug', 'MainCtrl - registerGameStartListenerAndHandler - overwolf.games.onGameInfoUpdated:', changeData);
+			if (MainCtrl.gameStarted(changeData)) {
 				// to get the match reloading
 				MainCtrl.closeMatch().then(function () {
 					MainCtrl._handleGameStart(settings);
@@ -167,14 +168,14 @@ var Static = {
 		let previousChangeData = null
 
 		// NOTE: second point where App determines if player is within a game or not. Other point is in Boot.js (at app boot)
-		overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ result) {
+		overwolf.games.onGameInfoUpdated.addListener(function (/** GameInfoChangeData */ changeData) {
 			if (equals(previousChangeData, changeData)) {
 				return;
 			} else {
 				previousChangeData = changeData;
 			}
-			steal.dev.log('debug', 'MainCtrl - registerGameEndListenerAndHandler - overwolf.games.onGameInfoUpdated:', result);
-			if (MainCtrl.gameFinished(result)) { MainCtrl._handleGameEnd(settings); }
+			steal.dev.log('debug', 'MainCtrl - registerGameEndListenerAndHandler - overwolf.games.onGameInfoUpdated:', changeData);
+			if (MainCtrl.gameFinished(changeData)) { MainCtrl._handleGameEnd(settings); }
 		});
 	}
 	,

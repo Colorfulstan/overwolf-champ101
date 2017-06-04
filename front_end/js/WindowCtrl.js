@@ -106,7 +106,6 @@ var WindowCtrl = can.Control.extend('WindowCtrl',
 							if (windowStates[windowName] !== 'closed') {
 								steal.dev.log(`triggering event ${type} with data. ${data} for window: ${windowName}`)
 								overwolf.windows.sendMessage(windowName, type, data, function () {
-									console.error(arguments) // TODO: remove again
 								})
 
 							}
