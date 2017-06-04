@@ -2,13 +2,7 @@
 	   poster="{{videoPosterSrc}}" preload="none" width="348"
 	   height="196" id="videoPlayer">
 	{{!--spell-{{ videoId}}--}}
-	{{#videoSrcMp4}}
-		<source src="{{.}}" type="video/mp4">
-	{{/videoSrcMp4}}
-	{{#videoSrcWebm}}
+	{{#videoSrc}}
 		<source src="{{.}}" type="video/webm">
-	{{/videoSrcWebm}}
-	{{#videoSrcOgg}}
-		<source src="{{.}}" type="video/ogg">
-	{{/videoSrcOgg}}
+	{{/videoSrc}}
 </video>

@@ -118,18 +118,10 @@ var ChampionModel = function ChampionModel(options) {
 	};
 	/** @get */
 	this.videoAvailable = function () { // TODO: maybe don't implement for Champion Spotlight // TODO: get...
-		return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();
+		return this.videoSrc();
 	};
 	/** @get */
-	this.videoSrcOgg = function () { // TODO: get...
-		return null; // TODO: Youtube video how to find??
-	};
-	/** @get */
-	this.videoSrcMp4 = function () { // TODO: get...
-		return null; // TODO: Youtube video how to find??
-	};
-	/** @get */
-	this.videoSrcWebm = function () { // TODO: get...
+	this.videoSrc = function () { // TODO: get...
 		return null; // TODO: Youtube video how to find??
 	};
 };

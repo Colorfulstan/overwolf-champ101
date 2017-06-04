@@ -99,7 +99,7 @@ var SpellModel = can.Map.extend('SpellModel', {}, {
 	},
 	videoAvailable: function () {
 		if (this.enableVideo != null) return this.enableVideo;
-		else return this.videoSrcMp4() || this.videoSrcOgg() || this.videoSrcWebm();
+		else return this.videoSrc();
 	},
 	videoId: function () {
 		return this.name.replace(' ', '-');
@@ -118,42 +118,31 @@ var SpellModel = can.Map.extend('SpellModel', {}, {
 		}
 		return id;
 	},
-	cdnNumber: function () {
+	cdnAbilityKey: function () {
+		// since the cdn url-format changed, we need to translate the number 1 = passive, 2-4 == skills, 5 = ultimate)
+		// into the new key that is appended
 		try {
-			return this.cdnChampId() + '_0' + this.number;
+			const keys = [null, 'P1', 'Q1','W1','E1','E3','R1'];
+
+			return keys[this.number];
 		} catch (e) { steal.dev.log(e)}
 	},
+	cdnAbilitiyUriComponent: function(){
+		return this.cdnChampId() + '/ability_' + this.cdnChampId() + '_' + this.cdnAbilityKey()
+	},
 	/**
-	 * @example http://cdn.leagueoflegends.com/champion-abilities/images/0063_03.jpg
+	 * @example http://d28xe8vt774jo5.cloudfront.net/champion-abilities/0240/ability_0240_R1.jpg
 	 * @returns {string}
 	 */
 	videoPosterSrc: function () {
-		return CDN_ABILITIES_URL + 'images/' + this.cdnNumber() + '.jpg';
+		return CDN_CLIENT_ABILITIES_URL + this.cdnAbilitiyUriComponent() + '.jpg';
 	},
 	/**
-	 * @example http://cdn.leagueoflegends.com/champion-abilities/videos/ogv/0063_03.ogv
+	 * @example http://d28xe8vt774jo5.cloudfront.net/champion-abilities/0240/ability_0240_R1.jpg
 	 * @returns {string}
 	 */
-	videoSrcOgg: function () {
-		// TODO: Fallbakc if not available
-		return CDN_ABILITIES_URL + 'videos/ogv/' + this.cdnNumber() + '.ogv';
-	},
-	/**
-	 * @example  http://cdn.leagueoflegends.com/champion-abilities/videos/mp4/0063_03.mp4
-	 * @returns {string}
-	 */
-	videoSrcMp4: function () {
-		// TODO: Fallbakc if not available
-		return CDN_ABILITIES_URL + 'videos/mp4/' + this.cdnNumber() + '.mp4';
-	},
-	/**
-	 * @example http://cdn.leagueoflegends.com/champion-abilities/videos/webm/0063_03.webm
-	 * @returns {string}
-	 */
-	videoSrcWebm: function () {
-		// TODO: Fallbakc if not available
-		return CDN_ABILITIES_URL + 'videos/webm/' + this.cdnNumber() + '.webm';
-		//return null;
+	videoSrc: function () {
+		return CDN_CLIENT_ABILITIES_URL  + this.cdnAbilitiyUriComponent() + '.webm';
 	}
 });
 export default SpellModel;
