@@ -766,9 +766,6 @@ export class OwIoLolService {
 					const matches = regEx.exec(lineData);
 					const line = new LineInfo();
 					line.champion = matches[1];
-					if (line.champion === 'MonkeyKing') {
-						line.champion = 'Wukong'
-					}
 					line.team = parseInt(matches[2]);
 					line.clientId = parseInt(matches[3]);
 					line.summoner = matches[4];
