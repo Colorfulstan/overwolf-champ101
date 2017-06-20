@@ -34,18 +34,16 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 				server = serv;
 			Settings.getInstance().server(server); // TODO: handle this outside of DAO!
 			analytics.refreshRegion();
-			return owIoLolService.getMatchInfo();// TODO:  load this previously and give as dependencies
+			return owIoLolService.gettingChampionsInTeams();// TODO:  load this previously and give as dependencies
 			})
-			.then(function (/** MatchInfoResult */ matchData) {
-				/** LeagueMatchInfo */
-				var matchInfo = matchData.matchInfo; // TODO: move variables into transferItem
+			.then(function (/** {team_100: Array<{champion: string, team:number, isBot: boolean, skinId}, team_200: Array<{champion: string, team:number, isBot: boolean, skinId}>} */ championsInTeams) {
 
 				var champions = [];
-				for (var i = 0; i < matchInfo.team_100.length; i++) {// TODO: move variables into transferItem
-					champions.push(matchInfo.team_100[i].champion);// TODO: move variables into transferItem
+				for (var i = 0; i < championsInTeams.team_100.length; i++) {// TODO: move variables into transferItem
+					champions.push(championsInTeams.team_100[i].champion);// TODO: move variables into transferItem
 				}
-				for (var i = 0; i < matchInfo.team_200.length; i++) {// TODO: move variables into transferItem
-					champions.push(matchInfo.team_200[i].champion);// TODO: move variables into transferItem
+				for (var i = 0; i < championsInTeams.team_200.length; i++) {// TODO: move variables into transferItem
+					champions.push(championsInTeams.team_200[i].champion);// TODO: move variables into transferItem
 				}
 
 				params = {server: server, championKeys: champions.toString()};// TODO: move variables into transferItem
@@ -55,8 +53,8 @@ var MatchDAO = can.Construct.extend('MatchDAO', {}, {
 					, function (/** LeagueMatchInfo */ data) { // success
 						steal.dev.log("championData from Server:", data);
 
-						data.team_100 = matchInfo.team_100;// TODO: move variables into transferItem
-						data.team_200 = matchInfo.team_200;// TODO: move variables into transferItem
+						data.team_100 = championsInTeams.team_100;// TODO: move variables into transferItem
+						data.team_200 = championsInTeams.team_200;// TODO: move variables into transferItem
 
 						LOL_PATCH = data.version;
 						DDRAGON_URL = DDRAGON_BASE_URL + LOL_PATCH + '/';

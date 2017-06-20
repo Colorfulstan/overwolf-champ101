@@ -109,8 +109,8 @@ export class OwIoLolService {
 							return Promise.reject(new Error(err.toString() + ' -> ' + newErr.toString()))
 						})
 				})
-				.then((path) => {
-					return this.gettingGameRootFromPath(path)
+				.then((gameinfo) => {
+					return this.gettingGameRootFromPath(gameinfo.executionPath)
 						.then((gameRoot) => {
 							this.gameRoot = gameRoot;
 							this.$log.debug("OwIoLolService.getGameRoot(): GameRoot loaded. ", this.gameRoot);
@@ -137,7 +137,7 @@ export class OwIoLolService {
 					this.$log.debug("OwIoLolService.getGameRoot(): Not in game.");
 					rejectRunningGameInfo(new Error(this.MSG_NOT_IN_GAME));
 				} else {
-					resolveRunningGameInfo(gameInfo.executionPath);
+					resolveRunningGameInfo(gameInfo);
 				}
 			});
 		})
@@ -345,24 +345,12 @@ export class OwIoLolService {
 					return this.region
 				} else {
 					this.$log.debug('client is not garena')
-					return this.checkingIfIsLCU()
-						.then((isLCU) => {
-							if (isLCU) {
-								return this.getLeagueClientSettingsCache().then((data) => {
-									// TODO: are LAS / LAN Regions right in this approach? (see below for
-									// clientpropertiescache
-									const regex = /region: "(.*)"/
-									return [data, regex]
-								})
-							} else {
-								return this.getClientPropertiesCache().then((data) => {
-
-									// TODO: LAS / LAN Regions seem to arrive at the server as the platformID instead of the region-Tag even though getPlatformId is set to false
-									const regex = /regionTag=(.*)/
-									return [data, regex]
-								})
-							}
-						})
+					return this.getLeagueClientSettingsCache().then((data) => {
+						// TODO: are LAS / LAN Regions right in this approach? (see below for
+						// clientpropertiescache
+						const regex = /region: "(.*)"/
+						return [data, regex]
+					})
 				}
 			}).then(([ data, regex ]) => {
 				let region
@@ -512,23 +500,6 @@ export class OwIoLolService {
 
 	isReplayOrSpectate() {
 		return this.isSpectate();
-	}
-
-	/**
-	 * Checks if the last used Client is the new LCU or the legacy client.
-	 * It does so by checking the Config Folder within the gameRoot for the most recently updated file.
-	 * If that file is not "LeagueClientSettings.yaml" it assumes the Legacy client is currently in use.
-	 *
-	 *
-	 */
-	checkingIfIsLCU() {
-		this.$log.debug('checking if Client is LCU')
-		return this.getConfigPath().then((configPath) => {
-			return this.simpleIOPlugin.getLatestFileInDirectory(configPath)
-		}).then((filename) => {
-			this.$log.debug('latest modified config-file: ' + filename)
-			return filename === 'LeagueClientSettings.yaml'
-		})
 	}
 
 	// endregion
@@ -780,6 +751,58 @@ export class OwIoLolService {
 					//endregion
 				}
 			});
+	}
+
+	gettingChampionsInTeams(){
+		this.$log.debug('gettingChampionsInTeams');
+
+		const START_INDICATOR = "Game Info Start"
+		const END_INDICATOR = "Game Info End"
+		const TEAM_ORDER = 100
+		const TEAM_CHAOS = 200
+		const REGEXP = /\D\| (.*?) Skin (.*?) \((\w.*?) (\w.*?)\)/
+		const id = 'gameLogForChampionsInTeams'
+
+		let teams = {
+			['team_' + TEAM_ORDER]: [],
+			['team_' + TEAM_CHAOS]: []
+		}
+		let isInGameInfoSection = false;
+		return new Promise((resolve, reject) => {
+			this.getGameLogFilePath().then(path => {
+				this.$log.debug('path to game-log:', path);
+				this.simpleIOPlugin.listenOnFile(id, path, false, (fileId, status, line) => {
+					if(fileId === id){
+						if (line.indexOf(END_INDICATOR) !== -1){
+							this.simpleIOPlugin.closeFile(id);
+							this.$log.debug('gettingChampionsInTeams reached end:', teams);
+							resolve(teams);
+							return;
+						}
+						isInGameInfoSection = isInGameInfoSection || line.indexOf(START_INDICATOR) !== -1
+						if (isInGameInfoSection){
+							console.log('isInGameInfoSection', line)
+							let matches = REGEXP.exec(line)
+							if (matches){
+								const champion = matches[1]
+								const skinId = matches[2]
+								// 100 or 200
+								const teamId = (matches[3] === 'Order') ? TEAM_ORDER : TEAM_CHAOS
+								const isBot = matches[4] === 'Bot'
+
+								teams['team_' + teamId].push({
+									champion: champion,
+									team: teamId,
+									isBot,
+									skinId
+								})
+							}
+						}
+					}
+				})
+
+			})
+		})
 	}
 
 	/**
