@@ -122,7 +122,7 @@ var SpellModel = can.Map.extend('SpellModel', {}, {
 		// since the cdn url-format changed, we need to translate the number 1 = passive, 2-4 == skills, 5 = ultimate)
 		// into the new key that is appended
 		try {
-			const keys = [null, 'P1', 'Q1','W1','E1','E3','R1'];
+			const keys = [null, 'P1', 'Q1','W1','E1','R1'];
 
 			return keys[this.number];
 		} catch (e) { steal.dev.log(e)}

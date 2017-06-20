@@ -22,8 +22,7 @@ describe('SettingsProvider (Settings) | ', function () {
 		var expected = {};
 
 		var settingsChanged = Settings.getInstance();
-		settingsChanged.summonerName('123');
-		settingsChanged.server('123');
+		settingsChanged.cachedGameId('123');
 		var actual = settingsChanged.changedPropsOriginalValues;
 		expect(actual).not.toEqual(expected);
 

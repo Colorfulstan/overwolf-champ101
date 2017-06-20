@@ -8,24 +8,24 @@ describe('SettingsModel', function () {
 	describe('hasValueChanged() || ', function () {
 		it('should return false on a new Instance', function () {
 			var expected = false;
-			var actual = settings.hasValueChanged('summonerName');
+			var actual = settings.hasValueChanged('cachedGameId');
 			expect(actual).toEqual(expected);
 		});
 		it('should return false if Value changed back to the old value', function () {
 			var expected = false;
 
-			settings.summonerName('123');
-			expect(settings.hasValueChanged('summonerName')).toEqual(true);
+			settings.cachedGameId('123');
+			expect(settings.hasValueChanged('cachedGameId')).toEqual(true);
 
 			settings.changedPropsOriginalValues = {};
-			settings.summonerName('321');
-			expect(settings.hasValueChanged('summonerName')).toEqual(true);
-			settings.summonerName('123');
-			expect(settings.hasValueChanged('summonerName')).toEqual(false);
+			settings.cachedGameId('321');
+			expect(settings.hasValueChanged('cachedGameId')).toEqual(true);
+			settings.cachedGameId('123');
+			expect(settings.hasValueChanged('cachedGameId')).toEqual(false);
 		});
 		it('should return true if old and new Value differ', function () {
-			settings.summonerName('321');
-			expect(settings.hasValueChanged('summonerName')).toEqual(true);
+			settings.cachedGameId('321');
+			expect(settings.hasValueChanged('cachedGameId')).toEqual(true);
 		});
 	});
 });

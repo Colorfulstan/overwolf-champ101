@@ -26,7 +26,6 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 			self.odkWindow = odkWindow;
 		});
 		self.renderView();
-		//this.element.find('#summoner-name-input').focus();
 	},
 	renderView: function () {
 		this.element.find('#content').html(
@@ -35,32 +34,16 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 		this.element.removeClass('hidden');
 	},
 
-	/**
-	 * @deprecated summoner name will not be set manually anymore
-	 * */
-	summonerUnchanged: function () {
-		var settings = this.options.settings;
-		// testing string;
-		return SettingsModel.isSummonerSet()
-			&& typeof settings.changedPropsOriginalValues.server === "undefined"
-			&& typeof settings.changedPropsOriginalValues.summonerName === "undefined"
-			&& settings.summonerName() != "---";
-	},
 	saveAndCloseHandler: function (self, $btn) {
 		/**@type {SettingsModel} */
 		var settings = self.options.settings;
-		//if (self.summonerUnchanged()) {	// no change - spare the request
 		self.triggerRestartIfNeccessary(settings.changedPropsOriginalValues['startWithGame'], settings.startWithGame());
 		sendAnalytics(settings);
 		window.setTimeout(function () {
 			self.closeSettings();
 		}, 100);
-		function sendAnalytics(settings, summonerChanged) {
-			//if (summonerChanged) {
-			//	var value = (settings.summonerName() === '---') ? analytics.VALUES.RANDOM_SUMMONER : analytics.VALUES.SPECIFIC_SUMMONER;
-			//	var label = (settings.summonerName() === '---') ? 'random' : 'specific';
-			//	analytics.event('Settings', 'summoner-changed', label, {eventValue: value});
-			//}
+		function sendAnalytics(settings) {
+
 			var action;
 			if (settings.hasValueChanged('startWithGame')) {
 				action = (settings.constructor.startWithGame()) ? 'enabled' : 'disabled';
@@ -109,9 +92,6 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 	'#server-region-select change': function ($el, ev) {
 		this.options.settings.server($el.val());
 	},
-	'#summoner-name-input change': function ($el, ev) {
-		this.options.settings.summonerName($el.val());
-	},
 	'{hotkeyBtns} click': function ($el, ev) {
 		var self = this;
 		ev.stopPropagation();
@@ -139,9 +119,6 @@ var SettingsCtrl = WindowCtrl.extend('SettingsCtrl', {
 				});
 			}
 		});
-	},
-	'#summoner-name-input focus': function ($el, ev) {
-		$el.val('');
 	},
 	'#dropdown-hotkeys click': function ($el, ev) {
 		ev.stopPropagation();

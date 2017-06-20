@@ -154,8 +154,7 @@ var MatchCtrl = WindowCtrl.extend(
 				WindowCtrl.events.trigger('expanded');
 			}
 
-			var name = self.options.settings.summonerName();
-			self.options.$overviewContainer.html(can.view(self.options.loadingTmpl, {summonerName: name}));
+			self.options.$overviewContainer.html(can.view(self.options.loadingTmpl));
 			self.options.$overviewContainer.removeClass('failed').addClass('loading');
 
 			// clean up old controllers // TODO: does this make sense?
@@ -208,21 +207,6 @@ var MatchCtrl = WindowCtrl.extend(
 					deferred.resolve(matchModel);
 				}
 			};
-
-			// TODO: for testing - not waiting on stableFPS
-			//self.initVisibility(self);
-			//
-			//var name = self.options.settings.summonerName();
-			//self.options.$overviewContainer.html(can.view(self.options.loadingTmpl, {summonerName: name}));
-			//self.options.$overviewContainer.removeClass('failed').addClass('loading');
-			//
-			//// clean up old controllers // TODO: does this make sense?
-			//if (self.options.overview) { self.options.overview.destroy() }
-			//if (self.options.champions) { self.options.champions.destroy() }
-			//if (self.options.tooltip) { self.options.tooltip.destroy() }
-			//
-			//$.when(matchPromise).done(resolveCB).fail(rejectCb);
-
 
 			var waitForStableFps = window.setInterval(function () {
 				var settings = self.options.settings;

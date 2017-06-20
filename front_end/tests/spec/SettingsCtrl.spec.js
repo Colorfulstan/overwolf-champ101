@@ -14,34 +14,6 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 			settingsCtrl.destroy();
 		}
 	});
-	xdescribe("summonerUnchanged ", function () {
-		function createTrueCondition(settingsCtrl) {
-			spyOn(SettingsModel, 'isSummonerSet').and.returnValue(true);
-			var settings = settingsCtrl.options.settings;
-
-			settings.summonerName('Not ---');
-			delete settings.changedPropsOriginalValues.summonerName;
-		}
-
-		beforeEach(function () {
-			createTrueCondition(settingsCtrl);
-		});
-		it("should return true when using createTruCondition Test-Helper Method", function () {
-			expect(settingsCtrl.summonerUnchanged()).toBe(true);
-		});
-		it("should return false when username is set to ---", function () {
-			settingsCtrl.options.settings.summonerName('---');
-			expect(settingsCtrl.summonerUnchanged()).toBe(false);
-		});
-		it("should return false when server changed", function () {
-			settingsCtrl.options.settings.server('na');
-			expect(settingsCtrl.summonerUnchanged()).toBe(false);
-		});
-		it("should return false when summonerName changed", function () {
-			settingsCtrl.options.settings.summonerName('123');
-			expect(settingsCtrl.summonerUnchanged()).toBe(false);
-		});
-	});
 	describe("reset ", function () {
 		it("should restore the original settings if something changed", function () {
 			settingsModel.server('euw');
@@ -56,80 +28,6 @@ describe("SettingsCtrlSpec - testing the Settings-Window ", function () {
 		});
 	});
 	describe("saveAndCloseHandler ", function () {
-
-		it("should not make a request if summonerUnchanged returns true", function () {
-			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(true);
-			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
-			settingsCtrl.odkWindow = {name: 'Settings'};
-
-			jasmine.Ajax.install();
-
-			settingsCtrl.saveAndCloseHandler(settingsCtrl, $('<div class="btn"></div>'));
-
-			var request = jasmine.Ajax.requests.mostRecent();
-			expect(request).toBeUndefined();
-			jasmine.Ajax.uninstall();
-		});
-		it("should make a request to {BaseUrl}/getSummonerId.php?server={server}&summoner={summonerName}", function () {
-			var server = 'euw', name = 'Test';
-			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
-			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
-			settingsCtrl.odkWindow = {name: 'Settings'};
-
-			jasmine.Ajax.install();
-
-			settingsCtrl.options.settings.server(server);
-			settingsCtrl.options.settings.summonerName(name);
-			settingsCtrl.saveAndCloseHandler(settingsCtrl, $('<div class="btn"></div>'));
-
-			var request = jasmine.Ajax.requests.mostRecent();
-			expect(request.url).toContain('/getSummonerId.php?server=' + server + '&summoner=' + name);
-			jasmine.Ajax.uninstall();
-		});
-		it("should call close after successful request", function () { // TODO: fails because closeSettings is called within setTimeout
-			var server = 'euw', name = 'Test';
-			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
-			settingsCtrl.closeSettings = jasmine.createSpy('"settingsCtrl.closeSettings spy"');
-			settingsCtrl.odkWindow = {name: 'Settings'};
-
-			jasmine.Ajax.install();
-
-			settingsCtrl.options.settings.server(server);
-			settingsCtrl.options.settings.summonerName(name);
-			settingsCtrl.saveAndCloseHandler(settingsCtrl, $('<div class="btn"></div>'));
-
-			var request = jasmine.Ajax.requests.mostRecent();
-			request.respondWith({
-				"status": 200,
-				"contentType": 'text/plain',
-				"responseText": '123456'
-			});
-
-			expect(settingsCtrl.closeSettings).toHaveBeenCalled();
-			jasmine.Ajax.uninstall();
-		});
-		it("should not call close after failed request", function () {
-			var server = 'euw', name = 'Test';
-			spyOn(settingsCtrl, ['summonerUnchanged']).and.returnValue(false);
-			settingsCtrl.constructor.close = jasmine.createSpy('"settingsCtrl.constructor.close spy"');
-			settingsCtrl.odkWindow = {name: 'Settings'};
-
-			jasmine.Ajax.install();
-
-			settingsCtrl.options.settings.server(server);
-			settingsCtrl.options.settings.summonerName(name);
-			settingsCtrl.saveAndCloseHandler(settingsCtrl, $('<div class="btn"></div>'));
-
-			var request = jasmine.Ajax.requests.mostRecent();
-			request.respondWith({
-				"status": 404,
-				"contentType": 'text/plain',
-				"responseText": 'Not Found'
-			});
-
-			expect(settingsCtrl.constructor.close).not.toHaveBeenCalled();
-			jasmine.Ajax.uninstall();
-		});
 		describe("error-code handling", function () { // TODO: write tests
 			// https://developer.riotgames.com/docs/response-codes
 			describe("400 - Bad Request", function () {
