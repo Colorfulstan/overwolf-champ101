@@ -205,14 +205,32 @@ import analytics from 'analytics';
 					//$panel.toggleClass('sticky-tooltip');
 					$el.toggleClass('active');
 					$el.siblings().removeClass('active');
+					var $panel = this.mouseenterHandler($el);
 					//}
 					if (Routes.attr('video') == 1) {
 						steal.dev.log('setting video:0');
-						Routes.setRouteData({'video': 0}, false);
+						Routes.setRouteData({
+							route: Routes.tooltipSpell,
+							champ: $panel.attr('data-name'),
+							index: $el.attr('data-index-1') - 1,
+							type: $el.attr('data-type'),
+							y: $panel.offset().top + $panel.height(),
+							x: $panel.offset().left,
+							'video': 0
+						}, true);
 						analytics.event('Video', 'stop');
 					} else {
 						steal.dev.log('setting video:1');
-						Routes.setRouteData({'video': 1}, false);
+
+						Routes.setRouteData({
+							route: Routes.tooltipSpell,
+							champ: $panel.attr('data-name'),
+							index: $el.attr('data-index-1') - 1,
+							type: $el.attr('data-type'),
+							y: $panel.offset().top + $panel.height(),
+							x: $panel.offset().left,
+							'video': 1
+						}, true);
 						analytics.event('Video', 'play');
 					}
 				},
