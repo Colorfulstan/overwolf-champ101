@@ -6,6 +6,7 @@ function createInfoTextHtml(msg) {
 		return '<p class="padded-bot-half">' + msg + '</p>';
 }
 
+var that // for some reason now needed for computes to work
 /**
  * @class {can.Map} SettingsModel
  * @extends {can.Map}
@@ -130,7 +131,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	 * @constructs
 	 */
 	init: function () {
-
+		that = this
 		/** Holds the original values of the settings if they where changed.
 		 * @type {{propName: string, originialValue: * }} */
 		this.changedPropsOriginalValues = {};
@@ -145,11 +146,11 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_NAME); // getter
 		else if (newVal === null) {localStorage.removeItem(SettingsModel.STORAGE_KEY_REGION)} // reset
 		else { // setter
-			var oldVal = this.summonerName();
-			this.valueChanged('summonerName', oldVal);
+			var oldVal = that.summonerName();
+			that.valueChanged('summonerName', oldVal);
 
 			localStorage.setItem(SettingsModel.STORAGE_KEY_NAME, newVal);
-			//this.cachedGameAvailable(false); // TODO: TEST
+			//that.cachedGameAvailable(false); // TODO: TEST
 		}
 	}, this),
 
@@ -159,9 +160,9 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE); // getter
 		if (newVal === null) localStorage.removeItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE);
 		else { // setter
-			var oldVal = this.firstStartDate();
+			var oldVal = that.firstStartDate();
 
-			this.valueChanged('firstStartDate', oldVal);
+			that.valueChanged('firstStartDate', oldVal);
 			localStorage.setItem(SettingsModel.STORAGE_KEY_FIRST_START_DATE, newVal);
 		}
 	}, false),
@@ -172,11 +173,11 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') return localStorage.getItem(SettingsModel.STORAGE_KEY_REGION); // getter
 		else if (newVal === null) {localStorage.removeItem(SettingsModel.STORAGE_KEY_REGION)} // reset
 		else { // setter
-			var oldVal = this.server();
+			var oldVal = that.server();
 			localStorage.setItem(SettingsModel.STORAGE_KEY_REGION, newVal);
-			this.valueChanged('server', oldVal);
+			that.valueChanged('server', oldVal);
 
-			//this.cachedGameAvailable(false); // TODO: TEST
+			//that.cachedGameAvailable(false); // TODO: TEST
 		}
 	}),
 	/** @type {boolean}
@@ -185,9 +186,9 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') {
 			return localStorage.getItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED) == 'true';
 		} else { // setter
-			var oldVal = this.startMatchCollapsed();
+			var oldVal = that.startMatchCollapsed();
 
-			this.valueChanged('startMatchCollapsed', oldVal);
+			that.valueChanged('startMatchCollapsed', oldVal);
 
 			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED);
 			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_START_MATCH_COLLAPSED, newVal);
@@ -208,8 +209,9 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') {
 			return SettingsModel.isGameRunning();
 		} else { // setter
+			console.log(arguments)
 			var oldVal = SettingsModel.isGameRunning();
-			this.valueChanged('isGameRunning', oldVal);
+			that.valueChanged('isGameRunning', oldVal);
 			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_GAME_IS_RUNNING);
 			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_GAME_IS_RUNNING, newVal);
 		}
@@ -221,7 +223,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			return SettingsModel.isManualReloading();
 		} else { // setter
 			var oldVal = SettingsModel.isManualReloading();
-			this.valueChanged('isManualReloading', oldVal);
+			that.valueChanged('isManualReloading', oldVal);
 			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_RELOADING);
 			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_RELOADING, newVal);
 		}
@@ -233,7 +235,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			return SettingsModel.isWaitingForStableFps();
 		} else { // setter
 			var oldVal = SettingsModel.isWaitingForStableFps();
-			this.valueChanged('isWaitingForStableFps', oldVal);
+			that.valueChanged('isWaitingForStableFps', oldVal);
 			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_AWAIT_FPS);
 			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_AWAIT_FPS, newVal);
 		}
@@ -246,16 +248,16 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			return SettingsModel.startWithGame();
 		} else { // setter
 			var oldVal = SettingsModel.startWithGame();
-			this.valueChanged('startWithGame', oldVal);
+			that.valueChanged('startWithGame', oldVal);
 			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_START_WITH_GAME);
 			else if (newVal !== oldVal) {
 				localStorage.setItem(SettingsModel.STORAGE_KEY_START_WITH_GAME, newVal);
 			}
 
-			if (this.changedPropsOriginalValues['startWithGame'] === newVal) { // to remove the message again if changed back
-				this.attr('startWithGameMessage', null);
+			if (that.changedPropsOriginalValues['startWithGame'] === newVal) { // to remove the message again if changed back
+				that.attr('startWithGameMessage', null);
 			} else {
-				this.attr('startWithGameMessage', 'Changed autostart setting will restart the App.'); // TODO: enable this for multiple messages if neccessary (message-bag)
+				that.attr('startWithGameMessage', 'Changed autostart setting will restart the App.'); // TODO: enable this for multiple messages if neccessary (message-bag)
 			}
 		}
 	}),
@@ -269,7 +271,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 			return SettingsModel.closeMatchWithGame();
 		} else { // setter
 			var oldVal = SettingsModel.closeMatchWithGame();
-			this.valueChanged('closeMatchWithGame', oldVal);
+			that.valueChanged('closeMatchWithGame', oldVal);
 			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME);
 			else if (newVal !== oldVal) localStorage.setItem(SettingsModel.STORAGE_KEY_CLOSE_MATCH_WITH_GAME, newVal);
 		}
@@ -284,8 +286,8 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') { // getter
 			return localStorage.getItem('temp_gameId');
 		} else { // setter
-			var oldVal = this.cachedGameId();
-			this.valueChanged('cachedGameId', oldVal);
+			var oldVal = that.cachedGameId();
+			that.valueChanged('cachedGameId', oldVal);
 			if (newVal == false) localStorage.removeItem('temp_gameId');
 			else if (newVal !== oldVal) localStorage.setItem('temp_gameId', newVal);
 		}
@@ -298,8 +300,8 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') { // getter
 			return localStorage.getItem('lock_getCachedGame') == 'true';
 		} else { // setter
-			var oldVal = this.cachedGameAvailable();
-			this.valueChanged('cachedGameId', oldVal);
+			var oldVal = that.cachedGameAvailable();
+			that.valueChanged('cachedGameId', oldVal);
 			if (newVal == false) localStorage.removeItem('lock_getCachedGame');
 			else if (newVal !== oldVal) localStorage.setItem('lock_getCachedGame', newVal);
 		}
@@ -308,7 +310,7 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	/**
 	 * Loads Hotkeys from the overwolf settings and stores them
 	 * into the SettingsModel instance as attr('hotkeys')
-	 * @return  {null} Promise that gets resolved after Hotkeys has been set for this.attr('hotkeys'). Does not resolve into any value
+	 * @return  {null} Promise that gets resolved after Hotkeys has been set for that.attr('hotkeys'). Does not resolve into any value
 	 */
 	loadHotKeys: function () {
 		var deferred = $.Deferred();
@@ -325,19 +327,19 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 	 */
 	reset: function () {
 		// TODO: use http://canjs.com/docs/can.Map.backup.html ???
-		for (var prop in this.changedPropsOriginalValues) {
-			this[prop](this.changedPropsOriginalValues[prop]);
+		for (var prop in that.changedPropsOriginalValues) {
+			this[prop](that.changedPropsOriginalValues[prop]);
 		}
-		this.changedPropsOriginalValues = {};
+		that.changedPropsOriginalValues = {};
 	},
 	/** If the given propName wasn't changed already, oldVal gets stored under the propName as key */
 	valueChanged: function (propName, oldVal) {
-		if (typeof this.changedPropsOriginalValues[propName] === 'undefined') {
-			this.changedPropsOriginalValues[propName] = oldVal;
+		if (typeof that.changedPropsOriginalValues[propName] === 'undefined') {
+			that.changedPropsOriginalValues[propName] = oldVal;
 		}
 	},
 	hasValueChanged: function (propName) {
-		return (typeof this.changedPropsOriginalValues[propName] !== 'undefined' && this.changedPropsOriginalValues[propName] !== this[propName]());
+		return (typeof that.changedPropsOriginalValues[propName] !== 'undefined' && that.changedPropsOriginalValues[propName] !== this[propName]());
 	}
 });
 export default SettingsModel;
