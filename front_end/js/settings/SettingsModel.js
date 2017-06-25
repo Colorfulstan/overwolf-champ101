@@ -209,7 +209,6 @@ var SettingsModel = can.Map.extend('SettingsModel', {
 		if (typeof newVal === 'undefined') {
 			return SettingsModel.isGameRunning();
 		} else { // setter
-			console.log(arguments)
 			var oldVal = SettingsModel.isGameRunning();
 			that.valueChanged('isGameRunning', oldVal);
 			if (newVal == false) localStorage.removeItem(SettingsModel.STORAGE_KEY_GAME_IS_RUNNING);

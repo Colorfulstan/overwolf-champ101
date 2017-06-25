@@ -33,11 +33,11 @@ export class OwSimpleIOPluginService {
 	}
 
 	refreshingPlugin() {
-		return this.addingPlugin(this.pluginId).then(plugin => this.plugin = plugin);
+		return this.addingPlugin(this.pluginId).then(plugin => this.plugin = plugin)
 	}
 
 	addingPlugin(extraObjectNameInManifest) {
-		const plugin = new OverwolfPlugin(extraObjectNameInManifest, true);
+		const plugin = new OverwolfPlugin(extraObjectNameInManifest, true)
 		return new Promise((resolve, reject) => {
 			plugin.initialize(function (status) {
 				if (status == false) {
@@ -56,19 +56,19 @@ export class OwSimpleIOPluginService {
 	 */
 	waitForPlugin(intervallMs = this.PLUGIN_CHECK_READY_INTERVAL_MS, timeoutMs = this.PLUGIN_TIMEOUT_MS) {
 		return new Promise((resolve, reject) => {
-			let passedTimeMs = 0;
+			let passedTimeMs = 0
 			const ival = setInterval(() => {
 				if (passedTimeMs > timeoutMs) {
-					reject(new Error(`simpleIOPlugin.waitForPlugin() timed out after ${passedTimeMs} MS`)); // TODO:
+					reject(new Error(`simpleIOPlugin.waitForPlugin() timed out after ${passedTimeMs} MS`)) // TODO:
 					// OwIoError
 					clearInterval(ival)
 				} else if (!this.isInUse) {
 					clearInterval(ival)
-					resolve(true);
+					resolve(true)
 				}
-				passedTimeMs += intervallMs;
-			}, intervallMs);
-		});
+				passedTimeMs += intervallMs
+			}, intervallMs)
+		})
 	}
 
 	getPlugin() {
@@ -84,22 +84,22 @@ export class OwSimpleIOPluginService {
 	 */
 	getLatestFileInDirectory(dir, searchTerm = null, receiveFullPath = false) {
 		return new Promise((resolve, reject) => {
-			searchTerm = searchTerm ? '*' + searchTerm + '*' : '*';
+			searchTerm = searchTerm ? '*' + searchTerm + '*' : '*'
 			try {
 				this.getPlugin().getLatestFileInDirectory(dir + searchTerm, (status, filename) => {
 					if (!status) {
-						reject(new Error('Unable to open any file for path ' + dir + searchTerm)); // TODO: OwIoError
+						reject(new Error('Unable to open any file for path ' + dir + searchTerm)) // TODO: OwIoError
 					}
-					receiveFullPath ? resolve(dir + filename) : resolve(filename);
-				});
+					receiveFullPath ? resolve(dir + filename) : resolve(filename)
+				})
 			} catch (e) {
-				reject(new Error('Unable to open any file for path ' + dir + searchTerm)); // TODO: OwIoError
+				reject(new Error('Unable to open any file for path ' + dir + searchTerm)) // TODO: OwIoError
 			}
-		});
+		})
 	}
 
 	listenOnFile(fileId, path, bool, callback) {
-		this.isInUse = true;
+		this.isInUse = true
 		// TODO: how to remove the listener again on stopListen?
 		this.getPlugin().onFileListenerChanged.addListener(callback)
 		this.getPlugin().listenOnFile(fileId, path, bool, (id, status) => {
@@ -107,22 +107,23 @@ export class OwSimpleIOPluginService {
 				this.getPlugin().onFileListenerChanged.removeListener(callback)
 				callback(id, false)
 			}
-		});
+		})
 	}
 
-	listDirectory(path, callback) {
+	listDirectory(path) {
 		return new Promise((resolve, reject) => {
 			try {
 				this.getPlugin().listDirectory(path, (status, listing) => {
+					console.error(path, status, listing)
 					if (typeof listing == 'string') {
 						listing = JSON.parse(listing)
 					}
 					resolve(listing)
-				});
+				})
 			} catch (e) {
-				reject(e);
+				reject(e)
 			}
-		});
+		})
 	}
 
 	getTextFile(path, isUCS2) {
@@ -130,34 +131,45 @@ export class OwSimpleIOPluginService {
 			try {
 				this.getPlugin().getTextFile(path, isUCS2, (status, data) => {
 					if (!status) {
-						reject(new Error('simpleIOPlugin failed to load Text from: ' + path)); // TODO: OwIoError
+						reject(new Error('simpleIOPlugin failed to load Text from: ' + path)) // TODO: OwIoError
 					} else {
-						resolve(data);
+						resolve(data)
 					}
-				});
+				})
 			} catch (e) {
-				reject(new Error('simpleIOPlugin failed to load Text from: ' + path + '' + e.message)); // TODO: OwIoError
+				reject(new Error('simpleIOPlugin failed to load Text from: ' + path + '' + e.message)) // TODO: OwIoError
 			}
-		});
+		})
 	}
 
 	closeFile(fileId) { // TODO: refactor to private
 		return new Promise((resolve, reject) => {
-			this.$log.debug('Closing file ' + fileId + ' in 2000 MS...');
+			this.$log.debug('Closing file ' + fileId + ' in 2000 MS...')
 			setTimeout(() => {
 				try {
-					this.getPlugin().stopFileListen(fileId);
-					this.$log.debug('File listener closed.');
+					this.getPlugin().stopFileListen(fileId)
+					this.$log.debug('File listener closed.')
 				} catch (e) {
 					//this.getPlugin().stopFileListen(fileId);
 					this.$log.warn('Error closing File listener for fileId: ' + fileId, e)
 				} finally {
-					this.$log.warn('closeFile() moving on regardless...');
-					this.isInUse = false;
-					resolve(true);
+					this.$log.warn('closeFile() moving on regardless...')
+					this.isInUse = false
+					resolve(true)
 				}
-			}, 2000); // timing is crucial! Too little time and there will be an error trying to calling stopFileListen() - 2 seconds seem to be a safe amount
-		});
+			}, 2000) // timing is crucial! Too little time and there will be an error trying to calling stopFileListen() - 2 seconds seem to be a safe amount
+		})
 	}
 
+	checkingIfDirectoryExists(path) { // TODO: add to LB implementation
+		return new Promise((resolve, reject) => {
+			try {
+				this.getPlugin().isDirectory(path, (status) => {
+					resolve(status)
+				})
+			} catch (e){
+				reject(e)
+			}
+		})
+	}
 }

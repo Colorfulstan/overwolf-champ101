@@ -203,13 +203,15 @@ var Boot = {
 		if (SettingsModel.isGameRunning()) {
 			const owIoLolService = new OwIoLolService(console, overwolf, new OwSimpleIOPluginService(console))
 
-			owIoLolService.simpleIOPlugin.refreshingPlugin().then(owIoLolService.isReplayOrSpectate.bind(owIoLolService)).then(function (isReplayOrSpectate) {
-				if (!isReplayOrSpectate){
+			owIoLolService.simpleIOPlugin.refreshingPlugin()
+			// .then(owIoLolService.isReplayOrSpectate.bind(owIoLolService)) // TODO: add with CLI method again if neccessary
+				.then(function (isReplayOrSpectate) {
+				// if (!isReplayOrSpectate){
 					steal.dev.log('game is running, opening match');
 					var settings = Settings.getInstance();
 					main.constructor.addStableFpsListenerAndHandler(settings.isFpsStable);
 					return WindowCtrl.openMatch(needsReload);
-				}
+				// }
 			});
 		}
 		return $.Deferred().reject().promise();
