@@ -315,7 +315,6 @@ export class OwIoLolService {
 						if (matches) {
 							region = matches[1]
 						} else {
-							// TODO: what about new garena-client??
 							region = 'garena' // garena doesn't have regionTag or platformId line
 						}
 						this.$log.debug('region found: ' + region)
