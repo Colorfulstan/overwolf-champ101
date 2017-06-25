@@ -46,7 +46,7 @@ gulp.task('copy:postBuildSubmission', ['copy:recursively'], function () {
 	// submission to the store
 	return copy('out/**/*', '../' + appName + '_latest/app');
 });
-gulp.task('copy:postBuildSubmissionManifest', ['copy:recursively'], function () {
+gulp.task('copy:postBuildSubmissionManifest', ['copy:postBuildSubmission'], function () {
 	return gulp.src('out/manifest.json')
 	// replace the Version for production
 		.pipe(replace(devV, appV))
