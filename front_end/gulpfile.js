@@ -77,7 +77,7 @@ gulp.task('copy:views', ['clean:preBuild'], function () {
 		.pipe(gulp.dest('out'));
 });
 gulp.task('copy:videoJS', ['clean:preBuild'], function () {
-	return copy(['node_modules/video.js/dist/video-js/video.js', 'node_modules/video.js/dist/video-js/video-js.min.css'], 'out/vendor/videojs');
+	return copy(['node_modules/video.js/dist/video.js', 'node_modules/video.js/dist/video-js.min.css'], 'out/vendor/videojs');
 });
 gulp.task('copy:fakeFilesForUpload', ['clean:preBuild'], function () {
 	return copy('filesForUploadRestriction/*', 'out');

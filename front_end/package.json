@@ -4,7 +4,7 @@
     "can": "^2.2.7",
     "jquery": "^2.1.4",
     "materialize-css": "^0.96.1",
-    "video.js": "^4.12.14"
+    "video.js": "~6.2.0"
   },
   "devDependencies": {
     "del": "~2.2.2",

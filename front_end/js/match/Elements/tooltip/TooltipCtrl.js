@@ -330,14 +330,12 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl',
 				var videoTag = $('video').get(0);
 
 				//$(videoTag).on('ready', function () {
-				videojs(videoTag, {controls: false, controlBar: {fullscreenToggle: false}}, function () {
+				self.options.videoPlayer = videojs(videoTag, {controls: false, controlBar: {fullscreenToggle: false}}, function () {
 					// sets up the videojs Player to work after it got inserted into the page by templatingFullscreenToggle
-					var player = this;
-					self.options.videoPlayer = this;
-					player.on('ended', function () {
+					self.options.videoPlayer.on('ended', function () {
 						player.play();
 					});
-					player.on('error', function (event) {
+					self.options.videoPlayer.on('error', function (event) {
 						// TODO: maybe better error handling!?
 						steal.dev.log('Video got an Error', event, 'networkstate:', player.networkState);
 						$('#videoPlayer').remove();
@@ -355,12 +353,13 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl',
 			var player = self.options.videoPlayer;
 			if (startPlaying == 1) {
 				steal.dev.log('starting video');
-				player.addClass('vjs-fluid');
-				player.play();
+				player.ready(function(){
+					player.play();
+				})
+
 			} else {
 				steal.dev.log('pausing video');
 				player.pause();
-				player.removeClass('vjs-fluid');
 			}
 		},
 		// Routing Handlers
@@ -372,7 +371,12 @@ var TooltipCtrl = can.Control.extend('TooltipCtrl',
 		}
 		,
 		'{tooltipHideRoute} route': function () {
+			var self = this;
 			this.hideTooltip();
+			if(self.options.videoPlayer){
+				steal.dev.log('disposing video-player');
+				self.options.videoPlayer.dispose()
+			}
 		}
 		,
 		'{tooltipSpellRoute} route': function (routeData) {
