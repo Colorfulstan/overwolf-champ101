@@ -93,6 +93,8 @@ export class OwIoLolService {
 		/** @private */
 		this.gameLogFilePath = null
 
+		this.championsInTeamPromise = null
+
 	}
 
 	gettingInstallPath() { // add to LB implementation
@@ -544,6 +546,10 @@ export class OwIoLolService {
 
 	gettingChampionsInTeams() {
 		this.$log.debug('gettingChampionsInTeams')
+		if (this.championsInTeamPromise){
+			this.$log.debug('Already aggregating champions, returning promise')
+			return this.championsInTeamPromise
+		}
 
 		const START_INDICATOR = "Game Info Start"
 		const END_INDICATOR = "Game Info End"
@@ -556,28 +562,35 @@ export class OwIoLolService {
 			['team_' + TEAM_ORDER]: [],
 			['team_' + TEAM_CHAOS]: []
 		}
-		let isInGameInfoSection = false
-		return new Promise((resolve, reject) => {
+		let inGameSectionStarted = false
+		let inGameSectionEnded = false
+		return this.championsInTeamPromise = new Promise((resolve, reject) => {
 			this.getGameLogFilePath().then(path => {
 				this.$log.debug('path to game-log:', path)
 				this.simpleIOPlugin.listenOnFile(id, path, false, (fileId, status, line) => {
 					if (fileId === id) {
 						if (line.indexOf(END_INDICATOR) !== -1) {
+							inGameSectionEnded = true
 							this.simpleIOPlugin.closeFile(id)
 							this.$log.debug('gettingChampionsInTeams reached end:', teams)
 							resolve(teams)
 							return
 						}
-						isInGameInfoSection = isInGameInfoSection || line.indexOf(START_INDICATOR) !== -1
-						if (isInGameInfoSection) {
+						if (!inGameSectionStarted) {
+							inGameSectionStarted = line.indexOf(START_INDICATOR) !== -1
+						}
+						if (inGameSectionStarted && !inGameSectionEnded) {
 							console.log('isInGameInfoSection', line)
 							let matches = REGEXP.exec(line)
 							if (matches) {
-								const champion = matches[1]
+
 								const skinId = matches[2]
 								// 100 or 200
 								const teamId = (matches[3] === 'Order') ? TEAM_ORDER : TEAM_CHAOS
 								const isBot = matches[4] === 'Bot'
+
+								// if the match includes bot the regex will get something like "Cassiopeia bot" as champion
+								const champion = isBot ? matches[1].replace(' bot', '') : matches[1]
 
 								teams['team_' + teamId].push({
 									champion: champion,
