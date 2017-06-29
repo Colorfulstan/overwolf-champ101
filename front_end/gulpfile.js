@@ -73,7 +73,7 @@ gulp.task('copy:views', ['clean:preBuild'], function () {
 		// fix src-path (needs to match the path where the steal.js file gets located through grunt-copy)
 		.pipe(replace(/src='\.\.\/node_modules\/steal\/steal\.js'/g, 'src="../steal.production.js"'))
 		// change videojs paths
-		.pipe(replace(/\.\.\/node_modules\/video\.js\/dist\/video-js/g, '../vendor/videojs'))
+		.pipe(replace(/\.\.\/node_modules\/video\.js\/dist/g, '../vendor/videojs'))
 		.pipe(gulp.dest('out'));
 });
 gulp.task('copy:videoJS', ['clean:preBuild'], function () {

@@ -161,15 +161,14 @@ export class OwSimpleIOPluginService {
 		})
 	}
 
-	checkingIfDirectoryExists(path) { // TODO: add to LB implementation
+	checkingIfDirectoryExists(path) {
 		return new Promise((resolve, reject) => {
-			try {
-				this.getPlugin().isDirectory(path, (status) => {
-					resolve(status)
+				this.refreshingPlugin().then(plugin => {
+					plugin.isDirectory(path, (status) => {
+						resolve(status)
+					})
 				})
-			} catch (e){
-				reject(e)
-			}
+
 		})
 	}
 }

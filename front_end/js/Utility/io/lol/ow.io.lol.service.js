@@ -171,7 +171,7 @@ export class OwIoLolService {
 	}
 
 	/** @private */
-	gettingGameRootFromInstallPath(installPath) { // TODO: add to LB implementation
+	gettingGameRootFromInstallPath(installPath) {
 		// check if Garena client by looking for the GameData folder in installPath (only available on Garena)
 
 		return this.checkingIfIsGarena()
@@ -273,25 +273,31 @@ export class OwIoLolService {
 	// 		})
 	// }
 
-	checkingIfIsGarena() { // TODO: add to LB implementation
-		return this.gettingInstallPath()
-			.then((installPath) => {
-				return this.simpleIOPlugin.checkingIfDirectoryExists(installPath + 'GameData')
-					.then(isGarena => {
-						this.$log.info('Garena Client detected: ' + isGarena)
-						return isGarena
-					})
-			})
+	private isGarena = null
+	checkingIfIsGarena() {
+
+		if (this.isGarena !== null) {
+			return Promise.resolve(this.isGarena)
+		} else {
+			// check if Garena client by looking for the GameData folder in installPath (only available on Garena)
+			return this.gettingInstallPath()
+				.then((installPath) => {
+					return this.simpleIOPlugin.checkingIfDirectoryExists(installPath + 'GameData')
+						.then(isGarena => {
+							this.$log.info('Garena Client detected: ' + isGarena)
+							this.isGarena = isGarena
+							return isGarena
+						})
+				})
+		}
 	}
 
 	/**
-	 * Returns the platformId or RegionTag of the active player.
+	 * Returns the RegionTag of the active player.
 	 * Returns 'garena' if players is on servers not supported by the RIOT API.
 	 * can only used when within a game
 	 * @returns {Promise|string} the regionTag for the current Player (Summoner)
 	 */
-
-
 	getActiveRegion() {
 		this.$log.debug('getting active region')
 		if (this.region) {
@@ -546,7 +552,7 @@ export class OwIoLolService {
 
 	gettingChampionsInTeams() {
 		this.$log.debug('gettingChampionsInTeams')
-		if (this.championsInTeamPromise){
+		if (this.championsInTeamPromise) {
 			this.$log.debug('Already aggregating champions, returning promise')
 			return this.championsInTeamPromise
 		}
@@ -580,7 +586,7 @@ export class OwIoLolService {
 							inGameSectionStarted = line.indexOf(START_INDICATOR) !== -1
 						}
 						if (inGameSectionStarted && !inGameSectionEnded) {
-							console.log('isInGameInfoSection', line)
+							console.log('isInGameInfoSection' + line)
 							let matches = REGEXP.exec(line)
 							if (matches) {
 
@@ -590,7 +596,10 @@ export class OwIoLolService {
 								const isBot = matches[4] === 'Bot'
 
 								// if the match includes bot the regex will get something like "Cassiopeia bot" as champion
-								const champion = isBot ? matches[1].replace(' bot', '') : matches[1]
+								let champion = isBot ? matches[1].replace(' bot', '') : matches[1]
+								if (champion.toLowerCase() === 'fiddlesticks'){
+									champion = 'Fiddlesticks' // still wrong in game logs
+								}
 
 								teams['team_' + teamId].push({
 									champion: champion,
