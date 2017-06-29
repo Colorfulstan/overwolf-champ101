@@ -95,6 +95,8 @@ export class OwIoLolService {
 
 		this.championsInTeamPromise = null
 
+		this.isGarena = null
+
 	}
 
 	gettingInstallPath() { // add to LB implementation
@@ -273,7 +275,6 @@ export class OwIoLolService {
 	// 		})
 	// }
 
-	private isGarena = null
 	checkingIfIsGarena() {
 
 		if (this.isGarena !== null) {
