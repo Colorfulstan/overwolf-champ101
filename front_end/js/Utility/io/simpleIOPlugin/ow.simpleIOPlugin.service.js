@@ -29,11 +29,12 @@ export class OwSimpleIOPluginService {
 		this.pluginId = 'simple-io-plugin'
 
 		/** @private */
-		this.plugin = this.addingPlugin(this.pluginId).then(plugin => this.plugin = plugin)
+		this.pluginPromise = this.addingPlugin(this.pluginId)
 	}
 
 	refreshingPlugin() {
-		return this.addingPlugin(this.pluginId).then(plugin => this.plugin = plugin)
+		this.pluginPromise = this.addingPlugin(this.pluginId)
+		return this.gettingPlugin()
 	}
 
 	addingPlugin(extraObjectNameInManifest) {
@@ -71,8 +72,8 @@ export class OwSimpleIOPluginService {
 		})
 	}
 
-	getPlugin() {
-		return this.plugin.get()
+	gettingPlugin() {
+		return this.pluginPromise.then(plugin => plugin.get())
 	};
 
 	/**
@@ -86,11 +87,13 @@ export class OwSimpleIOPluginService {
 		return new Promise((resolve, reject) => {
 			searchTerm = searchTerm ? '*' + searchTerm + '*' : '*'
 			try {
-				this.getPlugin().getLatestFileInDirectory(dir + searchTerm, (status, filename) => {
-					if (!status) {
-						reject(new Error('Unable to open any file for path ' + dir + searchTerm)) // TODO: OwIoError
-					}
-					receiveFullPath ? resolve(dir + filename) : resolve(filename)
+				this.gettingPlugin().then(plugin => {
+					plugin.getLatestFileInDirectory(dir + searchTerm, (status, filename) => {
+						if (!status) {
+							reject(new Error('Unable to open any file for path ' + dir + searchTerm)) // TODO: OwIoError
+						}
+						receiveFullPath ? resolve(dir + filename) : resolve(filename)
+					})
 				})
 			} catch (e) {
 				reject(new Error('Unable to open any file for path ' + dir + searchTerm)) // TODO: OwIoError
@@ -101,24 +104,29 @@ export class OwSimpleIOPluginService {
 	listenOnFile(fileId, path, bool, callback) {
 		this.isInUse = true
 		// TODO: how to remove the listener again on stopListen?
-		this.getPlugin().onFileListenerChanged.addListener(callback)
-		this.getPlugin().listenOnFile(fileId, path, bool, (id, status) => {
-			if (!status) {
-				this.getPlugin().onFileListenerChanged.removeListener(callback)
-				callback(id, false)
-			}
+		this.gettingPlugin().then(plugin => {
+			plugin.onFileListenerChanged.addListener(callback)
+			plugin.listenOnFile(fileId, path, bool, (id, status) => {
+				if (!status) {
+					this.getPlugin().onFileListenerChanged.removeListener(callback)
+					callback(id, false)
+				}
+			})
 		})
+
 	}
 
 	listDirectory(path) {
 		return new Promise((resolve, reject) => {
 			try {
-				this.getPlugin().listDirectory(path, (status, listing) => {
-					console.error(path, status, listing)
-					if (typeof listing == 'string') {
-						listing = JSON.parse(listing)
-					}
-					resolve(listing)
+				this.gettingPlugin().then(plugin => {
+					plugin.listDirectory(path, (status, listing) => {
+						console.error(path, status, listing)
+						if (typeof listing == 'string') {
+							listing = JSON.parse(listing)
+						}
+						resolve(listing)
+					})
 				})
 			} catch (e) {
 				reject(e)
@@ -129,12 +137,14 @@ export class OwSimpleIOPluginService {
 	getTextFile(path, isUCS2) {
 		return new Promise((resolve, reject) => {
 			try {
-				this.getPlugin().getTextFile(path, isUCS2, (status, data) => {
-					if (!status) {
-						reject(new Error('simpleIOPlugin failed to load Text from: ' + path)) // TODO: OwIoError
-					} else {
-						resolve(data)
-					}
+				this.gettingPlugin().then(plugin => {
+					plugin.getTextFile(path, isUCS2, (status, data) => {
+						if (!status) {
+							reject(new Error('simpleIOPlugin failed to load Text from: ' + path)) // TODO: OwIoError
+						} else {
+							resolve(data)
+						}
+					})
 				})
 			} catch (e) {
 				reject(new Error('simpleIOPlugin failed to load Text from: ' + path + '' + e.message)) // TODO: OwIoError
@@ -147,10 +157,11 @@ export class OwSimpleIOPluginService {
 			this.$log.debug('Closing file ' + fileId + ' in 2000 MS...')
 			setTimeout(() => {
 				try {
-					this.getPlugin().stopFileListen(fileId)
-					this.$log.debug('File listener closed.')
+					this.gettingPlugin().then(plugin => {
+						plugin.stopFileListen(fileId)
+						this.$log.debug('File listener closed.')
+					})
 				} catch (e) {
-					//this.getPlugin().stopFileListen(fileId);
 					this.$log.warn('Error closing File listener for fileId: ' + fileId, e)
 				} finally {
 					this.$log.warn('closeFile() moving on regardless...')
@@ -163,12 +174,11 @@ export class OwSimpleIOPluginService {
 
 	checkingIfDirectoryExists(path) {
 		return new Promise((resolve, reject) => {
-				this.refreshingPlugin().then(plugin => {
-					plugin.isDirectory(path, (status) => {
-						resolve(status)
-					})
+			this.gettingPlugin().then(plugin => {
+				plugin.isDirectory(path, (status) => {
+					resolve(status)
 				})
-
+			})
 		})
 	}
 }
