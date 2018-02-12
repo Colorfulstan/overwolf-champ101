@@ -429,19 +429,24 @@ export class OwIoLolService {
 
 
 	/** @private */
-	getGameLogFilePath() {
+	private getGameLogFilePath() {
 		if (this.gameLogFilePath) {
 			this.$log.debug('using cached gameLogFilePath: ', this.gameLogFilePath)
 			return Promise.resolve(this.gameLogFilePath)
 		} else {
 			this.$log.debug('getting gameLogFilePath from files')
-			const path = 'Logs/Game - R3d Logs/'
+			const path = 'Logs/GameLogs/'
 			return Promise.all([this.getGameRoot(), this.checkingIfIsGarena()])
 				.then(([gameRoot, isGarena]) => {
-					const logPath = (isGarena ? 'Game/' : '') + path
-					return this.simpleIOPlugin.getLatestFileInDirectory(gameRoot + logPath, null, true)
+					const logPath = gameRoot + (isGarena ? 'Game/' : '') + path
+					return this.simpleIOPlugin.listDirectory(logPath)
+						.then(dirListing => {
+							return this.simpleIOPlugin.getLatestFileInDirectory(logPath + dirListing[dirListing.length - 1].name + '/', 'r3dlog', true)
+						})
 				})
 				.then((filepath) => {
+					this.$log.debug('gamelogpath:' + filepath)
+
 					this.gameLogFilePath = filepath
 					return this.gameLogFilePath
 				})
@@ -452,7 +457,6 @@ export class OwIoLolService {
 				})
 		}
 	}
-
 	/** @private */
 	cacheLog(type, path, endIndicator) {
 		this.$log.debug('starting to cache game-log ' + type + ' ' + path + ' ' + endIndicator)
