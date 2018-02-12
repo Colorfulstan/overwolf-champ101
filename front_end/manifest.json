@@ -60,7 +60,7 @@
 	  }
 	},
 	"hotkeys": {
-		"toggle_match": {"title":"Minimise/Restore Match Dock", "action-type": "custom", "default": "Ctrl+Shift+Space"},
+		"toggle_match": {"title":"Minimise/Restore Match Dock", "action-type": "toggle", "default": "Ctrl+Shift+Space"},
 		"toggle_panels": { "title": "Collapse/Expand Match Dock", "action-type": "custom", "default": "Ctrl+Space"},
 		"open_panels_team_blue": {
 			"title": "Open Champions Team Blue",
