@@ -429,7 +429,7 @@ export class OwIoLolService {
 
 
 	/** @private */
-	private getGameLogFilePath() {
+	getGameLogFilePath() {
 		if (this.gameLogFilePath) {
 			this.$log.debug('using cached gameLogFilePath: ', this.gameLogFilePath)
 			return Promise.resolve(this.gameLogFilePath)
@@ -445,8 +445,6 @@ export class OwIoLolService {
 						})
 				})
 				.then((filepath) => {
-					this.$log.debug('gamelogpath:' + filepath)
-
 					this.gameLogFilePath = filepath
 					return this.gameLogFilePath
 				})
