@@ -10,7 +10,8 @@
   	"description": "Basic League of Legends champion information relevant for your current game",
   	"dock_button_title": "LoL Champ 101",
 	"icon": "assets/img/icon.png",
-	"icon_gray": "assets/img/icon_gray.png"
+	"icon_gray": "assets/img/icon_gray.png",
+	"launcher_icon": "assets/img/icon.ico"
   },
   "data": {
 	"launch_events": [
