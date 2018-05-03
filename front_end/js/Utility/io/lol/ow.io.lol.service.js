@@ -501,58 +501,6 @@ export class OwIoLolService {
 
 	// endregion
 
-	/**
-	 * Gets participant-data (summonername, played champion, team) From latest Game-log.
-	 * Will also receive the champion and summonername of the active user explicitly as mySummonerName and myChampion
-	 * @returns {*}
-	 */
-	/** @private
-	 * @deprecated*/
-	collectParticipantsData() {
-		const regEx = /[0-9.| a-zA-Z]*[()]([\w]+)[) ]\ with skinID [\d]+ on team ([\d]+) for clientID ([-]*[\d]) and summonername [(]([^)]+)\)/
-		let lines = []
-
-		let matchInfo = new MatchInfo()
-		let stopLoop = false
-		return this.getGameLogCache()
-			.then((gameLogCache) => {
-				for (let i = 0; i < gameLogCache.length && !stopLoop; i++) {
-					const lineData = gameLogCache[i]
-
-					//region condition-checks
-					const allParticipantsRead = (lines.length == 10 || i == gameLogCache.length - 1)
-					if (allParticipantsRead) {
-						this.$log.debug('Matchdata is ready')
-						stopLoop = true // break;
-
-						return matchInfo
-					}
-
-					if (!lineData.includes("Spawning champion")) { // not a summoner-line
-						continue // return
-					}
-					//endregion
-
-					//region logic
-					const matches = regEx.exec(lineData)
-					const line = new LineInfo()
-					line.champion = matches[1]
-					line.team = parseInt(matches[2])
-					line.clientId = parseInt(matches[3])
-					line.summoner = matches[4]
-					lines.push(line)
-					this.$log.debug("Found line for summoner: " + line.summoner)
-
-					matchInfo['team_' + line.team].push({
-						champion: line.champion,
-						summoner: line.summoner,
-						team: line.team
-					})
-					//endregion
-				}
-			})
-	}
-
 	gettingChampionsInTeams() {
 		this.$log.debug('gettingChampionsInTeams')
 		if (this.championsInTeamPromise) {
@@ -560,11 +508,11 @@ export class OwIoLolService {
 			return this.championsInTeamPromise
 		}
 
-		const START_INDICATOR = "Game Info Start"
-		const END_INDICATOR = "Game Info End"
+		const START_INDICATOR = "Waiting for client ID"
+		const END_INDICATOR = "Server Connection Established"
 		const TEAM_ORDER = 100
 		const TEAM_CHAOS = 200
-		const REGEXP = /\D\| (.*?) Skin (.*?) \((\w.*?) (\w.*?)\)/
+		const REGEXP = /ROST\|.*?Team(\w*) (\d)\) (.*?)[-|\*].*? Champion\((.*?)\) SkinID\((\d*)\) TeamBuilderRole\((.*?)\)/
 		const id = 'gameLogForChampionsInTeams'
 
 		let teams = {
@@ -592,14 +540,24 @@ export class OwIoLolService {
 							console.log('isInGameInfoSection' + line)
 							let matches = REGEXP.exec(line)
 							if (matches) {
+								// const participant = {
+								// 	team        : matches[1],
+								// 	teamPosition: matches[2],
+								// 	summonerName: matches[3].trim(),
+								// 	championKey : matches[4].toLowerCase(),
+								// 	skindId     : matches[5],
+								// 	selectedRole: matches[6] === 'NONE' ? null : matches[6]
+								// }
 
-								const skinId = matches[2]
+								const skinId = matches[5]
 								// 100 or 200
-								const teamId = (matches[3] === 'Order') ? TEAM_ORDER : TEAM_CHAOS
-								const isBot = matches[4] === 'Bot'
+								const teamId = (matches[1] === 'Order') ? TEAM_ORDER : TEAM_CHAOS
+								// const isBot = matches[4] === 'Bot'
 
 								// if the match includes bot the regex will get something like "Cassiopeia bot" as champion
-								let champion = isBot ? matches[1].replace(' bot', '') : matches[1]
+								let champion = matches[4]
+								// !!!bots not included in logs anymore!!!
+
 								if (champion.toLowerCase() === 'fiddlesticks'){
 									champion = 'Fiddlesticks' // still wrong in game logs
 								}
@@ -607,7 +565,6 @@ export class OwIoLolService {
 								teams['team_' + teamId].push({
 									champion: champion,
 									team: teamId,
-									isBot,
 									skinId
 								})
 							}
