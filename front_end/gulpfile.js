@@ -105,7 +105,7 @@ gulp.task('steal:build', function () {
 		bundlesPath: 'script-bundles' // only responsible for creation, not where steal looks for the files
 	}, {
 		bundleSteal: false, // doesn't work? propably needs steel-tools also then
-		minify: true,
+		minify: false,
 		sourceMaps: false,
 
 		//debug: false, // use script tag environment="development" instead
