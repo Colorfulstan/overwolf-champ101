@@ -2,39 +2,62 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-  	"name": "League of Legends Champ 101",
-  	"access-name": "it.krispin.champ101",
-  	"version": "2.3.19.0",
+	"name": "League of Legends Champ 101",
+	"access-name": "it.krispin.champ101",
+	"version": "2.3.21.0",
 	"minimum-overwolf-version": "0.99.218",
 	"author": "Colorfulstan",
-  	"description": "Basic League of Legends champion information relevant for your current game",
-  	"dock_button_title": "LoL Champ 101",
+	"description": "Basic League of Legends champion information relevant for your current game",
+	"dock_button_title": "LoL Champ 101",
 	"icon": "assets/img/icon.png",
 	"icon_gray": "assets/img/icon_gray.png",
 	"launcher_icon": "assets/img/icon.ico"
   },
   "data": {
 	"launch_events": [
-		{
-		  "event": "GameLaunch",
-		  "event_data": {
-			"game_ids": [5426, 54261]
-		  },
-		  "start_minimized": true
-		}
-	  ],
-	"game_events": [ 5426 ],
+	  {
+		"event": "GameLaunch",
+		"event_data": {
+		  "game_ids": [
+			5426
+		  ]
+		},
+		"start_minimized": true
+	  }
+	],
+	"game_events": [
+	  5426
+	],
+	"externally_connectable": {
+	  "matches": [
+		"http://*.krispin.it/*",
+		"*google-analytics*"
+	  ]
+	},
+	"game_targeting": {
+	  "type": "dedicated",
+	  "game_ids": [
+		5426
+	  ]
+	},
 	"start_window": "Main",
 	"windows": {
 	  "Main": {
 		"file": "views/main.html",
 		"transparent": true,
 		"resizable": false,
-		  "show_in_taskbar": true,
-		  "disable_restore_animation": true,
-		"size": {"width": 400,"height": 1200},
-		"min_size": {"width": 400},
-		"max_size": {"width": 400}
+		"show_in_taskbar": true,
+		"disable_restore_animation": true,
+		"size": {
+		  "width": 400,
+		  "height": 1200
+		},
+		"min_size": {
+		  "width": 400
+		},
+		"max_size": {
+		  "width": 400
+		}
 	  },
 	  "Settings": {
 		"file": "views/settings.html",
@@ -42,11 +65,17 @@
 		"resizable": false,
 		"show_in_taskbar": true,
 		"disable_restore_animation": true,
-		"size": {"width": 400,"height": 1200},
-		"grab_keyboard_focus" : true,
-	  	"min_size": {"width": 400},
-		"max_size": {"width": 400}
-
+		"size": {
+		  "width": 400,
+		  "height": 1200
+		},
+		"grab_keyboard_focus": true,
+		"min_size": {
+		  "width": 400
+		},
+		"max_size": {
+		  "width": 400
+		}
 	  },
 	  "Match": {
 		"file": "views/match.html",
@@ -54,29 +83,46 @@
 		"resizable": false,
 		"show_in_taskbar": false,
 		"disable_restore_animation": true,
-		"size": {"width": 800, "height": 1200},
-		"min_size": {"width": 800, "height": 1200},
-		"max_size": {"width": 800, "height": 1200}
+		"size": {
+		  "width": 800,
+		  "height": 1200
+		},
+		"min_size": {
+		  "width": 800,
+		  "height": 1200
+		},
+		"max_size": {
+		  "width": 800,
+		  "height": 1200
+		}
 	  }
 	},
 	"hotkeys": {
-		"toggle_match": {"title":"Minimise/Restore Match Dock", "action-type": "toggle", "default": "Ctrl+Shift+Space"},
-		"toggle_panels": { "title": "Collapse/Expand Match Dock", "action-type": "custom", "default": "Ctrl+Space"},
-		"open_panels_team_blue": {
-			"title": "Open Champions Team Blue",
-			"action-type": "custom",
-			"default": "Num /"
-		},
-		"open_panels_team_red": {
-			"title": "Open Champions Team Red",
-			"action-type": "custom",
-			"default": "Num *"
-		},
-		"close_panels": {
-			"title": "Close all Champions",
-			"action-type": "custom",
-			"default": "Num -"
-		}
+	  "toggle_match": {
+		"title": "Minimise/Restore Match Dock",
+		"action-type": "toggle",
+		"default": "Ctrl+Shift+Space"
+	  },
+	  "toggle_panels": {
+		"title": "Collapse/Expand Match Dock",
+		"action-type": "custom",
+		"default": "Ctrl+Space"
+	  },
+	  "open_panels_team_blue": {
+		"title": "Open Champions Team Blue",
+		"action-type": "custom",
+		"default": "Num /"
+	  },
+	  "open_panels_team_red": {
+		"title": "Open Champions Team Red",
+		"action-type": "custom",
+		"default": "Num *"
+	  },
+	  "close_panels": {
+		"title": "Close all Champions",
+		"action-type": "custom",
+		"default": "Num -"
+	  }
 	},
 	"extra-objects": {
 	  "simple-io-plugin": {
@@ -85,11 +131,9 @@
 	  }
 	}
   },
-  "permissions": [ "Hotkeys", "GameInfo", "Extensions"],
-  "externally_connectable": {
-	"matches": [
-	  "http://*.krispin.it/*",
-		"*google-analytics*"
-	]
-  }
+  "permissions": [
+	"Hotkeys",
+	"GameInfo",
+	"Extensions"
+  ]
 }
