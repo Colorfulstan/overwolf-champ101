@@ -1,0 +1,5 @@
+- coldstart leerer localstorage
+- warmstart leerer localstorage
+- warmstart summoner set
+- coldstart summoner set
+
