@@ -508,7 +508,7 @@ export class OwIoLolService {
 			return this.championsInTeamPromise
 		}
 
-		const START_INDICATOR = "Waiting for client ID"
+		const START_INDICATOR = "ROST|"
 		const END_INDICATOR = "Server Connection Established"
 		const TEAM_ORDER = 100
 		const TEAM_CHAOS = 200
