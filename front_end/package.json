@@ -2,7 +2,7 @@
   "main": "js/boot.js",
   "dependencies": {
     "can": "^2.2.7",
-    "jquery": "^3.4.0",
+    "jquery": "^3.5.0",
     "materialize-css": "^0.96.1",
     "video.js": "~6.2.0"
   },
